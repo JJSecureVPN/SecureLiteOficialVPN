@@ -1,0 +1,94 @@
+/* ===========================================
+   Logs - Panel de logs
+   =========================================== */
+
+/* Contenedor principal de la pantalla de logs */
+.logs-screen {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.logs-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-shrink: 0;
+}
+
+.logs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+  justify-content: center;
+}
+
+.logs-panel {
+  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.log-entry {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--glass-65);
+  border: 1px dashed var(--border);
+}
+
+.log-line-number {
+  font-size: var(--font-xs);
+  color: var(--muted);
+  opacity: 0.8;
+  min-width: 36px;
+  text-align: right;
+}
+
+.log-entry__body {
+  flex: 1;
+}
+
+.log-entry__meta {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--font-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+  margin-bottom: var(--space-xs);
+}
+
+.log-entry__text {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--text);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.logs-empty {
+  background: var(--glass-60);
+}

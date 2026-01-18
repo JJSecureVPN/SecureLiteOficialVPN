@@ -1,0 +1,75 @@
+/* ===========================================
+   Menu - Lista de menú
+   =========================================== */
+
+.menu-list {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  box-shadow: var(--shadow-sm);
+}
+
+.menu-row {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.menu-row:last-child {
+  border-bottom: none;
+}
+
+.menu-row:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.menu-row--pressed {
+  background: var(--accent-15);
+}
+
+.menu-row__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-base);
+  color: var(--text-strong);
+}
+
+.menu-row__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu-row__title {
+  font-weight: 600;
+  font-size: var(--font-base);
+}
+
+.menu-row__subtitle {
+  font-size: var(--font-sm);
+  color: var(--muted);
+}
+
+.menu-row__chevron {
+  color: var(--muted);
+  opacity: 0.7;
+}

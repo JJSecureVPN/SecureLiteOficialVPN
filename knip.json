@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "src/app/main.tsx",
+    "build-inline.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "build-inline.ts",
+    "vite.config.ts"
+  ],
+  "ignore": [
+    "dist/**",
+    "node_modules/**"
+  ]
+}

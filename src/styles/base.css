@@ -1,0 +1,207 @@
+/* ===========================================
+   Base - Reset y estilos globales
+   =========================================== */
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color-scheme: light;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html,
+body {
+  -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
+  height: 100%;
+}
+
+html.fix-fontinfl body {
+  overflow: hidden;
+}
+
+html,
+body,
+#root,
+.phone {
+  -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-loose);
+  color: var(--text);
+  background-color: var(--bg-1);
+  background-image:
+    linear-gradient(180deg, transparent 0%, transparent 70%, rgba(0, 0, 0, 0.22) 90%, rgba(0, 0, 0, 0.6) 96%, #000 100%),
+    linear-gradient(180deg, var(--bg-2), var(--bg-1));
+}
+
+/* Jerarquía tipográfica (alineada a la web) */
+.panel-title,
+.session-card__title,
+.loc-name,
+.account-card .card-head,
+.server-item__title,
+.category-card__title,
+.subcategory-title,
+.menu-row__title {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+}
+
+/* ===========================================
+   Utilidades
+   =========================================== */
+
+.hidden {
+  display: none !important;
+}
+
+.flex-1,
+.item-main {
+  flex: 1;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.center {
+  text-align: center;
+}
+
+.muted {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: var(--font-base);
+}
+
+.pad {
+  padding: var(--space-xl);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* ===========================================
+   Secciones
+   =========================================== */
+
+.section-header {
+  margin-bottom: var(--space-sm);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.section-header--detail {
+  align-items: stretch;
+  gap: var(--space-sm);
+}
+
+.section-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  text-align: center;
+  width: 100%;
+}
+
+.section-eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.section-title-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.divider-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  max-width: 100%;
+}
+
+.divider-line {
+  flex: 1;
+  border-top: 1px dashed var(--border);
+  height: 0;
+}
+
+.panel-title--divider {
+  white-space: nowrap;
+}
+
+.section-subtitle {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--muted);
+}
+
+.panel-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin: var(--space-xs) 0 var(--space-md);
+  text-align: center;
+}
+
+/* ===========================================
+   Filas y layouts comunes
+   =========================================== */
+
+.row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.connect-row {
+  margin-top: var(--space-md);
+  align-items: center;
+  flex-wrap: nowrap;
+}

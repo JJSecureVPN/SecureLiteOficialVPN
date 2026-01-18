@@ -1,0 +1,211 @@
+/* ===========================================
+   Variables CSS - Tokens de diseño
+   =========================================== */
+
+:root {
+  /* Colores base */
+  --bg-1: #f8f7ff;
+  --bg-2: #efeaff;
+  --surface-1: #ffffff;
+  --surface-2: #f3f0ff;
+
+  /* Texto sobre fondos */
+  --on-accent: #ffffff;
+
+  --text: #1f2937;
+  --text-strong: #372580;
+  --muted: #4b5563;
+  --muted-2: #6b7280;
+
+  --border: rgba(55, 37, 128, 0.14);
+
+  /* Acento (web: violeta) */
+  --accent: #6d4aff;
+  --accent-2: #5b3fd6;
+  --accent-3: #4a32ad;
+  --accent-10: rgba(109, 74, 255, 0.1);
+  --accent-15: rgba(109, 74, 255, 0.15);
+  --accent-20: rgba(109, 74, 255, 0.2);
+  --accent-30: rgba(109, 74, 255, 0.3);
+  --accent-40: rgba(109, 74, 255, 0.4);
+  --accent-60: rgba(109, 74, 255, 0.6);
+
+  --text-strong-35: rgba(55, 37, 128, 0.35);
+
+  /* Superficies de cards (en lugar de overlays blancos pensados para dark) */
+  --cardBg1: rgba(255, 255, 255, 0.92);
+  --cardBg2: rgba(248, 247, 255, 0.96);
+
+  /* Superficies "glass" reutilizables */
+  --glass-65: rgba(255, 255, 255, 0.65);
+  --glass-60: rgba(255, 255, 255, 0.6);
+
+  /* Estados */
+  --status-ok: #22c55e;
+  --status-warn: #f59e0b;
+  --status-ok-85: rgba(34, 197, 94, 0.85);
+  --status-ok-45: rgba(34, 197, 94, 0.45);
+  --status-warn-85: rgba(245, 158, 11, 0.85);
+  --status-warn-35: rgba(245, 158, 11, 0.35);
+  --status-bad: #ef4444;
+  --status-bad-35: rgba(239, 68, 68, 0.35);
+  --status-bad-12: rgba(239, 68, 68, 0.12);
+  --status-bad-08: rgba(239, 68, 68, 0.08);
+  --status-bad-90: rgba(239, 68, 68, 0.9);
+  --status-bad-55: rgba(239, 68, 68, 0.55);
+  --status-warn-08: rgba(245, 158, 11, 0.08);
+  --muted-2-85: rgba(107, 114, 128, 0.85);
+  --muted-2-45: rgba(107, 114, 128, 0.45);
+
+  --text-strong-12: rgba(55, 37, 128, 0.12);
+  --text-strong-06: rgba(55, 37, 128, 0.06);
+
+  /* Overlay (toast/modales) */
+  --overlay: rgba(17, 24, 39, 0.55);
+
+  /* Factor de escala responsivo - con fallback para navegadores antiguos */
+  --scale-factor: 1; /* Fallback */
+  --scale-factor: clamp(0.82, calc(0.6 + 0.1vw), 1.15);
+
+  /* Espaciado - valores fijos como fallback */
+  --space-xs: 6px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 14px;
+  --space-xl: 16px;
+
+  /* Tipografías (igual que la web) */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, Cambria, "Times New Roman", Times,
+    serif;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Line-height (leading) - alineado a la web */
+  --leading-tight: 1.08;
+  --leading-snug: 1.2;
+  --leading-normal: 1.34;
+  --leading-relaxed: 1.5;
+  --leading-loose: 1.625;
+
+  /* Escala de texto (como la web) */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+
+  /* Sombras (estilo Tailwind-like del sitio) */
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 10px 24px rgba(17, 24, 39, 0.10);
+
+  /* Sombra con tinte de acento */
+  --shadow-accent: 0 10px 24px var(--accent-15);
+
+  /* Tipografía - valores fijos como fallback */
+  --font-xs: 12px;
+  --font-sm: 12px;
+  --font-base: 14px;
+  --font-md: 16px;
+  --font-lg: 18px;
+  --font-xl: 20px;
+  --font-2xl: 24px;
+
+  /* Border radius - valores fijos como fallback */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Componentes - valores fijos como fallback */
+  --btn-height: 36px;
+  --input-height: 36px;
+  --icon-size: 24px;
+  --flag-size: 26px;
+
+  /* Toggle */
+  --toggle-width: 48px;
+  --toggle-height: 33px;
+  --thumb-size: 25px;
+
+  /* Layout */
+  --header-padding: 45px;
+  --screen-top: 170px;
+  --top-strip-height: 170px;
+  --hero-top: 145px;
+}
+
+/* Dark mode: solo sobrescribe tokens */
+html[data-theme="dark"] {
+  /* Fondo (referencia: SecureVPN Reventa) */
+  --bg-1: #09090a;
+  --bg-2: #24262d;
+  --surface-1: #15161a;
+  --surface-2: #24262d;
+
+  --text: #e5e7eb;
+  --text-strong: #f8f7ff;
+  --muted: rgba(229, 231, 235, 0.75);
+  --muted-2: rgba(229, 231, 235, 0.6);
+
+  --border: rgba(248, 247, 255, 0.14);
+  --text-strong-35: rgba(248, 247, 255, 0.35);
+
+  --cardBg1: rgba(255, 255, 255, 0.08);
+  --cardBg2: rgba(255, 255, 255, 0.03);
+
+  --glass-65: rgba(255, 255, 255, 0.08);
+  --glass-60: rgba(255, 255, 255, 0.06);
+
+  --overlay: rgba(0, 0, 0, 0.62);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+
+/* Valores responsivos con clamp() para navegadores modernos */
+@supports (width: clamp(1px, 2px, 3px)) {
+  :root {
+    /* Espaciado responsivo */
+    --space-xs: clamp(4px, calc(6px * var(--scale-factor)), 8px);
+    --space-sm: clamp(6px, calc(8px * var(--scale-factor)), 12px);
+    --space-md: clamp(8px, calc(12px * var(--scale-factor)), 16px);
+    --space-lg: clamp(10px, calc(14px * var(--scale-factor)), 20px);
+    --space-xl: clamp(12px, calc(16px * var(--scale-factor)), 24px);
+
+    /* Tipografía responsiva */
+    --font-xs: clamp(11px, calc(12px * var(--scale-factor)), 14px);
+    --font-sm: clamp(11px, calc(12px * var(--scale-factor)), 14px);
+    --font-base: clamp(12px, calc(14px * var(--scale-factor)), 16px);
+    --font-md: clamp(14px, calc(16px * var(--scale-factor)), 20px);
+    --font-lg: clamp(16px, calc(18px * var(--scale-factor)), 24px);
+    --font-xl: clamp(18px, calc(20px * var(--scale-factor)), 28px);
+    --font-2xl: clamp(20px, calc(24px * var(--scale-factor)), 32px);
+
+    /* Border radius responsivo */
+    --radius-sm: clamp(8px, calc(10px * var(--scale-factor)), 14px);
+    --radius-md: clamp(10px, calc(12px * var(--scale-factor)), 16px);
+    --radius-lg: clamp(12px, calc(14px * var(--scale-factor)), 18px);
+    --radius-xl: clamp(16px, calc(20px * var(--scale-factor)), 26px);
+
+    /* Componentes responsivos */
+    --btn-height: clamp(32px, calc(36px * var(--scale-factor)), 44px);
+    --input-height: clamp(32px, calc(36px * var(--scale-factor)), 44px);
+    --icon-size: clamp(20px, calc(24px * var(--scale-factor)), 32px);
+    --flag-size: clamp(22px, calc(26px * var(--scale-factor)), 32px);
+
+    /* Toggle responsivo */
+    --toggle-width: clamp(40px, calc(48px * var(--scale-factor)), 56px);
+    --toggle-height: clamp(28px, calc(33px * var(--scale-factor)), 40px);
+    --thumb-size: clamp(22px, calc(25px * var(--scale-factor)), 32px);
+
+    /* Layout responsivo */
+    --header-padding: clamp(35px, calc(45px * var(--scale-factor)), 55px);
+    --screen-top: clamp(140px, calc(170px * var(--scale-factor)), 200px);
+    --top-strip-height: clamp(140px, calc(170px * var(--scale-factor)), 200px);
+    --hero-top: clamp(120px, calc(145px * var(--scale-factor)), 170px);
+  }
+}
