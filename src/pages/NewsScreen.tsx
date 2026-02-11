@@ -27,7 +27,16 @@ export function NewsScreen() {
     setSelectedNews(newsItem);
     const html = newsItem.contenido_completo || newsItem.descripcion || '';
     const clean = DOMPurify.sanitize(html);
-    setSanitizedContent(clean);
+
+    // Post-procesar enlaces para que abran en nueva pestaña y prevenir opener
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(clean, 'text/html');
+    doc.querySelectorAll('a').forEach(a => {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+    });
+    const processed = doc.body.innerHTML;
+    setSanitizedContent(processed);
 
     // Guardar identificador como antes
     const identifier = newsItem.fecha_publicacion ? new Date(newsItem.fecha_publicacion).toISOString() : String(newsItem.id);
@@ -37,6 +46,17 @@ export function NewsScreen() {
   const handleCloseModal = useCallback(() => {
     setSelectedNews(null);
     setSanitizedContent('');
+  }, []);
+
+  // Manejo de clicks dentro del HTML sanitizado para abrir enlaces en el navegador (nueva pestaña)
+  const handleExternalLinkClick = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement | null;
+    const anchor = target && (target.closest ? (target.closest('a') as HTMLAnchorElement | null) : null);
+    if (anchor && anchor.href) {
+      e.preventDefault();
+      // Abrir en nueva pestaña con seguridad
+      window.open(anchor.href, '_blank', 'noopener,noreferrer');
+    }
   }, []);
 
   const handleBack = useCallback(() => setScreen('home'), [setScreen]);
@@ -71,7 +91,7 @@ export function NewsScreen() {
             )}
 
             {/* Renderizamos el HTML proveniente de la API de forma segura (sanitizado) */}
-            <div className="news-modal-body" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+            <div className="news-modal-body" onClick={handleExternalLinkClick} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </div>
         </GlobalModal>
       )}
