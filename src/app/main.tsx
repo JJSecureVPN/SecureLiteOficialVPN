@@ -6,6 +6,7 @@ import { appLogger } from '../features/logs/model/useAppLogs';
 import { initializePerformanceMonitoring } from '../utils/performanceMonitor';
 
 import '../styles/variables.css';
+import '../styles/animations.css';
 import '../styles/base.css';
 import '../styles/layout.css';
 import '../styles/components/buttons.css';
@@ -19,19 +20,18 @@ import '../styles/components/applogs.css';
 import '../styles/components/toast.css';
 import '../styles/components/premium.css';
 import '../styles/components/promo-header.css';
-import '../styles/components/news-list.css';
-import '../styles/components/news-item.css';
-import '../styles/components/news-item-skeleton.css';
-import '../styles/components/news-states.css';
-import '../styles/components/news-screen.css';
-import '../styles/components/news-item.css';
-import '../styles/components/news-item-skeleton.css';
-import '../styles/components/news-states.css';
+
+/* News components (refined) */
+import '../components/MiniHeader/MiniHeader.css';
+import '../components/News/NewsList.css';
+import '../components/News/NewsItem.css';
+import '../components/News/NewsItemSkeleton.css';
+import '../components/News/NewsStates.css';
+import '../screens/NewsScreen.css';
+
 import '../styles/components/error-boundary.css';
 import '../styles/components/modal.css';
-import '../styles/components/mini-header.css';
 import '../styles/screens/home.css';
-import '../styles/screens/news.css';
 import '../styles/screens/account.css';
 import '../styles/screens/terms.css';
 import '../styles/responsive.css';

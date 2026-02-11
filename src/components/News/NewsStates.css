@@ -1,0 +1,129 @@
+/* ==============================================
+   NEWS STATES (Empty & Error)
+   ============================================== */
+
+.news-empty,
+.news-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  min-height: 400px;
+}
+
+/* Icon */
+.news-empty__icon,
+.news-error__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  color: #d1d5db;
+  opacity: 0.6;
+}
+
+.news-error__icon {
+  color: #ef4444;
+  opacity: 0.8;
+}
+
+/* Title */
+.news-empty__title,
+.news-error__title {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+
+/* Description */
+.news-empty__description,
+.news-error__description {
+  margin: 0 0 32px 0;
+  color: #6c757d;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+/* Retry Button */
+.news-error__button {
+  padding: 12px 28px;
+  background: #007aff;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.news-error__button:hover {
+  background: #0051d5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+.news-error__button:active {
+  transform: translateY(0);
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .news-empty__title,
+  .news-error__title {
+    color: #ffffff;
+  }
+
+  .news-empty__description,
+  .news-error__description {
+    color: #9ca3af;
+  }
+
+  .news-empty__icon {
+    color: #4b5563;
+  }
+
+  .news-error__icon {
+    color: #ef4444;
+  }
+
+  .news-error__button {
+    background: #0a84ff;
+  }
+
+  .news-error__button:hover {
+    background: #0070e0;
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.4);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .news-empty,
+  .news-error {
+    padding: 60px 20px;
+  }
+
+  .news-empty__icon,
+  .news-error__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .news-empty__title,
+  .news-error__title {
+    font-size: 18px;
+  }
+
+  .news-empty__description,
+  .news-error__description {
+    font-size: 14px;
+  }
+}

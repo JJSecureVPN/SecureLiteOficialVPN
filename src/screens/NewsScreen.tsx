@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
+import MiniHeader from '../components/MiniHeader/MiniHeader';
 import { GlobalModal } from '../shared/components/GlobalModal';
-import MiniHeader from '../shared/components/MiniHeader';
 import { useVpn } from '../features/vpn/model/VpnContext';
 import { useNoticias, NoticiaItem } from '../features/vpn/hooks/useNoticias';
 import { saveNewsLastSeen } from '../utils/storageUtils';
-import NewsList from '../shared/components/NewsList';
+import NewsList from '../components/News/NewsList';
 
 export function NewsScreen() {
   const demoUrl = (import.meta as any).env?.VITE_NEWS_API_URL || 'http://149.50.148.6:4001/api/noticias/vpn';
@@ -60,3 +60,4 @@ export function NewsScreen() {
   );
 }
 
+export default NewsScreen;
