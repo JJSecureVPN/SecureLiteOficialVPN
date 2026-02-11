@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
-import MiniHeader from '../components/MiniHeader/MiniHeader';
+import MiniHeader from '../shared/components/MiniHeader/MiniHeader';
 import { GlobalModal } from '../shared/components/GlobalModal';
 import { useVpn } from '../features/vpn/model/VpnContext';
 import { useNoticias, NoticiaItem } from '../features/vpn/hooks/useNoticias';
 import { saveNewsLastSeen } from '../utils/storageUtils';
-import NewsList from '../components/News/NewsList';
+import NewsList from '../features/vpn/components/News/NewsList';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
 
 export function NewsScreen() {
