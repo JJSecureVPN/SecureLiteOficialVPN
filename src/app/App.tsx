@@ -6,7 +6,7 @@ import { AppHeader } from '../shared/components/AppHeader';
 import { ConnectionStatusBanner } from '../shared/components/ConnectionStatusBanner';
 import { CouponModal } from '../shared/components/CouponModal';
 import { HomeScreen } from '../pages/HomeScreen';
-import { NewsScreen } from '../pages/NewsScreen';
+import { NewsScreen } from '../screens/NewsScreen';
 import { ServersScreen } from '../pages/ServersScreen';
 import { MenuScreen } from '../pages/MenuScreen';
 import { ImportConfigScreen } from '../pages/ImportConfigScreen';

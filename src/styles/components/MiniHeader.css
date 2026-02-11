@@ -8,11 +8,17 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  display: flex;
+  /* Use grid to ensure left/right buttons and center title stay aligned vertically */
+  display: grid;
+  /* Keep side columns at least touch-size but allow center column to expand */
+  grid-template-columns: minmax(48px, auto) 1fr minmax(48px, auto);
   align-items: center;
-  justify-content: center;
-  min-height: calc(56px + env(safe-area-inset-top, 0px));
-  padding: calc(12px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) 12px calc(16px + env(safe-area-inset-left, 0px));
+  /* Support runtime safe-area via --mini-header-top (set by component) with a fallback to env(safe-area-inset-top) */
+  --mini-header-top: env(safe-area-inset-top, 0px);
+  /* Reduce min-height and top padding so title isn't pushed out of view on devices with a large status bar */
+  min-height: calc(48px + var(--mini-header-top));
+  padding: calc(8px + var(--mini-header-top)) calc(16px + env(safe-area-inset-right, 0px)) 8px calc(16px + env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -28,13 +34,22 @@
 
 /* Title */
 .mini-header__title {
+  grid-column: 2;
+  justify-self: center;
+  align-self: center; /* robust vertical centering */
+  position: relative;
+  z-index: 1100; /* ensure title stays above decorations */
   margin: 0;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #1a1a1a;
+  color: var(--text, #1a1a1a); /* use design tokens to prevent accidental invisibility */
   text-align: center;
+  min-width: 0; /* allow proper truncation inside grid */
   max-width: calc(100% - 120px);
+  line-height: 1.2; /* make sure vertical alignment is stable */
+  opacity: 1 !important;
+  visibility: visible !important;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -42,15 +57,14 @@
 
 /* Back Button */
 .mini-header__back {
-  position: absolute;
-  left: calc(8px + env(safe-area-inset-left, 0px));
-  top: 50%;
-  transform: translateY(-50%);
+  grid-column: 1;
+  align-self: center;
+  justify-self: start; /* place at the start of the left column without using margins */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px; /* slightly larger touch area */
+  height: 44px;
   padding: 0;
   background: transparent;
   border: none;
@@ -58,6 +72,17 @@
   color: #1a1a1a;
   cursor: pointer;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+} 
+
+/* Improve hit target on small screens and when status bar is large */
+.mini-header__back:before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+@media (max-width: 640px) {
+  .mini-header__back, .icon-btn { width: 44px; height: 44px; }
 }
 
 .mini-header__back:hover {
@@ -65,7 +90,7 @@
 }
 
 .mini-header__back:active {
-  transform: translateY(-50%) scale(0.96);
+  transform: scale(0.96);
 }
 
 .mini-header__back i {
@@ -74,10 +99,9 @@
 
 /* Right Actions */
 .mini-header__actions {
-  position: absolute;
-  right: calc(8px + env(safe-area-inset-right, 0px));
-  top: 50%;
-  transform: translateY(-50%);
+  grid-column: 3;
+  align-self: center;
+  justify-self: end; /* place at the end of the right column */
   display: flex;
   gap: 8px;
   align-items: center;

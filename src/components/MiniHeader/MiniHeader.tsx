@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
+import { useSafeArea } from '../../shared/hooks/useSafeArea';
 
 export interface MiniHeaderProps {
   title: string;
@@ -16,7 +17,9 @@ export function MiniHeader({
   className = '',
 }: MiniHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-
+  // Use safe area to compute a comfortable top offset for buttons (avoid status bar)
+  const { statusBarHeight } = useSafeArea();
+  const buttonTop = Math.max(12 + statusBarHeight, 28); // px, minimum spacing
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 8);
@@ -28,8 +31,14 @@ export function MiniHeader({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Provide CSS variables so the header and its buttons can be shifted down on devices with a large status bar
+  const style = {
+    ['--mini-header-top' as any]: `${Math.max(0, Math.round(statusBarHeight))}px`,
+    ['--mini-header-button-top' as any]: `${buttonTop}px`,
+  };
+
   return (
-    <header className={`mini-header ${scrolled ? 'mini-header--scrolled' : ''} ${className}`}>
+    <header className={`mini-header ${scrolled ? 'mini-header--scrolled' : ''} ${className}`} style={style}>
       {showBackButton && onBack && (
         <button 
           className="mini-header__back" 

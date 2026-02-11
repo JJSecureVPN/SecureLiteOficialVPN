@@ -223,6 +223,17 @@ header.topbar .row {
   border: 2px solid var(--bg-1);
 }
 
+/* Ensure cart and theme icons share the same subtle color as the news icon */
+.subscribe-btn,
+.theme-btn {
+  color: var(--text-strong-35);
+}
+
+.subscribe-btn i,
+.theme-btn i {
+  color: var(--text-strong-35);
+}
+
 
 /* ===========================================
    Hero Section

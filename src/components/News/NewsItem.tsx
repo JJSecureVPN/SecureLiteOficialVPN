@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { NoticiaItem } from '../../../features/vpn/hooks/useNoticias';
+import type { NoticiaItem } from '../../features/vpn/hooks/useNoticias';
 
 interface NewsItemProps {
   item: NoticiaItem;

@@ -1,4 +1,4 @@
-import type { NoticiaItem } from '../../../features/vpn/hooks/useNoticias';
+import type { NoticiaItem } from '../../features/vpn/hooks/useNoticias';
 import NewsItem from './NewsItem';
 import NewsItemSkeleton from './NewsItemSkeleton';
 import NewsEmptyState from './NewsEmptyState';

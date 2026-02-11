@@ -22,12 +22,12 @@ import '../styles/components/premium.css';
 import '../styles/components/promo-header.css';
 
 /* News components (refined) */
-import '../components/MiniHeader/MiniHeader.css';
-import '../components/News/NewsList.css';
-import '../components/News/NewsItem.css';
-import '../components/News/NewsItemSkeleton.css';
-import '../components/News/NewsStates.css';
-import '../screens/NewsScreen.css';
+import '../styles/components/MiniHeader.css';
+import '../styles/components/NewsList.css';
+import '../styles/components/NewsItem.css';
+import '../styles/components/NewsItemSkeleton.css';
+import '../styles/components/NewsStates.css';
+import '../styles/screens/news.css';
 
 import '../styles/components/error-boundary.css';
 import '../styles/components/modal.css';

@@ -5,13 +5,13 @@
 /* Use the refined layout and responsive spacing */
 .news-screen {
   min-height: 100vh;
-  background: #fafafa;
   padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 .phone.is-news .screen.news-screen {
   inset: 0 0 0 0;
-  padding-top: calc(var(--space-md) + 52px + env(safe-area-inset-top, 0px));
+  /* Allow runtime override with --news-header-offset (computed from useSafeArea). Fallback keeps previous behavior. */
+  padding-top: calc(var(--space-md) + var(--news-header-offset, calc(52px + env(safe-area-inset-top, 0px))));
 }
 
 .news-container {
@@ -41,3 +41,23 @@
     padding-top: calc(64px + env(safe-area-inset-top, 0px));
   }
 }
+
+/* Modal image: ensure it fits inside modal and is responsive */
+.news-modal .modal-body .news-modal-content .news-modal-image,
+.news-modal .modal-body .news-modal-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 50vh; /* leave space for header & content */
+  object-fit: contain; /* show full image without cropping */
+  display: block;
+  margin: 0 0 var(--space-md);
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .news-modal .modal-body .news-modal-image {
+    max-height: 40vh;
+  }
+}
+
