@@ -78,9 +78,24 @@
   overflow-y: auto;
 }
 
-/* Coupon modal specific - overrides and refined styles */
+/* News-specific overrides to ensure the modal has more vertical space for images */
+.modal-content.modal-content--lg.news-modal,
+.modal-content.modal-content--xl.news-modal {
+  max-height: 92vh;
+}
 
-/* Full coupon modal styles (copied from component design) */
+.news-modal .modal-body {
+  padding: 20px 24px 28px;
+}
+
+.news-modal .news-modal-image {
+  width: 100%;
+  height: auto;
+  max-height: 55vh;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 16px;
+}
 .modal-overlay {
   position: fixed;
   inset: 0;

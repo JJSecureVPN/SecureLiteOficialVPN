@@ -5,6 +5,7 @@ import { useVpn } from '../features/vpn/model/VpnContext';
 import { useNoticias, NoticiaItem } from '../features/vpn/hooks/useNoticias';
 import { saveNewsLastSeen } from '../utils/storageUtils';
 import NewsList from '../components/News/NewsList';
+import { useSafeArea } from '../shared/hooks/useSafeArea';
 
 export function NewsScreen() {
   const demoUrl = (import.meta as any).env?.VITE_NEWS_API_URL || 'http://149.50.148.6:4001/api/noticias/vpn';
@@ -12,6 +13,12 @@ export function NewsScreen() {
 
   const [selectedNews, setSelectedNews] = useState<NoticiaItem | null>(null);
   const { setScreen } = useVpn();
+
+  // Safe area metrics for header & modal sizing
+  const { statusBarHeight, navigationBarHeight, getModalHeight } = useSafeArea();
+  // compute a reasonable header offset (header height + status bar) — matches CSS fallback of 52px + safe-area
+  const headerOffsetPx = Math.max(52 + statusBarHeight, 52);
+  const modalImageMax = getModalHeight(60);
 
   const handleOpenNews = useCallback((newsItem: NoticiaItem) => {
     setSelectedNews(newsItem);
@@ -24,7 +31,7 @@ export function NewsScreen() {
   const handleBack = useCallback(() => setScreen('home'), [setScreen]);
 
   return (
-    <section className="screen news-screen">
+    <section className="screen news-screen" style={{ ['--nav-safe' as any]: `${navigationBarHeight}px`, ['--news-header-offset' as any]: `${headerOffsetPx}px` }}>
       <MiniHeader title="Noticias" onBack={handleBack} rightActions={items.length > 0 && !loading ? (
         <button className="icon-btn refresh-btn" onClick={reload} aria-label="Actualizar noticias" disabled={isRefreshing}>
           <i className={`fa fa-refresh ${isRefreshing ? 'spinning' : ''}`} />
@@ -36,10 +43,10 @@ export function NewsScreen() {
       </div>
 
       {selectedNews && (
-        <GlobalModal onClose={handleCloseModal} title={selectedNews.titulo} className="news-modal">
+        <GlobalModal size="lg" onClose={handleCloseModal} title={selectedNews.titulo} className="news-modal">
           <div className="news-modal-content">
             {selectedNews.imagen_url && (
-              <img src={selectedNews.imagen_url} alt={selectedNews.imagen_alt || selectedNews.titulo} className="news-modal-image" />
+              <img src={selectedNews.imagen_url} alt={selectedNews.imagen_alt || selectedNews.titulo} className="news-modal-image" style={{ maxHeight: `${modalImageMax}px` }} />
             )}
 
             {selectedNews.fecha_publicacion && (
