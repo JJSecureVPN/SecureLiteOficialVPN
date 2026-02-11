@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import DOMPurify from 'dompurify';
 import MiniHeader from '../shared/components/MiniHeader/MiniHeader';
 import { GlobalModal } from '../shared/components/GlobalModal';
 import { useVpn } from '../features/vpn/model/VpnContext';
@@ -12,6 +13,7 @@ export function NewsScreen() {
   const { items, loading, error, reload, isRefreshing } = useNoticias({ limit: 50, pollInterval: 60_000, apiUrl: demoUrl });
 
   const [selectedNews, setSelectedNews] = useState<NoticiaItem | null>(null);
+  const [sanitizedContent, setSanitizedContent] = useState<string>('');
   const { setScreen } = useVpn();
 
   // Safe area metrics for header & modal sizing
@@ -21,12 +23,21 @@ export function NewsScreen() {
   const modalImageMax = getModalHeight(60);
 
   const handleOpenNews = useCallback((newsItem: NoticiaItem) => {
+    // Guardar noticia seleccionada y sanitizar el HTML que venga de la API para evitar XSS
     setSelectedNews(newsItem);
+    const html = newsItem.contenido_completo || newsItem.descripcion || '';
+    const clean = DOMPurify.sanitize(html);
+    setSanitizedContent(clean);
+
+    // Guardar identificador como antes
     const identifier = newsItem.fecha_publicacion ? new Date(newsItem.fecha_publicacion).toISOString() : String(newsItem.id);
     saveNewsLastSeen(identifier);
   }, []);
 
-  const handleCloseModal = useCallback(() => setSelectedNews(null), []);
+  const handleCloseModal = useCallback(() => {
+    setSelectedNews(null);
+    setSanitizedContent('');
+  }, []);
 
   const handleBack = useCallback(() => setScreen('home'), [setScreen]);
 
@@ -59,7 +70,8 @@ export function NewsScreen() {
               <p className="news-modal-description">{selectedNews.descripcion}</p>
             )}
 
-            <div className="news-modal-body" dangerouslySetInnerHTML={{ __html: selectedNews.contenido_completo || selectedNews.descripcion || '' }} />
+            {/* Renderizamos el HTML proveniente de la API de forma segura (sanitizado) */}
+            <div className="news-modal-body" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </div>
         </GlobalModal>
       )}
