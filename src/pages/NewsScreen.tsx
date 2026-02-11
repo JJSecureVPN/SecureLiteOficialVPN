@@ -25,7 +25,8 @@ export function NewsScreen() {
   const handleOpenNews = useCallback((newsItem: NoticiaItem) => {
     // Guardar noticia seleccionada y sanitizar el HTML que venga de la API para evitar XSS
     setSelectedNews(newsItem);
-    const html = newsItem.contenido_completo || newsItem.descripcion || '';
+    // Solo usar contenido completo para el modal; la descripción se muestra en la tarjeta
+    const html = newsItem.contenido_completo || '';
     const clean = DOMPurify.sanitize(html);
 
     // Post-procesar enlaces para que abran en nueva pestaña y prevenir opener
@@ -86,11 +87,7 @@ export function NewsScreen() {
               </time>
             )}
 
-            {selectedNews.descripcion && (
-              <p className="news-modal-description">{selectedNews.descripcion}</p>
-            )}
-
-            {/* Renderizamos el HTML proveniente de la API de forma segura (sanitizado) */}
+            {/* Renderizamos el HTML proveniente de la API de forma segura (sanitizado). Nota: la descripción NO se muestra en el modal. */}
             <div className="news-modal-body" onClick={handleExternalLinkClick} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </div>
         </GlobalModal>
