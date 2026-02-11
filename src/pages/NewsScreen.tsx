@@ -14,6 +14,7 @@ export function NewsScreen() {
 
   const [selectedNews, setSelectedNews] = useState<NoticiaItem | null>(null);
   const [sanitizedContent, setSanitizedContent] = useState<string>('');
+  const [donationUrl, setDonationUrl] = useState<string | null>(null);
   const { setScreen } = useVpn();
 
   // Safe area metrics for header & modal sizing
@@ -29,13 +30,26 @@ export function NewsScreen() {
     const html = newsItem.contenido_completo || '';
     const clean = DOMPurify.sanitize(html);
 
-    // Post-procesar enlaces para que abran en nueva pestaña y prevenir opener
+    // Post-procesar enlaces y detectar si hay un link de donación para extraerlo y evitar abrirlo dentro del modal
     const parser = new DOMParser();
     const doc = parser.parseFromString(clean, 'text/html');
+    let foundDonation: string | null = null;
     doc.querySelectorAll('a').forEach(a => {
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener noreferrer');
+      const href = a.getAttribute('href') || a.href || '';
+      if (href.includes('shop.jhservices.com.ar/donaciones')) {
+        // Guardar la primera coincidencia como URL de donación y reemplazar el enlace en el HTML por texto para que no aparezca dentro del modal
+        if (!foundDonation) {
+          try { foundDonation = new URL(href, location.href).href; } catch (e) { foundDonation = href; }
+        }
+        const span = doc.createElement('span');
+        span.textContent = a.textContent || '';
+        a.parentNode?.replaceChild(span, a);
+      } else {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+      }
     });
+    if (foundDonation) setDonationUrl(foundDonation);
     const processed = doc.body.innerHTML;
     setSanitizedContent(processed);
 
@@ -47,6 +61,7 @@ export function NewsScreen() {
   const handleCloseModal = useCallback(() => {
     setSelectedNews(null);
     setSanitizedContent('');
+    setDonationUrl(null);
   }, []);
 
   // Manejo de clicks dentro del HTML sanitizado para abrir enlaces en el navegador (nueva pestaña)
@@ -59,6 +74,12 @@ export function NewsScreen() {
       window.open(anchor.href, '_blank', 'noopener,noreferrer');
     }
   }, []);
+
+  const handleDonate = useCallback(() => {
+    if (!donationUrl) return;
+    // Abrir en nueva pestaña (el contenedor o la app nativa puede redirigir esto al navegador externo)
+    window.open(donationUrl, '_blank', 'noopener,noreferrer');
+  }, [donationUrl]);
 
   const handleBack = useCallback(() => setScreen('home'), [setScreen]);
 
@@ -85,6 +106,14 @@ export function NewsScreen() {
               <time className="news-modal-date" dateTime={selectedNews.fecha_publicacion}>
                 {new Date(selectedNews.fecha_publicacion).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </time>
+            )}
+
+            {donationUrl && (
+              <div className="news-modal-donate">
+                <button className="btn donate-btn" onClick={handleDonate} type="button">
+                  Donar ahora
+                </button>
+              </div>
             )}
 
             {/* Renderizamos el HTML proveniente de la API de forma segura (sanitizado). Nota: la descripción NO se muestra en el modal. */}
