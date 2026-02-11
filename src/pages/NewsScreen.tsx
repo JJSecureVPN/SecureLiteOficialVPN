@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify';
 import MiniHeader from '../shared/components/MiniHeader/MiniHeader';
 import { GlobalModal } from '../shared/components/GlobalModal';
 import { useVpn } from '../features/vpn/model/VpnContext';
+import { callOne } from '../features/vpn/api/vpnBridge';
 import { useNoticias, NoticiaItem } from '../features/vpn/hooks/useNoticias';
 import { saveNewsLastSeen } from '../utils/storageUtils';
 import NewsList from '../features/vpn/components/News/NewsList';
@@ -77,8 +78,9 @@ export function NewsScreen() {
 
   const handleDonate = useCallback(() => {
     if (!donationUrl) return;
-    // Abrir en nueva pestaña (el contenedor o la app nativa puede redirigir esto al navegador externo)
-    window.open(donationUrl, '_blank', 'noopener,noreferrer');
+    // Replicar comportamiento de AppHeader: preferir puente nativo y fallback a window.open
+    if (callOne(['DtOpenExternalUrl'], donationUrl)) return;
+    window.open(donationUrl, '_blank');
   }, [donationUrl]);
 
   const handleBack = useCallback(() => setScreen('home'), [setScreen]);
