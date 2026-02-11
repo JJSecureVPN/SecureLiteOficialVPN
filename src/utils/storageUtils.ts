@@ -58,3 +58,12 @@ export function loadThemePreference(): ThemePreference | null {
 export function saveThemePreference(theme: ThemePreference) {
   safeSetItem(LS_KEYS.theme, theme);
 }
+
+export function loadNewsLastSeen(): string | null {
+  return safeGetItem(LS_KEYS.news_last_seen);
+}
+
+export function saveNewsLastSeen(iso: string) {
+  safeSetItem(LS_KEYS.news_last_seen, iso);
+}
+

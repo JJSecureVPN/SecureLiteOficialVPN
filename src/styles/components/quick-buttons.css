@@ -1,0 +1,119 @@
+.ql-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.ql-qbtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(8px, 1.4vw, 12px) clamp(6px, 1.2vw, 10px);
+  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  color: var(--text-strong);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: padding 0.15s ease, font-size 0.15s ease, gap 0.15s ease;
+  min-width: 0;
+}
+
+.ql-qbtn:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent-15);
+  border-color: var(--accent-40);
+}
+
+.ql-qbtn i {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 1.2em;
+  opacity: 0.95;
+}
+
+.ql-qbtn .ql-qbtn-label {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  line-height: 1.2;
+  width: 100%;
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  .ql-qbtn {
+    padding: 12px 10px;
+    font-size: 1.05rem;
+    gap: 6px;
+  }
+  .ql-qbtn i {
+    font-size: 1.3em;
+  }
+}
+
+/* Medium screens */
+@media (max-width: 900px) {
+  .ql-qbtn {
+    padding: 10px 8px;
+    font-size: 0.88rem;
+    gap: 4px;
+  }
+  .ql-qbtn i {
+    font-size: 1.2em;
+  }
+}
+
+/* Mobile - texto más compacto */
+@media (max-width: 520px) {
+  .ql-quick-grid {
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 8px;
+  }
+  
+  .ql-qbtn {
+    padding: 8px 6px;
+    gap: 3px;
+    font-size: 0.75rem;
+  }
+  
+  .ql-qbtn i {
+    font-size: 1.1em;
+  }
+  
+  .ql-qbtn .ql-qbtn-label {
+    line-height: 1.1;
+  }
+}
+
+/* Extra small - máxima compactación */
+@media (max-width: 380px) {
+  .ql-quick-grid {
+    grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+    gap: 6px;
+  }
+  
+  .ql-qbtn {
+    padding: 7px 5px;
+    gap: 2px;
+    font-size: 0.7rem;
+  }
+  
+  .ql-qbtn i {
+    font-size: 1em;
+  }
+  
+  .ql-qbtn .ql-qbtn-label {
+    line-height: 1.05;
+  }
+}

@@ -10,6 +10,7 @@ import { HeaderPromo } from '../shared/components/HeaderPromo';
 import { CredentialFields } from '../shared/ui/CredentialFields';
 import { Toggle } from '../shared/ui/Toggle';
 import { Button } from '../shared/ui/Button';
+import QuickButton from '../shared/ui/QuickButton';
 import { SessionDetails } from '../shared/components/SessionDetails';
 import keyboardNavigationManager from '../shared/utils/keyboardNavigationManager';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
@@ -213,14 +214,12 @@ export function HomeScreen() {
               />
             </div>
 
-            <div className="quick-grid">
-              <Button variant="quick" onClick={handleUpdate} data-nav>
-                <i className="fa fa-rotate" />Actualizar
-              </Button>
-              <Button variant="quick" onClick={handleLogs} data-nav>
-                <i className="fa fa-terminal" />{UI_MESSAGES.buttons.logs}
-              </Button>
+            <div className="quick-grid ql-quick-grid">
+              <QuickButton icon="fa-rotate" label={UI_MESSAGES.buttons.update} onClick={handleUpdate} data-nav aria-label={UI_MESSAGES.buttons.update} />
+              <QuickButton icon="fa-file-import" label={UI_MESSAGES.import.shortTitle} onClick={() => setScreen('import')} data-nav aria-label={UI_MESSAGES.import.shortTitle} />
+              <QuickButton icon="fa-terminal" label={UI_MESSAGES.buttons.logs} onClick={handleLogs} data-nav aria-label={UI_MESSAGES.buttons.logs} />
             </div>
+
           </div>
         </div>
       </div>

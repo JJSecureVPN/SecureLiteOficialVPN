@@ -6,8 +6,10 @@ import { AppHeader } from '../shared/components/AppHeader';
 import { ConnectionStatusBanner } from '../shared/components/ConnectionStatusBanner';
 import { CouponModal } from '../shared/components/CouponModal';
 import { HomeScreen } from '../pages/HomeScreen';
+import { NewsScreen } from '../pages/NewsScreen';
 import { ServersScreen } from '../pages/ServersScreen';
 import { MenuScreen } from '../pages/MenuScreen';
+import { ImportConfigScreen } from '../pages/ImportConfigScreen';
 import { LogsScreen } from '../pages/LogsScreen';
 import { AppLogsScreen } from '../pages/AppLogsScreen';
 import { TermsScreen } from '../pages/TermsScreen';
@@ -31,8 +33,10 @@ type Coupon = {
 /** Mapeo de pantallas a componentes */
 const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
   home: HomeScreen,
+  news: NewsScreen,
   servers: ServersScreen,
   menu: MenuScreen,
+  import: ImportConfigScreen,
   logs: LogsScreen,
   applogs: AppLogsScreen,
   terms: TermsScreen,
@@ -75,9 +79,9 @@ function AppContent() {
 
   return (
     <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
-      <div className="top-strip" />
+      {screen !== 'news' && <div className="top-strip" />}
       
-      {screen !== 'terms' && (
+      {screen !== 'terms' && screen !== 'news' && (
         <>
           <AppHeader onMenuClick={() => setScreen('menu')} onShowCouponModal={handleShowCouponModal} />
           {screen === 'home' && <ConnectionStatusBanner />}

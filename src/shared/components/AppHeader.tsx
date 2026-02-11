@@ -3,6 +3,7 @@ import { useVpn } from '../../features/vpn/model/VpnContext';
 import { callOne } from '../../features/vpn/api/vpnBridge';
 import { UI_MESSAGES } from '../../constants';
 import { useTheme } from '../hooks/useTheme';
+import { loadNewsLastSeen } from '../../utils/storageUtils';
 
 type Coupon = {
   id: number;
@@ -32,6 +33,7 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
   const [hasActiveCoupon, setHasActiveCoupon] = useState(false);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const activeCouponsCount = coupons.filter(c => c.activo && !c.oculto).length;
+  const [hasUnreadNews, setHasUnreadNews] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -68,6 +70,45 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkLatest() {
+      try {
+        const resp = await fetch('/api/noticias/vpn?limit=1', { cache: 'no-store' });
+        if (!resp.ok) return;
+        const json = await resp.json();
+        if (!json.success) return;
+        const latest = json.data?.[0];
+        if (!latest) return;
+
+        const lastSeen = loadNewsLastSeen();
+        if (cancelled) return;
+
+        if (!lastSeen) {
+          setHasUnreadNews(true);
+          return;
+        }
+
+        const latestDate = latest.fecha_publicacion ? new Date(latest.fecha_publicacion).toISOString() : null;
+        if (latestDate) {
+          setHasUnreadNews(latestDate > lastSeen);
+        } else {
+          setHasUnreadNews(String(latest.id) !== lastSeen);
+        }
+      } catch {
+        // silent
+      }
+    }
+
+    checkLatest();
+    const id = window.setInterval(checkLatest, 60_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, []);
+
   const isSubScreen = screen !== 'home';
   const isCategoryDetail = screen === 'servers' && Boolean(selectedCategory);
 
@@ -92,6 +133,7 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
     console.log('[DEBUG] AppHeader: ticket clicked, coupons:', coupons);
     onShowCouponModal(coupons);
   }, [onShowCouponModal, coupons]);
+
 
   return (
     <header className="topbar">
@@ -119,6 +161,18 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
             {activeCouponsCount > 1 && <span className="coupon-badge">{activeCouponsCount}</span>}
           </button>
         )}
+
+        <button
+          type="button"
+          className="icon-btn hotzone news-btn"
+          onClick={() => setScreen('news')}
+          aria-label="Noticias"
+          title="Noticias"
+        >
+          <i className="fa fa-newspaper" aria-hidden="true" />
+          {hasUnreadNews && <span className="news-attention" />}
+        </button>
+
         <button
           type="button"
           className="icon-btn hotzone subscribe-btn"
@@ -138,6 +192,7 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
         >
           <i className={theme === 'dark' ? 'fa fa-sun' : 'fa fa-moon'} aria-hidden="true" />
         </button>
+
       </div>
     </header>
   );

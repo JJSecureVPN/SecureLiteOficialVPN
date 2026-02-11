@@ -25,6 +25,7 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
   }), [statusBarHeight, navigationBarHeight]);
 
   const hasLogs = logs.length > 0;
+  const { categorias } = useVpn();
 
   const handleCopy = useCallback(async () => {
     try {
@@ -37,6 +38,21 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
       showToast(UI_MESSAGES.applogs.copyFailedToast);
     }
   }, [logs, showToast]);
+
+  const handleCopyServers = useCallback(async () => {
+    try {
+      const all = (categorias || []).flatMap(c => (c.items || []).map(s => ({ id: String(s.id), name: s.name, category: c.name, host: (s.ip || '') })));
+      if (!all.length) {
+        showToast(UI_MESSAGES.applogs.serversCopyFailedToast);
+        return;
+      }
+      const text = all.map(s => `${s.id} - ${s.name}${s.category ? ` (${s.category})` : ''}${s.host ? ` - ${s.host}` : ''}`).join('\n');
+      await navigator.clipboard.writeText(text);
+      showToast(UI_MESSAGES.applogs.serversCopiedToast);
+    } catch {
+      showToast(UI_MESSAGES.applogs.serversCopyFailedToast);
+    }
+  }, [categorias, showToast]);
 
   const handleClear = useCallback(() => {
     clear();
@@ -60,6 +76,9 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
           </Button>
           <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
             {UI_MESSAGES.applogs.clear}
+          </Button>
+          <Button variant="soft" onClick={handleCopyServers} disabled={!categorias || categorias.length === 0}>
+            {UI_MESSAGES.applogs.servers}
           </Button>
           <Button onClick={handleClose}>{UI_MESSAGES.applogs.close}</Button>
         </div>

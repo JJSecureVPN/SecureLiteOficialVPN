@@ -1,0 +1,230 @@
+/* ==============================================
+   MINI HEADER - Improved Version
+   ============================================== */
+
+.mini-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: calc(16px + env(safe-area-inset-top, 0px));
+  padding-right: calc(20px + env(safe-area-inset-right, 0px));
+  padding-bottom: 16px;
+  padding-left: calc(20px + env(safe-area-inset-left, 0px));
+  background: var(--bg-1, #ffffff);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+  min-height: calc(56px + env(safe-area-inset-top, 0px));
+  box-sizing: border-box;
+  z-index: 1000;
+  transition: box-shadow 0.2s ease;
+}
+
+.mini-header.scrolled {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mini-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  flex: 0 1 auto;
+  text-align: center;
+  color: var(--text-strong, #1a1a1a);
+  max-width: calc(100% - (120px + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.back-btn {
+  position: absolute;
+  left: calc(8px + env(safe-area-inset-left, 0px));
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-strong, #1a1a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1010;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.back-btn:hover {
+  background: var(--bg-2, rgba(0, 0, 0, 0.04));
+}
+
+.back-btn:active {
+  transform: scale(0.95);
+}
+
+.back-btn i {
+  font-size: 20px;
+}
+
+.mini-header .right-actions {
+  position: absolute;
+  right: calc(8px + env(safe-area-inset-right, 0px));
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-strong, #1a1a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: var(--bg-2, rgba(0, 0, 0, 0.04));
+}
+
+.icon-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn i {
+  font-size: 18px;
+}
+
+/* NEWS styles moved to `src/styles/components/news.css` */
+/* Keep header styles focused here. */
+
+.news-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-modal-body::-webkit-scrollbar-thumb {
+  background: var(--border, rgba(0, 0, 0, 0.2));
+  border-radius: 3px;
+}
+
+.news-modal-body h1,
+.news-modal-body h2,
+.news-modal-body h3 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: var(--text-strong, #1a1a1a);
+}
+
+.news-modal-body p {
+  margin-bottom: 16px;
+}
+
+.news-modal-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.news-modal-body a {
+  color: var(--accent, #007aff);
+  text-decoration: underline;
+}
+
+/* ==============================================
+   ANIMATIONS
+   ============================================== */
+
+@keyframes spinning {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spinning 1s linear infinite;
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+   ============================================== */
+
+@media (max-width: 640px) {
+  .news-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .news-list {
+    gap: 12px;
+  }
+
+  .news-image-wrapper {
+    height: 180px;
+  }
+
+  .news-title {
+    font-size: 16px;
+  }
+
+  .news-description {
+    font-size: 13px;
+  }
+
+  .news-modal-body {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 641px) {
+  .news-list {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .mini-header {
+    background: var(--bg-1, #1a1a1a);
+    border-bottom-color: var(--border, rgba(255, 255, 255, 0.1));
+  }
+
+  .news-screen {
+    background: var(--bg-1, #0d0d0d);
+  }
+
+  .news-item {
+    /* keep transparent in dark mode as well */
+    background: transparent;
+    border-color: var(--border, rgba(255, 255, 255, 0.1));
+  }
+
+  .news-image-wrapper {
+    background: transparent;
+  }
+
+  .skeleton-pulse {
+    background: linear-gradient(
+      90deg,
+      var(--bg-3, #2a2a2a) 0%,
+      var(--bg-2, #333333) 50%,
+      var(--bg-3, #2a2a2a) 100%
+    );
+  }
+}

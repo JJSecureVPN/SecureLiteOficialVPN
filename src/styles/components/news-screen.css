@@ -1,0 +1,22 @@
+/* Screen-level styles for the News screen */
+
+.news-screen {
+  min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+.news-container {
+  padding: calc(72px + env(safe-area-inset-top, 0px)) 16px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* small utility for centering the inner list */
+.news-main {
+  max-width: 720px;
+  margin: 18px auto;
+}
+
+@media (max-width: 640px) {
+  .news-container { padding-left: 12px; padding-right: 12px; }
+}

@@ -20,6 +20,7 @@ export const MenuScreen = memo(function MenuScreen() {
   const { showToast } = useToastContext();
   const [hotspotStatus, setHotspotStatus] = useState<HotspotState>('UNKNOWN');
   const [pressedItem, setPressedItem] = useState<string | null>(null);
+
   const sectionStyle = useSectionStyle();
 
   const refreshHotspotStatus = useCallback(() => {
@@ -135,6 +136,7 @@ export const MenuScreen = memo(function MenuScreen() {
       icon: 'fa-list',
       action: () => setScreen('applogs'),
     },
+
   ];
 
   return (
@@ -172,6 +174,7 @@ export const MenuScreen = memo(function MenuScreen() {
           );
         })}
       </div>
+
     </section>
   );
 });

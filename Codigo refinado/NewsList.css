@@ -1,0 +1,39 @@
+/* ==============================================
+   NEWS LIST
+   ============================================== */
+
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+/* Responsive Grid */
+@media (min-width: 768px) {
+  .news-list {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-list {
+    gap: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .news-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+}
+
+/* Single column when only 1 item */
+.news-list:has(.news-item:only-child) {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
+}

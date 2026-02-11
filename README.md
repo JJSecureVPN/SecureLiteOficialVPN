@@ -22,6 +22,7 @@ Una aplicación VPN moderna construida con React y TypeScript, diseñada para in
 
 ## 📦 Instalación
 
+
 ```bash
 # Clonar el repositorio
 git clone https://github.com/jjsecurevpn-vpn/SecureLiteOficial.git

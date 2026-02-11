@@ -7,9 +7,10 @@ export const LS_KEYS = {
   auto: 'vpn_auto_on',
   terms: 'vpn_terms_accepted',
   theme: 'vpn_theme',
+  news_last_seen: 'vpn_news_last_seen',
 } as const;
 
-export const SCREENS = ['home', 'servers', 'menu', 'logs', 'applogs', 'terms', 'account'] as const;
+export const SCREENS = ['home', 'news', 'servers', 'menu', 'import', 'logs', 'applogs', 'terms', 'account'] as const;
 
 /** Duración del toast en milisegundos */
 export const TOAST_DURATION_MS = 2500;
@@ -79,6 +80,10 @@ export const UI_MESSAGES = {
         title: 'Logs de App',
         subtitle: 'Ver logs de la aplicación',
       },
+      import: {
+        title: 'Importar configuración',
+        subtitle: 'Importar JSON de configuración (offline)'
+      },
     },
   },
   // Errores
@@ -104,6 +109,7 @@ export const UI_MESSAGES = {
     disconnect: 'DESCONECTAR',
     stop: 'PARAR',
     retry: 'REINTENTAR',
+    update: 'Actualizar',
     logs: 'Registros',
     viewDetails: 'Ver detalles',
     back: 'Volver',
@@ -146,6 +152,22 @@ export const UI_MESSAGES = {
     autoModeActive: 'Modo automático activo',
     tapToConnect: 'Toca para conectar',
     inUse: 'En uso',
+  },
+  import: {
+    title: 'Importar configuración',
+    subtitle: 'Importa JSON con servidor y credenciales',
+    pastePlaceholder: 'Pega aquí el JSON (se permiten comentarios // y /* */)',
+    parseErrorInvalid: 'JSON inválido',
+    parseErrorEmpty: 'Campo vacío',
+    noServerFound: 'No se encontró ningún servidor con ese nombre/ID',
+    foundMatches: (n: number) => `Encontrados ${n} servidores`,
+    startNow: 'Iniciar conexión después de aplicar',
+    parse: 'Parsear',
+    apply: 'Aplicar',
+    applied: 'Configuración aplicada',
+    appliedAndConnecting: 'Configuración aplicada. Conectando...',
+    autoParseHint: 'Se analizará y aplicará automáticamente al presionar Aplicar',
+    shortTitle: 'Importar',
   },
   // Términos
   terms: {
@@ -195,6 +217,9 @@ export const UI_MESSAGES = {
     copiedToast: 'Logs copiados',
     copyFailedToast: 'No fue posible copiar',
     clearedToast: 'Logs limpiados',
+    servers: 'Servidores',
+    serversCopiedToast: 'Lista de servidores copiada',
+    serversCopyFailedToast: 'No fue posible copiar la lista de servidores',
     empty: 'No hay logs para mostrar.',
     emptyHint: 'Los logs se registrarán automáticamente al detectar:',
     hints: {

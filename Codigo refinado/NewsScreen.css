@@ -1,0 +1,45 @@
+/* ==============================================
+   NEWS SCREEN
+   ============================================== */
+
+.news-screen {
+  min-height: 100vh;
+  background: #fafafa;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+.news-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: calc(72px + env(safe-area-inset-top, 0px)) 24px 32px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .news-screen {
+    background: #0d0d0d;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .news-container {
+    max-width: 1024px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .news-container {
+    max-width: 768px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .news-container {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: calc(64px + env(safe-area-inset-top, 0px));
+  }
+}

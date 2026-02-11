@@ -81,16 +81,18 @@ header.topbar .btn.hotzone:focus-visible,
   margin-right: var(--space-sm);
 }
 
-/* ===========================================
-   Quick Buttons Grid
-   =========================================== */
 
-.quick-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-  margin-top: var(--space-md);
-}
+
+
+
+
+
+
+
+
+
+/* Tablet / Mobile: mantener etiquetas pero más compactas; ocultar sólo en pantallas muy pequeñas */
+
 
 .qbtn {
   position: relative;

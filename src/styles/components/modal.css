@@ -780,3 +780,334 @@
     background: var(--cardBg1);
   }
 }
+
+/* Import Config Modal - Scoped styles that extend the global modal */
+
+/* Use the global overlay and modal structure. This component adds only scoped appearance tweaks */
+.modal-content.import-config {
+  max-width: 480px;
+  width: 92vw;
+  max-height: 85vh;
+}
+
+/* Use global overlay and modal stacking. No duplicated overlay rules here. */
+.modal-content.import-config { z-index: auto; /* allow modal.css to manage stacking */ }
+
+.modal-content.import-config { max-width: 480px; width: 92vw; max-height: 85vh; }
+.modal-content.import-config .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-content.import-config .modal-header { border-bottom-color: rgba(255,255,255,0.08); }
+}
+
+.modal-content.import-config .header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.modal-content.import-config .icon-wrapper {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-content.import-config .icon-wrapper svg {
+  stroke: white;
+}
+
+.modal-content.import-config .header-text h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.modal-content.import-config .header-text p {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.modal-content.import-config .modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.modal-content.import-config .modal-close:hover { background: var(--bg-2); color: var(--text-strong); }
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 28px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.progress-steps .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.progress-steps .step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.progress-steps .step.active .step-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.progress-steps .step.completed .step-number {
+  background: var(--status-good, #10b981);
+  color: white;
+}
+
+.progress-steps .step span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.progress-steps .step.active span {
+  color: var(--accent-40);
+}
+
+.progress-steps .step.completed span {
+  color: var(--status-good, #10b981);
+}
+
+.progress-steps .step-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--border);
+  margin: 0 12px;
+  margin-bottom: 24px;
+}
+
+/* Modal Body */
+.modal-content.import-config .modal-body {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.step-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.divider span {
+  padding: 0 16px;
+}
+
+/* Textarea */
+.config-textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  resize: vertical;
+  transition: all 0.15s ease;
+  background: transparent; /* use parent background to avoid stark white */
+  color: var(--text);
+}
+
+.config-textarea:focus {
+  outline: none;
+  border-color: var(--accent-20);
+  box-shadow: 0 0 0 4px rgba(109,74,255,0.06);
+  background: rgba(109,74,255,0.02);
+}
+
+/* Alerts */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* Info Box */
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* Server Selection */
+.server-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Confirmation */
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modal-content.import-config {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-content.import-config .modal-header {
+    padding: 20px;
+  }
+
+  .modal-content.import-config .modal-body {
+    padding: 20px;
+  }
+
+  .modal-content.import-config .progress-steps {
+    padding: 16px 20px;
+  }
+
+  .modal-content.import-config .progress-steps .step span {
+    font-size: 11px;
+  }
+
+  .modal-content.import-config .progress-steps .step-divider {
+    width: 40px;
+  }
+
+  .modal-content.import-config .button-group {
+    flex-direction: column-reverse;
+  }
+
+  .modal-content.import-config .btn {
+    width: 100%;
+  }
+}
+
+/* Final override: ensure Import screen textarea never shows a strong white border on focus */
+.screen.import-screen textarea.config-textarea:focus,
+.screen.import-screen textarea.config-textarea:focus-visible,
+.screen.import-screen .config-textarea:focus,
+.screen.import-screen .config-textarea:focus-visible {
+  outline: none !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease !important;
+}
+
+/* If any focus ring still appears from UA, explicitly hide outline */
+.screen.import-screen textarea.config-textarea:focus::-webkit-focus-ring-color,
+.screen.import-screen textarea.config-textarea:focus {
+  outline: none !important;
+  -webkit-appearance: none !important;
+}
+

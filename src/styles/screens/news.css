@@ -1,0 +1,43 @@
+/* ==============================================
+   NEWS SCREEN (refined)
+   ============================================== */
+
+/* Use the refined layout and responsive spacing */
+.news-screen {
+  min-height: 100vh;
+  background: #fafafa;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+.phone.is-news .screen.news-screen {
+  inset: 0 0 0 0;
+  padding-top: calc(var(--space-md) + 52px + env(safe-area-inset-top, 0px));
+}
+
+.news-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: calc(72px + env(safe-area-inset-top, 0px)) 24px 32px;
+}
+
+@media (max-width: 1280px) {
+  .news-container {
+    max-width: 1024px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .news-container {
+    max-width: 768px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .news-container {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: calc(64px + env(safe-area-inset-top, 0px));
+  }
+}
