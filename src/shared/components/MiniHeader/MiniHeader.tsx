@@ -43,7 +43,7 @@ export function MiniHeader({
       style={style}
     >
       {showBackButton && onBack && (
-        <button className="mini-header__back" onClick={onBack} aria-label="Volver" type="button">
+        <button className="mini-header__back icon-btn" onClick={onBack} aria-label="Volver" type="button">
           <i className="fa fa-arrow-left" />
         </button>
       )}
