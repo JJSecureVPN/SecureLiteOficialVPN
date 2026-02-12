@@ -10,11 +10,14 @@ He ejecutado PurgeCSS y detectó selectores potencialmente no usados. Esto es un
 ## Archivos con selectores candidatos (prioridad inicial)
 - `src/styles/animations.css`
   - selectores detectados: `.fade-in`, `.slide-up`, `.scale-in`
-  - nota: **NO** eliminar `@keyframes fadeIn` porque ` .news-list > *` use esa animación por nombre; sí es seguro eliminar las clases que no se usan.
+  - **Acción:** Eliminadas las clases `.fade-in`, `.slide-up`, `.scale-in` (keyframes conservados). ✅
 - `src/styles/base.css`
   - selectores detectados: `.flex-1`, `.clickable`, `.row-between`, `html.fix-fontinfl body` (manual review)
+  - **Acción:** Eliminadas `.flex-1`, `.clickable` y `.row-between` (no referenciadas en el código). ✅
 - `src/styles/layout.css`
   - selectores detectados: `.news-badge`
+  - **Acción:** Eliminada `.news-badge` (no referenciada). ✅
+
 - `src/styles/responsive.css`
   - varios selectores con contexto de pantallas específicas (review manual)
 - `src/styles/components/*.css` (multiple)

@@ -20,7 +20,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   color-scheme: dark;
 }
 
@@ -59,7 +59,14 @@ body {
   color: var(--text);
   background-color: var(--bg-1);
   background-image:
-    linear-gradient(180deg, transparent 0%, transparent 70%, rgba(0, 0, 0, 0.22) 90%, rgba(0, 0, 0, 0.6) 96%, #000 100%),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 70%,
+      rgba(0, 0, 0, 0.22) 90%,
+      rgba(0, 0, 0, 0.6) 96%,
+      #000 100%
+    ),
     linear-gradient(180deg, var(--bg-2), var(--bg-1));
 }
 
@@ -195,10 +202,7 @@ body {
   flex-wrap: wrap;
 }
 
-.row-between {
-  justify-content: space-between;
-  align-items: center;
-}
+/* Removed unused utility selector (PurgeCSS candidate): .row-between */
 
 .connect-row {
   margin-top: var(--space-md);
