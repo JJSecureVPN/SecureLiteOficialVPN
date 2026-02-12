@@ -28,9 +28,7 @@
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Removed unused .fade-in selector (PurgeCSS candidate) */
 
 /* Slide up animation */
 @keyframes slideUp {
@@ -44,9 +42,7 @@
   }
 }
 
-.slide-up {
-  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Removed unused .slide-up selector (PurgeCSS candidate) */
 
 /* Scale in animation */
 @keyframes scaleIn {
@@ -60,13 +56,12 @@
   }
 }
 
-.scale-in {
-  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Removed unused .scale-in selector (PurgeCSS candidate) */
 
 /* Pulse animation */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -84,13 +79,27 @@
   animation-fill-mode: both;
 }
 
-.news-list > *:nth-child(1) { animation-delay: 0.05s; }
-.news-list > *:nth-child(2) { animation-delay: 0.1s; }
-.news-list > *:nth-child(3) { animation-delay: 0.15s; }
-.news-list > *:nth-child(4) { animation-delay: 0.2s; }
-.news-list > *:nth-child(5) { animation-delay: 0.25s; }
-.news-list > *:nth-child(6) { animation-delay: 0.3s; }
-.news-list > *:nth-child(n+7) { animation-delay: 0.35s; }
+.news-list > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.news-list > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.news-list > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.news-list > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.news-list > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.news-list > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.news-list > *:nth-child(n + 7) {
+  animation-delay: 0.35s;
+}
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
@@ -101,11 +110,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .spinning {
     animation: none;
   }
-  
+
   .news-list > * {
     animation: none;
   }
