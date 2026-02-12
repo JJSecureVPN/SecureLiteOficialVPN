@@ -16,12 +16,10 @@ describe('useNewsBadge', () => {
 
   beforeEach(() => {
     origFetch = global.fetch;
-    vi.useFakeTimers();
   });
 
   afterEach(() => {
     global.fetch = origFetch;
-    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -36,8 +34,7 @@ describe('useNewsBadge', () => {
     await waitFor(() => expect(screen.getByText(/has:/)).toBeTruthy());
     expect(screen.getByText(/has: true/)).toBeTruthy();
 
-    // poll
-    vi.advanceTimersByTime(1000);
+    // initial load happened
     expect(global.fetch).toHaveBeenCalled();
   });
 

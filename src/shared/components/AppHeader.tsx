@@ -17,8 +17,6 @@ type Coupon = {
   oculto: boolean;
 };
 
-const COUPONS_URL = 'https://shop.jhservices.com.ar/api/cupones';
-
 interface AppHeaderProps {
   onMenuClick: () => void;
   onShowCouponModal: (coupons: Coupon[]) => void;
