@@ -120,3 +120,31 @@
 .applogs-empty {
   background: var(--glass-60);
 }
+
+/* Reintroduced minimal visual variants for log levels (info, warn, error, debug).
+   These apply only subtle color to the icon and level badge to aid scanning and avoid
+   layout or spacing changes. They are intentionally minimal and reversible. */
+
+.applog-entry--info .applog-entry__icon,
+.applog-entry--info .applog-entry__level {
+  color: var(--status-good, #06b6d4);
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.applog-entry--warn .applog-entry__icon,
+.applog-entry--warn .applog-entry__level {
+  color: var(--status-warn, #f59e0b);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.applog-entry--error .applog-entry__icon,
+.applog-entry--error .applog-entry__level {
+  color: var(--status-bad-55, #ef4444);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.applog-entry--debug .applog-entry__icon,
+.applog-entry--debug .applog-entry__level {
+  color: var(--muted, #6b7280);
+  background: rgba(107, 114, 128, 0.03);
+}
