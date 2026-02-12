@@ -88,30 +88,8 @@ header.topbar .btn.hotzone:focus-visible,
 
 /* Tablet / Mobile: mantener etiquetas pero más compactas; ocultar sólo en pantallas muy pequeñas */
 
-.qbtn {
-  position: relative;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md) var(--space-lg);
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
-  color: var(--text-strong);
-  font-weight: 600;
-  font-size: var(--font-base);
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
+/* Nota: las reglas de quick-button se consolidaron en `src/styles/components/quick-buttons.css` y usan la clase `ql-qbtn`. El selector legacy `.qbtn` se eliminó para evitar duplicados. */
 
-.qbtn:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--accent-15);
-  border-color: var(--accent-40);
-}
-
-.qbtn i {
-  margin-right: var(--space-sm);
-  opacity: 0.95;
-}
 
 /* ===========================================
    Toggle Switch
