@@ -30,5 +30,3 @@ export const BackButton = memo(function BackButton({
     </button>
   );
 });
-
-export default BackButton;

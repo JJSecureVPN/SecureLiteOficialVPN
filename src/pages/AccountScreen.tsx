@@ -4,6 +4,7 @@ import { formatBytes, pingClass } from '../utils/formatUtils';
 import { dt } from '../features/vpn/api/vpnBridge';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
 import { UI_MESSAGES } from '../constants';
+import { getDisplayName } from '../shared/utils/sessionUtils';
 
 export const AccountScreen = memo(function AccountScreen() {
   const { status, user, creds, config, pingMs, topInfo } = useVpn();
@@ -13,8 +14,7 @@ export const AccountScreen = memo(function AccountScreen() {
   const ul = +(dt.call<number>('DtGetNetworkUploadBytes') || 0);
   const used = dl + ul;
 
-  const name =
-    user?.name || config?.auth?.username || creds.user || UI_MESSAGES.account.defaultUser;
+  const name = getDisplayName(user, config, creds);
   const vence = user?.expiration_date || '-';
   const limite = user?.limit_connections || '-';
   const conexiones = user?.count_connections ?? 0;

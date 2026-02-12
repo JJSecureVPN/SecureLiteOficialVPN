@@ -31,5 +31,30 @@ module.exports = [
       'deprecation/deprecation': 'off'
     },
     settings: { react: { version: 'detect' } }
+  },
+  {
+    // Avoid type-aware rules on root config/tooling TS files to prevent project/parse errors
+    files: ['vitest.config.ts', 'vite.config.ts', 'build-inline.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        // no `project` here so typescript-eslint won't require type-aware parsing
+        sourceType: 'module'
+      }
+    },
+    plugins: {
+      'unused-imports': unusedImports,
+      react: reactPlugin
+    },
+    rules: {
+      // keep minimal checks; avoid rules that require type information
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+      ],
+      'react/react-in-jsx-scope': 'off'
+    },
+    settings: { react: { version: 'detect' } }
   }
 ];

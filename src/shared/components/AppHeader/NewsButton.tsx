@@ -19,5 +19,3 @@ export const NewsButton = memo(function NewsButton({ hasUnread, onClick }: Props
     </button>
   );
 });
-
-export default NewsButton;

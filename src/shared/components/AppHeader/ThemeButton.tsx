@@ -18,5 +18,3 @@ export const ThemeButton = memo(function ThemeButton({ theme, onToggle }: Props)
     </button>
   );
 });
-
-export default ThemeButton;

@@ -26,5 +26,3 @@ export const CouponButton = memo(function CouponButton({ coupons, onClick }: Pro
     </button>
   );
 });
-
-export default CouponButton;

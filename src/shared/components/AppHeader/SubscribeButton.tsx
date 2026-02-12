@@ -17,5 +17,3 @@ export const SubscribeButton = memo(function SubscribeButton({ onClick }: Props)
     </button>
   );
 });
-
-export default SubscribeButton;

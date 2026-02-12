@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import { useVpn } from '../../features/vpn/model/VpnContext';
 import { Button } from '../ui/Button';
 import { UI_MESSAGES } from '../../constants';
+import { getDisplayName } from '../utils/sessionUtils';
 
 /**
  * Muestra información de la sesión cuando está conectado
@@ -16,7 +17,7 @@ export const SessionDetails = memo(function SessionDetails() {
 
   if (status !== 'CONNECTED') return null;
 
-  const name = user?.name || config?.auth?.username || creds.user || 'usuario';
+  const name = getDisplayName(user, config, creds);
 
   return (
     <div className="info-card session-card">
