@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { useSafeArea } from '../../shared/hooks/useSafeArea';
+import { useSafeArea } from '../../hooks/useSafeArea';
 
 export interface MiniHeaderProps {
   title: string;
@@ -9,10 +9,10 @@ export interface MiniHeaderProps {
   className?: string;
 }
 
-export function MiniHeader({ 
-  title, 
-  onBack, 
-  rightActions, 
+export function MiniHeader({
+  title,
+  onBack,
+  rightActions,
   showBackButton = true,
   className = '',
 }: MiniHeaderProps) {
@@ -38,25 +38,19 @@ export function MiniHeader({
   };
 
   return (
-    <header className={`mini-header ${scrolled ? 'mini-header--scrolled' : ''} ${className}`} style={style}>
+    <header
+      className={`mini-header ${scrolled ? 'mini-header--scrolled' : ''} ${className}`}
+      style={style}
+    >
       {showBackButton && onBack && (
-        <button 
-          className="mini-header__back" 
-          onClick={onBack}
-          aria-label="Volver"
-          type="button"
-        >
+        <button className="mini-header__back" onClick={onBack} aria-label="Volver" type="button">
           <i className="fa fa-arrow-left" />
         </button>
       )}
-      
+
       <h1 className="mini-header__title">{title}</h1>
-      
-      {rightActions && (
-        <div className="mini-header__actions">
-          {rightActions}
-        </div>
-      )}
+
+      {rightActions && <div className="mini-header__actions">{rightActions}</div>}
     </header>
   );
 }

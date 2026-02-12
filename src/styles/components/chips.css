@@ -18,7 +18,9 @@
   font-weight: 600;
   color: var(--text-strong);
   cursor: pointer;
-  transition: transform 0.1s ease, opacity 0.1s ease,
+  transition:
+    transform 0.1s ease,
+    opacity 0.1s ease,
     background 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -120,7 +122,6 @@
   color: var(--muted);
   text-transform: uppercase;
 }
-
 
 /* ===========================================
    Category Pills

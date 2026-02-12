@@ -36,10 +36,7 @@ export function initializePerformanceMonitoring() {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.duration > SLOW_RENDER_THRESHOLD && entry.entryType === 'measure') {
-        appLogger.add(
-          'warn',
-          `🐌 Render lento: ${entry.name} (${Math.round(entry.duration)}ms)`
-        );
+        appLogger.add('warn', `🐌 Render lento: ${entry.name} (${Math.round(entry.duration)}ms)`);
       }
     }
   });

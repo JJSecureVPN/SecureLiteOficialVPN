@@ -4,7 +4,7 @@
  */
 
 /** Nombres de APIs disponibles en el bridge */
-export type DtApiName = 
+export type DtApiName =
   // Conexión VPN
   | 'DtExecuteVpnStart'
   | 'DtExecuteVpnStop'

@@ -19,10 +19,13 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
   const { logs, clear } = useAppLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
 
-  const screenStyle = useMemo(() => ({
-    paddingTop: `calc(${statusBarHeight}px + 16px)`,
-    bottom: `${navigationBarHeight}px`,
-  }), [statusBarHeight, navigationBarHeight]);
+  const screenStyle = useMemo(
+    () => ({
+      paddingTop: `calc(${statusBarHeight}px + 16px)`,
+      bottom: `${navigationBarHeight}px`,
+    }),
+    [statusBarHeight, navigationBarHeight],
+  );
 
   const hasLogs = logs.length > 0;
   const { categorias } = useVpn();
@@ -30,7 +33,7 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
   const handleCopy = useCallback(async () => {
     try {
       const text = logs
-        .map(log => `[${log.timestamp}] ${log.level.toUpperCase()}: ${log.message}`)
+        .map((log) => `[${log.timestamp}] ${log.level.toUpperCase()}: ${log.message}`)
         .join('\n');
       await navigator.clipboard.writeText(text);
       showToast(UI_MESSAGES.applogs.copiedToast);
@@ -41,12 +44,24 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
 
   const handleCopyServers = useCallback(async () => {
     try {
-      const all = (categorias || []).flatMap(c => (c.items || []).map(s => ({ id: String(s.id), name: s.name, category: c.name, host: (s.ip || '') })));
+      const all = (categorias || []).flatMap((c) =>
+        (c.items || []).map((s) => ({
+          id: String(s.id),
+          name: s.name,
+          category: c.name,
+          host: s.ip || '',
+        })),
+      );
       if (!all.length) {
         showToast(UI_MESSAGES.applogs.serversCopyFailedToast);
         return;
       }
-      const text = all.map(s => `${s.id} - ${s.name}${s.category ? ` (${s.category})` : ''}${s.host ? ` - ${s.host}` : ''}`).join('\n');
+      const text = all
+        .map(
+          (s) =>
+            `${s.id} - ${s.name}${s.category ? ` (${s.category})` : ''}${s.host ? ` - ${s.host}` : ''}`,
+        )
+        .join('\n');
       await navigator.clipboard.writeText(text);
       showToast(UI_MESSAGES.applogs.serversCopiedToast);
     } catch {
@@ -77,7 +92,11 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
           <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
             {UI_MESSAGES.applogs.clear}
           </Button>
-          <Button variant="soft" onClick={handleCopyServers} disabled={!categorias || categorias.length === 0}>
+          <Button
+            variant="soft"
+            onClick={handleCopyServers}
+            disabled={!categorias || categorias.length === 0}
+          >
             {UI_MESSAGES.applogs.servers}
           </Button>
           <Button onClick={handleClose}>{UI_MESSAGES.applogs.close}</Button>
@@ -88,7 +107,10 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
         {hasLogs ? (
           <div className="applogs-list">
             {logs.map((log, idx) => (
-              <div key={`${log.timestamp}-${idx}`} className={`applog-entry applog-entry--${log.level}`}>
+              <div
+                key={`${log.timestamp}-${idx}`}
+                className={`applog-entry applog-entry--${log.level}`}
+              >
                 <div className="applog-entry__icon">
                   <i className={`fas ${LOG_LEVEL_ICONS[log.level]}`} aria-hidden="true" />
                 </div>
@@ -105,7 +127,10 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
             <i className="fas fa-inbox" aria-hidden="true" />
             <p>{UI_MESSAGES.applogs.empty}</p>
             <small className="muted">{UI_MESSAGES.applogs.emptyHint}</small>
-            <ul className="muted" style={{ fontSize: '11px', textAlign: 'left', margin: '8px 0', paddingLeft: '20px' }}>
+            <ul
+              className="muted"
+              style={{ fontSize: '11px', textAlign: 'left', margin: '8px 0', paddingLeft: '20px' }}
+            >
               <li>{UI_MESSAGES.applogs.hints.slowOps}</li>
               <li>{UI_MESSAGES.applogs.hints.slowRenders}</li>
               <li>{UI_MESSAGES.applogs.hints.uncaughtErrors}</li>

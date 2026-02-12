@@ -23,7 +23,8 @@ export const PremiumCard = memo(function PremiumCard() {
         <span className="summary-eyebrow">Premium</span>
         <h3>Comprar o revender</h3>
         <p className="summary-meta">
-          Accede a planes oficiales o solicita tu app propia para revender con un diseño limpio, sin contacto ni spam.
+          Accede a planes oficiales o solicita tu app propia para revender con un diseño limpio, sin
+          contacto ni spam.
         </p>
       </div>
       <div className="premium-card__actions">

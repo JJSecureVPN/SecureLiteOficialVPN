@@ -33,89 +33,95 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
     const raw = dt.call<string | number>('DtGetPingResult');
     const parsed = toPingNumber(raw ?? null);
     if (Number.isFinite(parsed)) {
-      setPingMs(prev => (prev === parsed ? prev : parsed));
+      setPingMs((prev) => (prev === parsed ? prev : parsed));
     } else {
       setPingMs(null);
     }
   }, []);
 
-  const handleUserData = useCallback((dataInput: unknown) => {
-    try {
-      const parsed = typeof dataInput === 'string' ? JSON.parse(dataInput) : dataInput;
-      if (!parsed || typeof parsed !== 'object') return;
-      const payload = parsed as Record<string, unknown>;
+  const handleUserData = useCallback(
+    (dataInput: unknown) => {
+      try {
+        const parsed = typeof dataInput === 'string' ? JSON.parse(dataInput) : dataInput;
+        if (!parsed || typeof parsed !== 'object') return;
+        const payload = parsed as Record<string, unknown>;
 
-      const pick = (keys: string[], fallback?: unknown) => {
-        for (const key of keys) {
-          const value = payload[key];
-          if (value !== undefined && value !== null && value !== '') return value;
-        }
-        return fallback;
-      };
+        const pick = (keys: string[], fallback?: unknown) => {
+          for (const key of keys) {
+            const value = payload[key];
+            if (value !== undefined && value !== null && value !== '') return value;
+          }
+          return fallback;
+        };
 
-      const username = pick(['username', 'user', 'name'], creds.user || 'usuario');
-      const expirationDate = pick(['expiration_date', 'expirationDate', 'expire_date']);
-      const limitConnections = pick(['limit_connections', 'limitConnections', 'max_connections']);
-      const countConnections = pick(['count_connections', 'countConnections', 'connections']);
+        const username = pick(['username', 'user', 'name'], creds.user || 'usuario');
+        const expirationDate = pick(['expiration_date', 'expirationDate', 'expire_date']);
+        const limitConnections = pick(['limit_connections', 'limitConnections', 'max_connections']);
+        const countConnections = pick(['count_connections', 'countConnections', 'connections']);
 
-      setUser(prev => ({
-        name: String(username ?? prev?.name ?? creds.user ?? 'usuario'),
-        expiration_date: String(expirationDate ?? prev?.expiration_date ?? '-'),
-        limit_connections: String(limitConnections ?? prev?.limit_connections ?? '-'),
-        count_connections: Number(countConnections ?? prev?.count_connections ?? 0) || 0,
-      }));
+        setUser((prev) => ({
+          name: String(username ?? prev?.name ?? creds.user ?? 'usuario'),
+          expiration_date: String(expirationDate ?? prev?.expiration_date ?? '-'),
+          limit_connections: String(limitConnections ?? prev?.limit_connections ?? '-'),
+          count_connections: Number(countConnections ?? prev?.count_connections ?? 0) || 0,
+        }));
 
-      userFetchRef.current.pending = false;
-      userFetchRef.current.lastAt = Date.now();
-    } catch (error) {
-      console.error('❌ Error parsing user data:', error);
-      userFetchRef.current.pending = false;
-    }
-  }, [creds.user]);
-
-  const requestUserInfo = useCallback((force = false) => {
-    const now = Date.now();
-    const { pending, lastAt } = userFetchRef.current;
-    const recentlyFetched = now - lastAt < 5000;
-
-    if (!force && (pending || recentlyFetched)) {
-      return;
-    }
-
-    userFetchRef.current.pending = true;
-    userFetchRef.current.lastAt = now;
-
-    let resolved = false;
-
-    const readDirect = () => {
-      const raw = dt.call<string>('DtGetUserInfo');
-      if (raw) {
-        resolved = true;
-        handleUserData(raw);
-      } else {
+        userFetchRef.current.pending = false;
+        userFetchRef.current.lastAt = Date.now();
+      } catch (error) {
+        console.error('❌ Error parsing user data:', error);
         userFetchRef.current.pending = false;
       }
-    };
+    },
+    [creds.user],
+  );
 
-    try {
-      const win = window as unknown as Record<string, { execute?: () => void }>;
-      const dtCheck = win.DtStartCheckUser;
-      if (dtCheck?.execute) {
-        dtCheck.execute();
-        setTimeout(() => {
-          if (!resolved) readDirect();
-        }, 600);
-        setTimeout(() => {
-          if (!resolved) readDirect();
-        }, 2000);
+  const requestUserInfo = useCallback(
+    (force = false) => {
+      const now = Date.now();
+      const { pending, lastAt } = userFetchRef.current;
+      const recentlyFetched = now - lastAt < 5000;
+
+      if (!force && (pending || recentlyFetched)) {
         return;
       }
-    } catch (error) {
-      console.warn('DtStartCheckUser no disponible directamente', error);
-    }
 
-    readDirect();
-  }, [handleUserData]);
+      userFetchRef.current.pending = true;
+      userFetchRef.current.lastAt = now;
+
+      let resolved = false;
+
+      const readDirect = () => {
+        const raw = dt.call<string>('DtGetUserInfo');
+        if (raw) {
+          resolved = true;
+          handleUserData(raw);
+        } else {
+          userFetchRef.current.pending = false;
+        }
+      };
+
+      try {
+        const win = window as unknown as Record<string, { execute?: () => void }>;
+        const dtCheck = win.DtStartCheckUser;
+        if (dtCheck?.execute) {
+          dtCheck.execute();
+          setTimeout(() => {
+            if (!resolved) readDirect();
+          }, 600);
+          setTimeout(() => {
+            if (!resolved) readDirect();
+          }, 2000);
+          return;
+        }
+      } catch (error) {
+        console.warn('DtStartCheckUser no disponible directamente', error);
+      }
+
+      readDirect();
+    },
+    [handleUserData],
+  );
 
   useEffect(() => {
     const offUserResult = onNativeEvent('DtCheckUserResultEvent', handleUserData);

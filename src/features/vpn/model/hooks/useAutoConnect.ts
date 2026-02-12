@@ -1,5 +1,12 @@
 import { useCallback, useRef } from 'react';
-import type { AutoState, Category, Credentials, ScreenType, ServerConfig, VpnStatus } from '@/shared/types';
+import type {
+  AutoState,
+  Category,
+  Credentials,
+  ScreenType,
+  ServerConfig,
+  VpnStatus,
+} from '@/shared/types';
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/constants';
 import { dt } from '../../api/vpnBridge';
 
@@ -38,24 +45,24 @@ export function useAutoConnect({
   const nextAuto = useCallback(() => {
     const auto = autoRef.current;
     if (!auto.on) return;
-    
+
     if (auto.i >= auto.list.length) {
       auto.on = false;
       setStatus('DISCONNECTED');
       return;
     }
-    
+
     const srv = auto.list[auto.i++];
     dt.call('DtSetConfig', srv.id);
     setConfigState(srv);
-    
+
     setTimeout(() => {
       pushCreds();
       dt.call('DtExecuteVpnStart');
     }, 120);
 
     clearAutoTimers();
-    
+
     // Timeout para probar siguiente servidor
     auto.tmo = setTimeout(() => {
       dt.call('DtExecuteVpnStop');
@@ -81,29 +88,32 @@ export function useAutoConnect({
     }, 600);
   }, [clearAutoTimers, pushCreds, setConfigState, setStatus]);
 
-  const startAutoConnect = useCallback((cat?: Category) => {
-    if (status === 'CONNECTED' || status === 'CONNECTING') return;
+  const startAutoConnect = useCallback(
+    (cat?: Category) => {
+      if (status === 'CONNECTED' || status === 'CONNECTING') return;
 
-    pushCreds();
-    persistCreds();
-    clearAutoTimers();
+      pushCreds();
+      persistCreds();
+      clearAutoTimers();
 
-    let list: ServerConfig[] = [];
-    if (cat?.items?.length) {
-      list = cat.items.slice();
-    } else {
-      categorias.forEach(c => c.items && list.push(...c.items));
-    }
+      let list: ServerConfig[] = [];
+      if (cat?.items?.length) {
+        list = cat.items.slice();
+      } else {
+        categorias.forEach((c) => c.items && list.push(...c.items));
+      }
 
-    if (!list.length) return;
+      if (!list.length) return;
 
-    autoRef.current.on = true;
-    autoRef.current.list = list;
-    autoRef.current.i = 0;
-    setStatus('CONNECTING');
-    setScreen('home');
-    nextAuto();
-  }, [categorias, clearAutoTimers, nextAuto, persistCreds, pushCreds, setScreen, setStatus, status]);
+      autoRef.current.on = true;
+      autoRef.current.list = list;
+      autoRef.current.i = 0;
+      setStatus('CONNECTING');
+      setScreen('home');
+      nextAuto();
+    },
+    [categorias, clearAutoTimers, nextAuto, persistCreds, pushCreds, setScreen, setStatus, status],
+  );
 
   const cancelAuto = useCallback(() => {
     autoRef.current.on = false;

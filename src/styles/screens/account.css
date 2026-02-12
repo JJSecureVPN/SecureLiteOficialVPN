@@ -12,3 +12,34 @@
   margin: var(--space-xs) 0 var(--space-xs);
   font-size: var(--font-2xl);
 }
+
+/* Expiry status colors */
+.expiry-green {
+  color: var(--status-ok);
+}
+.expiry-yellow {
+  color: var(--status-warn);
+}
+.expiry-orange {
+  color: var(--status-warn);
+}
+.expiry-red {
+  color: var(--status-bad);
+}
+
+/* Blinking animation for critical expiry */
+@keyframes expiryBlink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking {
+  animation: expiryBlink 1s ease-in-out infinite;
+}

@@ -11,7 +11,9 @@
 .phone.is-news .screen.news-screen {
   inset: 0 0 0 0;
   /* Allow runtime override with --news-header-offset (computed from useSafeArea). Fallback keeps previous behavior. */
-  padding-top: calc(var(--space-md) + var(--news-header-offset, calc(52px + env(safe-area-inset-top, 0px))));
+  padding-top: calc(
+    var(--space-md) + var(--news-header-offset, calc(52px + env(safe-area-inset-top, 0px)))
+  );
 }
 
 .news-container {
@@ -60,4 +62,3 @@
     max-height: 40vh;
   }
 }
-

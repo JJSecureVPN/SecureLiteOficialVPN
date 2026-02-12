@@ -27,7 +27,7 @@
   cursor: pointer;
 }
 
-html[data-theme="dark"] .promo-header {
+html[data-theme='dark'] .promo-header {
   background: linear-gradient(180deg, rgba(109, 74, 255, 0.22), rgba(255, 255, 255, 0.06));
 }
 

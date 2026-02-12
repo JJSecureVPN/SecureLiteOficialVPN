@@ -38,7 +38,9 @@ export const MenuScreen = memo(function MenuScreen() {
 
   const toggleHotspot = useCallback(() => {
     const starting = hotspotStatus !== 'RUNNING';
-    const success = starting ? callOne(['DtStartHotSpotService']) : callOne(['DtStopHotSpotService']);
+    const success = starting
+      ? callOne(['DtStartHotSpotService'])
+      : callOne(['DtStopHotSpotService']);
     if (success) {
       showToast(starting ? UI_MESSAGES.menu.hotspotStarted : UI_MESSAGES.menu.hotspotStopped);
       setTimeout(refreshHotspotStatus, 400);
@@ -74,14 +76,19 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: UI_MESSAGES.menu.items.battery.subtitle,
       icon: 'fa-bolt',
       action: () => {
-        if (!callOne(['DtIgnoreBatteryOptimizations', 'DtOpenBatteryOptimization', 'DtOpenPower'])) {
+        if (
+          !callOne(['DtIgnoreBatteryOptimizations', 'DtOpenBatteryOptimization', 'DtOpenPower'])
+        ) {
           showToast(UI_MESSAGES.common.notAvailableDevice);
         }
       },
     },
     {
       id: 'hotspot',
-      title: hotspotStatus === 'RUNNING' ? UI_MESSAGES.menu.items.hotspot.titleOn : UI_MESSAGES.menu.items.hotspot.titleOff,
+      title:
+        hotspotStatus === 'RUNNING'
+          ? UI_MESSAGES.menu.items.hotspot.titleOn
+          : UI_MESSAGES.menu.items.hotspot.titleOff,
       subtitle:
         hotspotStatus === 'RUNNING'
           ? UI_MESSAGES.menu.items.hotspot.subtitleOn
@@ -136,7 +143,6 @@ export const MenuScreen = memo(function MenuScreen() {
       icon: 'fa-list',
       action: () => setScreen('applogs'),
     },
-
   ];
 
   return (
@@ -174,7 +180,6 @@ export const MenuScreen = memo(function MenuScreen() {
           );
         })}
       </div>
-
     </section>
   );
 });

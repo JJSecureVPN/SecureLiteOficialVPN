@@ -10,7 +10,17 @@ export const LS_KEYS = {
   news_last_seen: 'vpn_news_last_seen',
 } as const;
 
-export const SCREENS = ['home', 'news', 'servers', 'menu', 'import', 'logs', 'applogs', 'terms', 'account'] as const;
+export const SCREENS = [
+  'home',
+  'news',
+  'servers',
+  'menu',
+  'import',
+  'logs',
+  'applogs',
+  'terms',
+  'account',
+] as const;
 
 /** Duración del toast en milisegundos */
 export const TOAST_DURATION_MS = 2500;
@@ -82,7 +92,7 @@ export const UI_MESSAGES = {
       },
       import: {
         title: 'Importar configuración',
-        subtitle: 'Importar JSON de configuración (offline)'
+        subtitle: 'Importar JSON de configuración (offline)',
       },
     },
   },
@@ -268,6 +278,7 @@ export const UI_MESSAGES = {
       client: 'Cliente',
       validity: 'Vigencia',
       devices: 'Dispositivos',
+      remainingDays: 'Días restantes',
       server: 'Servidor',
       mode: 'Modo',
       operator: 'Operadora',

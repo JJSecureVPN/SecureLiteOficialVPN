@@ -29,15 +29,20 @@ header.topbar .btn.hotzone:focus-visible,
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   color: var(--on-accent);
   transform: translateZ(0) scale(1.03);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.32), 0 0 0 6px rgba(0,0,0,0.08), 0 0 0 4px rgba(255,255,255,0.06) inset;
-  border-color: rgba(255,255,255,0.12);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.32),
+    0 0 0 6px rgba(0, 0, 0, 0.08),
+    0 0 0 4px rgba(255, 255, 255, 0.06) inset;
+  border-color: rgba(255, 255, 255, 0.12);
   outline: none;
 }
 
 /* foco más visible para botones primarios (alto contraste sobre fondo acentuado) */
 .btn.primary:focus-visible,
 .btn.primary.danger:focus-visible {
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.95), 0 0 0 6px rgba(0,0,0,0.12);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.95),
+    0 0 0 6px rgba(0, 0, 0, 0.12);
   border-color: var(--on-accent);
 }
 
@@ -81,18 +86,7 @@ header.topbar .btn.hotzone:focus-visible,
   margin-right: var(--space-sm);
 }
 
-
-
-
-
-
-
-
-
-
-
 /* Tablet / Mobile: mantener etiquetas pero más compactas; ocultar sólo en pantallas muy pequeñas */
-
 
 .qbtn {
   position: relative;

@@ -27,12 +27,15 @@ interface AppHeaderProps {
  * Barra superior de navegación de la app
  * Anteriormente llamado "TopBar"
  */
-export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModal }: AppHeaderProps) {
+export const AppHeader = memo(function AppHeader({
+  onMenuClick,
+  onShowCouponModal,
+}: AppHeaderProps) {
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
   const { theme, toggleTheme } = useTheme();
   const [hasActiveCoupon, setHasActiveCoupon] = useState(false);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const activeCouponsCount = coupons.filter(c => c.activo && !c.oculto).length;
+  const activeCouponsCount = coupons.filter((c) => c.activo && !c.oculto).length;
   const [hasUnreadNews, setHasUnreadNews] = useState(false);
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
       try {
         const response = await fetch(COUPONS_URL, {
           method: 'GET',
-          headers: { 'Accept': 'application/json' },
+          headers: { Accept: 'application/json' },
           cache: 'no-store',
         });
 
@@ -54,7 +57,7 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
         if (cancelled) return;
 
         setCoupons(coupons);
-        const active = coupons.some(coupon => coupon.activo && !coupon.oculto);
+        const active = coupons.some((coupon) => coupon.activo && !coupon.oculto);
         setHasActiveCoupon(active);
       } catch {
         // Silent
@@ -90,7 +93,9 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
           return;
         }
 
-        const latestDate = latest.fecha_publicacion ? new Date(latest.fecha_publicacion).toISOString() : null;
+        const latestDate = latest.fecha_publicacion
+          ? new Date(latest.fecha_publicacion).toISOString()
+          : null;
         if (latestDate) {
           setHasUnreadNews(latestDate > lastSeen);
         } else {
@@ -134,20 +139,23 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
     onShowCouponModal(coupons);
   }, [onShowCouponModal, coupons]);
 
-
   return (
     <header className="topbar">
       {isSubScreen ? (
         <button className="btn hotzone" onClick={handleClick} data-nav tabIndex={0}>
-          <i className="fa fa-arrow-left" /> {isCategoryDetail ? UI_MESSAGES.servers.backToCategories : UI_MESSAGES.buttons.back}
+          <i className="fa fa-arrow-left" />{' '}
+          {isCategoryDetail ? UI_MESSAGES.servers.backToCategories : UI_MESSAGES.buttons.back}
         </button>
       ) : (
         <div className="dots hotzone" onClick={handleClick} aria-hidden="true">
-          <span /><span /><span /><span />
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
       )}
       <div className="row">
-          {hasActiveCoupon && (
+        {hasActiveCoupon && (
           <button
             type="button"
             className="icon-btn hotzone coupon-btn"
@@ -166,11 +174,11 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
           type="button"
           className="icon-btn hotzone news-btn"
           onClick={() => setScreen('news')}
-          aria-label="Noticias"
-          title="Noticias"
+          aria-label={hasUnreadNews ? 'Noticias — nuevas disponibles' : 'Noticias'}
+          title={hasUnreadNews ? 'Noticias (nuevas)' : 'Noticias'}
         >
           <i className="fa fa-newspaper" aria-hidden="true" />
-          {hasUnreadNews && <span className="news-attention" />}
+          {hasUnreadNews && <span className="news-attention pulse" aria-hidden="true" />}
         </button>
 
         <button
@@ -192,7 +200,6 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowCouponModa
         >
           <i className={theme === 'dark' ? 'fa fa-sun' : 'fa fa-moon'} aria-hidden="true" />
         </button>
-
       </div>
     </header>
   );

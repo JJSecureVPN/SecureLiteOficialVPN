@@ -53,16 +53,16 @@ export function formatProtocol(rawMode?: string | null): string {
  */
 export function extractDomain(description?: string | null): string | null {
   if (!description) return null;
-  
+
   const domains = ['Front A', 'Front B', 'Cloudflare', 'G-Cloud'];
   const upper = description.toUpperCase();
-  
+
   for (const domain of domains) {
     if (upper.includes(domain.toUpperCase())) {
       return domain;
     }
   }
-  
+
   return null;
 }
 
@@ -73,14 +73,14 @@ export function extractDomain(description?: string | null): string | null {
  */
 export function removeDomainFromDescription(description?: string | null): string {
   if (!description) return '';
-  
+
   const domains = ['Front A', 'Front B', 'Cloudflare', 'G-Cloud'];
   let result = description;
-  
+
   for (const domain of domains) {
     const regex = new RegExp(`\\s*[-•*]?\\s*${domain}\\s*[-•*]?\\s*`, 'gi');
     result = result.replace(regex, '').trim();
   }
-  
+
   return result;
 }

@@ -25,11 +25,7 @@ export const SessionDetails = memo(function SessionDetails() {
         <p className="session-card__title">{UI_MESSAGES.session.greeting(name)}</p>
         <p className="session-card__meta">{UI_MESSAGES.session.protected}</p>
       </div>
-      <Button
-        variant="soft"
-        className="session-card__button"
-        onClick={handleViewDetails}
-      >
+      <Button variant="soft" className="session-card__button" onClick={handleViewDetails}>
         <i className="fa fa-user-shield" aria-hidden="true" /> {UI_MESSAGES.buttons.viewDetails}
       </Button>
     </div>

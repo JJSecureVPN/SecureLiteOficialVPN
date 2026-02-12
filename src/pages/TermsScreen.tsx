@@ -49,10 +49,13 @@ export const TermsScreen = memo(function TermsScreen() {
     callOne(['DtStartWebViewActivity'], 'https://shop.jhservices.com.ar/terminos');
   }, []);
 
-  const sectionStyle = useMemo(() => ({
-    ...baseSectionStyle,
-    inset: 0,
-  }), [baseSectionStyle]);
+  const sectionStyle = useMemo(
+    () => ({
+      ...baseSectionStyle,
+      inset: 0,
+    }),
+    [baseSectionStyle],
+  );
 
   return (
     <section className="screen" style={sectionStyle}>
@@ -65,15 +68,28 @@ export const TermsScreen = memo(function TermsScreen() {
           {TERM_CARDS.map((card, i) => (
             <div key={i} className="info-card term-card">
               <div className="row" style={{ marginBottom: 'var(--space-sm)' }}>
-                <i className={`fa ${card.icon}`} style={{ color: card.color, fontSize: 'var(--font-lg)' }} />
+                <i
+                  className={`fa ${card.icon}`}
+                  style={{ color: card.color, fontSize: 'var(--font-lg)' }}
+                />
                 <strong style={{ fontSize: 'var(--font-md)' }}>{card.title}</strong>
               </div>
-              <p className="muted" style={{ fontSize: 'var(--font-sm)' }}>{card.text}</p>
+              <p className="muted" style={{ fontSize: 'var(--font-sm)' }}>
+                {card.text}
+              </p>
             </div>
           ))}
         </div>
 
-        <div style={{ padding: 'var(--space-xl) 0', borderTop: '1px solid rgba(255,255,255,.05)', display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+        <div
+          style={{
+            padding: 'var(--space-xl) 0',
+            borderTop: '1px solid rgba(255,255,255,.05)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-sm)',
+          }}
+        >
           {!termsAccepted ? (
             <Button variant="primary" onClick={handleAccept} className="full-width">
               {UI_MESSAGES.terms.accept}

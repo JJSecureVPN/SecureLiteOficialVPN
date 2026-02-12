@@ -48,7 +48,7 @@ initializePerformanceMonitoring();
 // Función para renderizar la app con manejo de errores
 function renderApp() {
   const rootElement = document.getElementById('root');
-  
+
   if (!rootElement) {
     console.error('❌ No se encontró el elemento #root');
     return;
@@ -59,7 +59,7 @@ function renderApp() {
     root.render(
       <StrictMode>
         <App />
-      </StrictMode>
+      </StrictMode>,
     );
     console.log('✅ App renderizada correctamente');
   } catch (error) {
@@ -92,4 +92,3 @@ if (document.readyState === 'loading') {
 } else {
   renderApp();
 }
-

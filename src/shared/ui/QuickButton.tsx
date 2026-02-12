@@ -6,9 +6,19 @@ interface QuickButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 
-export const QuickButton = memo(function QuickButton({ icon, label, className = '', ...props }: QuickButtonProps) {
+export const QuickButton = memo(function QuickButton({
+  icon,
+  label,
+  className = '',
+  ...props
+}: QuickButtonProps) {
   return (
-    <button className={`ql-qbtn ${className}`} type="button" {...props} aria-label={props['aria-label'] || label}>
+    <button
+      className={`ql-qbtn ${className}`}
+      type="button"
+      {...props}
+      aria-label={props['aria-label'] || label}
+    >
       <i className={`fa ${icon}`} aria-hidden="true" />
       <span className="ql-qbtn-label">{label}</span>
     </button>

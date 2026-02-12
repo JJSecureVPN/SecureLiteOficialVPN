@@ -32,18 +32,16 @@ interface UseVpnConnectionState {
   loadCategorias: () => void;
 }
 
-export function useVpnConnectionState({ creds, persistCreds, setScreen }: UseVpnConnectionArgs): UseVpnConnectionState {
+export function useVpnConnectionState({
+  creds,
+  persistCreds,
+  setScreen,
+}: UseVpnConnectionArgs): UseVpnConnectionState {
   const [status, setStatus] = useState<VpnStatus>('DISCONNECTED');
-  
+
   // Hook para manejo de servidores
-  const { 
-    categorias, 
-    config, 
-    setConfig, 
-    setConfigState, 
-    loadCategorias, 
-    loadInitialConfig 
-  } = useServers();
+  const { categorias, config, setConfig, setConfigState, loadCategorias, loadInitialConfig } =
+    useServers();
 
   // Función para enviar credenciales al bridge
   const pushCreds = useCallback(() => {
@@ -53,11 +51,7 @@ export function useVpnConnectionState({ creds, persistCreds, setScreen }: UseVpn
   }, [creds.pass, creds.user, creds.uuid]);
 
   // Hook para auto-conexión
-  const { 
-    auto, 
-    startAutoConnect, 
-    cancelAuto,
-  } = useAutoConnect({
+  const { auto, startAutoConnect, cancelAuto } = useAutoConnect({
     status,
     categorias,
     creds,
@@ -125,4 +119,3 @@ export function useVpnConnectionState({ creds, persistCreds, setScreen }: UseVpn
     loadCategorias,
   };
 }
-

@@ -25,7 +25,9 @@
   opacity: 0;
   transform: translateY(8px);
   margin: 0;
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
 }
 
 .toast.show {

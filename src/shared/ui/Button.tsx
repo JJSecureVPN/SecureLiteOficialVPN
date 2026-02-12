@@ -6,7 +6,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export const Button = memo(function Button({ children, variant = 'default', className = '', disabled, ...props }: ButtonProps) {
+export const Button = memo(function Button({
+  children,
+  variant = 'default',
+  className = '',
+  disabled,
+  ...props
+}: ButtonProps) {
   const variantClass = {
     default: 'btn',
     primary: 'btn primary',
@@ -15,11 +21,7 @@ export const Button = memo(function Button({ children, variant = 'default', clas
   }[variant];
 
   return (
-    <button
-      className={`${variantClass} ${className}`}
-      disabled={disabled}
-      {...props}
-    >
+    <button className={`${variantClass} ${className}`} disabled={disabled} {...props}>
       {children}
     </button>
   );

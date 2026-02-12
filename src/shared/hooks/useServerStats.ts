@@ -55,7 +55,13 @@ export function useServerStats(options: UseServerStatsOptions = {}) {
         const json = (await response.json()) as any;
         if (cancelled) return;
 
-        if (!json || !json.success || !json.data || !json.data.serverStats || !Array.isArray(json.data.serverStats.servers)) {
+        if (
+          !json ||
+          !json.success ||
+          !json.data ||
+          !json.data.serverStats ||
+          !Array.isArray(json.data.serverStats.servers)
+        ) {
           setState((prev) => ({
             data: prev.data,
             loading: false,
@@ -194,12 +200,20 @@ export function useServerStats(options: UseServerStatsOptions = {}) {
         if (n.includes(' 2') || n.endsWith('2') || n.includes('II')) {
           return findByIncludes(['PREMIUM', '2', 'BR']) || findByIncludes(['2', 'BR']);
         }
-        return findByIncludes(['PREMIUM', '1', 'BR']) || findByIncludes(['1', 'BR']) || findByIncludes(['BR']);
+        return (
+          findByIncludes(['PREMIUM', '1', 'BR']) ||
+          findByIncludes(['1', 'BR']) ||
+          findByIncludes(['BR'])
+        );
       }
 
       // ARGENTINA -> PREMIUM 1 AR
       if (n.includes('ARGENTINA') || n.includes(' AR ')) {
-        return findByIncludes(['PREMIUM', '1', 'AR']) || findByIncludes(['1', 'AR']) || findByIncludes(['AR']);
+        return (
+          findByIncludes(['PREMIUM', '1', 'AR']) ||
+          findByIncludes(['1', 'AR']) ||
+          findByIncludes(['AR'])
+        );
       }
 
       // GRATUITO -> GRATUITO (ej: GRATUITO USA)

@@ -66,7 +66,8 @@ export function useSafeArea() {
   }, []);
 
   const refresh = () => setMetrics(computeMetrics());
-  const getModalHeight = (percentage = 85) => Math.floor((metrics.contentHeight * percentage) / 100);
+  const getModalHeight = (percentage = 85) =>
+    Math.floor((metrics.contentHeight * percentage) / 100);
 
   return {
     statusBarHeight: metrics.statusBarHeight,

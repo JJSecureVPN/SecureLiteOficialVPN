@@ -12,11 +12,7 @@ export const Toggle = memo(function Toggle({ checked, onChange, label }: ToggleP
     <>
       {label && <span className="auto-switch-label">{label}</span>}
       <label className="toggle" aria-label={label || UI_MESSAGES.common.toggleAriaFallback}>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-        />
+        <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
         <span className="thumb" />
       </label>
     </>

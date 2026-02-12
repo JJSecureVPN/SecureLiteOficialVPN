@@ -63,29 +63,29 @@ class AppLogger {
 
     console.log = (...args) => {
       originals.log(...args);
-      this.add('info', args.map(arg => String(arg)).join(' '));
+      this.add('info', args.map((arg) => String(arg)).join(' '));
     };
 
     console.warn = (...args) => {
       originals.warn(...args);
-      this.add('warn', args.map(arg => String(arg)).join(' '));
+      this.add('warn', args.map((arg) => String(arg)).join(' '));
     };
 
     console.error = (...args) => {
       originals.error(...args);
-      this.add('error', args.map(arg => String(arg)).join(' '));
+      this.add('error', args.map((arg) => String(arg)).join(' '));
     };
 
     console.debug = (...args) => {
       originals.debug(...args);
-      this.add('debug', args.map(arg => String(arg)).join(' '));
+      this.add('debug', args.map((arg) => String(arg)).join(' '));
     };
   }
 
   add(level: 'info' | 'warn' | 'error' | 'debug', message: string) {
     const now = new Date();
     const timestamp = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-    
+
     this.logs.push({
       timestamp,
       level,
@@ -122,7 +122,7 @@ class AppLogger {
   }
 
   private notifyListeners() {
-    this.listeners.forEach(callback => {
+    this.listeners.forEach((callback) => {
       queueMicrotask(() => callback());
     });
   }

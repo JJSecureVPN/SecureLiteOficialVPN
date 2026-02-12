@@ -13,12 +13,12 @@ interface ConnectionStatusBannerProps {
  * Anteriormente llamado "Hero"
  * Ahora también muestra información detallada de errores de conexión
  */
-export const ConnectionStatusBanner = memo(function ConnectionStatusBanner({ 
+export const ConnectionStatusBanner = memo(function ConnectionStatusBanner({
   status: externalStatus,
   autoActive: externalAutoActive,
 }: ConnectionStatusBannerProps = {}) {
   const { status: contextStatus, auto } = useVpn();
-  
+
   // Usar props externas si se proporcionan, sino usar contexto
   const status = externalStatus ?? (contextStatus as VpnStatus);
   const autoActive = externalAutoActive ?? auto?.on;
@@ -49,7 +49,9 @@ export const ConnectionStatusBanner = memo(function ConnectionStatusBanner({
 
   return (
     <div className="hero">
-      <i className={`${iconClass} ${iconState === 'connected' ? 'hero-lock--connected' : iconState === 'error' ? 'hero-lock--error' : ''}`.trim()} />
+      <i
+        className={`${iconClass} ${iconState === 'connected' ? 'hero-lock--connected' : iconState === 'error' ? 'hero-lock--error' : ''}`.trim()}
+      />
       <div className="title">{text}</div>
       {detail && <div className="hero-detail">{detail}</div>}
     </div>

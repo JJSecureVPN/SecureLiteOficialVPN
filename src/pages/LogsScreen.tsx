@@ -13,10 +13,13 @@ export const LogsScreen = memo(function LogsScreen() {
   const { logs, refresh } = useLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
 
-  const screenStyle = useMemo(() => ({
-    paddingTop: `calc(${statusBarHeight}px + 16px)`,
-    bottom: `${navigationBarHeight}px`,
-  }), [statusBarHeight, navigationBarHeight]);
+  const screenStyle = useMemo(
+    () => ({
+      paddingTop: `calc(${statusBarHeight}px + 16px)`,
+      bottom: `${navigationBarHeight}px`,
+    }),
+    [statusBarHeight, navigationBarHeight],
+  );
 
   const logEntries = useMemo(() => {
     return logs
@@ -68,8 +71,12 @@ export const LogsScreen = memo(function LogsScreen() {
           <p className="section-subtitle">{UI_MESSAGES.logs.subtitle}</p>
         </div>
         <div className="logs-actions">
-          <Button variant="soft" onClick={handleCopy} disabled={!hasLogs}>{UI_MESSAGES.logs.copy}</Button>
-          <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>{UI_MESSAGES.logs.clear}</Button>
+          <Button variant="soft" onClick={handleCopy} disabled={!hasLogs}>
+            {UI_MESSAGES.logs.copy}
+          </Button>
+          <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
+            {UI_MESSAGES.logs.clear}
+          </Button>
           <Button onClick={handleClose}>{UI_MESSAGES.logs.close}</Button>
         </div>
       </div>

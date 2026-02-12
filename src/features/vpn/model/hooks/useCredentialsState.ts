@@ -12,7 +12,7 @@ export function useCredentialsState(): UseCredentialsState {
   const [creds, setCredsState] = useState<Credentials>(() => loadCredentials());
 
   const setCreds = useCallback((partial: Partial<Credentials>) => {
-    setCredsState(prev => {
+    setCredsState((prev) => {
       const next = { ...prev, ...partial };
       saveCredentials(next.user, next.pass, next.uuid);
       return next;
@@ -20,7 +20,7 @@ export function useCredentialsState(): UseCredentialsState {
   }, []);
 
   const persistCreds = useCallback(() => {
-    setCredsState(prev => {
+    setCredsState((prev) => {
       saveCredentials(prev.user, prev.pass, prev.uuid);
       return prev;
     });

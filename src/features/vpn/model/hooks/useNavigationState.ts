@@ -7,7 +7,7 @@ export function useNavigationState(termsAccepted: boolean) {
 
   const setScreen = useCallback((next: ScreenType) => {
     if (!SCREENS.includes(next)) return;
-    setScreenState(current => (current === next ? current : next));
+    setScreenState((current) => (current === next ? current : next));
   }, []);
 
   useEffect(() => {

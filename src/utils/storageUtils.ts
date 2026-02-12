@@ -66,4 +66,3 @@ export function loadNewsLastSeen(): string | null {
 export function saveNewsLastSeen(iso: string) {
   safeSetItem(LS_KEYS.news_last_seen, iso);
 }
-

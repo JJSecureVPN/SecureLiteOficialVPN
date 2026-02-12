@@ -55,7 +55,13 @@ export interface AutoState {
   i: number;
 }
 
-export type VpnStatus = 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED' | 'AUTH_FAILED' | 'NO_NETWORK' | 'STOPPING';
+export type VpnStatus =
+  | 'DISCONNECTED'
+  | 'CONNECTING'
+  | 'CONNECTED'
+  | 'AUTH_FAILED'
+  | 'NO_NETWORK'
+  | 'STOPPING';
 
 export type ScreenType = (typeof SCREENS)[number];
 

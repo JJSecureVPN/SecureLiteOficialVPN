@@ -37,14 +37,14 @@ export function useRetryLoads({
         retryCountRef.current++;
         appLogger.add(
           'warn',
-          `🔄 Reintentando cargar servidores... (${retryCountRef.current}/${maxRetries})`
+          `🔄 Reintentando cargar servidores... (${retryCountRef.current}/${maxRetries})`,
         );
         onRetry();
       }, retryDelay);
     } else if (catLength === 0 && retryCountRef.current >= maxRetries) {
       appLogger.add(
         'error',
-        `❌ No se pudieron cargar servidores después de ${maxRetries} intentos`
+        `❌ No se pudieron cargar servidores después de ${maxRetries} intentos`,
       );
     }
 

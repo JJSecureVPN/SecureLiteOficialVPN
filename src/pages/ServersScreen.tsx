@@ -65,7 +65,7 @@ export function ServersScreen() {
   const { serversByName } = useServerStats({ pollMs: 3_000, enabled: true });
 
   const toggleExpand = useCallback((catName: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(catName)) {
         newSet.delete(catName);
@@ -78,7 +78,6 @@ export function ServersScreen() {
 
   const serversContentRef = useRef<HTMLDivElement | null>(null);
   useKeyboardNavigation(serversContentRef);
-  
 
   // Al abrir una categoría, enfocar el primer elemento interactivo dentro del área
   useEffect(() => {
@@ -88,7 +87,9 @@ export function ServersScreen() {
     const selector = 'button, [role="button"], a, [tabindex]:not([tabindex="-1"])';
     // Pequeño delay para asegurar que el DOM esté renderizado
     const t = window.setTimeout(() => {
-      const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+      const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
+        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
+      );
       if (items.length) items[0].focus();
     }, 40);
     return () => window.clearTimeout(t);
@@ -99,7 +100,6 @@ export function ServersScreen() {
     if (selectedCategory) return;
     const root = serversContentRef.current;
     if (!root) return;
-
 
     // When we focus the search input via Enter, mark it as exitable so navigation keys can move out
     const onEnterWithExitable = (e: KeyboardEvent) => {
@@ -156,7 +156,9 @@ export function ServersScreen() {
       }
       if (!node) return;
 
-      const cats = Array.from(root.querySelectorAll<HTMLElement>('.category-card')).filter(el => el.offsetParent !== null && !el.hasAttribute('disabled'));
+      const cats = Array.from(root.querySelectorAll<HTMLElement>('.category-card')).filter(
+        (el) => el.offsetParent !== null && !el.hasAttribute('disabled'),
+      );
       if (!cats.length) return;
       const idx = cats.indexOf(node);
       if (idx === -1) return;
@@ -175,11 +177,23 @@ export function ServersScreen() {
         }
       } else if (e.key === 'ArrowLeft') {
         // focus header/back on left arrow
-        const sel = ['header.topbar [data-nav]', 'header.topbar button.btn.hotzone', 'header.topbar .btn.hotzone', 'header.topbar .hotzone'].join(',');
+        const sel = [
+          'header.topbar [data-nav]',
+          'header.topbar button.btn.hotzone',
+          'header.topbar .btn.hotzone',
+          'header.topbar .hotzone',
+        ].join(',');
         const back = document.querySelector<HTMLElement>(sel);
         if (back) {
-          try { back.setAttribute('tabindex', '0'); back.setAttribute('data-nav', '1'); } catch {}
-          setTimeout(() => { try { back.focus(); } catch {} }, 0);
+          try {
+            back.setAttribute('tabindex', '0');
+            back.setAttribute('data-nav', '1');
+          } catch {}
+          setTimeout(() => {
+            try {
+              back.focus();
+            } catch {}
+          }, 0);
           e.preventDefault();
         }
       }
@@ -201,7 +215,12 @@ export function ServersScreen() {
 
     const selector = '.server-grid .server-item';
 
-    const getItems = () => Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(el => !el.hasAttribute('disabled') && (el.offsetParent !== null || el.getClientRects().length > 0));
+    const getItems = () =>
+      Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
+        (el) =>
+          !el.hasAttribute('disabled') &&
+          (el.offsetParent !== null || el.getClientRects().length > 0),
+      );
 
     const getCenter = (r: DOMRect) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
 
@@ -215,61 +234,107 @@ export function ServersScreen() {
       const rows: Array<typeof nodes> = [];
       for (const node of nodes) {
         const last = rows[rows.length - 1];
-        if (!last) { rows.push([node]); continue; }
-        const avgHeight = last.reduce((s, n) => s + n.rect.height, 0) / last.length || node.rect.height;
+        if (!last) {
+          rows.push([node]);
+          continue;
+        }
+        const avgHeight =
+          last.reduce((s, n) => s + n.rect.height, 0) / last.length || node.rect.height;
         const tol = Math.max(12, avgHeight * 0.5);
         const lastY = last.reduce((s, n) => s + n.c.y, 0) / last.length;
-        if (Math.abs(node.c.y - lastY) <= tol) last.push(node); else rows.push([node]);
+        if (Math.abs(node.c.y - lastY) <= tol) last.push(node);
+        else rows.push([node]);
       }
-      const grid = rows.map(r => r.sort((a, b) => a.c.x - b.c.x));
+      const grid = rows.map((r) => r.sort((a, b) => a.c.x - b.c.x));
       const indexMap = new Map<number, { row: number; col: number }>();
       grid.forEach((row, ri) => row.forEach((n, ci) => indexMap.set(n.i, { row: ri, col: ci })));
       return { grid, indexMap };
     };
 
     const findNearestInRowByX = (row: Array<{ c: { x: number } }>, x: number) => {
-      let best = 0; let bestDist = Infinity;
-      row.forEach((n, i) => { const d = Math.abs(n.c.x - x); if (d < bestDist) { bestDist = d; best = i; } });
+      let best = 0;
+      let bestDist = Infinity;
+      row.forEach((n, i) => {
+        const d = Math.abs(n.c.x - x);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
       return best;
     };
 
     const onKey = (e: KeyboardEvent) => {
       if (!['ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
-      const items = getItems(); if (!items.length) return;
+      const items = getItems();
+      if (!items.length) return;
       const active = document.activeElement as HTMLElement | null;
       const activeIdx = active ? items.indexOf(active) : -1;
       // Build grid
       const { grid, indexMap } = buildGrid(items);
-      if (activeIdx < 0) { const first = grid[0]?.[0]?.el; if (first) { first.focus(); e.preventDefault(); } return; }
+      if (activeIdx < 0) {
+        const first = grid[0]?.[0]?.el;
+        if (first) {
+          first.focus();
+          e.preventDefault();
+        }
+        return;
+      }
       const pos = indexMap.get(activeIdx);
       if (!pos) return;
       const { row: r, col: c } = pos;
       let target: { row: number; col: number } | null = null;
       if (e.key === 'ArrowDown') {
         const nextRow = Math.min(grid.length - 1, r + 1);
-        if (nextRow !== r) { const desiredX = grid[r][c].c.x; const colInNext = findNearestInRowByX(grid[nextRow], desiredX); target = { row: nextRow, col: colInNext }; }
+        if (nextRow !== r) {
+          const desiredX = grid[r][c].c.x;
+          const colInNext = findNearestInRowByX(grid[nextRow], desiredX);
+          target = { row: nextRow, col: colInNext };
+        }
       } else if (e.key === 'ArrowUp') {
         const prevRow = Math.max(0, r - 1);
-        if (prevRow !== r) { const desiredX = grid[r][c].c.x; const colInPrev = findNearestInRowByX(grid[prevRow], desiredX); target = { row: prevRow, col: colInPrev }; }
+        if (prevRow !== r) {
+          const desiredX = grid[r][c].c.x;
+          const colInPrev = findNearestInRowByX(grid[prevRow], desiredX);
+          target = { row: prevRow, col: colInPrev };
+        }
       } else if (e.key === 'ArrowLeft') {
         // Focus header/back from within grid
-        const sel = ['header.topbar [data-nav]', 'header.topbar button.btn.hotzone', 'header.topbar .btn.hotzone', 'header.topbar .hotzone'].join(',');
+        const sel = [
+          'header.topbar [data-nav]',
+          'header.topbar button.btn.hotzone',
+          'header.topbar .btn.hotzone',
+          'header.topbar .hotzone',
+        ].join(',');
         const back = document.querySelector<HTMLElement>(sel);
         if (back) {
-          try { back.setAttribute('tabindex', '0'); back.setAttribute('data-nav', '1'); } catch {}
-          setTimeout(() => { try { back.focus(); } catch {} }, 0);
+          try {
+            back.setAttribute('tabindex', '0');
+            back.setAttribute('data-nav', '1');
+          } catch {}
+          setTimeout(() => {
+            try {
+              back.focus();
+            } catch {}
+          }, 0);
           return;
         }
       }
       if (target) {
         const el = grid[target.row]?.[target.col]?.el;
-        if (el) { el.focus(); e.preventDefault(); }
+        if (el) {
+          el.focus();
+          e.preventDefault();
+        }
       }
     };
 
     window.addEventListener('keydown', onKey);
     root.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); root.removeEventListener('keydown', onKey); };
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      root.removeEventListener('keydown', onKey);
+    };
   }, [selectedCategory]);
 
   const filteredCategories = useMemo(() => {
@@ -278,7 +343,8 @@ export function ServersScreen() {
       .filter((cat) => (cat.items?.length || 0) > 0)
       .filter((cat) => !query || cat.name.toLowerCase().includes(query))
       .sort((a, b) => {
-        const sorterDiff = (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
+        const sorterDiff =
+          (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
         if (sorterDiff !== 0) return sorterDiff;
         const countDiff = (b.items?.length || 0) - (a.items?.length || 0);
         if (countDiff !== 0) return countDiff;
@@ -298,7 +364,8 @@ export function ServersScreen() {
     return orderSubcategories(Array.from(map.keys())).map((label) => ({
       label,
       servers: (map.get(label) || []).sort((a, b) => {
-        const sorterDiff = (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
+        const sorterDiff =
+          (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
         if (sorterDiff !== 0) return sorterDiff;
         return a.name.localeCompare(b.name);
       }),
@@ -310,45 +377,69 @@ export function ServersScreen() {
     return groupedServers.filter(({ label }) => label === subcategoryFilter);
   }, [groupedServers, subcategoryFilter]);
 
-  const handleCategoryClick = useCallback((cat: Category) => {
-    setSelectedCategory(cat);
-  }, [setSelectedCategory]);
+  const handleCategoryClick = useCallback(
+    (cat: Category) => {
+      setSelectedCategory(cat);
+    },
+    [setSelectedCategory],
+  );
 
-  const handleServerClick = useCallback((srv: ServerConfig, cat: Category) => {
-    if (autoMode) {
-      startAutoConnect(cat);
-      showToast(UI_MESSAGES.auto.testing(cat.name || UI_MESSAGES.auto.categoryFallback), document.activeElement as HTMLElement);
-      return;
-    }
+  const handleServerClick = useCallback(
+    (srv: ServerConfig, cat: Category) => {
+      if (autoMode) {
+        startAutoConnect(cat);
+        showToast(
+          UI_MESSAGES.auto.testing(cat.name || UI_MESSAGES.auto.categoryFallback),
+          document.activeElement as HTMLElement,
+        );
+        return;
+      }
 
-    // Switch manual: permitir cambiar de servidor aunque esté conectado
-    if (status === 'CONNECTED' || status === 'CONNECTING') {
-      // Asegurar que el bridge tenga las credenciales actuales
-      dt.set('DtUsername', creds.user);
-      dt.set('DtPassword', creds.pass);
-      dt.set('DtUuid', creds.uuid);
+      // Switch manual: permitir cambiar de servidor aunque esté conectado
+      if (status === 'CONNECTED' || status === 'CONNECTING') {
+        // Asegurar que el bridge tenga las credenciales actuales
+        dt.set('DtUsername', creds.user);
+        dt.set('DtPassword', creds.pass);
+        dt.set('DtUuid', creds.uuid);
 
-      if (status === 'CONNECTING') {
-        cancelConnecting();
-      } else {
-        disconnect();
+        if (status === 'CONNECTING') {
+          cancelConnecting();
+        } else {
+          disconnect();
+        }
+
+        setConfig(srv);
+        setScreen('home');
+        showToast(
+          UI_MESSAGES.status.connectingTo(srv.name || UI_MESSAGES.servers.inUse),
+          document.activeElement as HTMLElement,
+        );
+
+        // Esperar un poco para que el stop se procese en DTunnel
+        window.setTimeout(() => {
+          dt.call('DtExecuteVpnStart');
+        }, 250);
+        return;
       }
 
       setConfig(srv);
       setScreen('home');
-      showToast(UI_MESSAGES.status.connectingTo(srv.name || UI_MESSAGES.servers.inUse), document.activeElement as HTMLElement);
-
-      // Esperar un poco para que el stop se procese en DTunnel
-      window.setTimeout(() => {
-        dt.call('DtExecuteVpnStart');
-      }, 250);
-      return;
-    }
-
-    setConfig(srv);
-    setScreen('home');
-    showToast(UI_MESSAGES.connection.serverSelected, document.activeElement as HTMLElement);
-  }, [autoMode, startAutoConnect, showToast, status, creds.user, creds.pass, creds.uuid, cancelConnecting, disconnect, setConfig, setScreen]);
+      showToast(UI_MESSAGES.connection.serverSelected, document.activeElement as HTMLElement);
+    },
+    [
+      autoMode,
+      startAutoConnect,
+      showToast,
+      status,
+      creds.user,
+      creds.pass,
+      creds.uuid,
+      cancelConnecting,
+      disconnect,
+      setConfig,
+      setScreen,
+    ],
+  );
 
   const handleClearSearch = useCallback(() => {
     setSearchTerm('');
@@ -357,35 +448,35 @@ export function ServersScreen() {
   const handleOpenNativeDialog = useCallback(() => {
     appLogger.add('info', '🔧 Abriendo diálogo de configuración nativa de DTunnel');
     dt.call('DtExecuteDialogConfig');
-    
+
     // Polling para detectar cambios en el servidor seleccionado
     let lastConfigId: string | null = null;
     const currentConfig = dt.jsonConfigAtual as ServerConfig | null;
     if (currentConfig?.id) {
       lastConfigId = String(currentConfig.id);
     }
-    
+
     const checkInterval = setInterval(() => {
       const newConfig = dt.jsonConfigAtual as ServerConfig | null;
       const newConfigId = newConfig?.id ? String(newConfig.id) : null;
-      
+
       // Si el ID del servidor cambió
       if (newConfigId && newConfigId !== lastConfigId) {
         appLogger.add('info', `🔄 Cambio detectado: ${lastConfigId} → ${newConfigId}`);
-        
+
         // Actualizar el servidor seleccionado inmediatamente
         if (newConfig && newConfig.id) {
           setConfig(newConfig);
           appLogger.add('info', `✅ Servidor actualizado: ${newConfig.name}`);
         }
-        
+
         // Luego recargar categorías en background para sincronizar
         loadCategorias();
         clearInterval(checkInterval);
         clearTimeout(timeoutId);
       }
     }, 300); // Más frecuente para mejor respuesta
-    
+
     // Detener el polling después de 10 segundos
     const timeoutId = setTimeout(() => {
       appLogger.add('debug', 'Timeout de polling alcanzado');
@@ -424,7 +515,8 @@ export function ServersScreen() {
                     <span className="chip-count">
                       {label === ALL_SUBCATEGORIES
                         ? selectedCategory.items?.length || 0
-                        : groupedServers.find((group) => group.label === label)?.servers.length || 0}
+                        : groupedServers.find((group) => group.label === label)?.servers.length ||
+                          0}
                     </span>
                   </button>
                 ))}
@@ -437,7 +529,6 @@ export function ServersScreen() {
             <p className="section-subtitle">{UI_MESSAGES.servers.subtitle}</p>
           </>
         )}
-
       </div>
 
       <div className="servers-content" ref={serversContentRef}>
@@ -453,15 +544,20 @@ export function ServersScreen() {
                 data-nav
               />
               {searchTerm && (
-                <button type="button" className="clear-btn" onClick={handleClearSearch} aria-label={UI_MESSAGES.servers.clearSearchAria}>
+                <button
+                  type="button"
+                  className="clear-btn"
+                  onClick={handleClearSearch}
+                  aria-label={UI_MESSAGES.servers.clearSearchAria}
+                >
                   <i className="fas fa-times" aria-hidden="true" />
                 </button>
               )}
             </div>
             {categorias.length > 0 && (
-              <button 
-                type="button" 
-                className="config-btn" 
+              <button
+                type="button"
+                className="config-btn"
                 data-nav
                 onClick={handleOpenNativeDialog}
                 title={UI_MESSAGES.servers.openConfiguratorTitle}
@@ -491,9 +587,21 @@ export function ServersScreen() {
                   <i className="fas fa-map-marker-alt" aria-hidden="true" />
                   <p>{UI_MESSAGES.servers.noSearchResults(searchTerm)}</p>
                   <small className="muted">{UI_MESSAGES.servers.noSearchHint}</small>
-                  <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <div
+                    style={{
+                      marginTop: '16px',
+                      display: 'flex',
+                      gap: '8px',
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <Button variant="soft" onClick={handleClearSearch}>
-                      <i className="fas fa-redo" aria-hidden="true" style={{ marginRight: '8px' }} />
+                      <i
+                        className="fas fa-redo"
+                        aria-hidden="true"
+                        style={{ marginRight: '8px' }}
+                      />
                       {UI_MESSAGES.servers.clearSearch}
                     </Button>
                     <Button onClick={handleOpenNativeDialog}>
@@ -504,90 +612,125 @@ export function ServersScreen() {
                 </div>
               ) : (
                 filteredCategories.map((cat) => {
-                  const hasSelectedServer = currentConfig && cat.items?.some(srv => srv.id === currentConfig.id);
+                  const hasSelectedServer =
+                    currentConfig && cat.items?.some((srv) => srv.id === currentConfig.id);
                   const first = cat.items?.[0];
                   const live = serversByName.getBestMatch(
-                    `${cat.name || ''} ${first?.name || ''} ${first?.description || ''}`.trim()
+                    `${cat.name || ''} ${first?.name || ''} ${first?.description || ''}`.trim(),
                   );
                   return (
-                  <div className={`category-card ${hasSelectedServer ? 'selected' : ''}`}>
-                    <button
-                      type="button"
-                      className="category-card__main"
-                      data-nav
-                      onClick={() => handleCategoryClick(cat)}
-                    >
-                      <div className="category-card__header">
-                        <div>
-                          <p className="category-card__title">{cat.name}</p>
-                          <small className="muted">{UI_MESSAGES.servers.serverCount(cat.items.length)}</small>
-                        </div>
-                        <span className="badge-count" title="Usuarios conectados">
+                    <div className={`category-card ${hasSelectedServer ? 'selected' : ''}`}>
+                      <button
+                        type="button"
+                        className="category-card__main"
+                        data-nav
+                        onClick={() => handleCategoryClick(cat)}
+                      >
+                        <div className="category-card__header">
+                          <div>
+                            <p className="category-card__title">{cat.name}</p>
+                            <small className="muted">
+                              {UI_MESSAGES.servers.serverCount(cat.items.length)}
+                            </small>
+                          </div>
+                          <span className="badge-count" title="Usuarios conectados">
                             <i className="fas fa-users" aria-hidden="true" />
                             {live?.connectedUsers ?? '-'}
-                            <span className="badge-count-label" aria-hidden="true">ONLINE</span>
+                            <span className="badge-count-label" aria-hidden="true">
+                              ONLINE
+                            </span>
                           </span>
-                      </div>
-                      <div className="category-card__body">
-                        <span className="category-card__label">{UI_MESSAGES.servers.subcategories}</span>
-                        <div className="category-pills">
-                          {Array.from(new Set(cat.items.map((srv) => resolveSubcategory(srv.name)))).slice(0, 4).map((label) => (
-                            <span key={label} className="pill">{label}</span>
-                          ))}
                         </div>
-                      </div>
-                      <div className="category-card__footer">
-                        <span>{autoMode ? UI_MESSAGES.servers.autoTest : UI_MESSAGES.servers.manualSelect}</span>
-                        <button
-                          type="button"
-                          className="expand-btn"
-                          onClick={(e) => { e.stopPropagation(); toggleExpand(cat.name); }}
-                          aria-label={expandedCategories.has(cat.name) ? 'Contraer detalles' : 'Expandir detalles'}
-                        >
-                          <i className={`fas fa-chevron-${expandedCategories.has(cat.name) ? 'up' : 'down'}`} aria-hidden="true" />
-                        </button>
-                      </div>
-                    </button>
-                    {expandedCategories.has(cat.name) && live && (
-                      <div className="category-card__expanded">
-                        <div className="stats-grid">
-                          <div className="stat-item">
-                            <i className="fas fa-microchip" aria-hidden="true" />
-                            <span>CPU: {live.cpuUsage !== undefined ? `${live.cpuUsage.toFixed(1)}%` : '-'}</span>
+                        <div className="category-card__body">
+                          <span className="category-card__label">
+                            {UI_MESSAGES.servers.subcategories}
+                          </span>
+                          <div className="category-pills">
+                            {Array.from(
+                              new Set(cat.items.map((srv) => resolveSubcategory(srv.name))),
+                            )
+                              .slice(0, 4)
+                              .map((label) => (
+                                <span key={label} className="pill">
+                                  {label}
+                                </span>
+                              ))}
                           </div>
-                          <div className="stat-item">
-                            <i className="fas fa-memory" aria-hidden="true" />
-                            <span>RAM: {live.memoryUsage !== undefined ? `${live.memoryUsage.toFixed(1)}%` : '-'}</span>
-                          </div>
-                          {live.cpuCores && (
-                            <div className="stat-item">
-                              <i className="fas fa-server" aria-hidden="true" />
-                              <span>Cores: {live.cpuCores}</span>
-                            </div>
-                          )}
-                          {live.totalMemoryGb && (
-                            <div className="stat-item">
-                              <i className="fas fa-database" aria-hidden="true" />
-                              <span>RAM Total: {live.totalMemoryGb} GB</span>
-                            </div>
-                          )}
-                          {live.netRecvMbps !== undefined && (
-                            <div className="stat-item">
-                              <i className="fas fa-download" aria-hidden="true" />
-                              <span>↓ {live.netRecvMbps.toFixed(1)} Mbps</span>
-                            </div>
-                          )}
-                          {live.netSentMbps !== undefined && (
-                            <div className="stat-item">
-                              <i className="fas fa-upload" aria-hidden="true" />
-                              <span>↑ {live.netSentMbps.toFixed(1)} Mbps</span>
-                            </div>
-                          )}
                         </div>
-                      </div>
-                    )}
-                  </div>
-                );
+                        <div className="category-card__footer">
+                          <span>
+                            {autoMode
+                              ? UI_MESSAGES.servers.autoTest
+                              : UI_MESSAGES.servers.manualSelect}
+                          </span>
+                          <button
+                            type="button"
+                            className="expand-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleExpand(cat.name);
+                            }}
+                            aria-label={
+                              expandedCategories.has(cat.name)
+                                ? 'Contraer detalles'
+                                : 'Expandir detalles'
+                            }
+                          >
+                            <i
+                              className={`fas fa-chevron-${expandedCategories.has(cat.name) ? 'up' : 'down'}`}
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </button>
+                      {expandedCategories.has(cat.name) && live && (
+                        <div className="category-card__expanded">
+                          <div className="stats-grid">
+                            <div className="stat-item">
+                              <i className="fas fa-microchip" aria-hidden="true" />
+                              <span>
+                                CPU:{' '}
+                                {live.cpuUsage !== undefined ? `${live.cpuUsage.toFixed(1)}%` : '-'}
+                              </span>
+                            </div>
+                            <div className="stat-item">
+                              <i className="fas fa-memory" aria-hidden="true" />
+                              <span>
+                                RAM:{' '}
+                                {live.memoryUsage !== undefined
+                                  ? `${live.memoryUsage.toFixed(1)}%`
+                                  : '-'}
+                              </span>
+                            </div>
+                            {live.cpuCores && (
+                              <div className="stat-item">
+                                <i className="fas fa-server" aria-hidden="true" />
+                                <span>Cores: {live.cpuCores}</span>
+                              </div>
+                            )}
+                            {live.totalMemoryGb && (
+                              <div className="stat-item">
+                                <i className="fas fa-database" aria-hidden="true" />
+                                <span>RAM Total: {live.totalMemoryGb} GB</span>
+                              </div>
+                            )}
+                            {live.netRecvMbps !== undefined && (
+                              <div className="stat-item">
+                                <i className="fas fa-download" aria-hidden="true" />
+                                <span>↓ {live.netRecvMbps.toFixed(1)} Mbps</span>
+                              </div>
+                            )}
+                            {live.netSentMbps !== undefined && (
+                              <div className="stat-item">
+                                <i className="fas fa-upload" aria-hidden="true" />
+                                <span>↑ {live.netSentMbps.toFixed(1)} Mbps</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
                 })
               )}
             </div>
@@ -608,7 +751,9 @@ export function ServersScreen() {
                     {servers.map((srv) => {
                       const isActive = currentConfig?.id === srv.id;
                       const protocolLabel = formatProtocol(srv.mode) || srv.mode;
-                      const actionLabel = autoMode ? UI_MESSAGES.servers.autoModeActive : UI_MESSAGES.servers.tapToConnect;
+                      const actionLabel = autoMode
+                        ? UI_MESSAGES.servers.autoModeActive
+                        : UI_MESSAGES.servers.tapToConnect;
                       const domain = extractDomain(srv.description);
                       const cleanDescription = removeDomainFromDescription(srv.description);
                       return (
@@ -628,7 +773,11 @@ export function ServersScreen() {
                             <div className="server-item__badges">
                               <span className="pill pill-soft">{protocolLabel}</span>
                               {domain && <span className="badge badge-domain">{domain}</span>}
-                              {isActive && <span className="badge badge-active">{UI_MESSAGES.servers.inUse}</span>}
+                              {isActive && (
+                                <span className="badge badge-active">
+                                  {UI_MESSAGES.servers.inUse}
+                                </span>
+                              )}
                             </div>
                           </div>
                           {cleanDescription && (

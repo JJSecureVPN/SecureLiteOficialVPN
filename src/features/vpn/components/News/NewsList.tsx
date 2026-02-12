@@ -1,4 +1,4 @@
-import type { NoticiaItem } from '../../features/vpn/hooks/useNoticias';
+import type { NoticiaItem } from '../../hooks/useNoticias';
 import NewsItem from './NewsItem';
 import NewsItemSkeleton from './NewsItemSkeleton';
 import NewsEmptyState from './NewsEmptyState';
@@ -12,13 +12,7 @@ interface NewsListProps {
   onOpen: (item: NoticiaItem) => void;
 }
 
-export function NewsList({ 
-  items, 
-  loading, 
-  error, 
-  reload, 
-  onOpen 
-}: NewsListProps) {
+export function NewsList({ items, loading, error, reload, onOpen }: NewsListProps) {
   // Loading state (initial load)
   if (loading && items.length === 0) {
     return (
@@ -44,11 +38,7 @@ export function NewsList({
   return (
     <div className="news-list">
       {items.map((item) => (
-        <NewsItem 
-          key={item.id} 
-          item={item} 
-          onClick={onOpen} 
-        />
+        <NewsItem key={item.id} item={item} onClick={onOpen} />
       ))}
     </div>
   );

@@ -30,7 +30,7 @@ export function useConnectionStatus(): ConnectionStatus {
   return useMemo(() => {
     const isError = (ERROR_STATES as readonly string[]).includes(status);
     const isDisconnectedState = (DISCONNECTED_STATES as readonly string[]).includes(status);
-    
+
     return {
       isDisconnected: isDisconnectedState && !auto.on,
       isConnecting: status === 'CONNECTING' || auto.on,

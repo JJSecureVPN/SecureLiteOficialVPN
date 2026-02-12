@@ -52,10 +52,10 @@ function AppContent() {
   const [modalCoupons, setModalCoupons] = useState<Coupon[]>([]);
 
   // Determinar clase de estado (isConnecting incluye auto.on para evitar flash rojo)
-  const stateClass = isConnected 
-    ? 'state-connected' 
-    : isConnecting 
-      ? 'state-connecting' 
+  const stateClass = isConnected
+    ? 'state-connected'
+    : isConnecting
+      ? 'state-connecting'
       : 'state-disconnected';
 
   // Obtener componente de pantalla
@@ -80,21 +80,22 @@ function AppContent() {
   return (
     <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
       {screen !== 'news' && <div className="top-strip" />}
-      
+
       {screen !== 'terms' && screen !== 'news' && (
         <>
-          <AppHeader onMenuClick={() => setScreen('menu')} onShowCouponModal={handleShowCouponModal} />
+          <AppHeader
+            onMenuClick={() => setScreen('menu')}
+            onShowCouponModal={handleShowCouponModal}
+          />
           {screen === 'home' && <ConnectionStatusBanner />}
         </>
       )}
 
       <ScreenComponent />
-      
+
       <Toast message={toast.message} visible={toast.visible} />
 
-      {showCouponModal && (
-        <CouponModal coupons={modalCoupons} onClose={handleCloseCouponModal} />
-      )}
+      {showCouponModal && <CouponModal coupons={modalCoupons} onClose={handleCloseCouponModal} />}
     </div>
   );
 }

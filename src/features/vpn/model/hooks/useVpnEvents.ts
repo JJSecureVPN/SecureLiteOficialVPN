@@ -17,30 +17,35 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
   // Suscripción a eventos nativos
   useEffect(() => {
     let lastStatus: VpnStatus | null = null;
-    
-    const offVpn = onNativeEvent('DtVpnStateEvent', state => {
+
+    const offVpn = onNativeEvent('DtVpnStateEvent', (state) => {
       const st = (typeof state === 'string' ? state : String(state || 'DISCONNECTED')) as VpnStatus;
-      
+
       // ✅ Solo loguear cambios reales, no cada polling
       if (st !== lastStatus) {
         appLogger.add('info', `Estado VPN: ${st}`);
         lastStatus = st;
       }
-      
+
       setStatus(st);
     });
 
-    const offConfigSelected = onNativeEvent('DtConfigSelectedEvent', payload => {
+    const offConfigSelected = onNativeEvent('DtConfigSelectedEvent', (payload) => {
       try {
         appLogger.add('info', `🔵 Evento DtConfigSelectedEvent recibido`);
         if (!payload) {
           appLogger.add('warn', 'DtConfigSelectedEvent: payload vacío');
           return;
         }
-        
-        const nativeConfig = (typeof payload === 'string' ? JSON.parse(payload) : payload) as ServerConfig;
-        appLogger.add('info', `✅ Servidor desde evento DTunnel: ${nativeConfig.name || nativeConfig.id}`);
-        
+
+        const nativeConfig = (
+          typeof payload === 'string' ? JSON.parse(payload) : payload
+        ) as ServerConfig;
+        appLogger.add(
+          'info',
+          `✅ Servidor desde evento DTunnel: ${nativeConfig.name || nativeConfig.id}`,
+        );
+
         // Actualizar directamente el servidor
         setConfigState(nativeConfig);
       } catch (error) {
@@ -63,7 +68,7 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
   // Polling de estado VPN como fallback
   useEffect(() => {
     let lastPolledStatus: VpnStatus | null = null;
-    
+
     const interval = setInterval(() => {
       const st = dt.call<string>('DtGetVpnState') as VpnStatus | null;
       if (st && st !== lastPolledStatus) {

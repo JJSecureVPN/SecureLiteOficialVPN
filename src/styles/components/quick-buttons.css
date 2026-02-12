@@ -23,7 +23,10 @@
   cursor: pointer;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  transition: padding 0.15s ease, font-size 0.15s ease, gap 0.15s ease;
+  transition:
+    padding 0.15s ease,
+    font-size 0.15s ease,
+    gap 0.15s ease;
   min-width: 0;
 }
 
@@ -80,17 +83,17 @@
     grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
     gap: 8px;
   }
-  
+
   .ql-qbtn {
     padding: 8px 6px;
     gap: 3px;
     font-size: 0.75rem;
   }
-  
+
   .ql-qbtn i {
     font-size: 1.1em;
   }
-  
+
   .ql-qbtn .ql-qbtn-label {
     line-height: 1.1;
   }
@@ -102,17 +105,17 @@
     grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
     gap: 6px;
   }
-  
+
   .ql-qbtn {
     padding: 7px 5px;
     gap: 2px;
     font-size: 0.7rem;
   }
-  
+
   .ql-qbtn i {
     font-size: 1em;
   }
-  
+
   .ql-qbtn .ql-qbtn-label {
     line-height: 1.05;
   }

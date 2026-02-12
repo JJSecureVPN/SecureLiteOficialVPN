@@ -1,0 +1,139 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NewsItem > renders correctly and matches snapshot 1`] = `
+<article
+  aria-label="Leer noticia: Noticia de prueba"
+  class="news-item"
+  role="button"
+  tabindex="0"
+>
+  <div
+    class="news-item__media"
+  >
+    <img
+      alt="Imagen de ejemplo"
+      class="news-item__image"
+      loading="lazy"
+      src="https://example.com/image.jpg"
+    />
+    <span
+      class="news-item__badge"
+      style="background-color: rgb(255, 102, 0);"
+    >
+      Novedades
+    </span>
+  </div>
+  <div
+    class="news-item__content"
+  >
+    <div
+      class="news-item__meta"
+    >
+      <time
+        class="news-item__date"
+        datetime="2020-01-01T11:59:00.000Z"
+      >
+        Hace unos minutos
+      </time>
+    </div>
+    <h3
+      class="news-item__title"
+    >
+      Noticia de prueba
+    </h3>
+    <p
+      class="news-item__description"
+    >
+      Descripción corta de la noticia
+    </p>
+    <div
+      class="news-item__footer"
+    >
+      <span
+        class="news-item__cta"
+      >
+        Leer más
+        <svg
+          fill="none"
+          height="14"
+          viewBox="0 0 14 14"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.25 3.5L8.75 7L5.25 10.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+</article>
+`;
+
+exports[`NewsItem > renders properly without image 1`] = `
+<article
+  aria-label="Leer noticia: Noticia de prueba"
+  class="news-item"
+  role="button"
+  tabindex="0"
+>
+  <div
+    class="news-item__content"
+  >
+    <div
+      class="news-item__meta"
+    >
+      <span
+        class="news-item__category"
+        style="background-color: rgb(255, 102, 0);"
+      >
+        Sin imagen
+      </span>
+      <time
+        class="news-item__date"
+        datetime="2020-01-01T11:59:00.000Z"
+      >
+        Hace unos minutos
+      </time>
+    </div>
+    <h3
+      class="news-item__title"
+    >
+      Noticia de prueba
+    </h3>
+    <p
+      class="news-item__description"
+    >
+      Descripción corta de la noticia
+    </p>
+    <div
+      class="news-item__footer"
+    >
+      <span
+        class="news-item__cta"
+      >
+        Leer más
+        <svg
+          fill="none"
+          height="14"
+          viewBox="0 0 14 14"
+          width="14"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.25 3.5L8.75 7L5.25 10.5"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+</article>
+`;

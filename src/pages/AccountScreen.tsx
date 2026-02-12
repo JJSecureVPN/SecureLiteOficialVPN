@@ -13,12 +13,56 @@ export const AccountScreen = memo(function AccountScreen() {
   const ul = +(dt.call<number>('DtGetNetworkUploadBytes') || 0);
   const used = dl + ul;
 
-  const name = user?.name || config?.auth?.username || creds.user || UI_MESSAGES.account.defaultUser;
+  const name =
+    user?.name || config?.auth?.username || creds.user || UI_MESSAGES.account.defaultUser;
   const vence = user?.expiration_date || '-';
   const limite = user?.limit_connections || '-';
   const conexiones = user?.count_connections ?? 0;
   const server = config?.name || UI_MESSAGES.account.noActiveServer;
   const mode = config?.mode || '—';
+
+  const daysRemainingInfo = useMemo(() => {
+    const exp = user?.expiration_date;
+    if (!exp || exp === '-') return undefined;
+
+    // Soporta formato DD/MM/YYYY y formatos parseables por Date.parse
+    let parsedDate: Date | null = null;
+    const dmY = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+    const m = dmY.exec(exp);
+    if (m) {
+      const dd = Number(m[1]);
+      const mm = Number(m[2]) - 1;
+      const yyyy = Number(m[3]);
+      parsedDate = new Date(yyyy, mm, dd);
+    } else {
+      const parsed = Date.parse(exp);
+      if (!Number.isNaN(parsed)) parsedDate = new Date(parsed);
+    }
+    if (!parsedDate) return undefined;
+
+    const now = new Date();
+    const utcNow = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    const utcExp = Date.UTC(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
+    const diff = Math.floor((utcExp - utcNow) / (1000 * 60 * 60 * 24));
+
+    let label: string;
+    if (diff > 1) label = `${diff} días`;
+    else if (diff === 1) label = `1 día`;
+    else if (diff === 0) label = 'Hoy';
+    else label = 'Expirado';
+
+    return { diff, label };
+  }, [user?.expiration_date]);
+
+  const daysRemainingLabel = daysRemainingInfo?.label;
+
+  const getExpiryClass = (diff?: number) => {
+    if (typeof diff !== 'number') return undefined;
+    if (diff > 30) return 'expiry-green';
+    if (diff >= 8) return 'expiry-yellow';
+    if (diff >= 3) return 'expiry-orange';
+    return 'expiry-red blinking';
+  };
 
   const pNum = typeof pingMs === 'number' ? Math.round(pingMs) : NaN;
   const pCls = pingClass(pNum);
@@ -49,6 +93,7 @@ export const AccountScreen = memo(function AccountScreen() {
           { label: UI_MESSAGES.account.fields.client, value: name },
           { label: UI_MESSAGES.account.fields.validity, value: vence },
           { label: UI_MESSAGES.account.fields.devices, value: limite },
+          { label: UI_MESSAGES.account.fields.remainingDays, value: daysRemainingLabel ?? '—' },
         ],
       },
       {
@@ -64,11 +109,23 @@ export const AccountScreen = memo(function AccountScreen() {
         title: UI_MESSAGES.account.sections.credentials,
         items: [
           { label: UI_MESSAGES.account.fields.username, value: creds.user || '—' },
-          { label: UI_MESSAGES.account.fields.uuid, value: creds.uuid || '—' },
+          ...(creds.uuid ? [{ label: UI_MESSAGES.account.fields.uuid, value: creds.uuid }] : []),
         ],
       },
     ],
-    [name, vence, limite, server, mode, topInfo.op, topInfo.ip, creds.user, creds.uuid],
+    [
+      name,
+      vence,
+      limite,
+      daysRemainingLabel,
+      daysRemainingInfo?.diff,
+      server,
+      mode,
+      topInfo.op,
+      topInfo.ip,
+      creds.user,
+      creds.uuid,
+    ],
   );
 
   return (
@@ -95,12 +152,18 @@ export const AccountScreen = memo(function AccountScreen() {
               <span>{title}</span>
             </div>
             <ul>
-              {items.map(({ label, value }) => (
-                <li key={label}>
-                  <span>{label}</span>
-                  <strong>{value}</strong>
-                </li>
-              ))}
+              {items.map(({ label, value }) => {
+                const valueClass =
+                  label === UI_MESSAGES.account.fields.remainingDays
+                    ? getExpiryClass(daysRemainingInfo?.diff)
+                    : undefined;
+                return (
+                  <li key={label}>
+                    <span>{label}</span>
+                    <strong className={valueClass}>{value}</strong>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}

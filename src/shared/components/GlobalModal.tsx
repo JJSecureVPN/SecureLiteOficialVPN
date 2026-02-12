@@ -10,12 +10,12 @@ type GlobalModalProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
-export const GlobalModal = memo(function GlobalModal({ 
-  onClose, 
-  title, 
-  subtitle, 
-  icon, 
-  children, 
+export const GlobalModal = memo(function GlobalModal({
+  onClose,
+  title,
+  subtitle,
+  icon,
+  children,
   className = '',
   size = 'md',
 }: GlobalModalProps) {
@@ -39,10 +39,10 @@ export const GlobalModal = memo(function GlobalModal({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div 
-        className={`modal-content modal-content--${size} ${className}`} 
-        onClick={(e) => e.stopPropagation()} 
-        role="dialog" 
+      <div
+        className={`modal-content modal-content--${size} ${className}`}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
       >
@@ -51,21 +51,20 @@ export const GlobalModal = memo(function GlobalModal({
             <div className="modal-header-content">
               {icon && <div className="modal-icon-wrapper">{icon}</div>}
               <div className="modal-header-text">
-                {title && <h3 id="modal-title" className="modal-title">{title}</h3>}
+                {title && (
+                  <h3 id="modal-title" className="modal-title">
+                    {title}
+                  </h3>
+                )}
                 {subtitle && <p className="modal-subtitle">{subtitle}</p>}
               </div>
             </div>
-            <button 
-              className="modal-close" 
-              onClick={onClose} 
-              aria-label="Cerrar"
-              type="button"
-            >
+            <button className="modal-close" onClick={onClose} aria-label="Cerrar" type="button">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path 
-                  d="M15 5L5 15M5 5L15 15" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
+                <path
+                  d="M15 5L5 15M5 5L15 15"
+                  stroke="currentColor"
+                  strokeWidth="2"
                   strokeLinecap="round"
                 />
               </svg>
@@ -74,17 +73,17 @@ export const GlobalModal = memo(function GlobalModal({
         )}
 
         {!title && !subtitle && !icon && (
-          <button 
-            className="modal-close modal-close--standalone" 
-            onClick={onClose} 
+          <button
+            className="modal-close modal-close--standalone"
+            onClick={onClose}
             aria-label="Cerrar"
             type="button"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path 
-                d="M15 5L5 15M5 5L15 15" 
-                stroke="currentColor" 
-                strokeWidth="2" 
+              <path
+                d="M15 5L5 15M5 5L15 15"
+                stroke="currentColor"
+                strokeWidth="2"
                 strokeLinecap="round"
               />
             </svg>

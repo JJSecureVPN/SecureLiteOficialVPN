@@ -13,8 +13,11 @@ interface SectionStyle {
 export function useSectionStyle(topOffset = 16, bottomOffset = 24): SectionStyle {
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
 
-  return useMemo(() => ({
-    paddingTop: `calc(${statusBarHeight}px + ${topOffset}px)`,
-    paddingBottom: `calc(${navigationBarHeight}px + ${bottomOffset}px)`,
-  }), [statusBarHeight, navigationBarHeight, topOffset, bottomOffset]);
+  return useMemo(
+    () => ({
+      paddingTop: `calc(${statusBarHeight}px + ${topOffset}px)`,
+      paddingBottom: `calc(${navigationBarHeight}px + ${bottomOffset}px)`,
+    }),
+    [statusBarHeight, navigationBarHeight, topOffset, bottomOffset],
+  );
 }

@@ -21,24 +21,20 @@ export const Input = memo(function Input({
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const inputType = toggleVisibility 
-    ? (showPassword ? 'text' : 'password')
-    : type;
+  const inputType = toggleVisibility ? (showPassword ? 'text' : 'password') : type;
 
   return (
     <div className={`field ${className}`}>
       {icon && <i className={`fa fa-${icon}`} />}
-      <input
-        type={inputType}
-        onChange={(e) => onChange?.(e.target.value)}
-        {...props}
-      />
+      <input type={inputType} onChange={(e) => onChange?.(e.target.value)} {...props} />
       {toggleVisibility && (
         <i
           className={`fa fa-eye${showPassword ? '-slash' : ''} eye-icon`}
           onClick={() => setShowPassword(!showPassword)}
           role="button"
-          aria-label={showPassword ? UI_MESSAGES.common.visibilityHide : UI_MESSAGES.common.visibilityShow}
+          aria-label={
+            showPassword ? UI_MESSAGES.common.visibilityHide : UI_MESSAGES.common.visibilityShow
+          }
         />
       )}
     </div>

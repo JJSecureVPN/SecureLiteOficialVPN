@@ -34,8 +34,8 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
   const fallbackEmoji = icon && !isImg ? icon : '🌐';
 
   return (
-    <div 
-      className="location-card" 
+    <div
+      className="location-card"
       onClick={disabled ? undefined : onClick}
       style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1 }}
       role="button"
@@ -55,20 +55,16 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
           {showFallback ? (
             <span className="flag-fallback">{fallbackEmoji}</span>
           ) : (
-            <img 
-              src={icon} 
-              alt={config?.name || UI_MESSAGES.serverCard.altServer} 
+            <img
+              src={icon}
+              alt={config?.name || UI_MESSAGES.serverCard.altServer}
               onError={handleImgError}
             />
           )}
         </div>
         <div className="loc-meta">
-          <div className="loc-name">
-            {config?.name || UI_MESSAGES.serverCard.pickServer}
-          </div>
-          {config?.description && (
-            <div className="loc-ip">{config.description}</div>
-          )}
+          <div className="loc-name">{config?.name || UI_MESSAGES.serverCard.pickServer}</div>
+          {config?.description && <div className="loc-ip">{config.description}</div>}
         </div>
       </div>
       <i className="fa fa-chevron-right" aria-hidden="true" />

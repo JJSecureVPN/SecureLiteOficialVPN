@@ -43,7 +43,8 @@ Fecha: 11-02-2026
 ## ✅ Entregables siguientes
 - PR 1 (ya preparado en rama): añadir `AUDIT.md` + scripts (lint/format/ts-prune/depcheck) + archivos de configuración base (`.eslintrc.cjs`, `.prettierrc`).  
 - PR 2: ejecutar `eslint --fix` + formateo + tests para componentes refactorados.  
-- PR 3+: limpieza de CSS por fichero con revisión visual / snapshots.
+- PR 3: añadir pruebas unitarias y snapshots para `NewsItem` y `NewsList` (para proteger futuros cambios en CSS y comportamiento).  
+- PR 4+: limpieza de CSS por fichero con revisión visual / snapshots.
 
 ---
 
