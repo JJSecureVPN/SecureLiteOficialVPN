@@ -1,14 +1,22 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('../../features/vpn/model/VpnContext', () => ({
-  useVpn: () => ({
-    screen: 'home',
-    setScreen: vi.fn(),
-    selectedCategory: null,
-    setSelectedCategory: vi.fn(),
-  }),
-}));
+const setScreenMock = vi.fn();
+const setSelectedCategoryMock = vi.fn();
+
+vi.mock('../../../features/vpn/model/VpnContext', () => {
+  const mock = {
+    useVpn: () => ({
+      screen: 'home',
+      setScreen: setScreenMock,
+      selectedCategory: null,
+      setSelectedCategory: setSelectedCategoryMock,
+    }),
+    // simple provider passthrough for integration test
+    VpnProvider: ({ children }: any) => children,
+  };
+  return mock;
+});
 
 // Mock storage utils (path alias '@') to avoid import resolution issues in hooks
 vi.mock('@/utils/storageUtils', () => ({
@@ -24,10 +32,14 @@ vi.mock('src/features/vpn/model/hooks/useVpnController', () => ({
     setScreen: vi.fn(),
     selectedCategory: null,
     setSelectedCategory: vi.fn(),
+    categorias: [],
+    loadCategorias: vi.fn(),
+    setConfig: vi.fn(),
+    setCreds: vi.fn(),
   }),
 }));
 
-vi.mock('../hooks/useCoupons', () => ({
+vi.mock('@/shared/hooks/useCoupons', () => ({
   useCoupons: () => ({
     coupons: [
       {
@@ -46,7 +58,7 @@ vi.mock('../hooks/useCoupons', () => ({
   }),
 }));
 
-vi.mock('../hooks/useNewsBadge', () => ({
+vi.mock('@/shared/hooks/useNewsBadge', () => ({
   useNewsBadge: () => ({ hasUnreadNews: true }),
 }));
 
@@ -63,7 +75,12 @@ describe('AppHeader integration', () => {
 
     // import after mocks so mocks take effect
     const { AppHeader: AppHeaderFresh } = await import('../AppHeader');
-    render(<AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />);
+    const { VpnProvider } = await import('../../../features/vpn/model/VpnContext');
+    render(
+      <VpnProvider>
+        <AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />
+      </VpnProvider>,
+    );
 
     const couponBtn = screen.getByRole('button', { name: /cup/ });
     expect(couponBtn).toBeInTheDocument();
@@ -75,19 +92,18 @@ describe('AppHeader integration', () => {
     fireEvent.click(newsBtn);
 
     // setScreen is mocked inside useVpn; retrieve it from the mocked module
-    const { useVpn } = require('../../features/vpn/model/VpnContext');
-    const { setScreen } = useVpn();
-    expect(setScreen).toHaveBeenCalledWith('news');
+    expect(setScreenMock).toHaveBeenCalledWith('news');
   });
 
   it('back button behaves correctly when on servers detail', async () => {
     // re-mock useVpn for this test case
-    vi.doMock('../../features/vpn/model/VpnContext', () => ({
+    const setSelectedCategoryMock2 = vi.fn();
+    vi.doMock('../../../features/vpn/model/VpnContext', () => ({
       useVpn: () => ({
         screen: 'servers',
         setScreen: vi.fn(),
         selectedCategory: { id: 1, name: 'Cat' },
-        setSelectedCategory: vi.fn(),
+        setSelectedCategory: setSelectedCategoryMock2,
       }),
     }));
 
@@ -102,8 +118,6 @@ describe('AppHeader integration', () => {
     expect(backBtn).toBeInTheDocument();
     fireEvent.click(backBtn);
 
-    const { useVpn: useVpn2 } = require('../../features/vpn/model/VpnContext');
-    const { setSelectedCategory } = useVpn2();
-    expect(setSelectedCategory).toHaveBeenCalledWith(null);
+    expect(setSelectedCategoryMock2).toHaveBeenCalledWith(null);
   });
 });
