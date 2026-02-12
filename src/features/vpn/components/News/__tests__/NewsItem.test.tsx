@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import NewsItem from '../NewsItem';
+import { NewsItem } from '../NewsItem';
 import type { NoticiaItem } from '../../../hooks/useNoticias';
 
 const mockItem: NoticiaItem = {

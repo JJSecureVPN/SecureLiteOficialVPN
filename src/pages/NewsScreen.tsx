@@ -6,7 +6,7 @@ import { useVpn } from '../features/vpn/model/VpnContext';
 import { callOne } from '../features/vpn/api/vpnBridge';
 import { useNoticias, NoticiaItem } from '../features/vpn/hooks/useNoticias';
 import { saveNewsLastSeen } from '../utils/storageUtils';
-import NewsList from '../features/vpn/components/News/NewsList';
+import { NewsList } from '../features/vpn/components/News/NewsList';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
 
 export function NewsScreen() {

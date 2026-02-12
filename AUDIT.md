@@ -12,7 +12,7 @@ Fecha: 11-02-2026
   - `src/pages/ImportConfigScreen.tsx` (`default`)  
   - `src/pages/NewsScreen.tsx` (`default`)  
   - `src/shared/components/CouponModal.tsx` (`default`)  
-  - `src/shared/components/HeaderCoupon.tsx` (`HeaderCoupon`)  
+  - `src/shared/components/HeaderCoupon.tsx` (`HeaderCoupon`) — **ELIMINADO** en PR `cleanup/app-header`  
   - y varios tipos y hooks listados por `ts-prune`.
 - `PurgeCSS` sugiere reglas CSS potencialmente no usadas (por fichero). Recomendación: revisar cada fichero CSS en contexto visual antes de eliminar.
 - `depcheck` no detectó devDependencies/dep no usadas (soporte correcto), pero conviene añadir `depcheck` y `ts-prune` a los scripts para monitorizar regularmente.

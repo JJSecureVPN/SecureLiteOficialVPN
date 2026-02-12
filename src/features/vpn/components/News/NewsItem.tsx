@@ -107,5 +107,3 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
     </article>
   );
 }
-
-export default NewsItem;

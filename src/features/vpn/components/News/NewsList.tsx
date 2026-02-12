@@ -1,5 +1,5 @@
 import type { NoticiaItem } from '../../hooks/useNoticias';
-import NewsItem from './NewsItem';
+import { NewsItem } from './NewsItem';
 import NewsItemSkeleton from './NewsItemSkeleton';
 import NewsEmptyState from './NewsEmptyState';
 import NewsErrorState from './NewsErrorState';
@@ -43,5 +43,3 @@ export function NewsList({ items, loading, error, reload, onOpen }: NewsListProp
     </div>
   );
 }
-
-export default NewsList;
