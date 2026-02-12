@@ -109,8 +109,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -306,7 +310,8 @@
 }
 
 .coupon-code {
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-family:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 20px;
   font-weight: 700;
   color: #667eea;
@@ -479,192 +484,32 @@
 }
 
 /* Server Stats Modal */
-.server-stats-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--overlay);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 99999;
-  padding: 0;
-}
+/* Removed server-stats-overlay (PurgeCSS candidate) */
 
-@media (min-width: 640px) {
-  .server-stats-overlay {
-    align-items: center;
-    padding: var(--space-lg);
-  }
-}
+/* Removed server-stats-overlay @media (PurgeCSS candidate) */
 
-.server-stats-modal {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  box-shadow: var(--shadow-xl);
-  max-width: 100%;
-  max-height: 85vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  animation: modalFadeIn 0.2s ease-out;
-  pointer-events: auto;
-}
+/* Removed server-stats-modal styles (PurgeCSS candidate) */
 
-@media (min-width: 640px) {
-  .server-stats-modal {
-    max-width: 28rem;
-    border-radius: var(--radius-xl);
-  }
-}
+/* Removed server-stats header/body styles (PurgeCSS candidate) */
 
-.server-stats-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-lg);
-  border-bottom: 1px solid var(--border);
-}
+/* Removed server-stats loading/error block (PurgeCSS candidate) */
 
-.server-stats-header-content {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.server-stats-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--radius-lg);
-  background: var(--accent-10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-}
-
-.server-stats-header-text h3 {
-  margin: 0;
-  font-size: var(--font-lg);
-  font-weight: 600;
-  color: var(--text-strong);
-}
-
-.server-stats-header-text p {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--muted);
-}
-
-.server-stats-close {
-  background: none;
-  border: none;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--radius-md);
-  color: var(--muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.server-stats-close:hover {
-  background: var(--bg-2);
-  color: var(--text);
-}
-
-.server-stats-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--space-lg);
-}
-
-.server-stats-loading,
-.server-stats-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem var(--space-lg);
-  text-align: center;
-}
-
-.server-stats-spinner {
-  width: 2rem;
-  height: 2rem;
-  border: 3px solid var(--accent-20);
-  border-top: 3px solid var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: var(--space-md);
-}
+/* Removed server-stats spinner (PurgeCSS candidate) */
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.server-stats-loading p,
-.server-stats-error p {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--muted);
-}
+/* Removed server-stats loading/error paragraph styles (PurgeCSS candidate) */
 
-.server-stats-error-icon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: var(--status-bad-08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--status-bad);
-  margin-bottom: var(--space-md);
-}
+/* Removed server-stats error icon and paragraph color styles (PurgeCSS candidate) */
 
-.server-stats-error p {
-  color: var(--status-bad);
-}
-
-.server-stats-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.server-stats-item {
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  transition: border-color 0.2s ease;
-}
-
-.server-stats-item:hover {
-  border-color: var(--accent-30);
-}
-
-.server-stats-item-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: var(--space-md);
-}
-
-.server-stats-item-info {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  flex: 1;
-  min-width: 0;
-}
+/* Removed server-stats list/item styles (PurgeCSS candidate) */
 
 .server-stats-status {
   width: 0.5rem;
@@ -673,25 +518,16 @@
   flex-shrink: 0;
 }
 
-.server-stats-status.status-green {
-  background: var(--status-ok);
-}
-
-.server-stats-status.status-yellow {
-  background: var(--status-warn);
-}
-
-.server-stats-status.status-red {
-  background: var(--status-bad);
-}
-
-.server-stats-status.pulse {
-  animation: pulse 2s infinite;
-}
+/* Removed server-stats status color variants and pulse usage (PurgeCSS candidate). */
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .server-stats-item-details {
@@ -806,9 +642,15 @@
 }
 
 /* Use global overlay and modal stacking. No duplicated overlay rules here. */
-.modal-content.import-config { z-index: auto; /* allow modal.css to manage stacking */ }
+.modal-content.import-config {
+  z-index: auto; /* allow modal.css to manage stacking */
+}
 
-.modal-content.import-config { max-width: 480px; width: 92vw; max-height: 85vh; }
+.modal-content.import-config {
+  max-width: 480px;
+  width: 92vw;
+  max-height: 85vh;
+}
 .modal-content.import-config .modal-header {
   display: flex;
   align-items: center;
@@ -819,7 +661,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .modal-content.import-config .modal-header { border-bottom-color: rgba(255,255,255,0.08); }
+  .modal-content.import-config .modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
 }
 
 .modal-content.import-config .header-content {
@@ -871,7 +715,10 @@
   border-radius: 8px;
 }
 
-.modal-content.import-config .modal-close:hover { background: var(--bg-2); color: var(--text-strong); }
+.modal-content.import-config .modal-close:hover {
+  background: var(--bg-2);
+  color: var(--text-strong);
+}
 
 /* Progress Steps */
 .progress-steps {
@@ -961,8 +808,6 @@
   }
 }
 
-
-
 /* Divider */
 .divider {
   display: flex;
@@ -1003,8 +848,8 @@
 .config-textarea:focus {
   outline: none;
   border-color: var(--accent-20);
-  box-shadow: 0 0 0 4px rgba(109,74,255,0.06);
-  background: rgba(109,74,255,0.02);
+  box-shadow: 0 0 0 4px rgba(109, 74, 255, 0.06);
+  background: rgba(109, 74, 255, 0.02);
 }
 
 /* Alerts */
@@ -1113,10 +958,13 @@
 .screen.import-screen .config-textarea:focus,
 .screen.import-screen .config-textarea:focus-visible {
   outline: none !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: none !important;
   background: transparent !important;
-  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease !important;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease !important;
 }
 
 /* If any focus ring still appears from UA, explicitly hide outline */
@@ -1125,4 +973,3 @@
   outline: none !important;
   -webkit-appearance: none !important;
 }
-
