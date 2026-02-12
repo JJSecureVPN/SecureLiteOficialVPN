@@ -615,3 +615,5 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     </section>
   );
 });
+
+export default ImportConfigScreen;
