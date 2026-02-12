@@ -11,9 +11,17 @@
     "build": "tsc && vite build",
     "build:inline": "npx tsx build-inline.ts",
     "analyze:deadcode": "knip --reporter json",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --ext .ts,.tsx",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,md,json}\"",
+    "typecheck": "tsc --noEmit",
+    "depcheck": "depcheck --json",
+    "ts-prune": "ts-prune --project tsconfig.json --exclude \"src/**/*.d.ts\"",
+    "analyze:bundle": "vite build --mode production",
     "preview": "vite preview --host --port 80"
   },
   "dependencies": {
+    "dompurify": "^3.3.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
