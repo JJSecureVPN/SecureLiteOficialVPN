@@ -59,25 +59,8 @@
   font-size: var(--font-sm);
 }
 
-.applog-entry--info {
-  border-color: var(--accent-30);
-  background: var(--accent-10);
-}
-
-.applog-entry--warn {
-  border-color: var(--status-warn-35);
-  background: var(--status-warn-08);
-}
-
-.applog-entry--error {
-  border-color: var(--status-bad-55);
-  background: var(--status-bad-08);
-}
-
-.applog-entry--debug {
-  border-color: var(--text-strong-35);
-  background: var(--text-strong-06);
-}
+/* Removed unused log-level modifiers (.applog-entry--info, --warn, --error, --debug)
+   These were not referenced in the codebase per PurgeCSS. */
 
 .applog-entry__icon {
   display: flex;
@@ -90,21 +73,7 @@
   font-size: var(--font-xs);
 }
 
-.applog-entry--info .applog-entry__icon {
-  color: var(--accent);
-}
-
-.applog-entry--warn .applog-entry__icon {
-  color: var(--status-warn);
-}
-
-.applog-entry--error .applog-entry__icon {
-  color: var(--status-bad);
-}
-
-.applog-entry--debug .applog-entry__icon {
-  color: var(--text-strong);
-}
+/* Removed icon color variants for log-level modifiers (not referenced) */
 
 .applog-entry__body {
   flex: 1;
@@ -135,25 +104,7 @@
   font-family: var(--font-display);
 }
 
-.applog-entry--info .applog-entry__level {
-  background: var(--accent-20);
-  color: var(--accent);
-}
-
-.applog-entry--warn .applog-entry__level {
-  background: var(--status-warn-35);
-  color: var(--status-warn);
-}
-
-.applog-entry--error .applog-entry__level {
-  background: var(--status-bad-55);
-  color: var(--status-bad);
-}
-
-.applog-entry--debug .applog-entry__level {
-  background: var(--text-strong-12);
-  color: var(--text-strong);
-}
+/* Removed level color variants for log-level modifiers (not referenced) */
 
 .applog-entry__message {
   margin: 0;

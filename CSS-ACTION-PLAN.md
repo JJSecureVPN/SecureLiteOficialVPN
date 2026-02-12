@@ -22,6 +22,7 @@ He ejecutado PurgeCSS y detectó selectores potencialmente no usados. Esto es un
   - varios selectores con contexto de pantallas específicas (review manual)
 - `src/styles/components/*.css` (multiple)
   - Rechazos detectados: `.applog-entry--info`, `.applog-entry--warn`, `.applog-entry--error`, `.status-*`, `.news-badge`, `.stats-btn` etc.
+  - **Acción (applied):** `src/styles/components/applogs.css` - eliminados los modificadores de nivel de log (`.applog-entry--info|--warn|--error|--debug`) y las variantes de color correspondientes (no referenciadas). ✅
 
 > Nota: la lista completa de selectores rechazados por fichero está en PurgeCSS output (se adjunta en `AUDIT.md` o puede reejecutarse). Usar esta lista como guía y revisar visualmente.
 
