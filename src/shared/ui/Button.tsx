@@ -17,7 +17,7 @@ export const Button = memo(function Button({
     default: 'btn',
     primary: 'btn primary',
     soft: 'btn soft',
-    quick: 'qbtn',
+    quick: 'ql-qbtn',
   }[variant];
 
   return (

@@ -39,6 +39,7 @@ He ejecutado PurgeCSS y detectó selectores potencialmente no usados. Esto es un
    - Revisar y consolidar utilidades (`.flex-1`, `.clickable`, `.row-between`). Revisión manual y pruebas visuales.
 3. **PR 3 — Component-specific CSS pruning**
    - Revisar cada fichero (applogs, servers, modal, etc.) y eliminar selectores obsoletos con pruebas cap/visual.
+   - Nota reciente: consolidé la clase `qbtn` en `ql-qbtn` y actualicé `src/shared/ui/Button.tsx` para usar `ql-qbtn` (esto elimina referencias a la clase legacy y unifica Quick Buttons). ✅
 4. **PR 4 — Assets optimization**
    - Recompressar imágenes y añadir `image-webpack-loader`/scripts para comprimir y crear webp versiones.
 
@@ -57,4 +58,6 @@ He ejecutado PurgeCSS y detectó selectores potencialmente no usados. Esto es un
 
 ---
 
-Si estás de acuerdo, aplicaré **PR 1** (eliminar clases de `animations.css`) ahora en una rama `chore/css-clean-animations`, ejecutaré build y añadiré capturas básicas y el contenido del PR para que lo revises.
+**Estado actual:** He añadido pruebas unitarias y snapshots para `NewsItem` y `NewsList` y revisé los ficheros CSS de News. No he encontrado reglas seguras para eliminar en `src/styles/components/NewsItem.css`, `src/styles/components/NewsList.css` ni `src/styles/components/NewsStates.css`, por lo que no apliqué eliminaciones en esos ficheros.
+
+**Próximos pasos (sin abrir PRs automáticamente):** continuaré la limpieza por fichero (propongo seguir con `MiniHeader` o el conjunto de `buttons`), prepararé PRs pequeños con los cambios, capturas de pantalla y tests, y te los mostraré antes de abrirlos para que des tu OK.
