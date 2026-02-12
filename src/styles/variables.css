@@ -30,6 +30,11 @@
   --accent-40: rgba(109, 74, 255, 0.4);
   --accent-60: rgba(109, 74, 255, 0.6);
 
+  /* Paleta adicional para noticias (azul) */
+  --primary-blue: #007aff;
+  --primary-blue-dark: #0051d5;
+  --muted-news: #6c757d;
+
   --text-strong-35: rgba(55, 37, 128, 0.35);
 
   /* Superficies de cards (en lugar de overlays blancos pensados para dark) */

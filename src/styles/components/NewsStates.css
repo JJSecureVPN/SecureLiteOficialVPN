@@ -37,15 +37,13 @@
   margin: 0 0 12px 0;
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
-  letter-spacing: -0.01em;
+  color: var(--text);
 }
 
-/* Description */
 .news-empty__description,
 .news-error__description {
   margin: 0 0 32px 0;
-  color: #6c757d;
+  color: var(--muted-news);
   font-size: 15px;
   line-height: 1.6;
   max-width: 360px;
@@ -54,18 +52,18 @@
 /* Retry Button */
 .news-error__button {
   padding: 12px 28px;
-  background: #007aff;
+  background: var(--primary-blue);
   color: #ffffff;
   border: none;
   border-radius: 12px;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .news-error__button:hover {
-  background: #0051d5;
+  background: var(--primary-blue-dark);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
 }
