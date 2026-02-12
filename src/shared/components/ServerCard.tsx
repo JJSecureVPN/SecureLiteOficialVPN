@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '../types';
 import { UI_MESSAGES } from '../../constants';
 
@@ -15,23 +15,28 @@ interface ServerCardProps {
  */
 export const ServerCard = memo(function ServerCard({ config, onClick, disabled }: ServerCardProps) {
   const icon = config?.icon?.trim();
-  const isImg = !!icon && (/^(https?:)?\/\//i.test(icon) || icon.startsWith('data:'));
+  const isImg = useMemo(() => {
+    if (!icon) return false;
+    const u = icon.toLowerCase();
+    return (
+      u.startsWith('http://') ||
+      u.startsWith('https://') ||
+      u.startsWith('//') ||
+      u.startsWith('data:') ||
+      (u.startsWith('/') && (u.includes('.') || u.includes(':')))
+    );
+  }, [icon]);
   const [imgError, setImgError] = useState(false);
 
-  const handleImgError = useCallback(() => {
-    setImgError(true);
-  }, []);
+  const handleImgError = useCallback(() => setImgError(true), []);
 
   // Reset error state when icon changes
-  const currentIcon = config?.icon;
-  const [prevIcon, setPrevIcon] = useState(currentIcon);
-  if (currentIcon !== prevIcon) {
-    setPrevIcon(currentIcon);
+  useEffect(() => {
     setImgError(false);
-  }
+  }, [icon]);
 
-  const showFallback = !isImg || !icon || imgError;
-  const fallbackEmoji = icon && !isImg ? icon : '🌐';
+  const showFallback = useMemo(() => !isImg || !icon || imgError, [isImg, icon, imgError]);
+  const fallbackEmoji = useMemo(() => (icon && !isImg ? icon : '🌐'), [icon, isImg]);
 
   return (
     <div
@@ -42,13 +47,16 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       tabIndex={disabled ? -1 : 0}
       data-nav
       aria-label={UI_MESSAGES.serverCard.ariaChooseServer}
-      onKeyDown={(e) => {
-        if (disabled) return;
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      }}
+      onKeyDown={useCallback(
+        (e: React.KeyboardEvent) => {
+          if (disabled) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick();
+          }
+        },
+        [disabled, onClick],
+      )}
     >
       <div className="loc-left">
         <div className="flag">
