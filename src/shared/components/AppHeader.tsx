@@ -1,10 +1,14 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '../../features/vpn/model/VpnContext';
 import { callOne } from '../../features/vpn/api/vpnBridge';
-import { UI_MESSAGES } from '../../constants';
 import { useTheme } from '../hooks/useTheme';
 import { useCoupons } from '../hooks/useCoupons';
 import { useNewsBadge } from '../hooks/useNewsBadge';
+import { CouponButton } from './AppHeader/CouponButton';
+import { NewsButton } from './AppHeader/NewsButton';
+import { SubscribeButton } from './AppHeader/SubscribeButton';
+import { ThemeButton } from './AppHeader/ThemeButton';
+import { BackButton } from './AppHeader/BackButton';
 
 type Coupon = {
   id: number;
@@ -33,7 +37,7 @@ export const AppHeader = memo(function AppHeader({
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
   const { theme, toggleTheme } = useTheme();
   // Use hooks to encapsulate side effects and make AppHeader smaller
-  const { coupons, activeCouponsCount, hasActiveCoupon } = useCoupons();
+  const { coupons } = useCoupons();
   const { hasUnreadNews } = useNewsBadge();
 
   const isSubScreen = screen !== 'home';
@@ -63,65 +67,19 @@ export const AppHeader = memo(function AppHeader({
 
   return (
     <header className="topbar">
-      {isSubScreen ? (
-        <button className="btn hotzone" onClick={handleClick} data-nav tabIndex={0}>
-          <i className="fa fa-arrow-left" />{' '}
-          {isCategoryDetail ? UI_MESSAGES.servers.backToCategories : UI_MESSAGES.buttons.back}
-        </button>
-      ) : (
-        <div className="dots hotzone" onClick={handleClick} aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
-      )}
+      <BackButton
+        isSubScreen={isSubScreen}
+        isCategoryDetail={isCategoryDetail}
+        onClick={handleClick}
+      />
       <div className="row">
-        {hasActiveCoupon && (
-          <button
-            type="button"
-            className="icon-btn hotzone coupon-btn"
-            onClick={handleShowCoupons}
-            aria-label={`${activeCouponsCount} cupón(es) activo(s) disponible(s)`}
-            title={`${activeCouponsCount} cupón(es) activo(s) disponible(s)`}
-          >
-            <i className="fa fa-ticket" aria-hidden="true" />
-            {/* attention marker: exclamation to attract attention */}
-            <span className="coupon-attention">!</span>
-            {activeCouponsCount > 1 && <span className="coupon-badge">{activeCouponsCount}</span>}
-          </button>
-        )}
+        <CouponButton coupons={coupons} onClick={handleShowCoupons} />
 
-        <button
-          type="button"
-          className="icon-btn hotzone news-btn"
-          onClick={() => setScreen('news')}
-          aria-label={hasUnreadNews ? 'Noticias — nuevas disponibles' : 'Noticias'}
-          title={hasUnreadNews ? 'Noticias (nuevas)' : 'Noticias'}
-        >
-          <i className="fa fa-newspaper" aria-hidden="true" />
-          {hasUnreadNews && <span className="news-attention pulse" aria-hidden="true" />}
-        </button>
+        <NewsButton hasUnread={hasUnreadNews} onClick={() => setScreen('news')} />
 
-        <button
-          type="button"
-          className="icon-btn hotzone subscribe-btn"
-          onClick={handleSubscribe}
-          aria-label="Suscribirse a un plan"
-          title="Suscribirse a un plan"
-        >
-          <i className="fa fa-shopping-cart" aria-hidden="true" />
-        </button>
+        <SubscribeButton onClick={handleSubscribe} />
 
-        <button
-          type="button"
-          className="icon-btn hotzone theme-btn"
-          onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-          title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-        >
-          <i className={theme === 'dark' ? 'fa fa-sun' : 'fa fa-moon'} aria-hidden="true" />
-        </button>
+        <ThemeButton theme={theme} onToggle={toggleTheme} />
       </div>
     </header>
   );
