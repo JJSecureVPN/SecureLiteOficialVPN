@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { UI_MESSAGES } from '../../constants';
+import { UI_MESSAGES } from '../../../constants';
 
 interface Props {
   isSubScreen: boolean;

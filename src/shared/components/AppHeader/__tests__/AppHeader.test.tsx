@@ -8,15 +8,16 @@ vi.mock('@/utils/storageUtils', () => ({
   loadAutoMode: () => null,
 }));
 vi.mock('src/features/vpn/model/hooks/useVpnController', () => ({ useVpnController: () => ({}) }));
-vi.mock('src/features/vpn/model/VpnContext', () => ({
+const mockSetScreen = vi.fn();
+vi.mock('../../../../features/vpn/model/VpnContext', () => ({
   useVpn: () => ({
     screen: 'home',
-    setScreen: vi.fn(),
+    setScreen: mockSetScreen,
     selectedCategory: null,
     setSelectedCategory: vi.fn(),
   }),
 }));
-vi.mock('../hooks/useCoupons', () => ({
+vi.mock('../../../hooks/useCoupons', () => ({
   useCoupons: () => ({
     coupons: [
       {
@@ -34,8 +35,8 @@ vi.mock('../hooks/useCoupons', () => ({
     hasActiveCoupon: true,
   }),
 }));
-vi.mock('../hooks/useNewsBadge', () => ({ useNewsBadge: () => ({ hasUnreadNews: true }) }));
-vi.mock('../hooks/useTheme', () => ({
+vi.mock('../../../hooks/useNewsBadge', () => ({ useNewsBadge: () => ({ hasUnreadNews: true }) }));
+vi.mock('../../../hooks/useTheme', () => ({
   useTheme: () => ({ theme: 'light', toggleTheme: vi.fn() }),
 }));
 
@@ -48,7 +49,7 @@ describe('AppHeader (unit)', () => {
     const onMenu = vi.fn();
     const onShowCoupons = vi.fn();
 
-    const { AppHeader: AppHeaderFresh } = await import('../AppHeader');
+    const { AppHeader: AppHeaderFresh } = await import('../../AppHeader');
 
     render(<AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />);
 
@@ -61,8 +62,6 @@ describe('AppHeader (unit)', () => {
     expect(newsBtn).toBeInTheDocument();
     fireEvent.click(newsBtn);
 
-    const { useVpn } = await import('src/features/vpn/model/VpnContext');
-    const { setScreen } = useVpn();
-    expect(setScreen).toHaveBeenCalledWith('news');
+    expect(mockSetScreen).toHaveBeenCalledWith('news');
   });
 });
