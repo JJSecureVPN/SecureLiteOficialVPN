@@ -32,19 +32,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         const offsetY = 8; // px gap between card and toast
         anchorPos = { x: r.left + r.width / 2, y: r.bottom + offsetY };
       }
-    } catch (err) {
+    } catch {
       anchorPos = null;
     }
 
     setToast({ message, visible: true, anchor: anchorPos });
-    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), TOAST_DURATION_MS);
+    setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), TOAST_DURATION_MS);
   }, []);
 
-  return (
-    <ToastContext.Provider value={{ toast, showToast }}>
-      {children}
-    </ToastContext.Provider>
-  );
+  return <ToastContext.Provider value={{ toast, showToast }}>{children}</ToastContext.Provider>;
 }
 
 export function useToastContext() {

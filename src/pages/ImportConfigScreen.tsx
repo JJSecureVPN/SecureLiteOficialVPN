@@ -18,7 +18,6 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
   const [matches, setMatches] = useState<ServerConfig[]>([]);
   const [selectedId, setSelectedId] = useState<number | string | null>(null);
 
-
   useEffect(() => {
     if (!categorias || categorias.length === 0) loadCategorias();
   }, [categorias, loadCategorias]);
@@ -47,7 +46,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
         const next = input[i + 1];
 
         if (!inString) {
-          if ((ch === '"' || ch === "'") ) {
+          if (ch === '"' || ch === "'") {
             inString = true;
             stringChar = ch;
             out += ch;
@@ -102,7 +101,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     try {
       const sanitized = stripCommentsAndTrailingCommas(text);
       obj = JSON.parse(sanitized);
-    } catch (err) {
+    } catch {
       return { error: UI_MESSAGES.import.parseErrorInvalid } as const;
     }
 
@@ -111,7 +110,8 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       out.serverId = obj.server.id || obj.serverId || obj.id;
       out.serverName = obj.server.name || obj.serverName;
       out.serverHost = obj.server.host || obj.serverHost;
-      out.serverCategory = obj.server.category || obj.server.location || obj.server.country || out.serverCategory;
+      out.serverCategory =
+        obj.server.category || obj.server.location || obj.server.country || out.serverCategory;
     } else {
       out.serverId = obj.serverId || obj.id;
       out.serverName = obj.serverName || obj.server || obj.name;
@@ -174,7 +174,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
     if (out.serverHost) {
       const byHost = allServers.filter((s) =>
-        normalize(((s.description || '') + ' ' + (s.ip || ''))).includes(normalize(out.serverHost))
+        normalize((s.description || '') + ' ' + (s.ip || '')).includes(normalize(out.serverHost)),
       );
       if (byHost.length) found.push(...byHost);
     }
@@ -217,7 +217,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
       appLogger.add(
         'warn',
-        `[ImportConfig] No matches for ${out.serverName || out.serverId || JSON.stringify(out)}; categories=${categorias.length}; totalServers=${allServers.length}; sample=${sample}`
+        `[ImportConfig] No matches for ${out.serverName || out.serverId || JSON.stringify(out)}; categories=${categorias.length}; totalServers=${allServers.length}; sample=${sample}`,
       );
       return { out, finalMatches, error: UI_MESSAGES.import.noServerFound } as const;
     }
@@ -252,10 +252,6 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     }
   }, [raw]);
 
-
-
-
-
   const handleApply = useCallback(() => {
     const sel = matches.find((m) => String(m.id) === String(selectedId)) || matches[0];
 
@@ -264,10 +260,10 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       return;
     }
 
-    setCreds({ 
-      user: parsed?.username || '', 
-      pass: parsed?.password || '', 
-      uuid: parsed?.uuid || '' 
+    setCreds({
+      user: parsed?.username || '',
+      pass: parsed?.password || '',
+      uuid: parsed?.uuid || '',
     });
 
     setConfig(sel);
@@ -295,7 +291,6 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
   return (
     <section className="screen import-screen">
       <div className="import-container" style={containerStyle}>
-
         {/* Progress Steps */}
         <div className="progress-steps">
           <div className={`step ${step === 'input' ? 'active' : 'completed'}`}>
@@ -303,7 +298,9 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
             <span className="step-label">Importar</span>
           </div>
           <div className="step-divider" />
-          <div className={`step ${step === 'select' ? 'active' : step === 'confirm' ? 'completed' : ''}`}>
+          <div
+            className={`step ${step === 'select' ? 'active' : step === 'confirm' ? 'completed' : ''}`}
+          >
             <div className="step-number">2</div>
             <span className="step-label">Seleccionar</span>
           </div>
@@ -317,11 +314,18 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
         {/* Header */}
         <div className="import-header">
           <div className="icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="12" y1="18" x2="12" y2="12"/>
-              <line x1="9" y1="15" x2="15" y2="15"/>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="12" y1="18" x2="12" y2="12" />
+              <line x1="9" y1="15" x2="15" y2="15" />
             </svg>
           </div>
           <div className="header-text">
@@ -332,15 +336,21 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
         {/* Body */}
         <div className="import-body">
-          
           {/* Step 1: Input */}
           {step === 'input' && (
             <div className="step-content">
-<div className="info-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="16" x2="12" y2="12"/>
-                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+              <div className="info-box">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
                 <span>Pega aquí el JSON (solo texto, no archivos).</span>
               </div>
@@ -353,39 +363,60 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                 className="config-textarea"
                 placeholder='{"server": {"name": "US Server 1"}, "credentials": {"username": "user", "password": "pass"}}'
                 value={raw}
-                onChange={e => setRaw(e.target.value)}
+                onChange={(e) => setRaw(e.target.value)}
                 rows={6}
               />
 
               {parseError && (
                 <div className="alert alert-error">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
                   <span>{parseError}</span>
                 </div>
               )}
 
               <div className="info-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="16" x2="12" y2="12"/>
-                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
                 <span>{UI_MESSAGES.import.autoParseHint}</span>
               </div>
 
               <div className="button-group">
-                <button 
-                  className="btn btn-primary btn-large" 
+                <button
+                  className="btn btn-primary btn-large"
                   onClick={handleParse}
                   disabled={!raw.trim()}
                 >
                   Continuar
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="9 18 15 12 9 6"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </button>
               </div>
@@ -401,29 +432,38 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               </div>
 
               <div className="server-list">
-                {matches.map(server => {
+                {matches.map((server) => {
                   const category = getCategory(server);
                   const isSelected = String(selectedId) === String(server.id);
-                  
+
                   return (
-                    <label 
-                      key={String(server.id)} 
+                    <label
+                      key={String(server.id)}
                       className={`server-card ${isSelected ? 'selected' : ''}`}
                     >
-                      <input 
-                        type="radio" 
-                        name="server" 
-                        checked={isSelected} 
-                        onChange={() => setSelectedId(server.id)} 
+                      <input
+                        type="radio"
+                        name="server"
+                        checked={isSelected}
+                        onChange={() => setSelectedId(server.id)}
                       />
                       <div className="server-info">
                         <div className="server-name">{server.name}</div>
                         {category && <div className="server-category">{category}</div>}
-                        {server.description && <div className="server-desc">{server.description}</div>}
+                        {server.description && (
+                          <div className="server-desc">{server.description}</div>
+                        )}
                       </div>
                       <div className="checkmark">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                          <polyline points="20 6 9 17 4 12"/>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </div>
                     </label>
@@ -433,19 +473,33 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
               <div className="button-group">
                 <button className="btn btn-secondary" onClick={handleBack}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="15 18 9 12 15 6"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
                   </svg>
                   Atrás
                 </button>
-                <button 
-                  className="btn btn-primary" 
+                <button
+                  className="btn btn-primary"
                   onClick={() => setStep('confirm')}
                   disabled={!selectedId}
                 >
                   Continuar
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="9 18 15 12 9 6"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </button>
               </div>
@@ -456,9 +510,16 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
           {step === 'confirm' && (
             <div className="step-content">
               <div className="success-icon">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="8 12 11 15 16 9"/>
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="8 12 11 15 16 9" />
                 </svg>
               </div>
 
@@ -468,18 +529,25 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               </div>
 
               {(() => {
-                const selectedServer = matches.find(m => String(m.id) === String(selectedId));
+                const selectedServer = matches.find((m) => String(m.id) === String(selectedId));
                 if (!selectedServer) return null;
                 const category = getCategory(selectedServer);
-                
+
                 return (
                   <div className="server-preview">
                     <div className="preview-main">
                       <div className="preview-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="2" y="3" width="20" height="14" rx="2"/>
-                          <line x1="8" y1="21" x2="16" y2="21"/>
-                          <line x1="12" y1="17" x2="12" y2="21"/>
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <rect x="2" y="3" width="20" height="14" rx="2" />
+                          <line x1="8" y1="21" x2="16" y2="21" />
+                          <line x1="12" y1="17" x2="12" y2="21" />
                         </svg>
                       </div>
                       <div className="preview-details">
@@ -489,35 +557,53 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                     </div>
 
                     {selectedServer.description && (
-                      <div className="preview-description">
-                        {selectedServer.description}
-                      </div>
+                      <div className="preview-description">{selectedServer.description}</div>
                     )}
 
                     {parsed?.username && (
                       <div className="preview-credentials">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                          <circle cx="12" cy="7" r="4"/>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
                         </svg>
                         <span>Usuario: {parsed.username}</span>
                       </div>
                     )}
-
                   </div>
                 );
               })()}
 
               <div className="button-group">
                 <button className="btn btn-secondary" onClick={handleBack}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="15 18 9 12 15 6"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
                   </svg>
                   Atrás
                 </button>
                 <button className="btn btn-primary btn-success" onClick={handleApply}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="20 6 9 17 4 12"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
                   </svg>
                   Aplicar configuración
                 </button>

@@ -36,7 +36,8 @@ export function HomeScreen() {
   // Determinar qué campos mostrar (mostrar también cuando hay error para permitir corregir credenciales)
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
   const isFreeServer = (config?.name || '').toLowerCase().includes('gratuito');
-  const hasEmbeddedAuth = isFreeServer || !!(config?.auth?.username || config?.auth?.password || config?.auth?.uuid);
+  const hasEmbeddedAuth =
+    isFreeServer || !!(config?.auth?.username || config?.auth?.password || config?.auth?.uuid);
   const canEditCredentials = isDisconnected || isError;
   const showUserPass = !hasEmbeddedAuth && !isV2Ray && canEditCredentials;
   const showUuid = !hasEmbeddedAuth && isV2Ray && canEditCredentials;
@@ -71,7 +72,20 @@ export function HomeScreen() {
     } else {
       connect();
     }
-  }, [isConnected, isConnecting, config, hasEmbeddedAuth, isV2Ray, creds, autoMode, disconnect, cancelConnecting, showToast, startAutoConnect, connect]);
+  }, [
+    isConnected,
+    isConnecting,
+    config,
+    hasEmbeddedAuth,
+    isV2Ray,
+    creds,
+    autoMode,
+    disconnect,
+    cancelConnecting,
+    showToast,
+    startAutoConnect,
+    connect,
+  ]);
 
   const handleServerClick = useCallback(() => {
     setScreen('servers');
@@ -89,10 +103,10 @@ export function HomeScreen() {
     setScreen('logs');
   }, [setScreen]);
 
-  const buttonText = isConnected 
-    ? UI_MESSAGES.buttons.disconnect 
-    : isConnecting 
-      ? UI_MESSAGES.buttons.stop 
+  const buttonText = isConnected
+    ? UI_MESSAGES.buttons.disconnect
+    : isConnecting
+      ? UI_MESSAGES.buttons.stop
       : isError
         ? UI_MESSAGES.buttons.retry
         : UI_MESSAGES.buttons.connect;
@@ -134,7 +148,7 @@ export function HomeScreen() {
           } catch {}
           return true;
         }
-      } catch (err) {
+      } catch {
         // ignore
       }
       return false;
@@ -180,11 +194,7 @@ export function HomeScreen() {
 
         <div className="server-card-wrapper">
           <div className="server-card">
-            <ServerCard 
-              config={config} 
-              onClick={handleServerClick}
-              disabled={false}
-            />
+            <ServerCard config={config} onClick={handleServerClick} disabled={false} />
 
             <HeaderPromo />
 
@@ -204,22 +214,40 @@ export function HomeScreen() {
             {isConnected && <SessionDetails />}
 
             <div className="row connect-row">
-              <Button variant="primary" onClick={handleConnect} className={isConnected ? 'danger' : ''} data-nav>
+              <Button
+                variant="primary"
+                onClick={handleConnect}
+                className={isConnected ? 'danger' : ''}
+                data-nav
+              >
                 {buttonText}
               </Button>
-              <Toggle
-                checked={autoMode}
-                onChange={setAutoMode}
-                label="Auto"
-              />
+              <Toggle checked={autoMode} onChange={setAutoMode} label="Auto" />
             </div>
 
             <div className="quick-grid ql-quick-grid">
-              <QuickButton icon="fa-rotate" label={UI_MESSAGES.buttons.update} onClick={handleUpdate} data-nav aria-label={UI_MESSAGES.buttons.update} />
-              <QuickButton icon="fa-file-import" label={UI_MESSAGES.import.shortTitle} onClick={() => setScreen('import')} data-nav aria-label={UI_MESSAGES.import.shortTitle} />
-              <QuickButton icon="fa-terminal" label={UI_MESSAGES.buttons.logs} onClick={handleLogs} data-nav aria-label={UI_MESSAGES.buttons.logs} />
+              <QuickButton
+                icon="fa-rotate"
+                label={UI_MESSAGES.buttons.update}
+                onClick={handleUpdate}
+                data-nav
+                aria-label={UI_MESSAGES.buttons.update}
+              />
+              <QuickButton
+                icon="fa-file-import"
+                label={UI_MESSAGES.import.shortTitle}
+                onClick={() => setScreen('import')}
+                data-nav
+                aria-label={UI_MESSAGES.import.shortTitle}
+              />
+              <QuickButton
+                icon="fa-terminal"
+                label={UI_MESSAGES.buttons.logs}
+                onClick={handleLogs}
+                data-nav
+                aria-label={UI_MESSAGES.buttons.logs}
+              />
             </div>
-
           </div>
         </div>
       </div>

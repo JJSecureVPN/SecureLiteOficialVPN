@@ -14,9 +14,9 @@ function getApi(name: DtApiName): DtApi | null {
     const api = (window as unknown as Record<string, unknown>)[name];
     if (api && typeof api === 'object') return api as DtApi;
     if (typeof api === 'function') return { execute: api as DtCallable };
-  } catch (error) {
+  } catch {
     // Silenciar errores de API no disponibles para reducir ruido en logs
-    // console.error('bridge error', name, error);
+    // console.error('bridge error', name);
   }
   return null;
 }
@@ -27,9 +27,9 @@ export const dt: NativeBridge = {
       const api = getApi(name);
       if (!api) return null;
       if (typeof api.execute === 'function') return api.execute(...args) as T;
-    } catch (error) {
+    } catch {
       // Silenciar errores para reducir ruido
-      // console.error('bridge call', name, error);
+      // console.error('bridge call', name);
     }
     return null;
   },
@@ -43,9 +43,9 @@ export const dt: NativeBridge = {
       } else if (typeof api.execute === 'function') {
         api.execute(value);
       }
-    } catch (error) {
+    } catch {
       // Silenciar errores para reducir ruido
-      // console.error('bridge set', name, error);
+      // console.error('bridge set', name);
     }
   },
 
@@ -96,7 +96,9 @@ export function getBestIP(config?: { ip?: string }): string {
 
 export function getLogs(): string {
   try {
-    return (window as { DtGetLogs?: { execute: () => string } }).DtGetLogs?.execute() || 'Nenhum log';
+    return (
+      (window as { DtGetLogs?: { execute: () => string } }).DtGetLogs?.execute() || 'Nenhum log'
+    );
   } catch {
     return 'Nenhum log';
   }
@@ -135,7 +137,7 @@ let initialized = false;
 function dispatchEvent(name: NativeEventName, payload: unknown) {
   const listeners = listenerMap.get(name);
   if (!listeners || !listeners.size) return;
-  listeners.forEach(handler => {
+  listeners.forEach((handler) => {
     queueMicrotask(() => {
       try {
         handler(payload);
@@ -175,7 +177,7 @@ export function initNativeEvents() {
     'DtCheckUserModelEvent',
   ];
 
-  stubListeners.forEach(name => {
+  stubListeners.forEach((name) => {
     if (!(name in win)) {
       win[name] = () => {
         // Stub vacío para prevenir ReferenceErrors
@@ -183,13 +185,13 @@ export function initNativeEvents() {
     }
   });
 
-  NATIVE_EVENT_NAMES.forEach(name => {
+  NATIVE_EVENT_NAMES.forEach((name) => {
     try {
       // ✅ Solo procesar si existe en window o fue asignado previamente
       const previous = win[name];
       if (!previous) return; // Skip listeners que no existen
-      
-      const proxy: NativeHandler = payload => {
+
+      const proxy: NativeHandler = (payload) => {
         dispatchEvent(name, payload);
       };
 
@@ -205,7 +207,7 @@ export function initNativeEvents() {
       } else {
         win[name] = proxy;
       }
-    } catch (error) {
+    } catch {
       // Silenciar errores si ocurren
     }
   });

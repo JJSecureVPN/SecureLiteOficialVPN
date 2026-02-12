@@ -1,5 +1,7 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import { callOne } from '../../features/vpn/api/vpnBridge';
+import { useToastContext } from '../toast/ToastContext';
+import { GlobalModal } from './GlobalModal';
 
 type PromoStatus = {
   activa: boolean;
@@ -54,7 +56,7 @@ export const HeaderPromo = memo(function HeaderPromo() {
       try {
         const response = await fetch(PROMO_STATUS_URL, {
           method: 'GET',
-          headers: { 'Accept': 'application/json' },
+          headers: { Accept: 'application/json' },
           cache: 'no-store',
         });
 
@@ -93,23 +95,95 @@ export const HeaderPromo = memo(function HeaderPromo() {
     return () => window.clearInterval(tickId);
   }, [promo?.activa]);
 
+  const { showToast } = useToastContext();
+  const [manualOpen, setManualOpen] = useState(false);
+
+  const tryOpenExternally = () => {
+    // Native attempt
+    if (callOne(['DtOpenExternalUrl'], PLANES_URL)) return true;
+
+    // Fallback: programmatic anchor click (often opens system browser)
+    try {
+      const a = document.createElement('a');
+      a.href = PLANES_URL;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      // some webviews react differently to programmatic clicks
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const handleClick = () => {
-    if (callOne(['DtOpenExternalUrl'], PLANES_URL)) return;
-    window.open(PLANES_URL, '_blank');
+    const ok = tryOpenExternally();
+    if (ok) {
+      showToast('Abriendo en el navegador predeterminado...');
+      return;
+    }
+    // Si no pudo abrir, mostrar modal con opción manual
+    setManualOpen(true);
   };
 
   if (!visible || !remaining) return null;
 
   return (
-    <button type="button" className="promo-header" onClick={handleClick} aria-label="Ver oferta" title="Ver oferta">
-      <span className="promo-header__label">OFERTA</span>
-      <span className="promo-header__timer" aria-label="Tiempo restante">
-        <span className="promo-header__time">{format2(remaining.hours)}</span>
-        <span className="promo-header__unit">HRS</span>
-        <span className="promo-header__time">{format2(remaining.minutes)}</span>
-        <span className="promo-header__unit">MIN</span>
-      </span>
-      <span className="promo-header__cta">OBTENER</span>
-    </button>
+    <>
+      <button
+        type="button"
+        className="promo-header"
+        onClick={handleClick}
+        aria-label="Ver oferta"
+        title="Ver oferta"
+      >
+        <span className="promo-header__label">OFERTA</span>
+        <span className="promo-header__timer" aria-label="Tiempo restante">
+          <span className="promo-header__time">{format2(remaining.hours)}</span>
+          <span className="promo-header__unit">HRS</span>
+          <span className="promo-header__time">{format2(remaining.minutes)}</span>
+          <span className="promo-header__unit">MIN</span>
+        </span>
+        <span className="promo-header__cta">OBTENER</span>
+      </button>
+
+      {manualOpen && (
+        <GlobalModal
+          onClose={() => setManualOpen(false)}
+          title="Abrir en navegador"
+          subtitle="No se pudo abrir automáticamente en tu navegador predeterminado"
+        >
+          <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+            <p>Si prefieres, puedes abrir la oferta manualmente en tu navegador predeterminado.</p>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+              <button
+                className="btn"
+                type="button"
+                onClick={() => {
+                  tryOpenExternally();
+                  setManualOpen(false);
+                  showToast('Intentando abrir...');
+                }}
+              >
+                Abrir en navegador
+              </button>
+              <button
+                className="btn btn-soft"
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(PLANES_URL);
+                  showToast('Enlace copiado al portapapeles');
+                }}
+              >
+                Copiar enlace
+              </button>
+            </div>
+          </div>
+        </GlobalModal>
+      )}
+    </>
   );
 });

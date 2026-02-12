@@ -16,24 +16,26 @@ const manager: Manager = {
     let root = document.querySelector(rootSelector) as HTMLElement | null;
     if (!root) {
       // fallback to document body so manager still works in different render states
-      // eslint-disable-next-line no-console
+
       console.warn('[keyboardNavigationManager] root not found, falling back to document');
       root = document.body;
     }
 
     // Priorizar elementos interactivos (botones, data-nav) y añadir formularios opcionalmente
-    const selector = options && options.includeFormControls
-      ? `${baseSelector}, input, textarea, select`
-      : baseSelector;
+    const selector =
+      options && options.includeFormControls
+        ? `${baseSelector}, input, textarea, select`
+        : baseSelector;
 
-    const getItems = () => Array.from(root!.querySelectorAll<HTMLElement>(selector)).filter((el) => {
-      if (el.hasAttribute('disabled')) return false;
-      try {
-        return el.offsetParent !== null || el.getClientRects().length > 0;
-      } catch (err) {
-        return true;
-      }
-    });
+    const getItems = () =>
+      Array.from(root!.querySelectorAll<HTMLElement>(selector)).filter((el) => {
+        if (el.hasAttribute('disabled')) return false;
+        try {
+          return el.offsetParent !== null || el.getClientRects().length > 0;
+        } catch {
+          return true;
+        }
+      });
 
     const getCenter = (r: DOMRect) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
 
@@ -55,7 +57,8 @@ const manager: Manager = {
           continue;
         }
         // row tolerance: half of average height or 24px
-        const avgHeight = last.reduce((s, n) => s + n.rect.height, 0) / last.length || node.rect.height;
+        const avgHeight =
+          last.reduce((s, n) => s + n.rect.height, 0) / last.length || node.rect.height;
         const tol = Math.max(16, avgHeight * 0.6);
         const lastY = last.reduce((s, n) => s + n.c.y, 0) / last.length;
         if (Math.abs(node.c.y - lastY) <= tol) {
@@ -99,11 +102,17 @@ const manager: Manager = {
         const listDebug = items.map((el, i) => {
           const r = el.getBoundingClientRect();
           const c = getCenter(r);
-          return { i, tag: el.tagName, txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60), x: Math.round(c.x), y: Math.round(c.y) };
+          return {
+            i,
+            tag: el.tagName,
+            txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60),
+            x: Math.round(c.x),
+            y: Math.round(c.y),
+          };
         });
-        // eslint-disable-next-line no-console
+
         console.debug('[keyboardNavigationManager] onKey items', key, listDebug);
-      } catch (err) {
+      } catch {
         // ignore
       }
 
@@ -122,13 +131,25 @@ const manager: Manager = {
           activeIdx = items.indexOf(active);
         }
       }
-      // eslint-disable-next-line no-console
-      console.debug('[keyboardNavigationManager] active element', activeIdx, active && active.tagName, active && (active.innerText || (active as HTMLInputElement).value));
+
+      console.debug(
+        '[keyboardNavigationManager] active element',
+        activeIdx,
+        active && active.tagName,
+        active && (active.innerText || (active as HTMLInputElement).value),
+      );
 
       if (key === 'Enter' || key === ' ') {
         if (active && items.includes(active)) {
-          if (active.tagName === 'INPUT' && active.getAttribute('type') !== 'button' && active.getAttribute('type') !== 'submit') {
-            if ((active as HTMLInputElement).type === 'checkbox' || (active as HTMLInputElement).type === 'radio') {
+          if (
+            active.tagName === 'INPUT' &&
+            active.getAttribute('type') !== 'button' &&
+            active.getAttribute('type') !== 'submit'
+          ) {
+            if (
+              (active as HTMLInputElement).type === 'checkbox' ||
+              (active as HTMLInputElement).type === 'radio'
+            ) {
               (active as HTMLInputElement).click();
             }
           } else {
@@ -150,40 +171,64 @@ const manager: Manager = {
           catNode = catNode.parentElement as HTMLElement | null;
         }
         if (catNode) {
-          const cats = Array.from(root.querySelectorAll<HTMLElement>('.category-card')).filter(el => el.offsetParent !== null && !el.hasAttribute('disabled'));
+          const cats = Array.from(root.querySelectorAll<HTMLElement>('.category-card')).filter(
+            (el) => el.offsetParent !== null && !el.hasAttribute('disabled'),
+          );
           if (cats.length > 1) {
             const cur = cats.indexOf(catNode);
             if (cur >= 0) {
               if (key === 'ArrowDown') {
                 const next = cats[Math.min(cats.length - 1, cur + 1)];
-                if (next) { next.focus(); return; }
+                if (next) {
+                  next.focus();
+                  return;
+                }
               }
               if (key === 'ArrowUp') {
                 const prev = cats[Math.max(0, cur - 1)];
-                if (prev) { prev.focus(); return; }
+                if (prev) {
+                  prev.focus();
+                  return;
+                }
               }
               if (key === 'ArrowLeft') {
                 // Delegate: focus header/back if available
-                const sel = ['header.topbar [data-nav]', 'header.topbar button.btn.hotzone', 'header.topbar .btn.hotzone', 'header.topbar .hotzone'].join(',');
+                const sel = [
+                  'header.topbar [data-nav]',
+                  'header.topbar button.btn.hotzone',
+                  'header.topbar .btn.hotzone',
+                  'header.topbar .hotzone',
+                ].join(',');
                 const back = document.querySelector<HTMLElement>(sel);
                 if (back) {
-                  try { back.setAttribute('tabindex', '0'); back.setAttribute('data-nav', '1'); } catch {}
-                  setTimeout(() => { try { back.focus(); } catch {} }, 0);
+                  try {
+                    back.setAttribute('tabindex', '0');
+                    back.setAttribute('data-nav', '1');
+                  } catch {}
+                  setTimeout(() => {
+                    try {
+                      back.focus();
+                    } catch {}
+                  }, 0);
                   return;
                 }
               }
             }
           }
         }
-      } catch (err) {
+      } catch {
         // ignore special-case errors
       }
       // Debug: show grid rows and centers for diagnosis
       try {
-        const gridDebug = grid.map((row, ri) => ({ row: ri, len: row.length, cols: row.map(n => ({ i: n.i, x: Math.round(n.c.x), y: Math.round(n.c.y) })) }));
-        // eslint-disable-next-line no-console
+        const gridDebug = grid.map((row, ri) => ({
+          row: ri,
+          len: row.length,
+          cols: row.map((n) => ({ i: n.i, x: Math.round(n.c.x), y: Math.round(n.c.y) })),
+        }));
+
         console.debug('[keyboardNavigationManager] grid', gridDebug);
-      } catch (err) {
+      } catch {
         // ignore
       }
 
@@ -248,14 +293,14 @@ const manager: Manager = {
         target = { row: r, col: Math.max(0, c - 1) };
       } else if (key === 'ArrowRight') {
         // move right in the same row
-        target = { row: r, col: Math.min((grid[r].length - 1), c + 1) };
+        target = { row: r, col: Math.min(grid[r].length - 1, c + 1) };
       }
 
       if (target) {
         const el = grid[target.row]?.[target.col]?.el;
         if (el) {
           el.focus();
-          // eslint-disable-next-line no-console
+
           console.debug('[keyboardNavigationManager] grid focus', target.row, target.col, el);
         }
       }
@@ -263,10 +308,14 @@ const manager: Manager = {
 
     // Log initial items for debugging
     try {
-      const initial = getItems().map((el, i) => ({ i, tag: el.tagName, txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60) }));
-      // eslint-disable-next-line no-console
+      const initial = getItems().map((el, i) => ({
+        i,
+        tag: el.tagName,
+        txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60),
+      }));
+
       console.info('[keyboardNavigationManager] initial items', initial.length, initial);
-    } catch (err) {
+    } catch {
       // ignore
     }
 
@@ -275,7 +324,7 @@ const manager: Manager = {
     // store handler so we can remove later
     (manager as any).__onKey = onKey;
     manager.enabled = true;
-    // eslint-disable-next-line no-console
+
     console.info('[keyboardNavigationManager] enabled on', rootSelector, 'options', options);
     return true;
   },
@@ -283,9 +332,9 @@ const manager: Manager = {
     const fn = (manager as any).__onKey as ((e: KeyboardEvent) => void) | undefined;
     if (fn) window.removeEventListener('keydown', fn);
     manager.enabled = false;
-    // eslint-disable-next-line no-console
+
     console.info('[keyboardNavigationManager] disabled');
-  }
+  },
 };
 
 export default manager;

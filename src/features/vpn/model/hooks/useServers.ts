@@ -21,16 +21,44 @@ export function useServers() {
             name: 'MOCK A',
             sorter: 10,
             items: [
-              { id: 'mock-a-1', name: 'Mock Server A1', description: '127.0.0.1', mode: 'udp', ip: '127.0.0.1', sorter: 1 },
-              { id: 'mock-a-2', name: 'Mock Server A2', description: '127.0.0.2', mode: 'udp', ip: '127.0.0.2', sorter: 2 },
+              {
+                id: 'mock-a-1',
+                name: 'Mock Server A1',
+                description: '127.0.0.1',
+                mode: 'udp',
+                ip: '127.0.0.1',
+                sorter: 1,
+              },
+              {
+                id: 'mock-a-2',
+                name: 'Mock Server A2',
+                description: '127.0.0.2',
+                mode: 'udp',
+                ip: '127.0.0.2',
+                sorter: 2,
+              },
             ],
           },
           {
             name: 'MOCK B',
             sorter: 20,
             items: [
-              { id: 'mock-b-1', name: 'Mock Server B1', description: '10.0.0.1', mode: 'tcp', ip: '10.0.0.1', sorter: 1 },
-              { id: 'mock-b-2', name: 'Mock Server B2', description: '10.0.0.2', mode: 'tcp', ip: '10.0.0.2', sorter: 2 },
+              {
+                id: 'mock-b-1',
+                name: 'Mock Server B1',
+                description: '10.0.0.1',
+                mode: 'tcp',
+                ip: '10.0.0.1',
+                sorter: 1,
+              },
+              {
+                id: 'mock-b-2',
+                name: 'Mock Server B2',
+                description: '10.0.0.2',
+                mode: 'tcp',
+                ip: '10.0.0.2',
+                sorter: 2,
+              },
             ],
           },
         ];
@@ -41,23 +69,51 @@ export function useServers() {
       let cats: Category[];
       try {
         cats = JSON.parse(raw) as Category[];
-      } catch (err) {
+      } catch {
         appLogger.add('error', '❌ Error parseando DtGetConfigs — usando MOCK');
         const mock: Category[] = [
           {
             name: 'MOCK A',
             sorter: 10,
             items: [
-              { id: 'mock-a-1', name: 'Mock Server A1', description: '127.0.0.1', mode: 'udp', ip: '127.0.0.1', sorter: 1 },
-              { id: 'mock-a-2', name: 'Mock Server A2', description: '127.0.0.2', mode: 'udp', ip: '127.0.0.2', sorter: 2 },
+              {
+                id: 'mock-a-1',
+                name: 'Mock Server A1',
+                description: '127.0.0.1',
+                mode: 'udp',
+                ip: '127.0.0.1',
+                sorter: 1,
+              },
+              {
+                id: 'mock-a-2',
+                name: 'Mock Server A2',
+                description: '127.0.0.2',
+                mode: 'udp',
+                ip: '127.0.0.2',
+                sorter: 2,
+              },
             ],
           },
           {
             name: 'MOCK B',
             sorter: 20,
             items: [
-              { id: 'mock-b-1', name: 'Mock Server B1', description: '10.0.0.1', mode: 'tcp', ip: '10.0.0.1', sorter: 1 },
-              { id: 'mock-b-2', name: 'Mock Server B2', description: '10.0.0.2', mode: 'tcp', ip: '10.0.0.2', sorter: 2 },
+              {
+                id: 'mock-b-1',
+                name: 'Mock Server B1',
+                description: '10.0.0.1',
+                mode: 'tcp',
+                ip: '10.0.0.1',
+                sorter: 1,
+              },
+              {
+                id: 'mock-b-2',
+                name: 'Mock Server B2',
+                description: '10.0.0.2',
+                mode: 'tcp',
+                ip: '10.0.0.2',
+                sorter: 2,
+              },
             ],
           },
         ];
@@ -67,10 +123,10 @@ export function useServers() {
 
       appLogger.add('info', `✓ Servidores cargados: ${cats.length} categorías`);
       cats.sort((a, b) => (a.sorter || 0) - (b.sorter || 0));
-      cats.forEach(c => c.items?.sort((a, b) => (a.sorter || 0) - (b.sorter || 0)));
+      cats.forEach((c) => c.items?.sort((a, b) => (a.sorter || 0) - (b.sorter || 0)));
       setCategorias(cats);
-    } catch (error) {
-      appLogger.add('error', `❌ Error cargando categorías: ${String(error)}`);
+    } catch (_error) {
+      appLogger.add('error', `❌ Error cargando categorías: ${String(_error)}`);
       setCategorias([]);
     }
   }, []);
@@ -99,4 +155,3 @@ export function useServers() {
     loadInitialConfig,
   };
 }
-
