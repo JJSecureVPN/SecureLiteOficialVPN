@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState, useMemo } from 'react';
 import { useSafeArea } from '../../hooks/useSafeArea';
 
 export interface MiniHeaderProps {
@@ -32,10 +32,12 @@ export function MiniHeader({
   }, []);
 
   // Provide CSS variables so the header and its buttons can be shifted down on devices with a large status bar
-  const style = {
-    ['--mini-header-top' as any]: `${Math.max(0, Math.round(statusBarHeight))}px`,
-    ['--mini-header-button-top' as any]: `${buttonTop}px`,
-  };
+  const style = useMemo(() => {
+    return {
+      ['--mini-header-top']: `${Math.max(0, Math.round(statusBarHeight))}px`,
+      ['--mini-header-button-top']: `${buttonTop}px`,
+    } as React.CSSProperties;
+  }, [statusBarHeight, buttonTop]);
 
   return (
     <header
@@ -43,7 +45,12 @@ export function MiniHeader({
       style={style}
     >
       {showBackButton && onBack && (
-        <button className="mini-header__back icon-btn" onClick={onBack} aria-label="Volver" type="button">
+        <button
+          className="mini-header__back icon-btn"
+          onClick={onBack}
+          aria-label="Volver"
+          type="button"
+        >
           <i className="fa fa-arrow-left" />
         </button>
       )}
