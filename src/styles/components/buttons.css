@@ -90,7 +90,6 @@ header.topbar .btn.hotzone:focus-visible,
 
 /* Nota: las reglas de quick-button se consolidaron en `src/styles/components/quick-buttons.css` y usan la clase `ql-qbtn`. El selector legacy `.qbtn` se eliminó para evitar duplicados. */
 
-
 /* ===========================================
    Toggle Switch
    =========================================== */

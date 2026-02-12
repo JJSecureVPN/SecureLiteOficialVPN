@@ -1,9 +1,10 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback } from 'react';
 import { useVpn } from '../../features/vpn/model/VpnContext';
 import { callOne } from '../../features/vpn/api/vpnBridge';
 import { UI_MESSAGES } from '../../constants';
 import { useTheme } from '../hooks/useTheme';
-import { loadNewsLastSeen } from '../../utils/storageUtils';
+import { useCoupons } from '../hooks/useCoupons';
+import { useNewsBadge } from '../hooks/useNewsBadge';
 
 type Coupon = {
   id: number;
@@ -33,86 +34,9 @@ export const AppHeader = memo(function AppHeader({
 }: AppHeaderProps) {
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
   const { theme, toggleTheme } = useTheme();
-  const [hasActiveCoupon, setHasActiveCoupon] = useState(false);
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const activeCouponsCount = coupons.filter((c) => c.activo && !c.oculto).length;
-  const [hasUnreadNews, setHasUnreadNews] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const response = await fetch(COUPONS_URL, {
-          method: 'GET',
-          headers: { Accept: 'application/json' },
-          cache: 'no-store',
-        });
-
-        if (!response.ok) return;
-
-        const data = await response.json();
-        const coupons: Coupon[] = data?.data ?? [];
-
-        if (cancelled) return;
-
-        setCoupons(coupons);
-        const active = coupons.some((coupon) => coupon.activo && !coupon.oculto);
-        setHasActiveCoupon(active);
-      } catch {
-        // Silent
-      }
-    }
-
-    load();
-    const pollId = window.setInterval(load, 60_000);
-
-    return () => {
-      cancelled = true;
-      window.clearInterval(pollId);
-    };
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function checkLatest() {
-      try {
-        const resp = await fetch('/api/noticias/vpn?limit=1', { cache: 'no-store' });
-        if (!resp.ok) return;
-        const json = await resp.json();
-        if (!json.success) return;
-        const latest = json.data?.[0];
-        if (!latest) return;
-
-        const lastSeen = loadNewsLastSeen();
-        if (cancelled) return;
-
-        if (!lastSeen) {
-          setHasUnreadNews(true);
-          return;
-        }
-
-        const latestDate = latest.fecha_publicacion
-          ? new Date(latest.fecha_publicacion).toISOString()
-          : null;
-        if (latestDate) {
-          setHasUnreadNews(latestDate > lastSeen);
-        } else {
-          setHasUnreadNews(String(latest.id) !== lastSeen);
-        }
-      } catch {
-        // silent
-      }
-    }
-
-    checkLatest();
-    const id = window.setInterval(checkLatest, 60_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-  }, []);
+  // Use hooks to encapsulate side effects and make AppHeader smaller
+  const { coupons, activeCouponsCount, hasActiveCoupon } = useCoupons();
+  const { hasUnreadNews } = useNewsBadge();
 
   const isSubScreen = screen !== 'home';
   const isCategoryDetail = screen === 'servers' && Boolean(selectedCategory);

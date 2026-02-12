@@ -20,14 +20,18 @@ describe('NewsList', () => {
   });
 
   it('shows empty state when no items and not loading', () => {
-    render(<NewsList items={[]} loading={false} error={null} reload={() => {}} onOpen={() => {}} />);
+    render(
+      <NewsList items={[]} loading={false} error={null} reload={() => {}} onOpen={() => {}} />,
+    );
 
     expect(screen.getByText(/No hay noticias disponibles/i)).toBeInTheDocument();
   });
 
   it('shows error state and calls reload when retry pressed', () => {
     const reload = vi.fn();
-    render(<NewsList items={[]} loading={false} error={'Boom'} reload={reload} onOpen={() => {}} />);
+    render(
+      <NewsList items={[]} loading={false} error={'Boom'} reload={reload} onOpen={() => {}} />,
+    );
 
     expect(screen.getByText(/Error al cargar noticias/i)).toBeInTheDocument();
 
@@ -40,7 +44,9 @@ describe('NewsList', () => {
     const items = [makeItem(1), makeItem(2)];
     const onOpen = vi.fn();
 
-    render(<NewsList items={items} loading={false} error={null} reload={() => {}} onOpen={onOpen} />);
+    render(
+      <NewsList items={items} loading={false} error={null} reload={() => {}} onOpen={onOpen} />,
+    );
 
     expect(screen.getByText(/Noticia 1/i)).toBeInTheDocument();
     const article = screen.getByRole('button', { name: /Leer noticia: Noticia 1/i });
