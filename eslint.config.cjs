@@ -27,7 +27,8 @@ module.exports = [
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
       ],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      'react/react-in-jsx-scope': 'off'
+      'react/react-in-jsx-scope': 'off',
+      'deprecation/deprecation': 'off'
     },
     settings: { react: { version: 'detect' } }
   }

@@ -36,15 +36,16 @@ export function useTheme() {
       removeListener?: (listener: () => void) => void;
     };
 
-    if (typeof mqAny.addEventListener === 'function' && typeof mqAny.removeEventListener === 'function') {
+    if (
+      typeof mqAny.addEventListener === 'function' &&
+      typeof mqAny.removeEventListener === 'function'
+    ) {
       mqAny.addEventListener('change', onChange);
       return () => mqAny.removeEventListener?.('change', onChange);
     }
 
     // Safari viejo
-    // eslint-disable-next-line deprecation/deprecation
     mqAny.addListener?.(onChange);
-    // eslint-disable-next-line deprecation/deprecation
     return () => mqAny.removeListener?.(onChange);
   }, [hasExplicitPreference]);
 
