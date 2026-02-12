@@ -115,49 +115,10 @@
   min-width: 0;
   flex: 1;
 }
-
-.loc-status {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 12px;
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-size: var(--font-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-  background: var(--accent-10);
-  color: var(--text-strong);
-}
-
-.status-chip--connecting {
-  background: var(--status-warn-35);
-  color: var(--status-warn);
-}
-
-.status-chip--connected {
-  background: var(--status-ok-45);
-  color: var(--status-ok);
-}
-
-.status-chip--error {
-  background: var(--status-bad-55);
-  color: var(--status-bad);
-}
-
-.status-detail {
-  font-size: var(--font-sm);
-  color: var(--muted);
-  line-height: 1.35;
-}
+/* Removed unused status-related styles (PurgeCSS candidates):
+   .loc-status, .status-chip, .status-chip--connecting, .status-chip--connected,
+   .status-chip--error, .status-detail
+   These classes were not referenced in the codebase and were removed to trim CSS. */
 
 /* ===========================================
    Info Card

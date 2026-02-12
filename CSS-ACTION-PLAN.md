@@ -26,6 +26,7 @@ He ejecutado PurgeCSS y detectó selectores potencialmente no usados. Esto es un
     - `src/styles/components/applogs.css` - eliminados los modificadores de nivel de log (`.applog-entry--info|--warn|--error|--debug`) y las variantes de color correspondientes (no referenciadas). ✅
     - `src/styles/components/servers.css` - eliminadas las reglas legacy `.stats-btn` (no referenciadas). ✅
     - `src/styles/components/modal.css` - eliminadas las reglas relacionadas con el "Server Stats Modal" (no referenciadas): overlay, modal, header/body, loading/spinner/list/item/status (se mantuvieron keyframes compartidos cuando aplica). ✅
+    - `src/styles/components/cards.css` - eliminadas reglas de estado no usadas: `.loc-status`, `.status-chip*`, `.status-detail`. ✅
 
 > Nota: la lista completa de selectores rechazados por fichero está en PurgeCSS output (se adjunta en `AUDIT.md` o puede reejecutarse). Usar esta lista como guía y revisar visualmente.
 
