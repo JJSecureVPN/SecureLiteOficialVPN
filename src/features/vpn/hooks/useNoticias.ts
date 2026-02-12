@@ -173,5 +173,3 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
     isRefreshing,
   };
 }
-
-export default useNoticias;

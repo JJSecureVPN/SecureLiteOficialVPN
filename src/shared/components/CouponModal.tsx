@@ -133,5 +133,3 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
     </GlobalModal>
   );
 });
-
-export default CouponModal;

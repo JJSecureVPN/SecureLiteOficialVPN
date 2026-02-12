@@ -149,5 +149,3 @@ export function NewsScreen() {
     </section>
   );
 }
-
-export default NewsScreen;
