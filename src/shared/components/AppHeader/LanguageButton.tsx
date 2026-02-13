@@ -7,7 +7,7 @@ interface Props {
 }
 
 const LANG_LABELS: Record<Language, string> = {
-  es: '🇪🇸',
+  es: '�🇷',
   en: '🇺🇸',
   pt: '🇧🇷',
 };
@@ -60,7 +60,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
             role="option"
             aria-selected={language === 'es'}
           >
-            🇪🇸 {t('language.spanish')}
+            �🇷 {t('language.spanish')}
           </button>
           <button
             type="button"
