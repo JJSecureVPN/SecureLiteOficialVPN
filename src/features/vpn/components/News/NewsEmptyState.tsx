@@ -1,4 +1,7 @@
+import { useTranslation } from '../../../../i18n/useTranslation';
+
 export function NewsEmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="news-empty">
       <div className="news-empty__icon">
@@ -39,10 +42,8 @@ export function NewsEmptyState() {
           />
         </svg>
       </div>
-      <h3 className="news-empty__title">No hay noticias disponibles</h3>
-      <p className="news-empty__description">
-        Vuelve más tarde para ver las últimas actualizaciones
-      </p>
+      <h3 className="news-empty__title">{t('news.noNews')}</h3>
+      <p className="news-empty__description">{t('news.emptyDescription')}</p>
     </div>
   );
 }

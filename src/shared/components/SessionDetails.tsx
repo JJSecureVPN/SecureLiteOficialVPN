@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '../../features/vpn/model/VpnContext';
 import { Button } from '../ui/Button';
-import { UI_MESSAGES } from '../../constants';
+import { useTranslation } from '../../i18n/useTranslation';
 import { getDisplayName } from '../utils/sessionUtils';
 
 /**
@@ -10,6 +10,7 @@ import { getDisplayName } from '../utils/sessionUtils';
  */
 export const SessionDetails = memo(function SessionDetails() {
   const { status, user, creds, config, setScreen } = useVpn();
+  const { t } = useTranslation();
 
   const handleViewDetails = useCallback(() => {
     setScreen('account');
@@ -17,17 +18,17 @@ export const SessionDetails = memo(function SessionDetails() {
 
   if (status !== 'CONNECTED') return null;
 
-  const name = getDisplayName(user, config, creds);
+  const name = getDisplayName(user, config, creds, t('account.defaultUser'));
 
   return (
     <div className="info-card session-card">
       <div className="session-card__body">
-        <span className="summary-eyebrow">{UI_MESSAGES.session.active}</span>
-        <p className="session-card__title">{UI_MESSAGES.session.greeting(name)}</p>
-        <p className="session-card__meta">{UI_MESSAGES.session.protected}</p>
+        <span className="summary-eyebrow">{t('session.active')}</span>
+        <p className="session-card__title">{t('session.greeting').replace('{name}', name)}</p>
+        <p className="session-card__meta">{t('session.protected')}</p>
       </div>
       <Button variant="soft" className="session-card__button" onClick={handleViewDetails}>
-        <i className="fa fa-user-shield" aria-hidden="true" /> {UI_MESSAGES.buttons.viewDetails}
+        <i className="fa fa-user-shield" aria-hidden="true" /> {t('buttons.viewDetails')}
       </Button>
     </div>
   );

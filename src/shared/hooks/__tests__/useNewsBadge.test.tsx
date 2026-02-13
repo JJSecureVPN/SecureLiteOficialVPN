@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useNewsBadge } from '../useNewsBadge';
 import * as storage from '../../../utils/storageUtils';
-import React from 'react';
 
 const latest = { id: 1, fecha_publicacion: '2020-01-01T12:00:00Z' };
 

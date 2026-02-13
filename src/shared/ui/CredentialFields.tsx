@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Input } from './Input';
-import { UI_MESSAGES } from '../../constants';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface CredentialFieldsProps {
   username: string;
@@ -26,6 +26,7 @@ export const CredentialFields = memo(function CredentialFields({
   onPasswordChange,
   onUuidChange,
 }: CredentialFieldsProps) {
+  const { t } = useTranslation();
   if (!showUserPass && !showUuid) return null;
 
   return (
@@ -34,13 +35,13 @@ export const CredentialFields = memo(function CredentialFields({
         <>
           <Input
             icon="user"
-            placeholder={UI_MESSAGES.credentials.usernamePlaceholder}
+            placeholder={t('credentials.usernamePlaceholder')}
             value={username}
             onChange={onUsernameChange}
           />
           <Input
             icon="lock"
-            placeholder={UI_MESSAGES.credentials.passwordPlaceholder}
+            placeholder={t('credentials.passwordPlaceholder')}
             value={password}
             onChange={onPasswordChange}
             toggleVisibility
@@ -50,7 +51,7 @@ export const CredentialFields = memo(function CredentialFields({
       {showUuid && (
         <Input
           icon="key"
-          placeholder={UI_MESSAGES.credentials.uuidPlaceholder}
+          placeholder={t('credentials.uuidPlaceholder')}
           value={uuid}
           onChange={onUuidChange}
           className={showUserPass ? '' : 'full'}

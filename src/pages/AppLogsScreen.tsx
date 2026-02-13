@@ -4,7 +4,7 @@ import { useToastContext } from '../shared/toast/ToastContext';
 import { useAppLogs } from '../features/logs/model/useAppLogs';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
 import { Button } from '../shared/ui/Button';
-import { UI_MESSAGES } from '../constants';
+import { useTranslation } from '../i18n/useTranslation';
 
 const LOG_LEVEL_ICONS: Record<string, string> = {
   info: 'fa-circle-info',
@@ -16,6 +16,7 @@ const LOG_LEVEL_ICONS: Record<string, string> = {
 export const AppLogsScreen = memo(function AppLogsScreen() {
   const { setScreen } = useVpn();
   const { showToast } = useToastContext();
+  const { t } = useTranslation();
   const { logs, clear } = useAppLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
 
@@ -36,11 +37,11 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
         .map((log) => `[${log.timestamp}] ${log.level.toUpperCase()}: ${log.message}`)
         .join('\n');
       await navigator.clipboard.writeText(text);
-      showToast(UI_MESSAGES.applogs.copiedToast);
+      showToast(t('applogs.copiedToast'));
     } catch {
-      showToast(UI_MESSAGES.applogs.copyFailedToast);
+      showToast(t('applogs.copyFailedToast'));
     }
-  }, [logs, showToast]);
+  }, [logs, showToast, t]);
 
   const handleCopyServers = useCallback(async () => {
     try {
@@ -53,7 +54,7 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
         })),
       );
       if (!all.length) {
-        showToast(UI_MESSAGES.applogs.serversCopyFailedToast);
+        showToast(t('applogs.serversCopyFailedToast'));
         return;
       }
       const text = all
@@ -63,16 +64,16 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
         )
         .join('\n');
       await navigator.clipboard.writeText(text);
-      showToast(UI_MESSAGES.applogs.serversCopiedToast);
+      showToast(t('applogs.serversCopiedToast'));
     } catch {
-      showToast(UI_MESSAGES.applogs.serversCopyFailedToast);
+      showToast(t('applogs.serversCopyFailedToast'));
     }
-  }, [categorias, showToast]);
+  }, [categorias, showToast, t]);
 
   const handleClear = useCallback(() => {
     clear();
-    showToast(UI_MESSAGES.applogs.clearedToast);
-  }, [clear, showToast]);
+    showToast(t('applogs.clearedToast'));
+  }, [clear, showToast, t]);
 
   const handleClose = useCallback(() => {
     setScreen('menu');
@@ -82,24 +83,24 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
     <section className="screen applogs-screen" style={screenStyle}>
       <div className="applogs-header">
         <div>
-          <div className="panel-title">{UI_MESSAGES.applogs.title}</div>
-          <p className="section-subtitle">{UI_MESSAGES.applogs.subtitle}</p>
+          <div className="panel-title">{t('applogs.title')}</div>
+          <p className="section-subtitle">{t('applogs.subtitle')}</p>
         </div>
         <div className="applogs-actions">
           <Button variant="soft" onClick={handleCopy} disabled={!hasLogs}>
-            {UI_MESSAGES.applogs.copy}
+            {t('applogs.copy')}
           </Button>
           <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
-            {UI_MESSAGES.applogs.clear}
+            {t('applogs.clear')}
           </Button>
           <Button
             variant="soft"
             onClick={handleCopyServers}
             disabled={!categorias || categorias.length === 0}
           >
-            {UI_MESSAGES.applogs.servers}
+            {t('applogs.servers')}
           </Button>
-          <Button onClick={handleClose}>{UI_MESSAGES.applogs.close}</Button>
+          <Button onClick={handleClose}>{t('applogs.close')}</Button>
         </div>
       </div>
 
@@ -125,17 +126,17 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
         ) : (
           <div className="empty-result applogs-empty">
             <i className="fas fa-inbox" aria-hidden="true" />
-            <p>{UI_MESSAGES.applogs.empty}</p>
-            <small className="muted">{UI_MESSAGES.applogs.emptyHint}</small>
+            <p>{t('applogs.empty')}</p>
+            <small className="muted">{t('applogs.emptyHint')}</small>
             <ul
               className="muted"
               style={{ fontSize: '11px', textAlign: 'left', margin: '8px 0', paddingLeft: '20px' }}
             >
-              <li>{UI_MESSAGES.applogs.hints.slowOps}</li>
-              <li>{UI_MESSAGES.applogs.hints.slowRenders}</li>
-              <li>{UI_MESSAGES.applogs.hints.uncaughtErrors}</li>
-              <li>{UI_MESSAGES.applogs.hints.promiseRejected}</li>
-              <li>{UI_MESSAGES.applogs.hints.visibilityChanges}</li>
+              <li>{t('applogs.hints.slowOps')}</li>
+              <li>{t('applogs.hints.slowRenders')}</li>
+              <li>{t('applogs.hints.uncaughtErrors')}</li>
+              <li>{t('applogs.hints.promiseRejected')}</li>
+              <li>{t('applogs.hints.visibilityChanges')}</li>
             </ul>
           </div>
         )}

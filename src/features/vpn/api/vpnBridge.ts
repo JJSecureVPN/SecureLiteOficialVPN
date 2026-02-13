@@ -16,7 +16,6 @@ function getApi(name: DtApiName): DtApi | null {
     if (typeof api === 'function') return { execute: api as DtCallable };
   } catch {
     // Silenciar errores de API no disponibles para reducir ruido en logs
-    // console.error('bridge error', name);
   }
   return null;
 }
@@ -29,7 +28,6 @@ export const dt: NativeBridge = {
       if (typeof api.execute === 'function') return api.execute(...args) as T;
     } catch {
       // Silenciar errores para reducir ruido
-      // console.error('bridge call', name);
     }
     return null;
   },
@@ -45,7 +43,6 @@ export const dt: NativeBridge = {
       }
     } catch {
       // Silenciar errores para reducir ruido
-      // console.error('bridge set', name);
     }
   },
 

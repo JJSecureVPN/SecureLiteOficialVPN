@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { LanguageProvider } from '../../../../../i18n/context';
 import { NewsList } from '../NewsList';
 import type { NoticiaItem } from '../../../hooks/useNoticias';
 
@@ -13,7 +14,9 @@ const makeItem = (id: number): NoticiaItem => ({
 describe('NewsList', () => {
   it('shows skeletons when loading with no items', () => {
     const { container } = render(
-      <NewsList items={[]} loading={true} error={null} reload={() => {}} onOpen={() => {}} />,
+      <LanguageProvider>
+        <NewsList items={[]} loading={true} error={null} reload={() => {}} onOpen={() => {}} />
+      </LanguageProvider>,
     );
 
     expect(container.firstChild).toMatchSnapshot();
@@ -21,7 +24,9 @@ describe('NewsList', () => {
 
   it('shows empty state when no items and not loading', () => {
     render(
-      <NewsList items={[]} loading={false} error={null} reload={() => {}} onOpen={() => {}} />,
+      <LanguageProvider>
+        <NewsList items={[]} loading={false} error={null} reload={() => {}} onOpen={() => {}} />
+      </LanguageProvider>,
     );
 
     expect(screen.getByText(/No hay noticias disponibles/i)).toBeInTheDocument();
@@ -30,12 +35,15 @@ describe('NewsList', () => {
   it('shows error state and calls reload when retry pressed', () => {
     const reload = vi.fn();
     render(
-      <NewsList items={[]} loading={false} error={'Boom'} reload={reload} onOpen={() => {}} />,
+      <LanguageProvider>
+        <NewsList items={[]} loading={false} error={'Boom'} reload={reload} onOpen={() => {}} />
+      </LanguageProvider>,
     );
 
-    expect(screen.getByText(/Error al cargar noticias/i)).toBeInTheDocument();
+    const es = require('../../../../../i18n/locales/es.json');
+    expect(screen.getByText(new RegExp(es.news.errorTitle, 'i'))).toBeInTheDocument();
 
-    const button = screen.getByRole('button', { name: /Reintentar/i });
+    const button = screen.getByRole('button', { name: new RegExp(es.news.retry, 'i') });
     fireEvent.click(button);
     expect(reload).toHaveBeenCalled();
   });
@@ -45,7 +53,9 @@ describe('NewsList', () => {
     const onOpen = vi.fn();
 
     render(
-      <NewsList items={items} loading={false} error={null} reload={() => {}} onOpen={onOpen} />,
+      <LanguageProvider>
+        <NewsList items={items} loading={false} error={null} reload={() => {}} onOpen={onOpen} />
+      </LanguageProvider>,
     );
 
     expect(screen.getByText(/Noticia 1/i)).toBeInTheDocument();

@@ -2,10 +2,10 @@ import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn } from '../features/vpn/model/VpnContext';
 import { useToastContext } from '../shared/toast/ToastContext';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
+import { useTranslation } from '../i18n/useTranslation';
 import { callOne, dt } from '../features/vpn/api/vpnBridge';
 import type { HotspotState } from '../shared/types/native';
 import { PremiumCard } from '../shared/components/PremiumCard';
-import { UI_MESSAGES } from '../constants';
 
 interface MenuItem {
   id: string;
@@ -16,6 +16,7 @@ interface MenuItem {
 }
 
 export const MenuScreen = memo(function MenuScreen() {
+  const { t } = useTranslation();
   const { setScreen } = useVpn();
   const { showToast } = useToastContext();
   const [hotspotStatus, setHotspotStatus] = useState<HotspotState>('UNKNOWN');
@@ -42,13 +43,13 @@ export const MenuScreen = memo(function MenuScreen() {
       ? callOne(['DtStartHotSpotService'])
       : callOne(['DtStopHotSpotService']);
     if (success) {
-      showToast(starting ? UI_MESSAGES.menu.hotspotStarted : UI_MESSAGES.menu.hotspotStopped);
+      showToast(starting ? t('menu.hotspotStarted') : t('menu.hotspotStopped'));
       setTimeout(refreshHotspotStatus, 400);
     } else {
-      showToast(UI_MESSAGES.common.notAvailableDevice);
+      showToast(t('common.notAvailableDevice'));
       setHotspotStatus('UNKNOWN');
     }
-  }, [hotspotStatus, showToast, refreshHotspotStatus]);
+  }, [hotspotStatus, showToast, refreshHotspotStatus, t]);
 
   const handlePressStart = useCallback((id: string) => {
     setPressedItem(id);
@@ -61,25 +62,25 @@ export const MenuScreen = memo(function MenuScreen() {
   const menuItems: MenuItem[] = [
     {
       id: 'apn',
-      title: UI_MESSAGES.menu.items.apn.title,
-      subtitle: UI_MESSAGES.menu.items.apn.subtitle,
+      title: t('menu.itemsApnTitle'),
+      subtitle: t('menu.itemsApnSubtitle'),
       icon: 'fa-signal',
       action: () => {
         if (!callOne(['DtStartApnActivity', 'DtOpenApn', 'DtApn'])) {
-          showToast(UI_MESSAGES.common.notAvailableDevice);
+          showToast(t('common.notAvailableDevice'));
         }
       },
     },
     {
       id: 'battery',
-      title: UI_MESSAGES.menu.items.battery.title,
-      subtitle: UI_MESSAGES.menu.items.battery.subtitle,
+      title: t('menu.itemsBatteryTitle'),
+      subtitle: t('menu.itemsBatterySubtitle'),
       icon: 'fa-bolt',
       action: () => {
         if (
           !callOne(['DtIgnoreBatteryOptimizations', 'DtOpenBatteryOptimization', 'DtOpenPower'])
         ) {
-          showToast(UI_MESSAGES.common.notAvailableDevice);
+          showToast(t('common.notAvailableDevice'));
         }
       },
     },
@@ -87,21 +88,21 @@ export const MenuScreen = memo(function MenuScreen() {
       id: 'hotspot',
       title:
         hotspotStatus === 'RUNNING'
-          ? UI_MESSAGES.menu.items.hotspot.titleOn
-          : UI_MESSAGES.menu.items.hotspot.titleOff,
+          ? t('menu.itemsHotspotTitleOn')
+          : t('menu.itemsHotspotTitleOff'),
       subtitle:
         hotspotStatus === 'RUNNING'
-          ? UI_MESSAGES.menu.items.hotspot.subtitleOn
+          ? t('menu.itemsHotspotSubtitleOn')
           : hotspotStatus === 'STOPPED'
-            ? UI_MESSAGES.menu.items.hotspot.subtitleOff
-            : UI_MESSAGES.menu.items.hotspot.subtitleUnknown,
+            ? t('menu.itemsHotspotSubtitleOff')
+            : t('menu.itemsHotspotSubtitleUnknown'),
       icon: 'fa-wifi',
       action: hotspotStatus === 'UNKNOWN' ? undefined : toggleHotspot,
     },
     {
       id: 'speedtest',
-      title: UI_MESSAGES.menu.items.speedtest.title,
-      subtitle: UI_MESSAGES.menu.items.speedtest.subtitle,
+      title: t('menu.itemsSpeedtestTitle'),
+      subtitle: t('menu.itemsSpeedtestSubtitle'),
       icon: 'fa-gauge-high',
       action: () => {
         if (callOne(['DtStartWebViewActivity'], 'https://www.speedtest.net/')) return;
@@ -111,44 +112,51 @@ export const MenuScreen = memo(function MenuScreen() {
     },
     {
       id: 'terms',
-      title: UI_MESSAGES.menu.items.terms.title,
-      subtitle: UI_MESSAGES.menu.items.terms.subtitle,
+      title: t('menu.itemsTermsTitle'),
+      subtitle: t('menu.itemsTermsSubtitle'),
       icon: 'fa-file-lines',
       action: () => setScreen('terms'),
     },
     {
       id: 'clean',
-      title: UI_MESSAGES.menu.items.clean.title,
-      subtitle: UI_MESSAGES.menu.items.clean.subtitle,
+      title: t('menu.itemsCleanTitle'),
+      subtitle: t('menu.itemsCleanSubtitle'),
       icon: 'fa-broom',
       action: () => {
         if (callOne(['DtCleanApp'])) {
-          showToast(UI_MESSAGES.menu.cleanupDone);
+          showToast(t('menu.cleanupDone'));
         } else {
-          showToast(UI_MESSAGES.common.notAvailableDevice);
+          showToast(t('common.notAvailableDevice'));
         }
       },
     },
     {
       id: 'logs',
-      title: UI_MESSAGES.menu.items.logs.title,
-      subtitle: UI_MESSAGES.menu.items.logs.subtitle,
+      title: t('menu.itemsLogsTitle'),
+      subtitle: t('menu.itemsLogsSubtitle'),
       icon: 'fa-terminal',
       action: () => setScreen('logs'),
     },
     {
       id: 'applogs',
-      title: UI_MESSAGES.menu.items.applogs.title,
-      subtitle: UI_MESSAGES.menu.items.applogs.subtitle,
+      title: t('menu.itemsAppLogsTitle'),
+      subtitle: t('menu.itemsAppLogsSubtitle'),
       icon: 'fa-list',
       action: () => setScreen('applogs'),
+    },
+    {
+      id: 'import',
+      title: t('menu.itemsImportTitle'),
+      subtitle: t('menu.itemsImportSubtitle'),
+      icon: 'fa-file-import',
+      action: () => setScreen('import'),
     },
   ];
 
   return (
     <section className="screen" style={sectionStyle}>
       <div className="section-header">
-        <div className="panel-title">{UI_MESSAGES.menu.title}</div>
+        <div className="panel-title">{t('menu.title')}</div>
       </div>
 
       <PremiumCard />

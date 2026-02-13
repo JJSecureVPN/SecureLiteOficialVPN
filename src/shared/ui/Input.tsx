@@ -1,5 +1,5 @@
 import { memo, useState, type InputHTMLAttributes } from 'react';
-import { UI_MESSAGES } from '../../constants';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   icon?: string;
@@ -20,6 +20,7 @@ export const Input = memo(function Input({
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
 
   const inputType = toggleVisibility ? (showPassword ? 'text' : 'password') : type;
 
@@ -32,9 +33,7 @@ export const Input = memo(function Input({
           className={`fa fa-eye${showPassword ? '-slash' : ''} eye-icon`}
           onClick={() => setShowPassword(!showPassword)}
           role="button"
-          aria-label={
-            showPassword ? UI_MESSAGES.common.visibilityHide : UI_MESSAGES.common.visibilityShow
-          }
+          aria-label={showPassword ? t('common.visibilityHide') : t('common.visibilityShow')}
         />
       )}
     </div>

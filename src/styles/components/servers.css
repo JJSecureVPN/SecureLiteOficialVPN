@@ -213,6 +213,13 @@
   transform: scale(0.985);
 }
 
+/* Match visual treatment of focused category with selected/server items */
+.category-card:focus-visible {
+  border-color: var(--accent-40);
+  box-shadow: 0 0 0 2px var(--accent-15);
+  background: linear-gradient(180deg, var(--accent-10), var(--glass-60));
+}
+
 .category-card.selected {
   border-color: var(--accent-40);
   box-shadow: 0 0 0 2px var(--accent-15);
@@ -288,6 +295,40 @@
 .expand-btn:focus-visible {
   color: var(--accent);
   background: var(--glass-50);
+}
+
+/* Compact STATS button — aligned bottom-right of category footer */
+.btn.stats-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  font-weight: 700;
+  font-size: 0.825rem;
+  border-radius: var(--radius-sm);
+  width: auto;
+  min-width: 64px;
+  flex: 0 0 auto;
+  box-shadow: none;
+  border-width: 1px;
+}
+
+.btn.stats-btn .stats-btn__label {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+
+/* Keep strong focus ring for accessibility but subtle otherwise */
+.btn.stats-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-15);
+  border-color: var(--accent-40);
+}
+
+/* Ensure icon is small and sits flush */
+.btn.stats-btn i {
+  font-size: 0.85em;
+  margin-left: 4px;
 }
 
 .category-card__expanded {

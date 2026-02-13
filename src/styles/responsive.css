@@ -47,7 +47,6 @@
   .field.full {
     grid-column: auto;
   }
-  .quick-grid,
   .stat-grid {
     grid-template-columns: 1fr;
   }
@@ -141,6 +140,12 @@
   /* TV: ocultar toggle de tema en el header */
   .phone.is-home header.topbar .theme-btn,
   .phone.is-servers header.topbar .theme-btn {
+    display: none;
+  }
+
+  /* TV: ocultar botón de Noticias en el header (modo horizontal/TV) */
+  .phone.is-home header.topbar .news-btn,
+  .phone.is-servers header.topbar .news-btn {
     display: none;
   }
 

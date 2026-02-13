@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { VpnProvider, useVpn } from '../features/vpn/model/VpnContext';
 import { ToastProvider, useToastContext } from '../shared/toast/ToastContext';
+import { LanguageProvider } from '../i18n/context';
 import { ErrorBoundary } from '../shared/components/ErrorBoundary';
 import { AppHeader } from '../shared/components/AppHeader';
 import { ConnectionStatusBanner } from '../shared/components/ConnectionStatusBanner';
@@ -68,7 +69,6 @@ function AppContent() {
   };
 
   const handleShowCouponModal = (coupons: Coupon[]) => {
-    console.log('[DEBUG] App: handleShowCouponModal called, coupons:', coupons);
     setModalCoupons(coupons);
     setShowCouponModal(true);
   };
@@ -102,12 +102,14 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <VpnProvider>
-        <ToastProvider>
-          <AppContent />
-        </ToastProvider>
-      </VpnProvider>
-    </ErrorBoundary>
+    <LanguageProvider>
+      <ErrorBoundary>
+        <VpnProvider>
+          <ToastProvider>
+            <AppContent />
+          </ToastProvider>
+        </VpnProvider>
+      </ErrorBoundary>
+    </LanguageProvider>
   );
 }

@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useState } from 'react';
 import { callOne } from '../../features/vpn/api/vpnBridge';
 import { useToastContext } from '../toast/ToastContext';
 import { GlobalModal } from './GlobalModal';
+import { useTranslation } from '../../i18n/useTranslation';
 
 type PromoStatus = {
   activa: boolean;
@@ -27,6 +28,7 @@ function toRemainingParts(ms: number): { hours: number; minutes: number; seconds
 }
 
 export const HeaderPromo = memo(function HeaderPromo() {
+  const { t } = useTranslation();
   const [promo, setPromo] = useState<PromoStatus | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
@@ -122,7 +124,7 @@ export const HeaderPromo = memo(function HeaderPromo() {
   const handleClick = () => {
     const ok = tryOpenExternally();
     if (ok) {
-      showToast('Abriendo en el navegador predeterminado...');
+      showToast(t('promo.toast.opening'));
       return;
     }
     // Si no pudo abrir, mostrar modal con opción manual
@@ -137,27 +139,27 @@ export const HeaderPromo = memo(function HeaderPromo() {
         type="button"
         className="promo-header"
         onClick={handleClick}
-        aria-label="Ver oferta"
-        title="Ver oferta"
+        aria-label={t('promo.ariaLabel')}
+        title={t('promo.title')}
       >
-        <span className="promo-header__label">OFERTA</span>
-        <span className="promo-header__timer" aria-label="Tiempo restante">
+        <span className="promo-header__label">{t('promo.label')}</span>
+        <span className="promo-header__timer" aria-label={t('promo.timerAria')}>
           <span className="promo-header__time">{format2(remaining.hours)}</span>
-          <span className="promo-header__unit">HRS</span>
+          <span className="promo-header__unit">{t('promo.unit.hours')}</span>
           <span className="promo-header__time">{format2(remaining.minutes)}</span>
-          <span className="promo-header__unit">MIN</span>
+          <span className="promo-header__unit">{t('promo.unit.minutes')}</span>
         </span>
-        <span className="promo-header__cta">OBTENER</span>
+        <span className="promo-header__cta">{t('promo.cta')}</span>
       </button>
 
       {manualOpen && (
         <GlobalModal
           onClose={() => setManualOpen(false)}
-          title="Abrir en navegador"
-          subtitle="No se pudo abrir automáticamente en tu navegador predeterminado"
+          title={t('promo.modal.title')}
+          subtitle={t('promo.modal.subtitle')}
         >
           <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
-            <p>Si prefieres, puedes abrir la oferta manualmente en tu navegador predeterminado.</p>
+            <p>{t('promo.modal.manualHint')}</p>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 className="btn"
@@ -165,20 +167,20 @@ export const HeaderPromo = memo(function HeaderPromo() {
                 onClick={() => {
                   tryOpenExternally();
                   setManualOpen(false);
-                  showToast('Intentando abrir...');
+                  showToast(t('promo.toast.tryOpen'));
                 }}
               >
-                Abrir en navegador
+                {t('promo.modal.openButton')}
               </button>
               <button
                 className="btn btn-soft"
                 type="button"
                 onClick={() => {
                   navigator.clipboard?.writeText(PLANES_URL);
-                  showToast('Enlace copiado al portapapeles');
+                  showToast(t('promo.toast.copied'));
                 }}
               >
-                Copiar enlace
+                {t('promo.modal.copyButton')}
               </button>
             </div>
           </div>

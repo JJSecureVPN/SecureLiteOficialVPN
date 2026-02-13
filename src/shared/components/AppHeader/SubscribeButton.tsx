@@ -1,19 +1,22 @@
-import { memo } from 'react';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 interface Props {
   onClick: () => void;
 }
 
-export const SubscribeButton = memo(function SubscribeButton({ onClick }: Props) {
+export function SubscribeButton({ onClick }: Props) {
+  const { t } = useTranslation();
+  const label = t('header.subscribe');
+
   return (
     <button
       type="button"
       className="icon-btn hotzone subscribe-btn"
       onClick={onClick}
-      aria-label="Suscribirse a un plan"
-      title="Suscribirse a un plan"
+      aria-label={label}
+      title={label}
     >
       <i className="fa fa-shopping-cart" aria-hidden="true" />
     </button>
   );
-});
+}

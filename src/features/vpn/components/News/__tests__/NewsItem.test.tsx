@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { LanguageProvider } from '../../../../../i18n/context';
 import { NewsItem } from '../NewsItem';
 import type { NoticiaItem } from '../../../hooks/useNoticias';
 
@@ -28,7 +29,11 @@ describe('NewsItem', () => {
 
   it('renders correctly and matches snapshot', () => {
     const onClick = vi.fn();
-    const { container } = render(<NewsItem item={mockItem} onClick={onClick} />);
+    const { container } = render(
+      <LanguageProvider>
+        <NewsItem item={mockItem} onClick={onClick} />
+      </LanguageProvider>,
+    );
 
     expect(screen.getByText(/Noticia de prueba/i)).toBeInTheDocument();
     expect(screen.getByText(/Descripción corta de la noticia/i)).toBeInTheDocument();
@@ -39,7 +44,11 @@ describe('NewsItem', () => {
 
   it('calls onClick when clicked and when pressing Enter/Space', () => {
     const onClick = vi.fn();
-    render(<NewsItem item={mockItem} onClick={onClick} />);
+    render(
+      <LanguageProvider>
+        <NewsItem item={mockItem} onClick={onClick} />
+      </LanguageProvider>,
+    );
 
     const article = screen.getByRole('button', { name: /Leer noticia:/i });
 
@@ -57,7 +66,11 @@ describe('NewsItem', () => {
       imagen_url: undefined,
       categoria_nombre: 'Sin imagen',
     };
-    const { container } = render(<NewsItem item={itemNoImage} onClick={() => {}} />);
+    const { container } = render(
+      <LanguageProvider>
+        <NewsItem item={itemNoImage} onClick={() => {}} />
+      </LanguageProvider>,
+    );
     expect(container.firstChild).toMatchSnapshot();
   });
 });

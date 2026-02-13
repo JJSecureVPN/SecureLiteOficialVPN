@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import GlobalModal from './GlobalModal';
+import { useTranslation } from '../../i18n/useTranslation';
 
 type Coupon = {
   id: number;
@@ -18,6 +19,7 @@ type CouponModalProps = {
 };
 
 export const CouponModal = memo(function CouponModal({ coupons, onClose }: CouponModalProps) {
+  const { t } = useTranslation();
   const activeCoupons = coupons.filter((c) => c.activo && !c.oculto);
   const [copied, setCopied] = useState<Record<number, boolean>>({});
 
@@ -34,14 +36,14 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
   return (
     <GlobalModal
       onClose={onClose}
-      title="Cupones disponibles"
-      subtitle="Aprovecha descuentos exclusivos"
+      title={t('coupon.title')}
+      subtitle={t('coupon.subtitle')}
       icon={<i className="fa fa-ticket" />}
       className="coupon-modal"
     >
       {activeCoupons.length === 0 ? (
         <div className="empty-state">
-          <p>No hay cupones activos en este momento</p>
+          <p>{t('coupon.empty')}</p>
         </div>
       ) : (
         <div className="coupons-grid">
@@ -51,12 +53,12 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
               <div key={coupon.id} className="coupon-card">
                 <div className="coupon-header">
                   <div className="coupon-code-wrapper">
-                    <span className="coupon-label">Código</span>
+                    <span className="coupon-label">{t('coupon.codeLabel')}</span>
                     <div className="coupon-code">{coupon.codigo}</div>
                   </div>
                   <div className="coupon-badge">
                     {coupon.tipo === 'porcentaje' ? `${coupon.valor}%` : `$${coupon.valor}`}
-                    <span className="badge-label">descuento</span>
+                    <span className="badge-label">{t('coupon.badgeLabel')}</span>
                   </div>
                 </div>
 
@@ -72,12 +74,12 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
                       />
                     </svg>
                     <span>
-                      {remaining} {remaining === 1 ? 'uso restante' : 'usos restantes'}
+                      {remaining} {remaining === 1 ? t('coupon.oneUse') : t('coupon.manyUses')}
                     </span>
                   </div>
                 </div>
 
-                <p className="coupon-description">Aplicable en la compra de cualquier plan</p>
+                <p className="coupon-description">{t('coupon.description')}</p>
 
                 <div className="coupon-actions">
                   <button
@@ -86,7 +88,7 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
                       window.open('https://shop.jhservices.com.ar/planes', '_blank');
                     }}
                   >
-                    Ver planes
+                    {t('coupon.openPlans')}
                   </button>
                   <button className="btn-copy" onClick={() => copyCoupon(coupon.codigo, coupon.id)}>
                     {copied[coupon.id] ? (
@@ -100,7 +102,7 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
                             strokeLinejoin="round"
                           />
                         </svg>
-                        Copiado
+                        {t('coupon.copied')}
                       </>
                     ) : (
                       <>
@@ -120,7 +122,7 @@ export const CouponModal = memo(function CouponModal({ coupons, onClose }: Coupo
                             strokeWidth="1.5"
                           />
                         </svg>
-                        Copiar
+                        {t('coupon.copy')}
                       </>
                     )}
                   </button>

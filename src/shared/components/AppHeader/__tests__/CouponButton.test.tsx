@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { LanguageProvider } from '../../../../i18n/context';
 import { CouponButton } from '../CouponButton';
 
 const coupons = [
@@ -28,13 +29,21 @@ const coupons = [
 describe('CouponButton', () => {
   it('does not render when no coupons', () => {
     const onClick = vi.fn();
-    render(<CouponButton coupons={[]} onClick={onClick} />);
+    render(
+      <LanguageProvider>
+        <CouponButton coupons={[]} onClick={onClick} />
+      </LanguageProvider>,
+    );
     expect(screen.queryByRole('button')).toBeNull();
   });
 
   it('renders badge and triggers click', () => {
     const onClick = vi.fn();
-    render(<CouponButton coupons={coupons as any} onClick={onClick} />);
+    render(
+      <LanguageProvider>
+        <CouponButton coupons={coupons as any} onClick={onClick} />
+      </LanguageProvider>,
+    );
 
     const btn = screen.getByRole('button');
     expect(btn).toHaveAttribute('aria-label', expect.stringContaining('2'));

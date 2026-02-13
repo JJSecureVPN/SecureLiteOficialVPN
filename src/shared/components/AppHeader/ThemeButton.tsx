@@ -1,20 +1,23 @@
-import { memo } from 'react';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 interface Props {
   theme: 'dark' | 'light';
   onToggle: () => void;
 }
 
-export const ThemeButton = memo(function ThemeButton({ theme, onToggle }: Props) {
+export function ThemeButton({ theme, onToggle }: Props) {
+  const { t } = useTranslation();
+  const ariaLabel = theme === 'dark' ? t('theme.darkMode') : t('theme.lightMode');
+
   return (
     <button
       type="button"
       className="icon-btn hotzone theme-btn"
       onClick={onToggle}
-      aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      aria-label={ariaLabel}
+      title={ariaLabel}
     >
       <i className={theme === 'dark' ? 'fa fa-sun' : 'fa fa-moon'} aria-hidden="true" />
     </button>
   );
-});
+}

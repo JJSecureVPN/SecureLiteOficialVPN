@@ -1,5 +1,4 @@
-import { memo } from 'react';
-import { UI_MESSAGES } from '../../../constants';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 interface Props {
   isSubScreen: boolean;
@@ -7,11 +6,9 @@ interface Props {
   onClick: () => void;
 }
 
-export const BackButton = memo(function BackButton({
-  isSubScreen,
-  isCategoryDetail,
-  onClick,
-}: Props) {
+export function BackButton({ isSubScreen, isCategoryDetail, onClick }: Props) {
+  const { t } = useTranslation();
+
   if (!isSubScreen) {
     return (
       <div className="dots hotzone" onClick={onClick} aria-hidden="true">
@@ -23,10 +20,11 @@ export const BackButton = memo(function BackButton({
     );
   }
 
+  const backText = isCategoryDetail ? t('servers.backToCategories') : t('buttons.back');
+
   return (
     <button className="btn hotzone" onClick={onClick} data-nav tabIndex={0}>
-      <i className="fa fa-arrow-left" />{' '}
-      {isCategoryDetail ? UI_MESSAGES.servers.backToCategories : UI_MESSAGES.buttons.back}
+      <i className="fa fa-arrow-left" /> {backText}
     </button>
   );
-});
+}

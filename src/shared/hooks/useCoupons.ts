@@ -50,5 +50,3 @@ export function useCoupons(pollInterval = 60_000) {
 
   return { coupons, activeCouponsCount, hasActiveCoupon };
 }
-
-export default useCoupons;

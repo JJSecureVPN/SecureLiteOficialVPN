@@ -8,6 +8,7 @@ import { CouponButton } from './AppHeader/CouponButton';
 import { NewsButton } from './AppHeader/NewsButton';
 import { SubscribeButton } from './AppHeader/SubscribeButton';
 import { ThemeButton } from './AppHeader/ThemeButton';
+import { LanguageButton } from './AppHeader/LanguageButton';
 import { BackButton } from './AppHeader/BackButton';
 
 type Coupon = {
@@ -61,7 +62,6 @@ export const AppHeader = memo(function AppHeader({
   }, []);
 
   const handleShowCoupons = useCallback(() => {
-    console.log('[DEBUG] AppHeader: ticket clicked, coupons:', coupons);
     onShowCouponModal(coupons);
   }, [onShowCouponModal, coupons]);
 
@@ -80,6 +80,8 @@ export const AppHeader = memo(function AppHeader({
         <SubscribeButton onClick={handleSubscribe} />
 
         <ThemeButton theme={theme} onToggle={toggleTheme} />
+
+        <LanguageButton />
       </div>
     </header>
   );

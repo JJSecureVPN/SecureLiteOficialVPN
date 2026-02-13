@@ -3,38 +3,39 @@ import { useVpn } from '../features/vpn/model/VpnContext';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
 import { callOne } from '../features/vpn/api/vpnBridge';
 import { Button } from '../shared/ui/Button';
-import { UI_MESSAGES } from '../constants';
-
-const TERM_CARDS = [
-  {
-    icon: 'fa-scroll',
-    color: 'var(--accent)',
-    title: UI_MESSAGES.terms.cards.legalTitle,
-    text: UI_MESSAGES.terms.cards.legalText,
-  },
-  {
-    icon: 'fa-shield-alt',
-    color: '#39d98a',
-    title: UI_MESSAGES.terms.cards.privacyTitle,
-    text: UI_MESSAGES.terms.cards.privacyText,
-  },
-  {
-    icon: 'fa-ban',
-    color: '#ef6573',
-    title: UI_MESSAGES.terms.cards.forbiddenTitle,
-    text: UI_MESSAGES.terms.cards.forbiddenText,
-  },
-  {
-    icon: 'fa-sync-alt',
-    color: '#f0a74b',
-    title: UI_MESSAGES.terms.cards.changesTitle,
-    text: UI_MESSAGES.terms.cards.changesText,
-  },
-] as const;
+import { useTranslation } from '../i18n/useTranslation';
 
 export const TermsScreen = memo(function TermsScreen() {
   const { acceptTerms, setScreen, termsAccepted } = useVpn();
+  const { t } = useTranslation();
   const baseSectionStyle = useSectionStyle(16, 16);
+
+  const TERM_CARDS = [
+    {
+      icon: 'fa-scroll',
+      color: 'var(--accent)',
+      title: t('terms.cardsLegalTitle'),
+      text: t('terms.cardsLegalText'),
+    },
+    {
+      icon: 'fa-shield-alt',
+      color: '#39d98a',
+      title: t('terms.cardsPrivacyTitle'),
+      text: t('terms.cardsPrivacyText'),
+    },
+    {
+      icon: 'fa-ban',
+      color: '#ef6573',
+      title: t('terms.cardsForbiddenTitle'),
+      text: t('terms.cardsForbiddenText'),
+    },
+    {
+      icon: 'fa-sync-alt',
+      color: '#f0a74b',
+      title: t('terms.cardsChangesTitle'),
+      text: t('terms.cardsChangesText'),
+    },
+  ] as const;
 
   const handleAccept = useCallback(() => {
     acceptTerms();
@@ -61,7 +62,7 @@ export const TermsScreen = memo(function TermsScreen() {
     <section className="screen" style={sectionStyle}>
       <div className="pad" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div className="panel-title center" style={{ marginBottom: 'var(--space-xl)' }}>
-          {UI_MESSAGES.terms.title}
+          {t('terms.title')}
         </div>
 
         <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', paddingRight: 2 }}>
@@ -92,15 +93,15 @@ export const TermsScreen = memo(function TermsScreen() {
         >
           {!termsAccepted ? (
             <Button variant="primary" onClick={handleAccept} className="full-width">
-              {UI_MESSAGES.terms.accept}
+              {t('terms.accept')}
             </Button>
           ) : (
             <Button variant="primary" onClick={handleBack} className="full-width">
-              {UI_MESSAGES.terms.back}
+              {t('terms.back')}
             </Button>
           )}
           <Button variant="soft" onClick={handleViewFullTerms} className="full-width">
-            {UI_MESSAGES.terms.viewFull}
+            {t('terms.viewFull')}
           </Button>
         </div>
       </div>

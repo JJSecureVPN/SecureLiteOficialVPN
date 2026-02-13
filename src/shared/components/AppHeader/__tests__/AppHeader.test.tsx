@@ -1,11 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { LanguageProvider } from '../../../../i18n/context';
 
 // Mock all hooks and modules that AppHeader depends on to avoid deep imports that use aliases
 vi.mock('@/utils/storageUtils', () => ({
   loadNewsLastSeen: () => null,
   loadThemePreference: () => null,
   loadAutoMode: () => null,
+  loadLanguagePreference: () => 'es',
 }));
 vi.mock('src/features/vpn/model/hooks/useVpnController', () => ({ useVpnController: () => ({}) }));
 const mockSetScreen = vi.fn();
@@ -51,9 +53,13 @@ describe('AppHeader (unit)', () => {
 
     const { AppHeader: AppHeaderFresh } = await import('../../AppHeader');
 
-    render(<AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />);
+    render(
+      <LanguageProvider>
+        <AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />
+      </LanguageProvider>,
+    );
 
-    const couponBtn = screen.getByRole('button', { name: /cup/ });
+    const couponBtn = screen.getByRole('button', { name: /cupon/i });
     expect(couponBtn).toBeInTheDocument();
     fireEvent.click(couponBtn);
     expect(onShowCoupons).toHaveBeenCalled();

@@ -47,5 +47,3 @@ export function useNewsBadge(pollInterval = 60_000) {
 
   return { hasUnreadNews };
 }
-
-export default useNewsBadge;

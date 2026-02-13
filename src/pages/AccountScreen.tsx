@@ -3,22 +3,23 @@ import { useVpn } from '../features/vpn/model/VpnContext';
 import { formatBytes, pingClass } from '../utils/formatUtils';
 import { dt } from '../features/vpn/api/vpnBridge';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
-import { UI_MESSAGES } from '../constants';
+import { useTranslation } from '../i18n/useTranslation';
 import { getDisplayName } from '../shared/utils/sessionUtils';
 
 export const AccountScreen = memo(function AccountScreen() {
   const { status, user, creds, config, pingMs, topInfo } = useVpn();
   const sectionStyle = useSectionStyle();
+  const { t } = useTranslation();
 
   const dl = +(dt.call<number>('DtGetNetworkDownloadBytes') || 0);
   const ul = +(dt.call<number>('DtGetNetworkUploadBytes') || 0);
   const used = dl + ul;
 
-  const name = getDisplayName(user, config, creds);
+  const name = getDisplayName(user, config, creds, t('account.defaultUser'));
   const vence = user?.expiration_date || '-';
   const limite = user?.limit_connections || '-';
   const conexiones = user?.count_connections ?? 0;
-  const server = config?.name || UI_MESSAGES.account.noActiveServer;
+  const server = config?.name || t('account.noActiveServer');
   const mode = config?.mode || '—';
 
   const daysRemainingInfo = useMemo(() => {
@@ -70,46 +71,46 @@ export const AccountScreen = memo(function AccountScreen() {
 
   const statusCopy =
     status === 'CONNECTED'
-      ? UI_MESSAGES.account.statusConnected
+      ? t('account.statusConnected')
       : status === 'CONNECTING'
-        ? UI_MESSAGES.account.statusConnecting
-        : UI_MESSAGES.account.statusDisconnected;
+        ? t('account.statusConnecting')
+        : t('account.statusDisconnected');
 
   const stats = useMemo(
     () => [
-      { label: UI_MESSAGES.account.labels.status, value: statusCopy },
-      { label: UI_MESSAGES.account.labels.latency, value: pShow, className: pCls },
-      { label: UI_MESSAGES.account.labels.totalUsage, value: formatBytes(used) },
-      { label: UI_MESSAGES.account.labels.activeSessions, value: conexiones.toString() },
+      { label: t('account.labels.status'), value: statusCopy },
+      { label: t('account.labels.latency'), value: pShow, className: pCls },
+      { label: t('account.labels.totalUsage'), value: formatBytes(used) },
+      { label: t('account.labels.activeSessions'), value: conexiones.toString() },
     ],
-    [statusCopy, pShow, pCls, used, conexiones],
+    [t, statusCopy, pShow, pCls, used, conexiones],
   );
 
   const compactSections = useMemo(
     () => [
       {
-        title: UI_MESSAGES.account.sections.plan,
+        title: t('account.sections.plan'),
         items: [
-          { label: UI_MESSAGES.account.fields.client, value: name },
-          { label: UI_MESSAGES.account.fields.validity, value: vence },
-          { label: UI_MESSAGES.account.fields.devices, value: limite },
-          { label: UI_MESSAGES.account.fields.remainingDays, value: daysRemainingLabel ?? '—' },
+          { label: t('account.fields.client'), value: name },
+          { label: t('account.fields.validity'), value: vence },
+          { label: t('account.fields.devices'), value: limite },
+          { label: t('account.fields.remainingDays'), value: daysRemainingLabel ?? '—' },
         ],
       },
       {
-        title: UI_MESSAGES.account.sections.connection,
+        title: t('account.sections.connection'),
         items: [
-          { label: UI_MESSAGES.account.fields.server, value: server },
-          { label: UI_MESSAGES.account.fields.mode, value: mode },
-          { label: UI_MESSAGES.account.fields.operator, value: topInfo.op },
-          { label: UI_MESSAGES.account.fields.publicIp, value: topInfo.ip },
+          { label: t('account.fields.server'), value: server },
+          { label: t('account.fields.mode'), value: mode },
+          { label: t('account.fields.operator'), value: topInfo.op },
+          { label: t('account.fields.publicIp'), value: topInfo.ip },
         ],
       },
       {
-        title: UI_MESSAGES.account.sections.credentials,
+        title: t('account.sections.credentials'),
         items: [
-          { label: UI_MESSAGES.account.fields.username, value: creds.user || '—' },
-          ...(creds.uuid ? [{ label: UI_MESSAGES.account.fields.uuid, value: creds.uuid }] : []),
+          { label: t('account.fields.username'), value: creds.user || '—' },
+          ...(creds.uuid ? [{ label: t('account.fields.uuid'), value: creds.uuid }] : []),
         ],
       },
     ],
@@ -131,9 +132,9 @@ export const AccountScreen = memo(function AccountScreen() {
   return (
     <section className="screen account-screen" style={sectionStyle}>
       <div className="account-header">
-        <span className="summary-eyebrow">{UI_MESSAGES.account.titleEyebrow}</span>
-        <h2>{UI_MESSAGES.account.hello(name)}</h2>
-        <p className="summary-meta">{UI_MESSAGES.account.subtitle}</p>
+        <span className="summary-eyebrow">{t('account.titleEyebrow')}</span>
+        <h2>{t('account.hello').replace('{name}', name)}</h2>
+        <p className="summary-meta">{t('account.subtitle')}</p>
       </div>
 
       <div className="stat-grid">
@@ -154,7 +155,7 @@ export const AccountScreen = memo(function AccountScreen() {
             <ul>
               {items.map(({ label, value }) => {
                 const valueClass =
-                  label === UI_MESSAGES.account.fields.remainingDays
+                  label === t('account.fields.remainingDays')
                     ? getExpiryClass(daysRemainingInfo?.diff)
                     : undefined;
                 return (

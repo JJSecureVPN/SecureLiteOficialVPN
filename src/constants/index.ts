@@ -8,6 +8,7 @@ export const LS_KEYS = {
   terms: 'vpn_terms_accepted',
   theme: 'vpn_theme',
   news_last_seen: 'vpn_news_last_seen',
+  language: 'vpn_language',
 } as const;
 
 export const SCREENS = [

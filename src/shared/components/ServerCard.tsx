@@ -1,6 +1,6 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '../types';
-import { UI_MESSAGES } from '../../constants';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface ServerCardProps {
   config: ServerConfig | null;
@@ -37,6 +37,7 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
 
   const showFallback = useMemo(() => !isImg || !icon || imgError, [isImg, icon, imgError]);
   const fallbackEmoji = useMemo(() => (icon && !isImg ? icon : '🌐'), [icon, isImg]);
+  const { t } = useTranslation();
 
   return (
     <div
@@ -46,7 +47,7 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       role="button"
       tabIndex={disabled ? -1 : 0}
       data-nav
-      aria-label={UI_MESSAGES.serverCard.ariaChooseServer}
+      aria-label={t('serverCard.ariaChooseServer')}
       onKeyDown={useCallback(
         (e: React.KeyboardEvent) => {
           if (disabled) return;
@@ -65,13 +66,13 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
           ) : (
             <img
               src={icon}
-              alt={config?.name || UI_MESSAGES.serverCard.altServer}
+              alt={config?.name || t('serverCard.altServer')}
               onError={handleImgError}
             />
           )}
         </div>
         <div className="loc-meta">
-          <div className="loc-name">{config?.name || UI_MESSAGES.serverCard.pickServer}</div>
+          <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>
           {config?.description && <div className="loc-ip">{config.description}</div>}
         </div>
       </div>

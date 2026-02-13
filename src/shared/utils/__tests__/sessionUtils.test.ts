@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { getDisplayName } from '../sessionUtils';
-import { UI_MESSAGES } from '../../../constants';
+
+const es = require('../../../i18n/locales/es.json');
 
 describe('getDisplayName', () => {
   it('uses user.name when available', () => {
@@ -17,7 +18,7 @@ describe('getDisplayName', () => {
     expect(getDisplayName(undefined, undefined, { user: 'credsUser' } as any)).toBe('credsUser');
   });
 
-  it('falls back to default UI_MESSAGES.account.defaultUser when nothing provided', () => {
-    expect(getDisplayName(undefined, undefined, undefined)).toBe(UI_MESSAGES.account.defaultUser);
+  it('falls back to default account user when nothing provided', () => {
+    expect(getDisplayName(undefined, undefined, undefined)).toBe('usuario');
   });
 });

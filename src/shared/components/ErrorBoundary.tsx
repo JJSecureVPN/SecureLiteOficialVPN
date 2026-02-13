@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { UI_MESSAGES } from '../../constants';
+import { LanguageContext } from '../../i18n/context';
 
 interface Props {
   children: ReactNode;
@@ -16,6 +16,9 @@ interface State {
  * Previene que toda la app crashee por un error en un componente
  */
 export class ErrorBoundary extends Component<Props, State> {
+  static contextType = LanguageContext;
+  declare context: React.ContextType<typeof LanguageContext>;
+
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -35,6 +38,8 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   render() {
+    const t = this.context?.t ?? ((k: string) => k);
+
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
@@ -44,12 +49,10 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="error-boundary">
           <div className="error-content">
             <i className="fa fa-exclamation-triangle" />
-            <h2>{UI_MESSAGES.errorBoundary.title}</h2>
-            <p className="muted">
-              {this.state.error?.message || UI_MESSAGES.errorBoundary.fallback}
-            </p>
+            <h2>{t('errorBoundary.title')}</h2>
+            <p className="muted">{this.state.error?.message || t('errorBoundary.fallback')}</p>
             <button className="btn primary" onClick={this.handleRetry}>
-              {UI_MESSAGES.errorBoundary.retry}
+              {t('errorBoundary.retry')}
             </button>
           </div>
         </div>

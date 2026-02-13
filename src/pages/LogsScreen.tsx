@@ -5,11 +5,12 @@ import { Button } from '../shared/ui/Button';
 import { useLogs } from '../features/logs/model/useLogs';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
 import { callOne } from '../features/vpn/api/vpnBridge';
-import { UI_MESSAGES } from '../constants';
+import { useTranslation } from '../i18n/useTranslation';
 
 export const LogsScreen = memo(function LogsScreen() {
   const { setScreen } = useVpn();
   const { showToast } = useToastContext();
+  const { t } = useTranslation();
   const { logs, refresh } = useLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
 
@@ -46,18 +47,18 @@ export const LogsScreen = memo(function LogsScreen() {
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(logs);
-      showToast(UI_MESSAGES.logs.copiedToast);
+      showToast(t('logs.copiedToast'));
     } catch {
-      showToast(UI_MESSAGES.logs.copyFailedToast);
+      showToast(t('logs.copyFailedToast'));
     }
-  }, [logs, showToast]);
+  }, [logs, showToast, t]);
 
   const handleClear = useCallback(() => {
     if (callOne(['DtClearLogs'])) {
-      showToast(UI_MESSAGES.logs.clearedToast);
+      showToast(t('logs.clearedToast'));
       refresh();
     }
-  }, [showToast, refresh]);
+  }, [showToast, refresh, t]);
 
   const handleClose = useCallback(() => {
     setScreen('home');
@@ -67,17 +68,17 @@ export const LogsScreen = memo(function LogsScreen() {
     <section className="screen logs-screen" style={screenStyle}>
       <div className="logs-header">
         <div>
-          <div className="panel-title">{UI_MESSAGES.buttons.logs}</div>
-          <p className="section-subtitle">{UI_MESSAGES.logs.subtitle}</p>
+          <div className="panel-title">{t('buttons.logs')}</div>
+          <p className="section-subtitle">{t('logs.subtitle')}</p>
         </div>
         <div className="logs-actions">
           <Button variant="soft" onClick={handleCopy} disabled={!hasLogs}>
-            {UI_MESSAGES.logs.copy}
+            {t('logs.copy')}
           </Button>
           <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
-            {UI_MESSAGES.logs.clear}
+            {t('logs.clear')}
           </Button>
-          <Button onClick={handleClose}>{UI_MESSAGES.logs.close}</Button>
+          <Button onClick={handleClose}>{t('logs.close')}</Button>
         </div>
       </div>
 
@@ -97,8 +98,8 @@ export const LogsScreen = memo(function LogsScreen() {
         ) : (
           <div className="empty-result logs-empty">
             <i className="fas fa-info-circle" aria-hidden="true" />
-            <p>{UI_MESSAGES.logs.empty}</p>
-            <small className="muted">{UI_MESSAGES.logs.generateHint}</small>
+            <p>{t('logs.empty')}</p>
+            <small className="muted">{t('logs.generateHint')}</small>
           </div>
         )}
       </div>

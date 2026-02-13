@@ -4,7 +4,7 @@ import { useToastContext } from '../shared/toast/ToastContext';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
 import { Button } from '../shared/ui/Button';
 import { formatProtocol, extractDomain, removeDomainFromDescription } from '../utils/formatUtils';
-import { UI_MESSAGES } from '../constants';
+import { useTranslation } from '../i18n/useTranslation';
 import { dt } from '../features/vpn/api/vpnBridge';
 import { appLogger } from '../features/logs/model/useAppLogs';
 import { useServerStats } from '../shared/hooks/useServerStats';
@@ -13,13 +13,13 @@ import keyboardNavigationManager from '../shared/utils/keyboardNavigationManager
 import type { Category, ServerConfig } from '../shared/types';
 
 const SUBCATEGORY_KEYWORDS = [
-  { key: 'PRINCIPAL', label: 'Principal' },
-  { key: 'JUEGOS', label: 'Juegos' },
-  { key: 'STREAM', label: 'Streaming' },
-  { key: 'SOCIAL', label: 'Social' },
+  { key: 'PRINCIPAL', label: 'principal' },
+  { key: 'JUEGOS', label: 'juegos' },
+  { key: 'STREAM', label: 'stream' },
+  { key: 'SOCIAL', label: 'social' },
 ];
-const DEFAULT_SUBCATEGORY = 'Otros';
-const ALL_SUBCATEGORIES = 'Todos';
+const DEFAULT_SUBCATEGORY = 'others';
+const ALL_SUBCATEGORIES = 'all';
 
 const resolveSubcategory = (name?: string | null): string => {
   if (!name) return DEFAULT_SUBCATEGORY;
@@ -56,6 +56,7 @@ export function ServersScreen() {
     selectedCategory,
     setSelectedCategory,
   } = useVpn();
+  const { t } = useTranslation();
   const { showToast } = useToastContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [subcategoryFilter, setSubcategoryFilter] = useState<string>(ALL_SUBCATEGORIES);
@@ -389,7 +390,7 @@ export function ServersScreen() {
       if (autoMode) {
         startAutoConnect(cat);
         showToast(
-          UI_MESSAGES.auto.testing(cat.name || UI_MESSAGES.auto.categoryFallback),
+          `${t('auto.testing')} ${cat.name || t('auto.categoryFallback')}`,
           document.activeElement as HTMLElement,
         );
         return;
@@ -411,7 +412,7 @@ export function ServersScreen() {
         setConfig(srv);
         setScreen('home');
         showToast(
-          UI_MESSAGES.status.connectingTo(srv.name || UI_MESSAGES.servers.inUse),
+          `${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`,
           document.activeElement as HTMLElement,
         );
 
@@ -424,7 +425,7 @@ export function ServersScreen() {
 
       setConfig(srv);
       setScreen('home');
-      showToast(UI_MESSAGES.connection.serverSelected, document.activeElement as HTMLElement);
+      showToast(t('connection.serverSelected'), document.activeElement as HTMLElement);
     },
     [
       autoMode,
@@ -438,6 +439,7 @@ export function ServersScreen() {
       disconnect,
       setConfig,
       setScreen,
+      t,
     ],
   );
 
@@ -490,7 +492,7 @@ export function ServersScreen() {
         {selectedCategory ? (
           <>
             <div className="section-title-group">
-              <span className="section-eyebrow">{UI_MESSAGES.servers.selectedEyebrow}</span>
+              <span className="section-eyebrow">{t('servers.selectedEyebrow')}</span>
               <div className="section-title-line">
                 <div className="divider-title" aria-label={`Categoría ${selectedCategory.name}`}>
                   <span className="divider-line" aria-hidden="true" />
@@ -498,7 +500,7 @@ export function ServersScreen() {
                   <span className="divider-line" aria-hidden="true" />
                 </div>
               </div>
-              <small className="section-subtitle">{UI_MESSAGES.servers.selectedSubtitle}</small>
+              <small className="section-subtitle">{t('servers.selectedSubtitle')}</small>
             </div>
             {groupedServers.length > 0 && (
               <div className="subcategory-chips subcategory-chips--header" role="tablist">
@@ -511,7 +513,9 @@ export function ServersScreen() {
                     role="tab"
                     aria-selected={label === subcategoryFilter}
                   >
-                    {label === ALL_SUBCATEGORIES ? ALL_SUBCATEGORIES : label}
+                    {label === ALL_SUBCATEGORIES
+                      ? t('servers.allSubcategories')
+                      : t(`servers.subcategoriesList.${label}`)}
                     <span className="chip-count">
                       {label === ALL_SUBCATEGORIES
                         ? selectedCategory.items?.length || 0
@@ -525,8 +529,8 @@ export function ServersScreen() {
           </>
         ) : (
           <>
-            <div className="panel-title">{UI_MESSAGES.servers.title}</div>
-            <p className="section-subtitle">{UI_MESSAGES.servers.subtitle}</p>
+            <div className="panel-title">{t('servers.title')}</div>
+            <p className="section-subtitle">{t('servers.subtitle')}</p>
           </>
         )}
       </div>
@@ -540,7 +544,7 @@ export function ServersScreen() {
                 type="search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={UI_MESSAGES.servers.searchPlaceholder}
+                placeholder={t('servers.searchPlaceholder')}
                 data-nav
               />
               {searchTerm && (
@@ -548,7 +552,7 @@ export function ServersScreen() {
                   type="button"
                   className="clear-btn"
                   onClick={handleClearSearch}
-                  aria-label={UI_MESSAGES.servers.clearSearchAria}
+                  aria-label={t('servers.clearSearchAria')}
                 >
                   <i className="fas fa-times" aria-hidden="true" />
                 </button>
@@ -560,7 +564,7 @@ export function ServersScreen() {
                 className="config-btn"
                 data-nav
                 onClick={handleOpenNativeDialog}
-                title={UI_MESSAGES.servers.openConfiguratorTitle}
+                title={t('servers.openConfiguratorTitle')}
               >
                 <i className="fas fa-cog" aria-hidden="true" />
               </button>
@@ -573,11 +577,11 @@ export function ServersScreen() {
           categorias.length === 0 ? (
             <div className="empty-result">
               <i className="fas fa-wifi" aria-hidden="true" />
-              <p>{UI_MESSAGES.servers.noServers}</p>
-              <small className="muted">{UI_MESSAGES.servers.checkConfigs}</small>
+              <p>{t('servers.noServers')}</p>
+              <small className="muted">{t('servers.checkConfigs')}</small>
               <Button onClick={handleOpenNativeDialog} className="empty-result-btn">
                 <i className="fas fa-cog" aria-hidden="true" style={{ marginRight: '8px' }} />
-                {UI_MESSAGES.servers.openConfigurator}
+                {t('servers.openConfigurator')}
               </Button>
             </div>
           ) : (
@@ -585,8 +589,10 @@ export function ServersScreen() {
               {filteredCategories.length === 0 ? (
                 <div className="empty-result">
                   <i className="fas fa-map-marker-alt" aria-hidden="true" />
-                  <p>{UI_MESSAGES.servers.noSearchResults(searchTerm)}</p>
-                  <small className="muted">{UI_MESSAGES.servers.noSearchHint}</small>
+                  <p>
+                    {t('servers.noSearchResults')} {searchTerm}
+                  </p>
+                  <small className="muted">{t('servers.noSearchHint')}</small>
                   <div
                     style={{
                       marginTop: '16px',
@@ -602,11 +608,11 @@ export function ServersScreen() {
                         aria-hidden="true"
                         style={{ marginRight: '8px' }}
                       />
-                      {UI_MESSAGES.servers.clearSearch}
+                      {t('servers.clearSearch')}
                     </Button>
                     <Button onClick={handleOpenNativeDialog}>
                       <i className="fas fa-cog" aria-hidden="true" style={{ marginRight: '8px' }} />
-                      {UI_MESSAGES.servers.configurator}
+                      {t('servers.configurator')}
                     </Button>
                   </div>
                 </div>
@@ -619,32 +625,38 @@ export function ServersScreen() {
                     `${cat.name || ''} ${first?.name || ''} ${first?.description || ''}`.trim(),
                   );
                   return (
-                    <div className={`category-card ${hasSelectedServer ? 'selected' : ''}`}>
+                    <div
+                      className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
+                      tabIndex={0}
+                      role="button"
+                      onClick={() => handleCategoryClick(cat)}
+                    >
                       <button
                         type="button"
                         className="category-card__main"
                         data-nav
-                        onClick={() => handleCategoryClick(cat)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCategoryClick(cat);
+                        }}
                       >
                         <div className="category-card__header">
                           <div>
                             <p className="category-card__title">{cat.name}</p>
                             <small className="muted">
-                              {UI_MESSAGES.servers.serverCount(cat.items.length)}
+                              {t('servers.serverCount')} {cat.items.length}
                             </small>
                           </div>
-                          <span className="badge-count" title="Usuarios conectados">
+                          <span className="badge-count" title={t('servers.usersConnected')}>
                             <i className="fas fa-users" aria-hidden="true" />
                             {live?.connectedUsers ?? '-'}
                             <span className="badge-count-label" aria-hidden="true">
-                              ONLINE
+                              {t('servers.online')}
                             </span>
                           </span>
                         </div>
                         <div className="category-card__body">
-                          <span className="category-card__label">
-                            {UI_MESSAGES.servers.subcategories}
-                          </span>
+                          <span className="category-card__label">{t('servers.subcategories')}</span>
                           <div className="category-pills">
                             {Array.from(
                               new Set(cat.items.map((srv) => resolveSubcategory(srv.name))),
@@ -652,35 +664,35 @@ export function ServersScreen() {
                               .slice(0, 4)
                               .map((label) => (
                                 <span key={label} className="pill">
-                                  {label}
+                                  {t(`servers.subcategoriesList.${label}`)}
                                 </span>
                               ))}
                           </div>
                         </div>
                         <div className="category-card__footer">
                           <span>
-                            {autoMode
-                              ? UI_MESSAGES.servers.autoTest
-                              : UI_MESSAGES.servers.manualSelect}
+                            {autoMode ? t('servers.autoTest') : t('servers.manualSelect')}
                           </span>
-                          <button
-                            type="button"
-                            className="expand-btn"
+                          <Button
+                            variant="primary"
+                            className="stats-btn"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleExpand(cat.name);
                             }}
                             aria-label={
                               expandedCategories.has(cat.name)
-                                ? 'Contraer detalles'
-                                : 'Expandir detalles'
+                                ? t('servers.hideStats')
+                                : t('servers.showStats')
                             }
                           >
+                            <span className="stats-btn__label">{t('servers.statsShort')}</span>
                             <i
                               className={`fas fa-chevron-${expandedCategories.has(cat.name) ? 'up' : 'down'}`}
                               aria-hidden="true"
+                              style={{ marginLeft: 8 }}
                             />
-                          </button>
+                          </Button>
                         </div>
                       </button>
                       {expandedCategories.has(cat.name) && live && (
@@ -705,25 +717,39 @@ export function ServersScreen() {
                             {live.cpuCores && (
                               <div className="stat-item">
                                 <i className="fas fa-server" aria-hidden="true" />
-                                <span>Cores: {live.cpuCores}</span>
+                                <span>
+                                  {t('servers.stats.cores')}: {live.cpuCores}
+                                </span>
                               </div>
                             )}
                             {live.totalMemoryGb && (
                               <div className="stat-item">
                                 <i className="fas fa-database" aria-hidden="true" />
-                                <span>RAM Total: {live.totalMemoryGb} GB</span>
+                                <span>
+                                  {t('servers.stats.totalRam')}: {live.totalMemoryGb} GB
+                                </span>
                               </div>
                             )}
                             {live.netRecvMbps !== undefined && (
                               <div className="stat-item">
                                 <i className="fas fa-download" aria-hidden="true" />
-                                <span>↓ {live.netRecvMbps.toFixed(1)} Mbps</span>
+                                <span>
+                                  {t('servers.stats.download').replace(
+                                    '{value}',
+                                    live.netRecvMbps.toFixed(1),
+                                  )}
+                                </span>
                               </div>
                             )}
                             {live.netSentMbps !== undefined && (
                               <div className="stat-item">
                                 <i className="fas fa-upload" aria-hidden="true" />
-                                <span>↑ {live.netSentMbps.toFixed(1)} Mbps</span>
+                                <span>
+                                  {t('servers.stats.upload').replace(
+                                    '{value}',
+                                    live.netSentMbps.toFixed(1),
+                                  )}
+                                </span>
                               </div>
                             )}
                           </div>
@@ -741,19 +767,21 @@ export function ServersScreen() {
             {visibleGroups.length === 0 ? (
               <div className="empty-result">
                 <i className="fas fa-info-circle" aria-hidden="true" />
-                <p>{UI_MESSAGES.servers.noServersInSubcategory}</p>
+                <p>{t('servers.noServersInSubcategory')}</p>
               </div>
             ) : (
               visibleGroups.map(({ label, servers }) => (
                 <div key={label} className="subcategory-block">
-                  <div className="subcategory-title">--- {label} ---</div>
+                  <div className="subcategory-title">
+                    --- {t(`servers.subcategoriesList.${label}`)} ---
+                  </div>
                   <div className="server-grid">
                     {servers.map((srv) => {
                       const isActive = currentConfig?.id === srv.id;
                       const protocolLabel = formatProtocol(srv.mode) || srv.mode;
                       const actionLabel = autoMode
-                        ? UI_MESSAGES.servers.autoModeActive
-                        : UI_MESSAGES.servers.tapToConnect;
+                        ? t('servers.autoModeActive')
+                        : t('servers.tapToConnect');
                       const domain = extractDomain(srv.description);
                       const cleanDescription = removeDomainFromDescription(srv.description);
                       return (
@@ -774,9 +802,7 @@ export function ServersScreen() {
                               <span className="pill pill-soft">{protocolLabel}</span>
                               {domain && <span className="badge badge-domain">{domain}</span>}
                               {isActive && (
-                                <span className="badge badge-active">
-                                  {UI_MESSAGES.servers.inUse}
-                                </span>
+                                <span className="badge badge-active">{t('servers.inUse')}</span>
                               )}
                             </div>
                           </div>

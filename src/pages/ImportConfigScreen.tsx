@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import type { ServerConfig } from '@/shared/types';
-import { UI_MESSAGES } from '@/constants';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useVpn } from '@/features/vpn/model/VpnContext';
 import { useToastContext } from '@/shared/toast/ToastContext';
 import { appLogger } from '@/features/logs/model/useAppLogs';
@@ -10,6 +10,7 @@ import { useSafeArea } from '@/shared/hooks/useSafeArea';
 export const ImportConfigScreen = memo(function ImportConfigScreen() {
   const { categorias, loadCategorias, setConfig, setCreds, setScreen } = useVpn();
   const { showToast } = useToastContext();
+  const { t } = useTranslation();
 
   const [step, setStep] = useState<'input' | 'select' | 'confirm'>('input');
   const [raw, setRaw] = useState('');
@@ -32,7 +33,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       .trim();
 
   const parseSync = (text: string) => {
-    if (!text) return { error: UI_MESSAGES.import.parseErrorEmpty } as const;
+    if (!text) return { error: t('import.parseErrorEmpty') } as const;
 
     // Allow JSON with comments (// and /* */) and trailing commas: strip them before parsing.
     const stripCommentsAndTrailingCommas = (input: string) => {
@@ -102,7 +103,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       const sanitized = stripCommentsAndTrailingCommas(text);
       obj = JSON.parse(sanitized);
     } catch {
-      return { error: UI_MESSAGES.import.parseErrorInvalid } as const;
+      return { error: t('import.parseErrorInvalid') } as const;
     }
 
     const out: any = {};
@@ -219,7 +220,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
         'warn',
         `[ImportConfig] No matches for ${out.serverName || out.serverId || JSON.stringify(out)}; categories=${categorias.length}; totalServers=${allServers.length}; sample=${sample}`,
       );
-      return { out, finalMatches, error: UI_MESSAGES.import.noServerFound } as const;
+      return { out, finalMatches, error: t('import.noServerFound') } as const;
     }
 
     return { out, finalMatches } as const;
@@ -229,14 +230,14 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     setParseError(null);
 
     if (!raw.trim()) {
-      setParseError(UI_MESSAGES.import.parseErrorEmpty);
+      setParseError(t('import.parseErrorEmpty'));
       return;
     }
 
     const res = parseSync(raw);
 
     if ('error' in res) {
-      setParseError(res.error ?? UI_MESSAGES.import.parseErrorInvalid);
+      setParseError(res.error ?? t('import.parseErrorInvalid'));
       return;
     }
 
@@ -256,7 +257,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     const sel = matches.find((m) => String(m.id) === String(selectedId)) || matches[0];
 
     if (!sel) {
-      setParseError(UI_MESSAGES.import.noServerFound);
+      setParseError(t('import.noServerFound'));
       return;
     }
 
@@ -267,7 +268,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     });
 
     setConfig(sel);
-    showToast(UI_MESSAGES.import.applied || 'Configuración aplicada correctamente');
+    showToast(t('import.applied') || t('import.appliedFallback'));
     setScreen('home');
   }, [matches, selectedId, parsed, setCreds, setConfig, showToast, setScreen]);
 
@@ -285,29 +286,35 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     return cat?.name || '';
   };
 
-  const { statusBarHeight } = useSafeArea();
-  const containerStyle = { paddingTop: `calc(${statusBarHeight}px + var(--space-lg))` } as const;
+  const { statusBarHeight, navigationBarHeight } = useSafeArea();
+  const sectionStyle = {
+    ['--nav-safe' as any]: `${navigationBarHeight}px`,
+  } as const;
+  const containerStyle = {
+    paddingTop: `calc(${statusBarHeight}px + var(--space-lg))`,
+    paddingBottom: `calc(${navigationBarHeight}px + var(--space-lg))`,
+  } as const;
 
   return (
-    <section className="screen import-screen">
+    <section className="screen import-screen" style={sectionStyle}>
       <div className="import-container" style={containerStyle}>
         {/* Progress Steps */}
         <div className="progress-steps">
           <div className={`step ${step === 'input' ? 'active' : 'completed'}`}>
             <div className="step-number">1</div>
-            <span className="step-label">Importar</span>
+            <span className="step-label">{t('import.steps.input')}</span>
           </div>
           <div className="step-divider" />
           <div
             className={`step ${step === 'select' ? 'active' : step === 'confirm' ? 'completed' : ''}`}
           >
             <div className="step-number">2</div>
-            <span className="step-label">Seleccionar</span>
+            <span className="step-label">{t('import.steps.select')}</span>
           </div>
           <div className="step-divider" />
           <div className={`step ${step === 'confirm' ? 'active' : ''}`}>
             <div className="step-number">3</div>
-            <span className="step-label">Confirmar</span>
+            <span className="step-label">{t('import.steps.confirm')}</span>
           </div>
         </div>
 
@@ -329,8 +336,8 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
             </svg>
           </div>
           <div className="header-text">
-            <h3>{UI_MESSAGES.import.title}</h3>
-            <p>{UI_MESSAGES.import.subtitle}</p>
+            <h3>{t('import.title')}</h3>
+            <p>{t('import.subtitle')}</p>
           </div>
         </div>
 
@@ -352,11 +359,11 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   <line x1="12" y1="16" x2="12" y2="12" />
                   <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                <span>Pega aquí el JSON (solo texto, no archivos).</span>
+                <span>{t('import.pasteHint')}</span>
               </div>
 
               <div className="divider">
-                <span>pega el contenido</span>
+                <span>{t('import.pasteLabel')}</span>
               </div>
 
               <textarea
@@ -398,7 +405,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   <line x1="12" y1="16" x2="12" y2="12" />
                   <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                <span>{UI_MESSAGES.import.autoParseHint}</span>
+                <span>{t('import.autoParseHint')}</span>
               </div>
 
               <div className="button-group">
@@ -407,7 +414,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   onClick={handleParse}
                   disabled={!raw.trim()}
                 >
-                  Continuar
+                  {t('import.continue')}
                   <svg
                     width="16"
                     height="16"
@@ -427,8 +434,10 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
           {step === 'select' && matches.length > 1 && (
             <div className="step-content">
               <div className="section-header">
-                <h4>Encontramos {matches.length} servidores</h4>
-                <p>Selecciona el que deseas configurar</p>
+                <h4>
+                  {t('import.foundServers')} {matches.length} servidores
+                </h4>
+                <p>{t('import.selectServer')}</p>
               </div>
 
               <div className="server-list">
@@ -483,14 +492,14 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   >
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
-                  Atrás
+                  {t('import.back')}
                 </button>
                 <button
                   className="btn btn-primary"
                   onClick={() => setStep('confirm')}
                   disabled={!selectedId}
                 >
-                  Continuar
+                  {t('import.continue')}
                   <svg
                     width="16"
                     height="16"
@@ -524,8 +533,8 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               </div>
 
               <div className="section-header centered">
-                <h4>Configuración lista</h4>
-                <p>Revisa los detalles antes de aplicar</p>
+                <h4>{t('import.configReady')}</h4>
+                <p>{t('import.reviewDetails')}</p>
               </div>
 
               {(() => {
@@ -573,7 +582,9 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                           <circle cx="12" cy="7" r="4" />
                         </svg>
-                        <span>Usuario: {parsed.username}</span>
+                        <span>
+                          {t('import.username')}: {parsed.username}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -592,7 +603,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   >
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
-                  Atrás
+                  {t('import.back')}
                 </button>
                 <button className="btn btn-primary btn-success" onClick={handleApply}>
                   <svg
@@ -605,7 +616,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
                   >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  Aplicar configuración
+                  {t('import.applyConfig')}
                 </button>
               </div>
             </div>
@@ -615,5 +626,3 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     </section>
   );
 });
-
-export default ImportConfigScreen;

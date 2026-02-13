@@ -5,6 +5,32 @@ import { initNativeEvents } from '../features/vpn/api/vpnBridge';
 import { appLogger } from '../features/logs/model/useAppLogs';
 import { initializePerformanceMonitoring } from '../utils/performanceMonitor';
 
+// Small i18n helper for bootstrap path (no React available)
+import en from '../i18n/locales/en.json';
+import es from '../i18n/locales/es.json';
+import pt from '../i18n/locales/pt.json';
+
+function getSystemLang() {
+  if (typeof navigator === 'undefined') return 'es';
+  const lang = (navigator.language || 'es').split('-')[0].toLowerCase();
+  if (lang === 'en') return 'en';
+  if (lang === 'pt') return 'pt';
+  return 'es';
+}
+
+function getNested(obj: any, path: string) {
+  return path
+    .split('.')
+    .reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : null), obj);
+}
+
+function tBootstrap(key: string) {
+  const lang = getSystemLang();
+  const map: Record<string, any> = { en, es, pt };
+  const v = getNested(map[lang], key) ?? getNested(map['es'], key) ?? key;
+  return v;
+}
+
 import '../styles/variables.css';
 import '../styles/animations.css';
 import '../styles/base.css';
@@ -20,6 +46,7 @@ import '../styles/components/applogs.css';
 import '../styles/components/toast.css';
 import '../styles/components/premium.css';
 import '../styles/components/promo-header.css';
+import '../styles/components/language-selector.css';
 
 /* News components (refined) */
 import '../styles/components/MiniHeader.css';
@@ -79,8 +106,8 @@ function renderApp() {
         background: linear-gradient(180deg, var(--bg-2, #efeaff), var(--bg-1, #f8f7ff));
       ">
         <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
-        <h2 style="margin: 0 0 8px 0;">Error al cargar</h2>
-        <p style="margin: 0; opacity: 0.7;">Por favor, reinicia la aplicación</p>
+        <h2 style="margin: 0 0 8px 0;">${tBootstrap('app.loadErrorTitle')}</h2>
+        <p style="margin: 0; opacity: 0.7;">${tBootstrap('app.restartPrompt')}</p>
       </div>
     `;
   }

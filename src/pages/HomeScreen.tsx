@@ -3,7 +3,7 @@ import { useVpn } from '../features/vpn/model/VpnContext';
 import { useToastContext } from '../shared/toast/ToastContext';
 import { useConnectionStatus } from '../features/vpn/model/useConnectionStatus';
 import { useSectionStyle } from '../shared/hooks/useSectionStyle';
-import { UI_MESSAGES } from '../constants';
+import { useTranslation } from '../i18n/useTranslation';
 import { callOne } from '../features/vpn/api/vpnBridge';
 import { ServerCard } from '../shared/components/ServerCard';
 import { HeaderPromo } from '../shared/components/HeaderPromo';
@@ -16,6 +16,7 @@ import keyboardNavigationManager from '../shared/utils/keyboardNavigationManager
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
 export function HomeScreen() {
+  const { t } = useTranslation();
   const {
     config,
     creds,
@@ -49,21 +50,21 @@ export function HomeScreen() {
     }
     if (isConnecting) {
       cancelConnecting();
-      showToast(UI_MESSAGES.connection.cancel);
+      showToast(t('connection.cancel'));
       return;
     }
     // Validar
     if (!config) {
-      showToast(UI_MESSAGES.connection.selectServer);
+      showToast(t('connection.selectServer'));
       return;
     }
     if (!hasEmbeddedAuth) {
       if (isV2Ray && !creds.uuid.trim()) {
-        showToast(UI_MESSAGES.connection.enterUuid);
+        showToast(t('connection.enterUuid'));
         return;
       }
       if (!isV2Ray && (!creds.user.trim() || !creds.pass.trim())) {
-        showToast(UI_MESSAGES.connection.enterCredentials);
+        showToast(t('connection.enterCredentials'));
         return;
       }
     }
@@ -85,6 +86,7 @@ export function HomeScreen() {
     showToast,
     startAutoConnect,
     connect,
+    t,
   ]);
 
   const handleServerClick = useCallback(() => {
@@ -93,23 +95,23 @@ export function HomeScreen() {
 
   const handleUpdate = useCallback(() => {
     if (callOne(['DtStartAppUpdate', 'DtExecuteDialogConfig'])) {
-      showToast(UI_MESSAGES.connection.searchingUpdate);
+      showToast(t('connection.searchingUpdate'));
     } else {
-      showToast(UI_MESSAGES.connection.updateNotAvailable);
+      showToast(t('connection.updateNotAvailable'));
     }
-  }, [showToast]);
+  }, [showToast, t]);
 
   const handleLogs = useCallback(() => {
     setScreen('logs');
   }, [setScreen]);
 
   const buttonText = isConnected
-    ? UI_MESSAGES.buttons.disconnect
+    ? t('buttons.disconnect')
     : isConnecting
-      ? UI_MESSAGES.buttons.stop
+      ? t('buttons.stop')
       : isError
-        ? UI_MESSAGES.buttons.retry
-        : UI_MESSAGES.buttons.connect;
+        ? t('buttons.retry')
+        : t('buttons.connect');
 
   const [logoError, setLogoError] = useState(false);
 
@@ -177,13 +179,12 @@ export function HomeScreen() {
         <div className="logo-container">
           {logoError ? (
             <div className="logo-fallback">
-              <span className="logo-icon">🔒</span>
-              <span className="logo-text">Secure VPN</span>
+              <span className="logo-text">{t('home.logoFallback')}</span>
             </div>
           ) : (
             <img
-              src="https://i.ibb.co/nMHrd6V4/Secure-VPN.png"
-              alt="Secure"
+              src="https://i.postimg.cc/15fhQj0d/Secure-VPN-(2).avif"
+              alt={t('home.logoAlt')}
               className="logo"
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
@@ -222,30 +223,30 @@ export function HomeScreen() {
               >
                 {buttonText}
               </Button>
-              <Toggle checked={autoMode} onChange={setAutoMode} label="Auto" />
+              <Toggle checked={autoMode} onChange={setAutoMode} label={t('home.auto')} />
             </div>
 
             <div className="quick-grid ql-quick-grid">
               <QuickButton
                 icon="fa-rotate"
-                label={UI_MESSAGES.buttons.update}
+                label={t('buttons.update')}
                 onClick={handleUpdate}
                 data-nav
-                aria-label={UI_MESSAGES.buttons.update}
+                aria-label={t('buttons.update')}
               />
               <QuickButton
                 icon="fa-file-import"
-                label={UI_MESSAGES.import.shortTitle}
+                label={t('import.shortTitle')}
                 onClick={() => setScreen('import')}
                 data-nav
-                aria-label={UI_MESSAGES.import.shortTitle}
+                aria-label={t('import.shortTitle')}
               />
               <QuickButton
                 icon="fa-terminal"
-                label={UI_MESSAGES.buttons.logs}
+                label={t('buttons.logs')}
                 onClick={handleLogs}
                 data-nav
-                aria-label={UI_MESSAGES.buttons.logs}
+                aria-label={t('buttons.logs')}
               />
             </div>
           </div>

@@ -1,0 +1,328 @@
+{
+  "common": {
+    "notAvailableDevice": "Não disponível neste dispositivo",
+    "toggleAriaFallback": "Toggle",
+    "visibilityShow": "Mostrar",
+    "visibilityHide": "Ocultar",
+    "close": "Fechar",
+    "back": "Voltar",
+    "accept": "Aceitar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "add": "Adicionar"
+  },
+  "credentials": {
+    "usernamePlaceholder": "Usuário",
+    "passwordPlaceholder": "Senha",
+    "uuidPlaceholder": "UUID (V2Ray)"
+  },
+  "menu": {
+    "title": "Ações",
+    "hotspotStarted": "Hotspot iniciado",
+    "hotspotStopped": "Hotspot parado",
+    "cleanupDone": "Limpeza realizada",
+    "itemsApnTitle": "APN",
+    "itemsApnSubtitle": "Configuração do ponto de acesso",
+    "itemsBatteryTitle": "Bateria",
+    "itemsBatterySubtitle": "Otimizações/uso de energia",
+    "itemsHotspotTitleOn": "Hotspot / Desativar",
+    "itemsHotspotTitleOff": "Hotspot / Ativar",
+    "itemsHotspotSubtitleOn": "Hotspot ativo",
+    "itemsHotspotSubtitleOff": "Hotspot inativo",
+    "itemsHotspotSubtitleUnknown": "Status desconhecido",
+    "itemsSpeedtestTitle": "Speedtest",
+    "itemsSpeedtestSubtitle": "Teste de velocidade",
+    "itemsTermsTitle": "Termos",
+    "itemsTermsSubtitle": "Termos e políticas",
+    "itemsCleanTitle": "Limpeza",
+    "itemsCleanSubtitle": "Limpar cache/configurações",
+    "itemsLogsTitle": "Logs VPN",
+    "itemsLogsSubtitle": "Ver e copiar logs de DTunnel",
+    "itemsAppLogsTitle": "Logs do App",
+    "itemsAppLogsSubtitle": "Ver logs da aplicação",
+    "itemsImportTitle": "Importar configuração",
+    "itemsImportSubtitle": "Importar JSON de configuração (offline)"
+  },
+  "applogs": {
+    "title": "Logs do App",
+    "subtitle": "Performance, erros e eventos",
+    "copy": "Copiar",
+    "clear": "Limpar",
+    "close": "Fechar",
+    "servers": "Servidores",
+    "copiedToast": "Logs copiados",
+    "copyFailedToast": "Não foi possível copiar os logs",
+    "clearedToast": "Logs limpos",
+    "serversCopiedToast": "Lista de servidores copiada",
+    "serversCopyFailedToast": "Não foi possível copiar a lista de servidores",
+    "empty": "Nenhum log do aplicativo disponível",
+    "emptyHint": "Os logs são registrados automaticamente ao detectar:",
+    "hints": {
+      "slowOps": "⏱️ Operações lentas (>1s)",
+      "slowRenders": "🐌 Renders lentos (>500ms)",
+      "uncaughtErrors": "❌ Erros não capturados",
+      "promiseRejected": "⚠️ Promises rejeitadas",
+      "visibilityChanges": "👁️ Mudanças de visibilidade"
+    }
+  },
+  "errorBoundary": {
+    "title": "Algo deu errado",
+    "fallback": "Ocorreu um erro inesperado",
+    "retry": "Tentar novamente"
+  },
+  "connection": {
+    "cancel": "Conexão cancelada",
+    "selectServer": "Selecione um servidor",
+    "enterUuid": "Digite o UUID",
+    "enterCredentials": "Digite nome de usuário e senha",
+    "stopToChange": "Pare a conexão para mudar de servidor",
+    "serverSelected": "Servidor selecionado",
+    "searchingUpdate": "Procurando atualização…",
+    "updateNotAvailable": "Atualização nativa não disponível",
+    "authFailed": "Falha de autenticação",
+    "checkCredentials": "Verifique suas credenciais",
+    "noNetwork": "Sem conexão de rede",
+    "checkNetwork": "Verifique sua conexão com a internet"
+  },
+  "buttons": {
+    "connect": "CONECTAR",
+    "disconnect": "DESCONECTAR",
+    "stop": "PARAR",
+    "retry": "TENTAR NOVAMENTE",
+    "update": "Atualizar",
+    "logs": "Registros",
+    "viewDetails": "Ver detalhes",
+    "back": "Voltar"
+  },
+  "status": {
+    "disconnected": "Você está desconectado",
+    "connected": "CONECTADO",
+    "connecting": "Estabelecendo conexão…",
+    "autoConnecting": "Procurando a melhor conexão…"
+  },
+  "auto": {
+    "categoryFallback": "categoria"
+  },
+  "servers": {
+    "title": "Servidores",
+    "subtitle": "Explore e escolha a melhor localização para sua conexão.",
+    "serverCount": "Servidores",
+    "selectedEyebrow": "Categoria selecionada",
+    "selectedSubtitle": "Escolha o servidor que melhor se adequa à sua conexão.",
+    "searchPlaceholder": "Procurar país ou categoria",
+    "noServers": "Nenhum servidor disponível.",
+    "checkConfigs": "Verifique se as configurações foram carregadas",
+    "backToCategories": "Voltar para categorias",
+    "openConfigurator": "Abrir Configurador DTunnel",
+    "openConfiguratorTitle": "Abrir configurador de DTunnel",
+    "clearSearchAria": "Limpar pesquisa",
+    "clearSearch": "Limpar pesquisa",
+    "configurator": "Configurador",
+    "subcategories": "Subcategorias",
+    "subcategoriesList": {
+      "principal": "Principal",
+      "juegos": "Jogos",
+      "stream": "Streaming",
+      "social": "Social",
+      "others": "Outros"
+    },
+    "allSubcategories": "Todos",
+    "autoTest": "Teste automático",
+    "manualSelect": "Seleção manual",
+    "noServersInSubcategory": "Nenhum servidor nesta subcategoria.",
+    "noSearchResults": "Sem resultados para",
+    "noSearchHint": "Tente outro termo ou limpe a pesquisa",
+    "autoModeActive": "Modo automático ativo",
+    "tapToConnect": "Toque para conectar",
+    "inUse": "Em uso",
+    "stats": {
+      "cores": "Cores",
+      "totalRam": "RAM Total",
+      "download": "↓ {value} Mbps",
+      "upload": "↑ {value} Mbps"
+    },
+    "usersConnected": "Usuários conectados",
+    "online": "ONLINE",
+    "showStats": "Mostrar estatísticas",
+    "hideStats": "Ocultar estatísticas",
+    "statsShort": "STATS"
+  },
+  "import": {
+    "title": "Importar configuração",
+    "subtitle": "Importar JSON com servidor e credenciais",
+    "pastePlaceholder": "Cole o JSON aqui (comentários // e /* */ permitidos)",
+    "parseErrorInvalid": "JSON inválido",
+    "parseErrorEmpty": "Campo vazio",
+    "noServerFound": "Nenhum servidor encontrado com esse nome/ID",
+    "startNow": "Inicie a conexão após aplicar",
+    "parse": "Analisar",
+    "apply": "Aplicar",
+    "applied": "Configuração aplicada",
+    "appliedAndConnecting": "Configuração aplicada. Conectando...",
+    "appliedFallback": "Configuração aplicada com sucesso",
+    "autoParseHint": "Será analisado e aplicado automaticamente quando você pressionar Aplicar",
+    "shortTitle": "Importar",
+    "pasteHint": "Cole o JSON aqui (apenas texto, sem arquivos).",
+    "pasteLabel": "colar conteúdo",
+    "continue": "Continuar",
+    "back": "Voltar",
+    "foundServers": "Encontramos",
+    "selectServer": "Selecione o que deseja configurar",
+    "configReady": "Configuração pronta",
+    "reviewDetails": "Revise os detalhes antes de aplicar",
+    "username": "Usuário",
+    "applyConfig": "Aplicar configuração",
+    "steps": { "input": "Importar", "select": "Selecionar", "confirm": "Confirmar" }
+  },
+  "terms": {
+    "title": "Termos de Uso e Política",
+    "accept": "ACEITO OS TERMOS DE USO",
+    "back": "VOLTAR",
+    "viewFull": "VER TERMOS COMPLETOS",
+    "cardsLegalTitle": "Termos Legais",
+    "cardsLegalText": "Ao usar nosso serviço, você concorda em cumprir com todas as leis e regulamentações aplicáveis. Você é responsável pelo seu uso do serviço e garante que não violará nenhuma lei, contrato ou direitos de terceiros.",
+    "cardsPrivacyTitle": "Privacidade",
+    "cardsPrivacyText": "Respeitamos sua privacidade. Não vendemos, compartilhamos nem divulgamos seus dados pessoais a terceiros sem seu consentimento explícito. Todos os dados são processados de acordo com nossas políticas de privacidade.",
+    "cardsForbiddenTitle": "Atividades Proibidas",
+    "cardsForbiddenText": "Não permitido: usar o serviço para atividades ilegais, assédio, fraude, malware, spam ou qualquer conteúdo que viole direitos de terceiros. Violações podem resultar em banimento permanente.",
+    "cardsChangesTitle": "Alterações nos Termos",
+    "cardsChangesText": "Nos reservamos o direito de modificar estes termos a qualquer momento. As alterações entram em vigor imediatamente. Seu uso contínuo do serviço constitui aceitação dos termos modificados."
+  },
+  "theme": {
+    "darkMode": "Mudar para modo claro",
+    "lightMode": "Mudar para modo escuro"
+  },
+  "language": {
+    "selectLanguage": "Selecionar idioma",
+    "spanish": "Español",
+    "english": "English",
+    "portuguese": "Português"
+  },
+  "header": {
+    "coupons": "Cupons",
+    "news": "Notícias",
+    "subscribe": "Inscrever-se em um plano",
+    "unreadNews": "Você tem notícias não lidas"
+  },
+  "home": {
+    "title": "Início",
+    "auto": "Auto",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "connecting": "Conectando...",
+    "disconnecting": "Desconectando..."
+  },
+  "app": {
+    "loadErrorTitle": "Erro ao carregar",
+    "restartPrompt": "Por favor, reinicie o aplicativo"
+  },
+  "premium": {
+    "title": "Premium",
+    "cta": "Comprar o revender",
+    "description": "Acesse planos oficiais ou solicite seu app white-label para revender com um design limpo.",
+    "buy": "Comprar",
+    "resell": "Revender"
+  },
+  "promo": {
+    "label": "OFERTA",
+    "ariaLabel": "Ver oferta",
+    "title": "Oferta por tempo limitado",
+    "timerAria": "Tempo restante",
+    "unit": { "hours": "HRS", "minutes": "MIN" },
+    "cta": "OBTER",
+    "modal": {
+      "title": "Abrir no navegador",
+      "subtitle": "Não foi possível abrir automaticamente no seu navegador padrão",
+      "manualHint": "Se preferir, pode abrir a oferta manualmente no seu navegador.",
+      "openButton": "Abrir no navegador",
+      "copyButton": "Copiar link"
+    },
+    "toast": {
+      "opening": "Abrindo no navegador padrão...",
+      "tryOpen": "Tentando abrir...",
+      "copied": "Link copiado para a área de transferência"
+    }
+  },
+  "coupon": {
+    "title": "Cupons disponíveis",
+    "subtitle": "Aproveite descontos exclusivos",
+    "empty": "Nenhum cupom ativo no momento",
+    "codeLabel": "Código",
+    "badgeLabel": "desconto",
+    "oneUse": "uso restante",
+    "manyUses": "usos restantes",
+    "description": "Aplicável na compra de qualquer plano",
+    "copied": "Copiado",
+    "copy": "Copiar",
+    "openPlans": "Ver planos"
+  },
+  "news": {
+    "title": "Notícias",
+    "noNews": "Nenhuma notícia disponível",
+    "loading": "Carregando notícias...",
+    "errorTitle": "Erro ao carregar notícias",
+    "retry": "Tentar novamente",
+    "emptyDescription": "Volte mais tarde para ver as últimas atualizações"
+  },
+  "logs": {
+    "title": "Registros",
+    "subtitle": "Ver e copiar os registros do DTunnel",
+    "clear": "Limpar registros",
+    "copy": "Copiar",
+    "close": "Fechar",
+    "empty": "Nenhum registro disponível",
+    "generateHint": "Realize uma conexão para gerar novos eventos.",
+    "copiedToast": "Logs copiados",
+    "copyFailedToast": "Não foi possível copiar os logs",
+    "clearedToast": "Logs limpos",
+    "noLogs": "Nenhum registro disponível"
+  },
+  "account": {
+    "title": "Conta",
+    "titleEyebrow": "Informações da conta",
+    "hello": "Olá, {name}",
+    "subtitle": "Gerencie os detalhes da sua sessão e plano ativo.",
+    "logout": "Sair",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "noActiveServer": "Sem servidor ativo",
+    "statusConnected": "Conectado",
+    "statusConnecting": "Conectando",
+    "statusDisconnected": "Desconectado",
+    "labels": {
+      "status": "Status",
+      "latency": "Latência",
+      "totalUsage": "Uso total",
+      "activeSessions": "Sessões ativas"
+    },
+    "sections": {
+      "plan": "Plano",
+      "connection": "Conexão",
+      "credentials": "Credenciais"
+    },
+    "fields": {
+      "client": "Cliente",
+      "validity": "Validade",
+      "devices": "Dispositivos",
+      "remainingDays": "Dias restantes",
+      "server": "Servidor",
+      "mode": "Modo",
+      "operator": "Operadora",
+      "publicIp": "IP público",
+      "username": "Usuário",
+      "uuid": "UUID"
+    }
+  },
+  "session": {
+    "active": "Sessão ativa",
+    "greeting": "Olá, {name}",
+    "protected": "Sua conexão está protegida. Verifique os detalhes da sua conta quando necessário."
+  },
+  "serverCard": {
+    "ariaChooseServer": "Escolher servidor",
+    "altServer": "Servidor",
+    "pickServer": "Escolha um servidor"
+  }
+}

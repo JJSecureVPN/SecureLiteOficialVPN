@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useCoupons } from '../useCoupons';
-import React from 'react';
 
 const mockCoupons = [
   {

@@ -1,7 +1,7 @@
 .ql-quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(4px, 1.5vw, 12px);
   margin-top: var(--space-md);
 }
 
@@ -10,15 +10,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: clamp(2px, 0.5vw, 4px);
   position: relative;
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
-  padding: clamp(8px, 1.4vw, 12px) clamp(6px, 1.2vw, 10px);
+  padding: clamp(6px, 1.2vw, 12px) clamp(4px, 1vw, 10px);
   background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
   color: var(--text-strong);
   font-weight: 600;
-  font-size: clamp(0.8rem, 0.9vw, 1rem);
+  font-size: clamp(0.7rem, 1vw, 1rem);
   text-align: center;
   cursor: pointer;
   outline: none;
@@ -80,34 +80,12 @@
 /* Mobile - texto más compacto */
 @media (max-width: 520px) {
   .ql-quick-grid {
-    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
   }
 
   .ql-qbtn {
-    padding: 8px 6px;
-    gap: 3px;
-    font-size: 0.75rem;
-  }
-
-  .ql-qbtn i {
-    font-size: 1.1em;
-  }
-
-  .ql-qbtn .ql-qbtn-label {
-    line-height: 1.1;
-  }
-}
-
-/* Extra small - máxima compactación */
-@media (max-width: 380px) {
-  .ql-quick-grid {
-    grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
-    gap: 6px;
-  }
-
-  .ql-qbtn {
-    padding: 7px 5px;
+    padding: 6px 3px;
     gap: 2px;
     font-size: 0.7rem;
   }
@@ -117,6 +95,30 @@
   }
 
   .ql-qbtn .ql-qbtn-label {
+    line-height: 1.1;
+    font-size: 0.65rem;
+  }
+}
+
+/* Extra small - máxima compactación */
+@media (max-width: 380px) {
+  .ql-quick-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .ql-qbtn {
+    padding: 4px 2px;
+    gap: 1px;
+    font-size: 0.65rem;
+  }
+
+  .ql-qbtn i {
+    font-size: 0.95em;
+  }
+
+  .ql-qbtn .ql-qbtn-label {
     line-height: 1.05;
+    font-size: 0.6rem;
   }
 }

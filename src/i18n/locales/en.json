@@ -1,0 +1,336 @@
+{
+  "common": {
+    "notAvailableDevice": "Not available on this device",
+    "toggleAriaFallback": "Toggle",
+    "visibilityShow": "Show",
+    "visibilityHide": "Hide",
+    "close": "Close",
+    "back": "Back",
+    "accept": "Accept",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add"
+  },
+  "credentials": {
+    "usernamePlaceholder": "Username",
+    "passwordPlaceholder": "Password",
+    "uuidPlaceholder": "UUID (V2Ray)"
+  },
+  "menu": {
+    "title": "Actions",
+    "hotspotStarted": "Hotspot started",
+    "hotspotStopped": "Hotspot stopped",
+    "cleanupDone": "Cleanup completed",
+    "itemsApnTitle": "APN",
+    "itemsApnSubtitle": "Access point configuration",
+    "itemsBatteryTitle": "Battery",
+    "itemsBatterySubtitle": "Optimizations/power usage",
+    "itemsHotspotTitleOn": "Hotspot / Disable",
+    "itemsHotspotTitleOff": "Hotspot / Enable",
+    "itemsHotspotSubtitleOn": "Hotspot active",
+    "itemsHotspotSubtitleOff": "Hotspot inactive",
+    "itemsHotspotSubtitleUnknown": "Unknown status",
+    "itemsSpeedtestTitle": "Speedtest",
+    "itemsSpeedtestSubtitle": "Speed test",
+    "itemsTermsTitle": "Terms",
+    "itemsTermsSubtitle": "Terms and policies",
+    "itemsCleanTitle": "Cleanup",
+    "itemsCleanSubtitle": "Clean cache/settings",
+    "itemsLogsTitle": "VPN Logs",
+    "itemsLogsSubtitle": "View and copy DTunnel logs",
+    "itemsAppLogsTitle": "App Logs",
+    "itemsAppLogsSubtitle": "View application logs",
+    "itemsImportTitle": "Import configuration",
+    "itemsImportSubtitle": "Import configuration JSON (offline)"
+  },
+  "applogs": {
+    "title": "App Logs",
+    "subtitle": "Performance, errors and events",
+    "copy": "Copy",
+    "clear": "Clear",
+    "close": "Close",
+    "servers": "Servers",
+    "copiedToast": "Logs copied",
+    "copyFailedToast": "Could not copy logs",
+    "clearedToast": "Logs cleared",
+    "serversCopiedToast": "Servers list copied",
+    "serversCopyFailedToast": "Could not copy servers list",
+    "empty": "No app logs available",
+    "emptyHint": "App logs are recorded automatically when detecting:",
+    "hints": {
+      "slowOps": "⏱️ Slow operations (>1s)",
+      "slowRenders": "🐌 Slow renders (>500ms)",
+      "uncaughtErrors": "❌ Uncaught errors",
+      "promiseRejected": "⚠️ Rejected promises",
+      "visibilityChanges": "👁️ Visibility changes"
+    }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "fallback": "An unexpected error occurred",
+    "retry": "Retry"
+  },
+  "connection": {
+    "cancel": "Connection cancelled",
+    "selectServer": "Select a server",
+    "enterUuid": "Enter the UUID",
+    "enterCredentials": "Enter username and password",
+    "stopToChange": "Stop the connection to change servers",
+    "serverSelected": "Server selected",
+    "searchingUpdate": "Searching for update…",
+    "updateNotAvailable": "Native update not available",
+    "authFailed": "Authentication failed",
+    "checkCredentials": "Check your credentials",
+    "noNetwork": "No network connection",
+    "checkNetwork": "Check your internet connection"
+  },
+  "buttons": {
+    "connect": "CONNECT",
+    "disconnect": "DISCONNECT",
+    "stop": "STOP",
+    "retry": "RETRY",
+    "update": "Update",
+    "logs": "Logs",
+    "viewDetails": "View details",
+    "back": "Back"
+  },
+  "status": {
+    "disconnected": "You are disconnected",
+    "connected": "CONNECTED",
+    "connecting": "Establishing connection…",
+    "autoConnecting": "Finding best connection…"
+  },
+  "auto": {
+    "categoryFallback": "category"
+  },
+  "servers": {
+    "title": "Servers",
+    "subtitle": "Explore and choose the best location for your connection.",
+    "serverCount": "Servers",
+    "selectedEyebrow": "Selected category",
+    "selectedSubtitle": "Choose the server that best suits your connection.",
+    "searchPlaceholder": "Search country or category",
+    "noServers": "No servers available.",
+    "checkConfigs": "Check if configs were loaded",
+    "backToCategories": "Back to categories",
+    "openConfigurator": "Open DTunnel Configurator",
+    "openConfiguratorTitle": "Open DTunnel configurator",
+    "clearSearchAria": "Clear search",
+    "clearSearch": "Clear search",
+    "configurator": "Configurator",
+    "subcategories": "Subcategories",
+    "subcategoriesList": {
+      "principal": "Principal",
+      "juegos": "Games",
+      "stream": "Streaming",
+      "social": "Social",
+      "others": "Others"
+    },
+    "allSubcategories": "All",
+    "autoTest": "Automatic test",
+    "manualSelect": "Manual selection",
+    "noServersInSubcategory": "No servers in this subcategory.",
+    "noSearchResults": "No results for",
+    "noSearchHint": "Try another term or clear the search",
+    "autoModeActive": "Automatic mode active",
+    "tapToConnect": "Tap to connect",
+    "inUse": "In use",
+    "stats": {
+      "cores": "Cores",
+      "totalRam": "Total RAM",
+      "download": "↓ {value} Mbps",
+      "upload": "↑ {value} Mbps"
+    },
+    "usersConnected": "Users connected",
+    "online": "ONLINE",
+    "showStats": "Show stats",
+    "hideStats": "Hide stats",
+    "statsShort": "STATS"
+  },
+  "import": {
+    "title": "Import configuration",
+    "subtitle": "Import JSON with server and credentials",
+    "pastePlaceholder": "Paste JSON here (comments // and /* */ allowed)",
+    "parseErrorInvalid": "Invalid JSON",
+    "parseErrorEmpty": "Empty field",
+    "noServerFound": "No server found with that name/ID",
+    "startNow": "Start connection after applying",
+    "parse": "Parse",
+    "apply": "Apply",
+    "applied": "Configuration applied",
+    "appliedAndConnecting": "Configuration applied. Connecting...",
+    "appliedFallback": "Configuration applied successfully",
+    "autoParseHint": "Will be analyzed and applied automatically when you press Apply",
+    "shortTitle": "Import",
+    "pasteHint": "Paste JSON here (text only, no files).",
+    "pasteLabel": "paste content",
+    "continue": "Continue",
+    "back": "Back",
+    "foundServers": "We found",
+    "selectServer": "Select the one you want to configure",
+    "configReady": "Configuration ready",
+    "reviewDetails": "Review the details before applying",
+    "username": "Username",
+    "applyConfig": "Apply configuration",
+    "steps": { "input": "Import", "select": "Select", "confirm": "Confirm" }
+  },
+  "terms": {
+    "title": "Terms of Use and Policy",
+    "accept": "I ACCEPT THE TERMS OF USE",
+    "back": "BACK",
+    "viewFull": "VIEW FULL TERMS",
+    "cardsLegalTitle": "Legal Terms",
+    "cardsLegalText": "By using our service, you agree to comply with all applicable laws and regulations. You are responsible for your use of the service and warrant that you will not violate any law, contract, or third-party rights.",
+    "cardsPrivacyTitle": "Privacy",
+    "cardsPrivacyText": "We respect your privacy. We do not sell, share, or disclose your personal data to third parties without your explicit consent. All data is processed according to our privacy policies.",
+    "cardsForbiddenTitle": "Prohibited Activities",
+    "cardsForbiddenText": "Not allowed: using the service for illegal activities, harassment, fraud, malware, spam, or any content that violates third-party rights. Violations may result in permanent ban.",
+    "cardsChangesTitle": "Changes to Terms",
+    "cardsChangesText": "We reserve the right to modify these terms at any time. Changes take effect immediately. Your continued use of the service constitutes acceptance of the modified terms."
+  },
+  "theme": {
+    "darkMode": "Switch to light mode",
+    "lightMode": "Switch to dark mode"
+  },
+  "language": {
+    "selectLanguage": "Select language",
+    "spanish": "Español",
+    "english": "English",
+    "portuguese": "Português"
+  },
+  "header": {
+    "coupons": "Coupons",
+    "news": "News",
+    "subscribe": "Subscribe to a plan",
+    "unreadNews": "You have unread news"
+  },
+  "home": {
+    "title": "Home",
+    "auto": "Auto",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "connecting": "Connecting...",
+    "disconnecting": "Disconnecting...",
+    "logoAlt": "Secure VPN logo",
+    "logoFallback": "Secure VPN"
+  },
+  "app": {
+    "loadErrorTitle": "Failed to load",
+    "restartPrompt": "Please restart the application"
+  },
+  "premium": {
+    "title": "Premium",
+    "cta": "Buy or resell",
+    "description": "Access official plans or request a white-label app to resell with a clean design.",
+    "buy": "Buy",
+    "resell": "Resell"
+  },
+  "promo": {
+    "label": "OFFER",
+    "ariaLabel": "View offer",
+    "title": "Limited time offer",
+    "timerAria": "Remaining time",
+    "unit": { "hours": "HRS", "minutes": "MIN" },
+    "cta": "GET",
+    "modal": {
+      "title": "Open in browser",
+      "subtitle": "Could not open automatically in your default browser",
+      "manualHint": "If you prefer, you can open the offer manually in your browser.",
+      "openButton": "Open in browser",
+      "copyButton": "Copy link"
+    },
+    "toast": {
+      "opening": "Opening in default browser...",
+      "tryOpen": "Trying to open...",
+      "copied": "Link copied to clipboard"
+    }
+  },
+  "coupon": {
+    "title": "Available coupons",
+    "subtitle": "Take advantage of exclusive discounts",
+    "empty": "No active coupons at the moment",
+    "codeLabel": "Code",
+    "badgeLabel": "discount",
+    "oneUse": "use remaining",
+    "manyUses": "uses remaining",
+    "description": "Applicable on the purchase of any plan",
+    "copied": "Copied",
+    "copy": "Copy",
+    "openPlans": "View plans"
+  },
+  "news": {
+    "title": "News",
+    "noNews": "No news available",
+    "loading": "Loading news...",
+    "errorTitle": "Failed to load news",
+    "retry": "Retry",
+    "emptyDescription": "Come back later to see the latest updates",
+    "errors": {
+      "generic": "Failed to load news",
+      "timeout": "The connection timed out",
+      "network": "Could not connect to the server",
+      "serverInvalid": "Server returned an invalid response"
+    }
+  },
+  "logs": {
+    "title": "Logs",
+    "subtitle": "View DTunnel logs and copy them",
+    "clear": "Clear logs",
+    "copy": "Copy",
+    "close": "Close",
+    "empty": "No logs available",
+    "generateHint": "Perform a connection to generate new events.",
+    "copiedToast": "Logs copied",
+    "copyFailedToast": "Could not copy logs",
+    "clearedToast": "Logs cleared",
+    "noLogs": "No logs available"
+  },
+  "account": {
+    "title": "Account",
+    "titleEyebrow": "Account information",
+    "hello": "Hello, {name}",
+    "subtitle": "Manage your session details and active plan.",
+    "logout": "Sign out",
+    "profile": "Profile",
+    "settings": "Settings",
+    "noActiveServer": "No active server",
+    "statusConnected": "Connected",
+    "statusConnecting": "Connecting",
+    "statusDisconnected": "Disconnected",
+    "labels": {
+      "status": "Status",
+      "latency": "Latency",
+      "totalUsage": "Total usage",
+      "activeSessions": "Active sessions"
+    },
+    "sections": {
+      "plan": "Plan",
+      "connection": "Connection",
+      "credentials": "Credentials"
+    },
+    "fields": {
+      "client": "Client",
+      "validity": "Validity",
+      "devices": "Devices",
+      "remainingDays": "Days remaining",
+      "server": "Server",
+      "mode": "Mode",
+      "operator": "Operator",
+      "publicIp": "Public IP",
+      "username": "Username",
+      "uuid": "UUID"
+    }
+  },
+  "session": {
+    "active": "Session active",
+    "greeting": "Hello, {name}",
+    "protected": "Your connection is protected. Check your account details when needed."
+  },
+  "serverCard": {
+    "ariaChooseServer": "Choose server",
+    "altServer": "Server",
+    "pickServer": "Choose a server"
+  }
+}

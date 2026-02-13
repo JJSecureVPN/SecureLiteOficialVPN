@@ -3,9 +3,13 @@ interface NewsErrorStateProps {
   onRetry: () => void;
 }
 
+import { useTranslation } from '../../../../i18n/useTranslation';
+
 export function NewsErrorState({ error, onRetry }: NewsErrorStateProps) {
+  const { t } = useTranslation();
   return (
     <div className="news-error">
+      {' '}
       <div className="news-error__icon">
         <svg
           width="64"
@@ -33,10 +37,10 @@ export function NewsErrorState({ error, onRetry }: NewsErrorStateProps) {
           <circle cx="32" cy="40" r="1.5" fill="currentColor" />
         </svg>
       </div>
-      <h3 className="news-error__title">Error al cargar noticias</h3>
+      <h3 className="news-error__title">{t('news.errorTitle')}</h3>
       <p className="news-error__description">{error}</p>
       <button className="news-error__button" onClick={onRetry} type="button">
-        Reintentar
+        {t('news.retry')}
       </button>
     </div>
   );

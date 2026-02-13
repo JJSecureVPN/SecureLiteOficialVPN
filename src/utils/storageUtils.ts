@@ -66,3 +66,15 @@ export function loadNewsLastSeen(): string | null {
 export function saveNewsLastSeen(iso: string) {
   safeSetItem(LS_KEYS.news_last_seen, iso);
 }
+
+export type Language = 'es' | 'en' | 'pt';
+
+export function loadLanguagePreference(): Language | null {
+  const value = safeGetItem(LS_KEYS.language);
+  if (value === 'es' || value === 'en' || value === 'pt') return value;
+  return null;
+}
+
+export function saveLanguagePreference(language: Language) {
+  safeSetItem(LS_KEYS.language, language);
+}

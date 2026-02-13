@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { LanguageProvider } from '../../../i18n/context';
 
 const setScreenMock = vi.fn();
 const setSelectedCategoryMock = vi.fn();
@@ -23,6 +24,7 @@ vi.mock('@/utils/storageUtils', () => ({
   loadNewsLastSeen: () => null,
   loadThemePreference: () => null,
   loadAutoMode: () => null,
+  loadLanguagePreference: () => 'es',
 }));
 
 // Also mock useVpnController to avoid importing the real file (which pulls aliases during transform)
@@ -77,12 +79,14 @@ describe('AppHeader integration', () => {
     const { AppHeader: AppHeaderFresh } = await import('../AppHeader');
     const { VpnProvider } = await import('../../../features/vpn/model/VpnContext');
     render(
-      <VpnProvider>
-        <AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />
-      </VpnProvider>,
+      <LanguageProvider>
+        <VpnProvider>
+          <AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />
+        </VpnProvider>
+      </LanguageProvider>,
     );
 
-    const couponBtn = screen.getByRole('button', { name: /cup/ });
+    const couponBtn = screen.getByRole('button', { name: /cupon/i });
     expect(couponBtn).toBeInTheDocument();
     fireEvent.click(couponBtn);
     expect(onShowCoupons).toHaveBeenCalled();
@@ -112,7 +116,11 @@ describe('AppHeader integration', () => {
 
     // reset cache and re-import component module to pick up new mock
     const AppHeaderFresh = (await import('../AppHeader')).AppHeader;
-    render(<AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />);
+    render(
+      <LanguageProvider>
+        <AppHeaderFresh onMenuClick={onMenu} onShowCouponModal={onShowCoupons} />
+      </LanguageProvider>,
+    );
 
     const backBtn = screen.getByRole('button', { name: /Volver|back|categor/ });
     expect(backBtn).toBeInTheDocument();

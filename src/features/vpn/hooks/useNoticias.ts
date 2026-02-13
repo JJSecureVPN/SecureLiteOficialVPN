@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 export type NoticiaItem = {
   id: number | string;
@@ -38,6 +39,7 @@ const DEFAULT_CONFIG: Required<NoticiasHookConfig> = {
 };
 
 export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn {
+  const { t } = useTranslation();
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
 
   const [loading, setLoading] = useState(true);
@@ -87,20 +89,20 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
         if (!response.ok) {
           const text = await response.text().catch(() => '');
           console.warn('[useNoticias] Non-OK response:', response.status, text.slice(0, 500));
-          throw new Error(`Error ${response.status}: No se pudieron cargar las noticias`);
+          throw new Error(t('news.errors.server'));
         }
 
         const contentType = response.headers.get('content-type')?.toLowerCase() || '';
         if (!contentType.includes('application/json')) {
           const text = await response.text().catch(() => '');
           console.warn('[useNoticias] Invalid content-type:', contentType, text.slice(0, 500));
-          throw new Error('El servidor retornó una respuesta inválida');
+          throw new Error(t('news.errors.serverInvalid'));
         }
 
         const json = await response.json();
 
         if (!json.success) {
-          throw new Error(json.error || 'Error al obtener noticias');
+          throw new Error(json.error || t('news.errors.generic'));
         }
 
         const newsData = (json.data || []) as NoticiaItem[];
@@ -113,12 +115,12 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
       } catch (err: any) {
         if (cancelledRef.current) return;
 
-        let errorMessage = 'Error al cargar noticias';
+        let errorMessage = t('news.errors.generic');
 
         if (err.name === 'AbortError' || err.name === 'TimeoutError') {
-          errorMessage = 'La conexión tardó demasiado tiempo';
+          errorMessage = t('news.errors.timeout');
         } else if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
-          errorMessage = 'No se pudo conectar con el servidor';
+          errorMessage = t('news.errors.network');
         } else if (typeof err.message === 'string') {
           // Filter out raw HTML/XML responses
           if (!err.message.includes('<') && !err.message.includes('DOCTYPE')) {
@@ -135,7 +137,7 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
         }
       }
     },
-    [finalConfig.limit, finalConfig.apiUrl, finalConfig.apiKey],
+    [finalConfig.limit, finalConfig.apiUrl, finalConfig.apiKey /* t is runtime-resolved */],
   );
 
   const reload = useCallback(async () => {
