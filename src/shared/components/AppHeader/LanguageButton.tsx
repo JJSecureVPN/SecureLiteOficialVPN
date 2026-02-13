@@ -7,9 +7,9 @@ interface Props {
 }
 
 const LANG_LABELS: Record<Language, string> = {
-  es: '🇪🇸 ES',
-  en: '🇺🇸 EN',
-  pt: '🇧🇷 PT',
+  es: '🇪🇸',
+  en: '🇺🇸',
+  pt: '🇧🇷',
 };
 
 export function LanguageButton({ onLanguageChange }: Props) {
