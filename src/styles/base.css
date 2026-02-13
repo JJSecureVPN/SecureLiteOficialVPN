@@ -202,8 +202,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Removed unused utility selector (PurgeCSS candidate): .row-between */
-
 .connect-row {
   margin-top: var(--space-md);
   align-items: center;

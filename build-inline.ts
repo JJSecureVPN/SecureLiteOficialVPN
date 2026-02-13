@@ -17,7 +17,12 @@ interface ManifestEntry {
 }
 type Manifest = Record<string, ManifestEntry>;
 
-const log = (...args: unknown[]) => console.log(...args);
+const log = (...args: unknown[]) => {
+  // Only log in development
+  if (process.env.DEBUG_BUILD) {
+    console.log(...args);
+  }
+};
 
 const runBuild = () => {
   log("🔧 Ejecutando build (npm run build)...");

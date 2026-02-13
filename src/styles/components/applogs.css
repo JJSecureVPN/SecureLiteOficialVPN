@@ -59,9 +59,6 @@
   font-size: var(--font-sm);
 }
 
-/* Removed unused log-level modifiers (.applog-entry--info, --warn, --error, --debug)
-   These were not referenced in the codebase per PurgeCSS. */
-
 .applog-entry__icon {
   display: flex;
   align-items: center;
@@ -72,8 +69,6 @@
   margin-top: 2px;
   font-size: var(--font-xs);
 }
-
-/* Removed icon color variants for log-level modifiers (not referenced) */
 
 .applog-entry__body {
   flex: 1;
@@ -103,8 +98,6 @@
   text-align: center;
   font-family: var(--font-display);
 }
-
-/* Removed level color variants for log-level modifiers (not referenced) */
 
 .applog-entry__message {
   margin: 0;

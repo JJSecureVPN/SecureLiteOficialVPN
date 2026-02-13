@@ -115,10 +115,6 @@
   min-width: 0;
   flex: 1;
 }
-/* Removed unused status-related styles (PurgeCSS candidates):
-   .loc-status, .status-chip, .status-chip--connecting, .status-chip--connected,
-   .status-chip--error, .status-detail
-   These classes were not referenced in the codebase and were removed to trim CSS. */
 
 /* ===========================================
    Info Card

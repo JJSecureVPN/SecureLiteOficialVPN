@@ -76,22 +76,6 @@ export function useKeyboardNavigation(
       const active = document.activeElement as HTMLElement | null;
       const activeIdx = active ? items.indexOf(active) : -1;
 
-      // Debug log when running locally to help diagnose focus issues
-      if (
-        typeof process !== 'undefined' &&
-        (process as any).env &&
-        (process as any).env.NODE_ENV === 'development'
-      ) {
-        console.debug(
-          '[useKeyboardNavigation] key',
-          key,
-          'items',
-          items.length,
-          'activeIdx',
-          activeIdx,
-        );
-      }
-
       let nextIdx = activeIdx;
       if (key === 'ArrowRight' || key === 'ArrowDown') {
         nextIdx = activeIdx >= 0 ? activeIdx + 1 : 0;

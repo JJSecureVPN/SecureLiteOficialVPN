@@ -245,7 +245,6 @@ header.topbar .row {
   color: var(--text-strong-35);
   position: relative;
 }
-/* Removed unused .news-badge selector (PurgeCSS candidate). */
 
 /* Ensure cart and theme icons share the same subtle color as the news icon */
 .subscribe-btn,

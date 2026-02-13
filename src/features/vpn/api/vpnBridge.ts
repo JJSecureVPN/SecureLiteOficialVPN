@@ -139,7 +139,7 @@ function dispatchEvent(name: NativeEventName, payload: unknown) {
       try {
         handler(payload);
       } catch (error) {
-        console.error(`Error al manejar ${name}`, error);
+        // Silent error handling for event listeners in production
       }
     });
   });

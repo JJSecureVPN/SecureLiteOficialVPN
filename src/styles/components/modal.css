@@ -484,17 +484,6 @@
 }
 
 /* Server Stats Modal */
-/* Removed server-stats-overlay (PurgeCSS candidate) */
-
-/* Removed server-stats-overlay @media (PurgeCSS candidate) */
-
-/* Removed server-stats-modal styles (PurgeCSS candidate) */
-
-/* Removed server-stats header/body styles (PurgeCSS candidate) */
-
-/* Removed server-stats loading/error block (PurgeCSS candidate) */
-
-/* Removed server-stats spinner (PurgeCSS candidate) */
 
 @keyframes spin {
   0% {
@@ -505,20 +494,12 @@
   }
 }
 
-/* Removed server-stats loading/error paragraph styles (PurgeCSS candidate) */
-
-/* Removed server-stats error icon and paragraph color styles (PurgeCSS candidate) */
-
-/* Removed server-stats list/item styles (PurgeCSS candidate) */
-
 .server-stats-status {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
   flex-shrink: 0;
 }
-
-/* Removed server-stats status color variants and pulse usage (PurgeCSS candidate). */
 
 @keyframes pulse {
   0%,

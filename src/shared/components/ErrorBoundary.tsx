@@ -28,9 +28,8 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('🚨 Error capturado por ErrorBoundary:', error);
-    console.error('📍 Component stack:', errorInfo.componentStack);
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {
+    // Error logging handled by appLogger if needed
   }
 
   handleRetry = () => {

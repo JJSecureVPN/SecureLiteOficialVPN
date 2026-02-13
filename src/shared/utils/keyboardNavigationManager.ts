@@ -16,8 +16,6 @@ const manager: Manager = {
     let root = document.querySelector(rootSelector) as HTMLElement | null;
     if (!root) {
       // fallback to document body so manager still works in different render states
-
-      console.warn('[keyboardNavigationManager] root not found, falling back to document');
       root = document.body;
     }
 
@@ -97,25 +95,6 @@ const manager: Manager = {
       if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', ' '].includes(key)) return;
       if (key.startsWith('Arrow')) ev.preventDefault();
 
-      // Debug: list items with bounding centers
-      try {
-        const listDebug = items.map((el, i) => {
-          const r = el.getBoundingClientRect();
-          const c = getCenter(r);
-          return {
-            i,
-            tag: el.tagName,
-            txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60),
-            x: Math.round(c.x),
-            y: Math.round(c.y),
-          };
-        });
-
-        console.debug('[keyboardNavigationManager] onKey items', key, listDebug);
-      } catch {
-        // ignore
-      }
-
       // Normalize active element: if a child is focused, climb to nearest ancestor that is in our items list
       let active = document.activeElement as HTMLElement | null;
       let activeIdx = -1;
@@ -131,13 +110,6 @@ const manager: Manager = {
           activeIdx = items.indexOf(active);
         }
       }
-
-      console.debug(
-        '[keyboardNavigationManager] active element',
-        activeIdx,
-        active && active.tagName,
-        active && (active.innerText || (active as HTMLInputElement).value),
-      );
 
       if (key === 'Enter' || key === ' ') {
         if (active && items.includes(active)) {
@@ -219,18 +191,6 @@ const manager: Manager = {
       } catch {
         // ignore special-case errors
       }
-      // Debug: show grid rows and centers for diagnosis
-      try {
-        const gridDebug = grid.map((row, ri) => ({
-          row: ri,
-          len: row.length,
-          cols: row.map((n) => ({ i: n.i, x: Math.round(n.c.x), y: Math.round(n.c.y) })),
-        }));
-
-        console.debug('[keyboardNavigationManager] grid', gridDebug);
-      } catch {
-        // ignore
-      }
 
       // If nothing active, focus first
       if (activeIdx < 0) {
@@ -300,24 +260,9 @@ const manager: Manager = {
         const el = grid[target.row]?.[target.col]?.el;
         if (el) {
           el.focus();
-
-          console.debug('[keyboardNavigationManager] grid focus', target.row, target.col, el);
         }
       }
     };
-
-    // Log initial items for debugging
-    try {
-      const initial = getItems().map((el, i) => ({
-        i,
-        tag: el.tagName,
-        txt: (el.innerText || (el as HTMLInputElement).value || '').toString().slice(0, 60),
-      }));
-
-      console.info('[keyboardNavigationManager] initial items', initial.length, initial);
-    } catch {
-      // ignore
-    }
 
     // attach
     window.addEventListener('keydown', onKey);
@@ -325,15 +270,12 @@ const manager: Manager = {
     (manager as any).__onKey = onKey;
     manager.enabled = true;
 
-    console.info('[keyboardNavigationManager] enabled on', rootSelector, 'options', options);
     return true;
   },
   disable() {
     const fn = (manager as any).__onKey as ((e: KeyboardEvent) => void) | undefined;
     if (fn) window.removeEventListener('keydown', fn);
     manager.enabled = false;
-
-    console.info('[keyboardNavigationManager] disabled');
   },
 };
 

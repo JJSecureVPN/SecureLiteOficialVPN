@@ -87,15 +87,13 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
         });
 
         if (!response.ok) {
-          const text = await response.text().catch(() => '');
-          console.warn('[useNoticias] Non-OK response:', response.status, text.slice(0, 500));
+          await response.text().catch(() => '');
           throw new Error(t('news.errors.server'));
         }
 
         const contentType = response.headers.get('content-type')?.toLowerCase() || '';
         if (!contentType.includes('application/json')) {
-          const text = await response.text().catch(() => '');
-          console.warn('[useNoticias] Invalid content-type:', contentType, text.slice(0, 500));
+          await response.text().catch(() => '');
           throw new Error(t('news.errors.serverInvalid'));
         }
 
@@ -128,7 +126,6 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
           }
         }
 
-        console.error('[useNoticias] Error fetching news:', err);
         setError(errorMessage);
       } finally {
         if (!cancelledRef.current) {

@@ -77,20 +77,18 @@ function renderApp() {
   const rootElement = document.getElementById('root');
 
   if (!rootElement) {
-    console.error('❌ No se encontró el elemento #root');
     return;
   }
 
   try {
     const root = createRoot(rootElement);
+    const Wrapper = import.meta.env.DEV ? StrictMode : ({ children }: any) => children;
     root.render(
-      <StrictMode>
+      <Wrapper>
         <App />
-      </StrictMode>,
+      </Wrapper>,
     );
-    console.log('✅ App renderizada correctamente');
   } catch (error) {
-    console.error('❌ Error al renderizar la app:', error);
     // Mostrar mensaje de error básico en caso de fallo total
     rootElement.innerHTML = `
       <div style="

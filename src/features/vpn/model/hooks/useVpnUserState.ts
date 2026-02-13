@@ -69,7 +69,6 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
         userFetchRef.current.pending = false;
         userFetchRef.current.lastAt = Date.now();
       } catch (error) {
-        console.error('❌ Error parsing user data:', error);
         userFetchRef.current.pending = false;
       }
     },
@@ -115,7 +114,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
           return;
         }
       } catch (error) {
-        console.warn('DtStartCheckUser no disponible directamente', error);
+        // Native API not available, continue with fallback
       }
 
       readDirect();

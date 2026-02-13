@@ -149,8 +149,6 @@
   transform: scale(0.95);
 }
 
-/* Removed legacy .stats-btn styles (PurgeCSS candidate) */
-
 /* ===========================================
    Category Grid
    =========================================== */

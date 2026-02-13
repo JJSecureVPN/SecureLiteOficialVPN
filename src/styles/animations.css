@@ -28,8 +28,6 @@
   }
 }
 
-/* Removed unused .fade-in selector (PurgeCSS candidate) */
-
 /* Slide up animation */
 @keyframes slideUp {
   from {
@@ -42,8 +40,6 @@
   }
 }
 
-/* Removed unused .slide-up selector (PurgeCSS candidate) */
-
 /* Scale in animation */
 @keyframes scaleIn {
   from {
@@ -55,8 +51,6 @@
     transform: scale(1);
   }
 }
-
-/* Removed unused .scale-in selector (PurgeCSS candidate) */
 
 /* Pulse animation */
 @keyframes pulse {
