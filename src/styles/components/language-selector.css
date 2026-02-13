@@ -20,6 +20,41 @@
   background: transparent;
   color: inherit;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Prefer color emoji fonts so flag glyphs render on supported platforms */
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI Emoji',
+    'Noto Color Emoji',
+    'Apple Color Emoji',
+    'Segoe UI Symbol',
+    'Helvetica Neue',
+    Arial;
+  font-variant-emoji: emoji;
+  -webkit-font-smoothing: antialiased;
+}
+
+.flag-arg {
+  display: inline-block;
+  width: 20px;
+  height: 14px;
+  vertical-align: middle;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06) inset;
+}
+
+.language-option {
+  /* ensure dropdown options also try to render color emoji */
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI Emoji',
+    'Noto Color Emoji',
+    'Apple Color Emoji',
+    'Segoe UI Symbol',
+    'Helvetica Neue',
+    Arial;
+  font-variant-emoji: emoji;
 }
 
 .language-btn:hover {

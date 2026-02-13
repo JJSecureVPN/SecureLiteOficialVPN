@@ -7,11 +7,10 @@ interface Props {
 }
 
 const LANG_LABELS: Record<Language, string> = {
-  es: 'AR',
+  es: '🇦🇷',
   en: '🇺🇸',
   pt: '🇧🇷',
 };
-
 export function LanguageButton({ onLanguageChange }: Props) {
   const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +28,8 @@ export function LanguageButton({ onLanguageChange }: Props) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
+
+    return undefined;
   }, [isOpen]);
 
   const handleSelectLanguage = (lang: Language) => {
@@ -60,7 +61,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
             role="option"
             aria-selected={language === 'es'}
           >
-            AR {t('language.spanish')}
+            🇦🇷 {t('language.spanish')}
           </button>
           <button
             type="button"
