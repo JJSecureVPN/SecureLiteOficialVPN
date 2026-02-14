@@ -11,6 +11,9 @@ import {
   SessionDetails,
 } from '@/shared';
 import { useTranslation } from '@/i18n';
+import { useAsyncError } from '@/core/hooks';
+import { ErrorCategory } from '@/core/utils/ErrorHandler';
+import { ErrorDisplay } from '@/core/components';
 import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
@@ -33,6 +36,9 @@ export function HomeScreen() {
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
 
+  // Error Handling
+  const error = useAsyncError();
+
   // Determinar qué campos mostrar (mostrar también cuando hay error para permitir corregir credenciales)
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
   const isFreeServer = (config?.name || '').toLowerCase().includes('gratuito');
@@ -43,34 +49,53 @@ export function HomeScreen() {
   const showUuid = !hasEmbeddedAuth && isV2Ray && canEditCredentials;
 
   const handleConnect = useCallback(() => {
-    if (isConnected) {
-      disconnect();
-      return;
-    }
-    if (isConnecting) {
-      cancelConnecting();
-      showToast(t('connection.cancel'));
-      return;
-    }
-    // Validar
-    if (!config) {
-      showToast(t('connection.selectServer'));
-      return;
-    }
-    if (!hasEmbeddedAuth) {
-      if (isV2Ray && !creds.uuid.trim()) {
-        showToast(t('connection.enterUuid'));
+    try {
+      error.clearError();
+
+      if (isConnected) {
+        disconnect();
         return;
       }
-      if (!isV2Ray && (!creds.user.trim() || !creds.pass.trim())) {
-        showToast(t('connection.enterCredentials'));
+      if (isConnecting) {
+        cancelConnecting();
+        showToast(t('connection.cancel'));
         return;
       }
-    }
-    if (autoMode) {
-      startAutoConnect();
-    } else {
-      connect();
+      // Validar
+      if (!config) {
+        error.setError(new Error('No server selected'), ErrorCategory.Validation);
+        showToast(t('connection.selectServer'));
+        return;
+      }
+      if (!hasEmbeddedAuth) {
+        if (isV2Ray && !creds.uuid.trim()) {
+          error.setError(new Error('UUID is required'), ErrorCategory.Validation);
+          showToast(t('connection.enterUuid'));
+          return;
+        }
+        if (!isV2Ray && (!creds.user.trim() || !creds.pass.trim())) {
+          error.setError(new Error('Credentials are required'), ErrorCategory.Validation);
+          showToast(t('connection.enterCredentials'));
+          return;
+        }
+      }
+      if (autoMode) {
+        try {
+          startAutoConnect();
+        } catch (err) {
+          error.setError(err, ErrorCategory.Internal);
+          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement);
+        }
+      } else {
+        try {
+          connect();
+        } catch (err) {
+          error.setError(err, ErrorCategory.Internal);
+          showToast(t('error.connectionFailed'), document.activeElement as HTMLElement);
+        }
+      }
+    } catch (err) {
+      error.setError(err, ErrorCategory.Internal);
     }
   }, [
     isConnected,
@@ -86,6 +111,7 @@ export function HomeScreen() {
     startAutoConnect,
     connect,
     t,
+    error,
   ]);
 
   const handleServerClick = useCallback(() => {
@@ -93,16 +119,28 @@ export function HomeScreen() {
   }, [setScreen]);
 
   const handleUpdate = useCallback(() => {
-    if (callOne(['DtStartAppUpdate', 'DtExecuteDialogConfig'])) {
-      showToast(t('connection.searchingUpdate'));
-    } else {
-      showToast(t('connection.updateNotAvailable'));
+    try {
+      error.clearError();
+      if (callOne(['DtStartAppUpdate', 'DtExecuteDialogConfig'])) {
+        showToast(t('connection.searchingUpdate'));
+      } else {
+        error.setError(new Error('Update not available'), ErrorCategory.Internal);
+        showToast(t('connection.updateNotAvailable'));
+      }
+    } catch (err) {
+      error.setError(err, ErrorCategory.Internal);
+      showToast(t('error.updateCheckFailed'), document.activeElement as HTMLElement);
     }
-  }, [showToast, t]);
+  }, [showToast, t, error]);
 
   const handleLogs = useCallback(() => {
-    setScreen('logs');
-  }, [setScreen]);
+    try {
+      error.clearError();
+      setScreen('logs');
+    } catch (err) {
+      error.setError(err, ErrorCategory.Internal);
+    }
+  }, [setScreen, error]);
 
   const buttonText = isConnected
     ? t('buttons.disconnect')
@@ -250,6 +288,8 @@ export function HomeScreen() {
             </div>
           </div>
         </div>
+
+        {error.error && <ErrorDisplay {...error} />}
       </div>
     </section>
   );

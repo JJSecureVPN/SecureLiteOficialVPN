@@ -52,6 +52,7 @@
     "knip": "^5.76.3",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
+    "terser": "^5.46.0",
     "ts-prune": "^0.10.3",
     "tsx": "^4.20.5",
     "typescript": "^5.5.0",
