@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
-import { useVpn } from '../../vpn';
-import { useToastContext } from '../../../shared';
-import { useAppLogs } from '../../logs';
+import { useVpn } from '@/features/vpn';
+import { useToastContext } from '@/shared';
+import { useAppLogs } from '@/features/logs';
 import { useSafeArea, Button } from '@/shared';
 import { useTranslation } from '@/i18n';
 

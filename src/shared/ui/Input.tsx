@@ -1,5 +1,5 @@
 import { memo, useState, type InputHTMLAttributes } from 'react';
-import { useTranslation } from '../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   icon?: string;

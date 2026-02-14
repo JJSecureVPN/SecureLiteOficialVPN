@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useTranslation } from '../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 interface ToggleProps {
   checked: boolean;

@@ -1,4 +1,4 @@
-import { useTranslation } from '../../../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 export function NewsEmptyState() {
   const { t } = useTranslation();

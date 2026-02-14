@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { useVpn } from '../../vpn';
-import { useToastContext } from '@/shared';
+import { useVpn, dt } from '@/features/vpn';
+import { useToastContext, useServerStats } from '@/shared';
 import { useSectionStyle } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
 import {
@@ -10,7 +10,8 @@ import {
   keyboardNavigationManager,
 } from '@/core/utils';
 import { useTranslation } from '@/i18n';
-import { dt, appLogger, useKeyboardNavigation } from '@/shared';
+import { useKeyboardNavigation } from '@/shared';
+import { appLogger } from '@/features/logs';
 import type { Category, ServerConfig } from '@/core/types';
 
 const SUBCATEGORY_KEYWORDS = [

@@ -1,6 +1,6 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
-import type { ServerConfig } from '../types';
-import { useTranslation } from '../../i18n/useTranslation';
+import type { ServerConfig } from '@/features/vpn';
+import { useTranslation } from '@/i18n';
 
 interface ServerCardProps {
   config: ServerConfig | null;

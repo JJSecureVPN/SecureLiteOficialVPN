@@ -1,7 +1,7 @@
 // News Feature - Re-exports principales
 
 // Domain hooks
-export { useNews } from './domain/hooks/useNoticias';
+export { useNoticias } from './domain/hooks/useNoticias';
 export type {
   NoticiaItem,
   NoticiasHookConfig,

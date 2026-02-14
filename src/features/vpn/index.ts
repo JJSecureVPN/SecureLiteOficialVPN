@@ -5,6 +5,7 @@ export { VpnProvider, useVpn } from './context/VpnContext';
 
 // Domain types
 export type { VpnContextType } from './domain/types';
+export type { ServerConfig } from '@/core/types';
 
 // Domain hooks
 export { useVpnController } from './domain/hooks/useVpnController';

@@ -1,11 +1,10 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import type { ServerConfig } from '@/core/types';
-import { useTranslation } from '@/i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 import { useVpn } from '@/features/vpn';
-import { useToastContext } from '@/shared';
+import { useToastContext, useSafeArea } from '@/shared';
 import { appLogger } from '@/features/logs';
-import '../styles/components/import-screen.css';
-import { useSafeArea } from '@/shared/hooks/useSafeArea';
+import '../../../../styles/components/import-screen.css';
 
 export const ImportConfigScreen = memo(function ImportConfigScreen() {
   const { categorias, loadCategorias, setConfig, setCreds, setScreen } = useVpn();

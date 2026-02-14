@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useVpn } from './VpnContext';
+import { useVpn } from '../../context/VpnContext';
 
 /** Estados que se consideran "desconectados" para propósitos de UI */
 const DISCONNECTED_STATES = ['DISCONNECTED', 'AUTH_FAILED', 'NO_NETWORK', 'STOPPING'] as const;

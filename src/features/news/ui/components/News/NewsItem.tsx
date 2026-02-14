@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { NoticiaItem } from '../../hooks/useNoticias';
+import type { NoticiaItem } from '@/features/news';
 
 interface NewsItemProps {
   item: NoticiaItem;

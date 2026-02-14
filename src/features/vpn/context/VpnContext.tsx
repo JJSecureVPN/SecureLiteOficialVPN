@@ -1,6 +1,6 @@
 import { createContext, useContext, type ReactNode } from 'react';
-import type { VpnContextType } from './types';
-import { useVpnController } from './hooks/useVpnController';
+import type { VpnContextType } from '../domain/types';
+import { useVpnController } from '../domain/hooks/useVpnController';
 
 const VpnContext = createContext<VpnContextType | null>(null);
 

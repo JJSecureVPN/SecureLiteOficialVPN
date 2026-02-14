@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Input } from './Input';
-import { useTranslation } from '../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 interface CredentialFieldsProps {
   username: string;

@@ -1,4 +1,4 @@
-import { appLogger } from '../features/logs';
+import { appLogger } from '@/features/logs';
 
 /**
  * Monitor de performance de la app

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useTranslation } from '../../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 export type NoticiaItem = {
   id: number | string;

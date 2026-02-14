@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useVpn, useConnectionStatus, ServerCard, callOne } from '../../vpn';
+import { useVpn, useConnectionStatus, ServerCard, callOne } from '@/features/vpn';
 import {
   useToastContext,
   useSectionStyle,
@@ -9,9 +9,9 @@ import {
   Button,
   QuickButton,
   SessionDetails,
-} from '../../../shared';
-import { useTranslation } from '../../../i18n/useTranslation';
-import keyboardNavigationManager from '../../../core/utils/keyboardNavigationManager';
+} from '@/shared';
+import { useTranslation } from '@/i18n';
+import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
 export function HomeScreen() {

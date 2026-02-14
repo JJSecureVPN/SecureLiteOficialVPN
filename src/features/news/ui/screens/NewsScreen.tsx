@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import DOMPurify from 'dompurify';
-import MiniHeader from '@/shared/components';
+import { MiniHeader } from '@/shared/components';
 import { GlobalModal, useSafeArea } from '@/shared';
-import { useVpn } from '../../vpn';
-import { callOne } from '../../vpn';
+import { useVpn, callOne } from '@/features/vpn';
 import { saveNewsLastSeen } from '@/core/utils';
+import { useNoticias, type NoticiaItem } from '@/features/news';
 import { NewsList } from '../components/News/NewsList';
 
 export function NewsScreen() {

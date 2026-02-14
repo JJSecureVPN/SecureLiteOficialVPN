@@ -1,10 +1,9 @@
 import { memo, useEffect, useState, useCallback } from 'react';
-import { useVpn } from '../../features/vpn';
+import { useVpn, callOne, dt } from '@/features/vpn';
 import { useToastContext } from '../context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks';
-import { useTranslation } from '../../i18n/useTranslation';
-import { callOne, dt } from '../../features/vpn/api/vpnBridge';
-import type { HotspotState } from '../../core/types/native';
+import { useTranslation } from '@/i18n';
+import type { HotspotState } from '@/core/types/native';
 import { PremiumCard } from '@/shared/components';
 
 interface MenuItem {

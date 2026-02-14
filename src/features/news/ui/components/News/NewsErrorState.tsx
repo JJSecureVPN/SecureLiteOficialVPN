@@ -3,7 +3,7 @@ interface NewsErrorStateProps {
   onRetry: () => void;
 }
 
-import { useTranslation } from '../../../../i18n/useTranslation';
+import { useTranslation } from '@/i18n';
 
 export function NewsErrorState({ error, onRetry }: NewsErrorStateProps) {
   const { t } = useTranslation();

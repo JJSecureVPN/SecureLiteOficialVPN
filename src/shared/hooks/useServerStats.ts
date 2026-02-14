@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ServersStatsResponse } from '@/core/types';
 
 const DEFAULT_STATS_URL = 'https://shop.jhservices.com.ar/api/realtime/snapshot';
 

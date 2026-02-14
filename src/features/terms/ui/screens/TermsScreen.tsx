@@ -1,8 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
-import { useVpn } from '../../vpn';
-import { useSectionStyle } from '../shared/hooks/useSectionStyle';
-import { callOne } from '../../vpn';
-import { Button } from '../shared/ui/Button';
+import { useVpn, callOne } from '@/features/vpn';
+import { useSectionStyle, Button } from '@/shared';
 import { useTranslation } from '@/i18n';
 
 export const TermsScreen = memo(function TermsScreen() {

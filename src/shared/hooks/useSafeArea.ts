@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { dt } from '../../features/vpn/api/vpnBridge';
+import { dt } from '@/features/vpn';
 
 const STATUS_FALLBACK = 24;
 const NAV_FALLBACK = 48;

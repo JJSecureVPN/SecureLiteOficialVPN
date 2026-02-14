@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 import { Button } from '../ui/Button';
-import { callOne } from '../../features/vpn/api/vpnBridge';
-import { useTranslation } from '../../i18n/useTranslation';
+import { callOne } from '@/features/vpn';
+import { useTranslation } from '@/i18n';
 
 export const PremiumCard = memo(function PremiumCard() {
   const { t } = useTranslation();

@@ -1,10 +1,8 @@
 import { memo, useMemo } from 'react';
-import { useVpn } from '../../vpn';
-import { formatBytes, pingClass } from '../../../core/utils';
-import { dt } from '../../vpn';
+import { useVpn, dt } from '@/features/vpn';
 import { useSectionStyle } from '@/shared';
 import { useTranslation } from '@/i18n';
-import { getDisplayName } from '../../../core/utils';
+import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
 
 export const AccountScreen = memo(function AccountScreen() {
   const { status, user, creds, config, pingMs, topInfo } = useVpn();

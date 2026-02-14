@@ -1,8 +1,8 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
 import { Button } from '../ui/Button';
-import { useTranslation } from '../../i18n/useTranslation';
-import { getDisplayName } from '../../core/utils';
+import { useTranslation } from '@/i18n';
+import { getDisplayName } from '@/core/utils';
 
 /**
  * Muestra información de la sesión cuando está conectado

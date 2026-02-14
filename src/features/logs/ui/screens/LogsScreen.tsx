@@ -1,11 +1,8 @@
 import { memo, useEffect, useCallback, useMemo } from 'react';
-import { useVpn } from '../../vpn';
-import { useToastContext } from '../../../shared';
-import { Button } from '../shared/ui/Button';
-import { useLogs } from '../../logs';
-import { useSafeArea } from '../shared/hooks/useSafeArea';
-import { callOne } from '../../vpn';
+import { useVpn, callOne } from '@/features/vpn';
+import { useToastContext, Button, useSafeArea } from '@/shared';
 import { useTranslation } from '@/i18n';
+import { useLogs } from '@/features/logs';
 
 export const LogsScreen = memo(function LogsScreen() {
   const { setScreen } = useVpn();

@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { useVpn } from '../../vpn';
-import { useTranslation } from '../../i18n/useTranslation';
+import { useVpn } from '@/features/vpn';
+import { useTranslation } from '@/i18n';
 import type { VpnStatus } from '@/core/types';
 
 interface ConnectionStatusBannerProps {
