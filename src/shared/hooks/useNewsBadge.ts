@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { loadNewsLastSeen } from '../../utils/storageUtils';
+import { loadNewsLastSeen } from '@/core/utils';
 
 export function useNewsBadge(pollInterval = 60_000) {
   const [hasUnreadNews, setHasUnreadNews] = useState(false);

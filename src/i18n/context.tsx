@@ -3,7 +3,7 @@ import es from './locales/es.json';
 import en from './locales/en.json';
 import pt from './locales/pt.json';
 import type { Language, LanguageContextType, Translations } from './types';
-import { loadLanguagePreference, saveLanguagePreference } from '../utils/storageUtils';
+import { loadLanguagePreference, saveLanguagePreference } from '../core/utils';
 
 function getSystemLanguage(): Language {
   if (typeof window === 'undefined') return 'es';

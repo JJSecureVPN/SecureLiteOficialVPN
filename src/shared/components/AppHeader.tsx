@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { useVpn } from '../../features/vpn/model/VpnContext';
+import { useVpn } from '@/features/vpn';
 import { callOne } from '../../features/vpn/api/vpnBridge';
 import { useTheme } from '../hooks/useTheme';
 import { useCoupons } from '../hooks/useCoupons';

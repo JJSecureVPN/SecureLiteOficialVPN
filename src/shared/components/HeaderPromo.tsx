@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import { callOne } from '../../features/vpn/api/vpnBridge';
-import { useToastContext } from '../toast/ToastContext';
+import { useToastContext } from '../context/ToastContext';
 import { GlobalModal } from './GlobalModal';
 import { useTranslation } from '../../i18n/useTranslation';
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { loadThemePreference, saveThemePreference } from '../../utils/storageUtils';
+import { loadThemePreference, saveThemePreference } from '@/core/utils';
 
 export type ThemeMode = 'light' | 'dark';
 

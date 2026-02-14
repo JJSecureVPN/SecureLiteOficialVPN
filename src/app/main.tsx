@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { initNativeEvents } from '../features/vpn/api/vpnBridge';
-import { appLogger } from '../features/logs/model/useAppLogs';
-import { initializePerformanceMonitoring } from '../utils/performanceMonitor';
+import { initNativeEvents } from '@/features/vpn';
+import { appLogger } from '@/features/logs';
+import { initializePerformanceMonitoring } from '../core/utils';
 
 // Small i18n helper for bootstrap path (no React available)
 import en from '../i18n/locales/en.json';

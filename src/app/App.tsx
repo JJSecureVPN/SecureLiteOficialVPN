@@ -1,24 +1,29 @@
 import { useState } from 'react';
-import { VpnProvider, useVpn } from '../features/vpn/model/VpnContext';
-import { ToastProvider, useToastContext } from '../shared/toast/ToastContext';
+import {
+  VpnProvider,
+  useVpn,
+  HomeScreen,
+  ServersScreen,
+  ImportConfigScreen,
+  useConnectionStatus,
+  ConnectionBanner,
+} from '../features/vpn';
+import { NewsScreen } from '../features/news';
+import { LogsScreen, AppLogsScreen } from '../features/logs';
+import { TermsScreen } from '../features/terms';
+import { AccountScreen } from '../features/account';
+import {
+  ToastProvider,
+  useToastContext,
+  ErrorBoundary,
+  AppHeader,
+  CouponModal,
+  Toast,
+  MenuScreen,
+  useSafeArea,
+} from '../shared';
 import { LanguageProvider } from '../i18n/context';
-import { ErrorBoundary } from '../shared/components/ErrorBoundary';
-import { AppHeader } from '../shared/components/AppHeader';
-import { ConnectionStatusBanner } from '../shared/components/ConnectionStatusBanner';
-import { CouponModal } from '../shared/components/CouponModal';
-import { HomeScreen } from '../pages/HomeScreen';
-import { NewsScreen } from '../pages/NewsScreen';
-import { ServersScreen } from '../pages/ServersScreen';
-import { MenuScreen } from '../pages/MenuScreen';
-import { ImportConfigScreen } from '../pages/ImportConfigScreen';
-import { LogsScreen } from '../pages/LogsScreen';
-import { AppLogsScreen } from '../pages/AppLogsScreen';
-import { TermsScreen } from '../pages/TermsScreen';
-import { AccountScreen } from '../pages/AccountScreen';
-import { Toast } from '../shared/ui/Toast';
-import { useConnectionStatus } from '../features/vpn/model/useConnectionStatus';
-import { useSafeArea } from '../shared/hooks/useSafeArea';
-import type { ScreenType } from '../shared/types';
+import type { ScreenType } from '../core/types';
 
 type Coupon = {
   id: number;
@@ -87,7 +92,7 @@ function AppContent() {
             onMenuClick={() => setScreen('menu')}
             onShowCouponModal={handleShowCouponModal}
           />
-          {screen === 'home' && <ConnectionStatusBanner />}
+          {screen === 'home' && <ConnectionBanner />}
         </>
       )}
 

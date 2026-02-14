@@ -18,12 +18,18 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/app/*": ["./src/app/*"],
-      "@/pages/*": ["./src/pages/*"],
+      "@/core/*": ["./src/core/*"],
+      "@/core/types/*": ["./src/core/types/*"],
+      "@/core/utils/*": ["./src/core/utils/*"],
+      "@/core/constants/*": ["./src/core/constants/*"],
       "@/shared/*": ["./src/shared/*"],
       "@/features/*": ["./src/features/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/types/*": ["./src/shared/types/*"],
-      "@/constants/*": ["./src/constants/*"]
+      "@/features/vpn/*": ["./src/features/vpn/*"],
+      "@/features/news/*": ["./src/features/news/*"],
+      "@/features/logs/*": ["./src/features/logs/*"],
+      "@/features/account/*": ["./src/features/account/*"],
+      "@/features/terms/*": ["./src/features/terms/*"],
+      "@/i18n/*": ["./src/i18n/*"]
     }
   },
   "include": ["src"],

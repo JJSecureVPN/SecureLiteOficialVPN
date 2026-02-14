@@ -1,6 +1,6 @@
 // Centraliza la interacción con el bridge nativo DT
 
-import type { DtApiName, NativeBridge } from '@/shared/types/native';
+import type { DtApiName, NativeBridge } from '@/core/types/native';
 
 type DtCallable = (...args: unknown[]) => unknown;
 
