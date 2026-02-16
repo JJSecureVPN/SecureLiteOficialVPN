@@ -208,7 +208,7 @@ body {
 }
 
 .connect-row {
-  margin-top: var(--space-md);
+  margin-top: clamp(6px, 1vw, 8px);
   align-items: center;
   flex-wrap: nowrap;
 }

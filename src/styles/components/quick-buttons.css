@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(4px, 1.5vw, 12px);
-  margin-top: var(--space-md);
+  margin-top: clamp(6px, 1vw, 10px);
 }
 
 .ql-qbtn {

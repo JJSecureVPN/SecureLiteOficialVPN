@@ -94,6 +94,7 @@
     "update": "Actualizar",
     "logs": "Registros",
     "viewDetails": "Ver detalles",
+    "renew": "Renovar",
     "becomePremium": "Convertirse Premium",
     "back": "Volver"
   },
@@ -328,7 +329,8 @@
     "greeting": "Hola, {name}",
     "promoTitle": "Mejora a Premium",
     "promoMessage": "Actualiza para obtener más servidores, mayor velocidad y sin límites.",
-    "protected": "Tu conexión está protegida. Consulta los datos de tu cuenta cuando lo necesites."
+    "protected": "Tu conexión está protegida. Consulta los datos de tu cuenta cuando lo necesites.",
+    "renewSoon": "Tu plan vence en {days}. Renueva ahora."
   },
   "serverCard": {
     "ariaChooseServer": "Elegir servidor",

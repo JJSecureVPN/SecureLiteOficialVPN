@@ -1,0 +1,116 @@
+/* ===========================================
+   Session Card - Layout compacto y responsivo
+   =========================================== */
+
+.session-card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.5vw, 12px);
+  padding: clamp(10px, 1.8vw, 14px) clamp(12px, 2vw, 16px);
+}
+
+.session-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.session-card__title {
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--text-strong);
+  line-height: 1.2;
+}
+
+.session-card__meta {
+  margin: 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.875rem);
+  color: var(--muted);
+  line-height: 1.35;
+  max-width: 95%;
+}
+
+/* Warning shown under greeting when account is near expiry */
+.session-card__warning {
+  margin-top: clamp(6px, 1.2vw, 10px);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+  color: var(--status-warn);
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  padding: clamp(6px, 1vw, 10px) clamp(8px, 1.2vw, 10px);
+  background: rgba(245, 158, 11, 0.06);
+  border-left: 2px solid var(--status-warn);
+  border-radius: var(--radius-sm);
+  line-height: 1.3;
+}
+
+.session-card__warning i {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 0.9em;
+}
+
+/* Actions container for session card */
+.session-card__actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: clamp(6px, 1vw, 10px);
+  width: 100%;
+}
+
+/* Split layout: two buttons side by side on larger screens */
+.session-card__actions--split {
+  flex-direction: row;
+}
+
+.session-card__actions--split .session-card__button {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Responsive adjustments for split buttons on small screens */
+@media (max-width: 480px) {
+  .session-card__actions--split {
+    flex-direction: column-reverse;
+  }
+
+  .session-card__actions--split .session-card__button {
+    width: 100%;
+  }
+}
+
+.session-card__button {
+  white-space: nowrap;
+  padding: clamp(0.6rem, 1.2vw, 0.85rem) clamp(10px, 1.5vw, 14px);
+  font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-md);
+}
+
+/* Renew button special styling - more prominent */
+.session-card__button.button--renew {
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(109, 74, 255, 0.2);
+}
+
+.session-card__button.button--renew:hover {
+  box-shadow: 0 4px 14px rgba(109, 74, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Eyebrow label */
+.summary-eyebrow {
+  font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--muted-2);
+  display: block;
+  margin-bottom: 2px;
+}
+

@@ -94,6 +94,7 @@
     "update": "Update",
     "logs": "Logs",
     "viewDetails": "View details",
+    "renew": "Renew",
     "becomePremium": "Become Premium",
     "back": "Back"
   },
@@ -330,7 +331,8 @@
     "greeting": "Hello, {name}",
     "promoTitle": "Upgrade to Premium",
     "promoMessage": "Upgrade to unlock more servers, higher speed and no limits.",
-    "protected": "Your connection is protected. Check your account details when needed."
+    "protected": "Your connection is protected. Check your account information when needed.",
+    "renewSoon": "Your plan expires in {days}. Renew now."
   },
   "serverCard": {
     "ariaChooseServer": "Choose server",

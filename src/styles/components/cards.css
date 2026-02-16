@@ -11,8 +11,8 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
-  padding: var(--space-lg);
-  margin-top: var(--space-md);
+  padding: clamp(10px, 1.5vw, 12px);
+  margin-top: clamp(6px, 1vw, 8px);
 }
 
 /* ===========================================
@@ -167,39 +167,7 @@
   font-size: var(--font-base);
 }
 
-/* ===========================================
-   Session Card
-   =========================================== */
-
-.session-card {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
-}
-
-.session-card__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.session-card__title {
-  font-size: var(--font-lg);
-  font-weight: 700;
-  margin: 2px 0 4px;
-}
-
-.session-card__meta {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--muted);
-}
-
-.session-card__button {
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding-inline: var(--space-lg);
-}
+/* session-card styles moved to src/styles/components/session-card.css */
 
 /* ===========================================
    Stat Card

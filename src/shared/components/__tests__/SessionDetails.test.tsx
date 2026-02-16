@@ -119,4 +119,54 @@ describe('SessionDetails', () => {
     // details button should not be present for free users
     expect(screen.queryByRole('button', { name: /Detalles|Detail|Ver/ })).toBeNull();
   });
+
+  it('shows renew warning and renders Renew button when remaining days <= 5', async () => {
+    const callOneMock = vi.fn(() => true);
+    vi.doMock('../../../features/vpn/api/vpnBridge', () => ({ callOne: callOneMock }));
+
+    const setScreenMock = vi.fn();
+
+    // build expiration date 3 days from now in DD/MM/YYYY to avoid timezone flakiness
+    const future = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+    const dd = String(future.getDate()).padStart(2, '0');
+    const mm = String(future.getMonth() + 1).padStart(2, '0');
+    const yyyy = future.getFullYear();
+    const exp = `${dd}/${mm}/${yyyy}`;
+
+    vi.doMock('../../../features/vpn/context/VpnContext', () => ({
+      useVpn: () => ({
+        status: 'CONNECTED',
+        user: { name: 'Carlos', expiration_date: exp },
+        creds: {},
+        config: {},
+        setScreen: setScreenMock,
+      }),
+      VpnProvider: ({ children }: any) => children,
+    }));
+
+    const SessionDetailsFresh = (await import('../SessionDetails')).SessionDetails;
+    render(
+      <LanguageProvider>
+        <SessionDetailsFresh />
+      </LanguageProvider>,
+    );
+
+    // greeting present
+    expect(screen.getByText(es.session.greeting.replace('{name}', 'Carlos'))).toBeInTheDocument();
+
+    // renew warning should appear with "3 días"
+    expect(screen.getByText(es.session.renewSoon.replace('{days}', '3 días'))).toBeInTheDocument();
+
+    // View details and Renew buttons should be visible
+    const viewBtn = screen.getByRole('button', { name: /Detalles|Detail|Ver/ });
+    const renewBtn = screen.getByRole('button', { name: es.buttons.renew });
+
+    // clicking view details opens account
+    viewBtn.click();
+    expect(setScreenMock).toHaveBeenCalledWith('account');
+
+    // clicking renew triggers external URL
+    renewBtn.click();
+    expect(callOneMock).toHaveBeenCalledWith(['DtOpenExternalUrl'], 'https://shop.jhservices.com.ar/planes');
+  });
 });
