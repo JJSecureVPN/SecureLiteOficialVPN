@@ -47,7 +47,9 @@ export function formatProtocol(rawMode?: string | null): string {
 }
 
 /**
- * Extrae el dominio (Front A, Front B, Cloudflare, G-Cloud) de la descripción
+ * Extrae el dominio (Front A, Front B, Cloudflare, G-Cloud) de la descripción.
+ * Ahora SOLO retorna el dominio cuando, al removerlo, queda texto adicional. 
+ * Esto evita convertir en "badge" descripciones que solo contienen el token.
  * @param description Descripción del servidor
  * @returns El dominio encontrado o null
  */
@@ -58,29 +60,52 @@ export function extractDomain(description?: string | null): string | null {
   const upper = description.toUpperCase();
 
   for (const domain of domains) {
-    if (upper.includes(domain.toUpperCase())) {
-      return domain;
-    }
+    if (!upper.includes(domain.toUpperCase())) continue;
+
+    // Si al quitar el dominio queda texto, tratamos el token como "domain/badge"
+    const regex = new RegExp(`\\s*[-•*]?\\s*${domain}\\s*[-•*]?\\s*`, 'gi');
+    const cleaned = description.replace(regex, '').trim();
+    if (cleaned.length > 0) return domain;
+    // Si no queda texto, no lo consideramos dominio (lo mostraremos como descripción)
   }
 
   return null;
 }
 
 /**
- * Remueve el dominio de la descripción
+ * Remueve el dominio de la descripción solo cuando corresponde (es decir,
+ * cuando el dominio aparece junto con texto adicional). Si la descripción
+ * es únicamente el token (ej. "Cloudflare") se normaliza y se devuelve el
+ * propio token sin signos/puntuación.
+ * Además elimina paréntesis vacíos que puedan quedar después de la limpieza.
  * @param description Descripción del servidor
- * @returns Descripción sin el dominio
+ * @returns Descripción sin el dominio (o la descripción original/normalizada)
  */
 export function removeDomainFromDescription(description?: string | null): string {
   if (!description) return '';
 
   const domains = ['Front A', 'Front B', 'Cloudflare', 'G-Cloud'];
-  let result = description;
+  let result = description.trim();
 
   for (const domain of domains) {
-    const regex = new RegExp(`\\s*[-•*]?\\s*${domain}\\s*[-•*]?\\s*`, 'gi');
-    result = result.replace(regex, '').trim();
+    const regex = new RegExp(`\\s*[-•*()\\[\\]]?\\s*${domain}\\s*[-•*()\\]\\[]?\\s*`, 'gi');
+
+    const cleaned = result.replace(regex, '').trim();
+
+    if (cleaned.length > 0) {
+      // Si queda texto válido, removemos el token y continuamos limpiando
+      result = cleaned.replace(/\(\s*\)/g, '').trim();
+    } else {
+      // El token aparece como único contenido: normalizamos devolviendo solo el token
+      const match = result.match(new RegExp(domain, 'i'));
+      if (match) {
+        result = match[0].trim();
+      }
+    }
   }
+
+  // Elimina cualquier paréntesis vacíos o caracteres sobrantes generados por la limpieza
+  result = result.replace(/\(\s*\)/g, '').trim();
 
   return result;
 }

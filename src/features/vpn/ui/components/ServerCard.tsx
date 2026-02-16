@@ -1,6 +1,7 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
+import { extractDomain, removeDomainFromDescription } from '@/core/utils';
 
 interface ServerCardProps {
   config: ServerConfig | null;
@@ -39,6 +40,13 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
   const fallbackEmoji = useMemo(() => (icon && !isImg ? icon : '🌐'), [icon, isImg]);
   const { t } = useTranslation();
 
+  // Extract additional information from config
+  const domain = useMemo(() => extractDomain(config?.description || ''), [config?.description]);
+  const cleanDescription = useMemo(
+    () => removeDomainFromDescription(config?.description || ''),
+    [config?.description],
+  );
+
   return (
     <div
       className="location-card"
@@ -72,8 +80,12 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
           )}
         </div>
         <div className="loc-meta">
-          <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>
-          {config?.description && <div className="loc-ip">{config.description}</div>}
+          <div className="loc-name-row">
+            <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>
+            {domain && <span className="badge badge-domain">{domain}</span>}
+          </div>
+          {config?.ip && <small className="loc-ip">{config.ip}</small>}
+          {cleanDescription && <div className="loc-description">{cleanDescription}</div>}
         </div>
       </div>
       <i className="fa fa-chevron-right" aria-hidden="true" />

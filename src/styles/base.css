@@ -178,10 +178,15 @@ body {
   white-space: nowrap;
 }
 
-.section-subtitle {
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--muted);
+/* Estilo destacado para el título de la pantalla Servidores */
+.panel-title--servers {
+  font-weight: 900;
+  font-size: calc(var(--font-lg) + 8px);
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.04);
+  margin-bottom: calc(var(--space-xs) / 2);
 }
 
 .panel-title {

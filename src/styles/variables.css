@@ -30,6 +30,16 @@
   --accent-40: rgba(109, 74, 255, 0.4);
   --accent-60: rgba(109, 74, 255, 0.6);
 
+  /* Focus/selección (indigo neon) - resalta elementos navegados por teclado */
+  --focus-accent: #5b2bff; /* indigo neon */
+  --focus-accent-10: rgba(91, 43, 255, 0.10);
+  --focus-accent-15: rgba(91, 43, 255, 0.15);
+  --focus-accent-20: rgba(91, 43, 255, 0.20);
+  --focus-accent-30: rgba(91, 43, 255, 0.30);
+  --focus-accent-40: rgba(91, 43, 255, 0.40);
+  --focus-accent-60: rgba(91, 43, 255, 0.60);
+  --shadow-focus: 0 10px 24px var(--focus-accent-15);
+
   /* Paleta adicional para noticias (azul) */
   --primary-blue: #007aff;
   --primary-blue-dark: #0051d5;

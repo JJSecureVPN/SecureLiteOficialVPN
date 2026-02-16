@@ -16,6 +16,7 @@ import { useSectionStyle } from '@/shared/hooks';
 import { useTranslation } from '@/i18n';
 import { appLogger } from '@/features/logs';
 import { useAsyncError } from '@/core/hooks';
+import { keyboardNavigationManager } from '@/core/utils';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { ErrorDisplay } from '@/core/components';
 import { useServersFilter, useServersExpand, useServersKeyboard } from '@/features/vpn/ui/hooks';
@@ -43,14 +44,16 @@ export function ServersScreen() {
   // UI State
   const { t } = useTranslation();
   const { showToast } = useToastContext();
-  const sectionStyle = useSectionStyle();
+  // Reducir un poco el espacio superior en la pantalla de Servidores
+  const sectionStyle = useSectionStyle(8);
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Error Handling
   const error = useAsyncError();
 
   // Custom Hooks
-  const { serversByName } = useServerStats({ pollMs: 3_000, enabled: true });
+  const { serversByName, data: serverStats } = useServerStats({ pollMs: 3_000, enabled: true });
+  const totalOnline = serverStats?.totalUsers ?? null;
   const { expandedCategories, toggleExpand } = useServersExpand();
   const {
     searchTerm,
@@ -77,6 +80,65 @@ export function ServersScreen() {
       if (items.length) items[0].focus();
     }, 40);
     return () => window.clearTimeout(t);
+  }, [selectedCategory]);
+
+  // Ensure focus is set when *entering* the categories list (Servers screen)
+  useEffect(() => {
+    if (selectedCategory) return;
+
+    let mounted = true;
+    const maxAttempts = 6;
+    let attempt = 0;
+    const timers: number[] = [];
+
+    const tryFocus = () => {
+      if (!mounted) return true;
+      try {
+        const root = contentRef.current;
+        if (!root) return false;
+
+        // Prefer focusing search input when available
+        const search = root.querySelector<HTMLInputElement>('.search-field input[data-nav]');
+        if (search) {
+          try {
+            search.focus();
+          } catch {}
+          try {
+            keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
+          } catch {}
+          return true;
+        }
+
+        // Otherwise focus the first navigable category-card or element
+        const first = root.querySelector<HTMLElement>('.category-card, [data-nav], button, [role="button"]');
+        if (first) {
+          try {
+            first.focus();
+          } catch {}
+          try {
+            keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
+          } catch {}
+          return true;
+        }
+      } catch {
+        // ignore
+      }
+      return false;
+    };
+
+    const schedule = () => {
+      const ok = tryFocus();
+      attempt++;
+      if (!ok && attempt < maxAttempts) {
+        timers.push(window.setTimeout(schedule, 40 * attempt));
+      }
+    };
+
+    timers.push(window.setTimeout(schedule, 20));
+    return () => {
+      mounted = false;
+      timers.forEach((t) => window.clearTimeout(t));
+    };
   }, [selectedCategory]);
 
   // Callbacks
@@ -253,6 +315,7 @@ export function ServersScreen() {
         groupedServers={groupedServers}
         subcategoryFilter={subcategoryFilter}
         onSubcategoryFilter={setSubcategoryFilter}
+        totalOnline={totalOnline}
       />
       <ServersContent
         contentRef={contentRef}

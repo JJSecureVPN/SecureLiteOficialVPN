@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LanguageProvider } from '../../../i18n/context';
 
-vi.mock('../../../features/vpn/model/VpnContext', () => {
+vi.mock('../../../features/vpn/context/VpnContext', () => {
   const mock = {
     useVpn: () => ({
       status: 'CONNECTED',
@@ -22,7 +22,7 @@ describe('SessionDetails', () => {
   beforeEach(() => vi.resetModules());
 
   it('does not render when status is not CONNECTED', async () => {
-    vi.doMock('../../../features/vpn/model/VpnContext', () => ({
+    vi.doMock('../../../features/vpn/context/VpnContext', () => ({
       useVpn: () => ({ status: 'DISCONNECTED' }),
     }));
 
@@ -37,7 +37,7 @@ describe('SessionDetails', () => {
 
   it('renders greeting using user.name when connected and handles click', async () => {
     const setScreenMock = vi.fn();
-    vi.doMock('../../../features/vpn/model/VpnContext', () => ({
+    vi.doMock('../../../features/vpn/context/VpnContext', () => ({
       useVpn: () => ({
         status: 'CONNECTED',
         user: { name: 'Bob' },
@@ -62,8 +62,8 @@ describe('SessionDetails', () => {
     expect(setScreenMock).toHaveBeenCalledWith('account');
   });
 
-  it('falls back to config username and creds user for greeting', async () => {
-    vi.doMock('../../../features/vpn/model/VpnContext', () => ({
+  it('does not render while user info is unresolved', async () => {
+    vi.doMock('../../../features/vpn/context/VpnContext', () => ({
       useVpn: () => ({
         status: 'CONNECTED',
         user: undefined,
@@ -81,16 +81,21 @@ describe('SessionDetails', () => {
       </LanguageProvider>,
     );
 
-    expect(screen.getByText(es.session.greeting.replace('{name}', 'cfgUser'))).toBeInTheDocument();
+    expect(screen.queryByText(es.session.active)).toBeNull();
+    expect(screen.queryByRole('button')).toBeNull();
   });
 
-  it('falls back to default user when no sources', async () => {
-    vi.doMock('../../../features/vpn/model/VpnContext', () => ({
+  it('shows promo CTA for free users and hides details button', async () => {
+    // mock native bridge that opens external urls
+    const callOneMock = vi.fn(() => true);
+    vi.doMock('../../../features/vpn/api/vpnBridge', () => ({ callOne: callOneMock }));
+
+    vi.doMock('../../../features/vpn/context/VpnContext', () => ({
       useVpn: () => ({
         status: 'CONNECTED',
-        user: undefined,
-        creds: undefined,
-        config: undefined,
+        user: { name: 'jjsecurefree' },
+        creds: {},
+        config: {},
         setScreen: vi.fn(),
       }),
       VpnProvider: ({ children }: any) => children,
@@ -103,8 +108,15 @@ describe('SessionDetails', () => {
       </LanguageProvider>,
     );
 
-    // Some environments may fallback to the translation key; accept either translation or raw key
-    const greetingText = screen.getByText(/Hola, (usuario|account.defaultUser)/i);
-    expect(greetingText).toBeInTheDocument();
+    expect(screen.getByText(es.session.active)).toBeInTheDocument();
+    expect(screen.getByText(es.session.promoTitle)).toBeInTheDocument();
+
+    const cta = screen.getByRole('button', { name: es.buttons.becomePremium });
+    // simulate click and assert native bridge was invoked
+    cta.click();
+    expect(callOneMock).toHaveBeenCalledWith(['DtOpenExternalUrl'], 'https://shop.jhservices.com.ar/planes');
+
+    // details button should not be present for free users
+    expect(screen.queryByRole('button', { name: /Detalles|Detail|Ver/ })).toBeNull();
   });
 });

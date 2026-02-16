@@ -6,6 +6,7 @@
     "src/**/*.test.tsx",
     "src/**/__tests__/*",
     "src/**/__tests__/**/*",
+    "src/features/vpn/ui/hooks/__tests__/useServersKeyboard.test.tsx",
     "vitest.config.ts",
     "vite.config.ts",
     "build-inline.ts"

@@ -8,6 +8,48 @@
   gap: var(--space-md);
 }
 
+/* Total online line beneath the main "Servers" title */
+.servers-total {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  justify-content: center;
+  font-size: var(--font-sm);
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.servers-total__count {
+  font-family: var(--font-serif);
+  font-size: var(--font-md);
+  color: var(--text);
+  font-weight: 800;
+}
+
+/* Blinking dots to the sides */
+.servers-total__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  display: inline-block;
+  transform-origin: center;
+  margin: 0 0.5rem;
+  box-shadow: 0 0 6px rgba(0,0,0,0.06);
+  animation: servers-dot-blink 1.2s ease-in-out infinite;
+}
+
+.servers-total__dot--left { animation-delay: 0s; }
+.servers-total__dot--right { animation-delay: 0.6s; }
+
+@keyframes servers-dot-blink {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
 /* ===========================================
    Server Grid
    =========================================== */
@@ -48,13 +90,13 @@
 .server-item:focus-visible {
   transform: scale(0.985);
   background: linear-gradient(180deg, var(--accent-10), var(--glass-65));
-  border-color: var(--accent-40);
-  box-shadow: inset 0 0 0 2px var(--accent-20);
+  border-color: var(--focus-accent-40);
+  box-shadow: inset 0 0 0 2px var(--focus-accent-20);
 }
 
 .server-item.selected {
-  border-color: var(--accent-40);
-  box-shadow: 0 0 0 2px var(--accent-15);
+  border-color: var(--focus-accent-40);
+  box-shadow: 0 0 0 2px var(--focus-accent-15);
 }
 
 .server-item__header {
@@ -207,20 +249,26 @@
 }
 
 .category-card:active .category-card__main,
-.category-card:focus-visible .category-card__main {
+.category-card:focus-within .category-card__main {
   transform: scale(0.985);
 }
 
 /* Match visual treatment of focused category with selected/server items */
+.category-card:focus-within {
+  border-color: var(--focus-accent-40);
+  box-shadow: 0 0 0 2px var(--focus-accent-15);
+  background: linear-gradient(180deg, var(--accent-10), var(--glass-60));
+}
+
 .category-card:focus-visible {
-  border-color: var(--accent-40);
-  box-shadow: 0 0 0 2px var(--accent-15);
+  border-color: var(--focus-accent-40);
+  box-shadow: 0 0 0 2px var(--focus-accent-15);
   background: linear-gradient(180deg, var(--accent-10), var(--glass-60));
 }
 
 .category-card.selected {
-  border-color: var(--accent-40);
-  box-shadow: 0 0 0 2px var(--accent-15);
+  border-color: var(--focus-accent-40);
+  box-shadow: 0 0 0 2px var(--focus-accent-15);
   background: linear-gradient(180deg, var(--accent-10), var(--glass-60));
 }
 
@@ -319,8 +367,8 @@
 
 /* Keep strong focus ring for accessibility but subtle otherwise */
 .btn.stats-btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-15);
-  border-color: var(--accent-40);
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
 }
 
 /* Ensure icon is small and sits flush */

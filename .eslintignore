@@ -1,0 +1,2 @@
+# Temporary ignores for files that cause parser/project resolution errors
+src/features/vpn/ui/hooks/__tests__/useServersKeyboard.test.tsx

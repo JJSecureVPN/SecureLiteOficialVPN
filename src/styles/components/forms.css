@@ -43,8 +43,8 @@
 }
 
 .field:focus-within {
-  border-color: var(--accent-60);
-  box-shadow: 0 0 0 2px var(--accent-20);
+  border-color: var(--focus-accent-60);
+  box-shadow: 0 0 0 2px var(--focus-accent-20);
   background: var(--surface-1);
 }
 

@@ -31,8 +31,8 @@
 }
 
 .ql-qbtn:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--accent-15);
-  border-color: var(--accent-40);
+  box-shadow: inset 0 0 0 2px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
 }
 
 .ql-qbtn i {

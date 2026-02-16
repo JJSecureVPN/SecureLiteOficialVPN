@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Credentials, ServerConfig, UserInfo, VpnStatus } from '@/core/types';
 import { toPingNumber } from '@/core/utils';
@@ -68,6 +69,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
 
         userFetchRef.current.pending = false;
         userFetchRef.current.lastAt = Date.now();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         userFetchRef.current.pending = false;
       }
@@ -113,6 +115,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
           }, 2000);
           return;
         }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         // Native API not available, continue with fallback
       }

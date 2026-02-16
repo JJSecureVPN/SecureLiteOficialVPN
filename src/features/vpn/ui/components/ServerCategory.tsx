@@ -57,6 +57,7 @@ export const ServerCategory = memo(
         className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
         tabIndex={0}
         role="button"
+        data-nav
         onClick={handleMainClick}
       >
         <button

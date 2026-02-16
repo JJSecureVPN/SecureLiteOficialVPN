@@ -94,6 +94,7 @@
     "update": "Update",
     "logs": "Logs",
     "viewDetails": "View details",
+    "becomePremium": "Become Premium",
     "back": "Back"
   },
   "status": {
@@ -106,9 +107,10 @@
     "categoryFallback": "category"
   },
   "servers": {
-    "title": "Servers",
+    "title": "Our Servers",
     "subtitle": "Explore and choose the best location for your connection.",
     "serverCount": "Servers",
+    "totalOnline": "USERS ONLINE:" ,
     "selectedEyebrow": "Selected category",
     "selectedSubtitle": "Choose the server that best suits your connection.",
     "searchPlaceholder": "Search country or category",
@@ -326,6 +328,8 @@
   "session": {
     "active": "Session active",
     "greeting": "Hello, {name}",
+    "promoTitle": "Upgrade to Premium",
+    "promoMessage": "Upgrade to unlock more servers, higher speed and no limits.",
     "protected": "Your connection is protected. Check your account details when needed."
   },
   "serverCard": {

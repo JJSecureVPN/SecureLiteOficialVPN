@@ -17,8 +17,8 @@
 }
 
 .btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-15);
-  border-color: var(--accent-40);
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
 }
 
 /* Más contraste para botones en la cabecera (back/menu) cuando reciben foco */
@@ -119,8 +119,8 @@ header.topbar .btn.hotzone:focus-visible,
 }
 
 .toggle:focus-within {
-  box-shadow: 0 0 0 3px var(--accent-15);
-  border-color: var(--accent-40);
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
 }
 
 .thumb {

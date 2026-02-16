@@ -94,6 +94,7 @@
     "update": "Atualizar",
     "logs": "Registros",
     "viewDetails": "Ver detalhes",
+    "becomePremium": "Tornar-se Premium",
     "back": "Voltar"
   },
   "status": {
@@ -106,9 +107,10 @@
     "categoryFallback": "categoria"
   },
   "servers": {
-    "title": "Servidores",
+    "title": "Nossos Servidores",
     "subtitle": "Explore e escolha a melhor localização para sua conexão.",
     "serverCount": "Servidores",
+    "totalOnline": "USUÁRIOS ONLINE:" ,
     "selectedEyebrow": "Categoria selecionada",
     "selectedSubtitle": "Escolha o servidor que melhor se adequa à sua conexão.",
     "searchPlaceholder": "Procurar país ou categoria",
@@ -318,6 +320,8 @@
   "session": {
     "active": "Sessão ativa",
     "greeting": "Olá, {name}",
+    "promoTitle": "Faça upgrade para Premium",
+    "promoMessage": "Atualize para desbloquear mais servidores, maior velocidade e sem limites.",
     "protected": "Sua conexão está protegida. Verifique os detalhes da sua conta quando necessário."
   },
   "serverCard": {

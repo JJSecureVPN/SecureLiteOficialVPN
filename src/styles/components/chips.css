@@ -32,7 +32,7 @@
 }
 
 .chip-active {
-  border-color: var(--accent-40);
+  border-color: var(--focus-accent-40);
   color: var(--text-strong);
 }
 

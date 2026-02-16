@@ -21,7 +21,7 @@
 
 .location-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
@@ -37,6 +37,10 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease;
 }
 
 .location-card:focus,
@@ -46,8 +50,8 @@
 
 .location-card:focus-visible {
   transform: scale(0.995);
-  border-color: var(--accent-40);
-  box-shadow: inset 0 0 0 2px var(--accent-15);
+  border-color: var(--focus-accent-40);
+  box-shadow: inset 0 0 0 2px var(--focus-accent-15);
 }
 
 .server-card .location-card {
@@ -58,8 +62,8 @@
 
 .loc-left {
   display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+  align-items: flex-start;
+  gap: var(--space-md);
   flex: 1;
   min-width: 0;
 }
@@ -75,6 +79,7 @@
   box-shadow: inset 0 0 0 1px var(--border);
   overflow: hidden;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .flag img {
@@ -106,14 +111,46 @@
 .loc-ip {
   font-size: var(--font-sm);
   color: var(--muted-2);
+  display: block;
+  margin-top: 2px;
 }
 
 .loc-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
   flex: 1;
+}
+
+.loc-name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.loc-name {
+  font-weight: 700;
+  font-size: var(--font-base);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.loc-ip {
+  font-size: var(--font-sm);
+  color: var(--muted-2);
+  display: block;
+}
+
+.loc-description {
+  font-size: var(--font-sm);
+  color: var(--muted-2);
+  line-height: 1.4;
 }
 
 /* ===========================================

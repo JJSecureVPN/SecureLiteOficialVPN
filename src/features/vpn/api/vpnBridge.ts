@@ -138,6 +138,7 @@ function dispatchEvent(name: NativeEventName, payload: unknown) {
     queueMicrotask(() => {
       try {
         handler(payload);
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
       } catch (error) {
         // Silent error handling for event listeners in production
       }
@@ -161,8 +162,6 @@ export function initNativeEvents() {
     'dtCheckUserStartedListener',
     'dtCheckUserErrorListener',
     'dtCheckUserModelListener',
-    // Eventos con sufijo "Event" que DTunnel intenta llamar directamente
-    // (DTunnel a veces intenta ejecutar estos como funciones)
     'DtNewDefaultConfigEvent',
     'DtNewLogEvent',
     'DtVpnStateEvent',
