@@ -19,10 +19,13 @@ export const SessionDetails = memo(function SessionDetails() {
   }, [setScreen]);
 
   const handleOpenPlans = useCallback(() => {
-    const url = 'https://shop.jhservices.com.ar/planes';
+    const base = 'https://shop.jhservices.com.ar/planes';
+    // Use only the app username (creds.user). Fall back to user.name if creds is missing.
+    const account = creds?.user || user?.name;
+    const url = account ? `${base}?cuenta=${encodeURIComponent(account)}` : base;
     if (callOne(['DtOpenExternalUrl'], url)) return;
     window.open(url, '_blank');
-  }, []);
+  }, [creds?.user, user?.name]);
 
   const daysRemainingInfo = useMemo(() => {
     const exp = user?.expiration_date;

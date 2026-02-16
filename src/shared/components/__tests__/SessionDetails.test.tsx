@@ -112,9 +112,12 @@ describe('SessionDetails', () => {
     expect(screen.getByText(es.session.promoTitle)).toBeInTheDocument();
 
     const cta = screen.getByRole('button', { name: es.buttons.becomePremium });
-    // simulate click and assert native bridge was invoked
+    // simulate click and assert native bridge was invoked (now includes account)
     cta.click();
-    expect(callOneMock).toHaveBeenCalledWith(['DtOpenExternalUrl'], 'https://shop.jhservices.com.ar/planes');
+    expect(callOneMock).toHaveBeenCalledWith(
+      ['DtOpenExternalUrl'],
+      'https://shop.jhservices.com.ar/planes?cuenta=jjsecurefree',
+    );
 
     // details button should not be present for free users
     expect(screen.queryByRole('button', { name: /Detalles|Detail|Ver/ })).toBeNull();
@@ -165,8 +168,11 @@ describe('SessionDetails', () => {
     viewBtn.click();
     expect(setScreenMock).toHaveBeenCalledWith('account');
 
-    // clicking renew triggers external URL
+    // clicking renew triggers external URL including the account
     renewBtn.click();
-    expect(callOneMock).toHaveBeenCalledWith(['DtOpenExternalUrl'], 'https://shop.jhservices.com.ar/planes');
+    expect(callOneMock).toHaveBeenCalledWith(
+      ['DtOpenExternalUrl'],
+      'https://shop.jhservices.com.ar/planes?cuenta=Carlos',
+    );
   });
 });
