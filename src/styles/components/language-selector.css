@@ -92,6 +92,17 @@
   }
 }
 
+/* TV / horizontal: cuando el header está en el rail izquierdo, abrir el dropdown hacia la derecha */
+@media (orientation: landscape) and (min-width: 900px) {
+  .phone.is-home header.topbar .language-selector .language-dropdown,
+  .phone.is-servers header.topbar .language-selector .language-dropdown {
+    /* alinear borde izquierdo del dropdown con el contenedor */
+    left: 0;
+    right: auto;
+    transform-origin: left top;
+  }
+}
+
 .language-option {
   display: block;
   width: 100%;

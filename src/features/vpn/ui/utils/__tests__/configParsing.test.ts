@@ -78,6 +78,22 @@ describe('parseConfigJson', () => {
     expect(result?.password).toBe('secret123');
   });
 
+  it('should ignore top-level autoConnect property (manual connect only)', () => {
+    const config = `{
+      "autoConnect": true,
+      "server": { "id": 7, "name": "ManualServer" },
+      "credentials": { "username": "importuser", "password": "importpass" }
+    }`;
+
+    const result = parseConfigJson(config);
+    expect(result).not.toBeNull();
+    expect(result?.serverId).toBe(7);
+    expect(result?.serverName).toBe('ManualServer');
+    expect(result?.username).toBe('importuser');
+    // ensure `autoConnect` is not surfaced in the parsed result
+    expect((result as any).autoConnect).toBeUndefined();
+  });
+
   it('should return null for invalid JSON', () => {
     const invalid = '{ invalid json }';
     const result = parseConfigJson(invalid);
