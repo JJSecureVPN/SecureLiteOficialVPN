@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
-import { useVpn, callOne } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTranslation } from '@/i18n';
 import { getDisplayName } from '@/core/utils';
 import { SessionCardBody } from './SessionDetails/SessionCardBody';
@@ -24,7 +25,11 @@ export const SessionDetails = memo(function SessionDetails() {
     // Use only the app username (creds.user). Fall back to user.name if creds is missing.
     const account = creds?.user || user?.name;
     const url = account ? `${base}?cuenta=${encodeURIComponent(account)}` : base;
-    if (callOne(['DtOpenExternalUrl'], url)) return;
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.android.openExternalUrl(url);
+      return;
+    }
     window.open(url, '_blank');
   }, [creds?.user, user?.name]);
 

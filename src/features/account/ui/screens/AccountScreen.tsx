@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
-import { useVpn, dt } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useSectionStyle } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
@@ -10,8 +11,8 @@ export const AccountScreen = memo(function AccountScreen() {
   const sectionStyle = useSectionStyle();
   const { t } = useTranslation();
 
-  const dl = +(dt.call<number>('DtGetNetworkDownloadBytes') || 0);
-  const ul = +(dt.call<number>('DtGetNetworkUploadBytes') || 0);
+  const dl = +(getSdk()?.android.getNetworkDownloadBytes() || 0);
+  const ul = +(getSdk()?.android.getNetworkUploadBytes() || 0);
   const used = dl + ul;
 
   const name = getDisplayName(user, config, creds, t('account.defaultUser'));

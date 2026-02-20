@@ -1,11 +1,13 @@
 import { memo, useEffect, useState, useCallback } from 'react';
-import { useVpn, callOne, dt } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '../context/ToastContext';
 import { useSectionStyle, useIsMobilePortrait } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { openNetworkSettings } from '@/shared/lib/appFunctions';
-import type { HotspotState } from '@/core/types/native';
 import { PremiumCard, MenuRow } from '@/shared/components';
+
+type HotspotState = 'RUNNING' | 'STOPPED' | 'UNKNOWN';
 
 interface MenuItem {
   id: string;
@@ -25,7 +27,7 @@ export const MenuScreen = memo(function MenuScreen() {
   const sectionStyle = useSectionStyle();
 
   const refreshHotspotStatus = useCallback(() => {
-    const status = dt.call<string>('DtGetStatusHotSpotService');
+    const status = getSdk()?.android.getHotSpotStatus();
     if (status === 'RUNNING' || status === 'STOPPED') {
       setHotspotStatus(status);
     } else {
@@ -38,11 +40,14 @@ export const MenuScreen = memo(function MenuScreen() {
   }, [refreshHotspotStatus]);
 
   const toggleHotspot = useCallback(() => {
+    const sdk = getSdk();
     const starting = hotspotStatus !== 'RUNNING';
-    const success = starting
-      ? callOne(['DtStartHotSpotService'])
-      : callOne(['DtStopHotSpotService']);
-    if (success) {
+    if (sdk) {
+      if (starting) {
+        sdk.android.startHotSpotService();
+      } else {
+        sdk.android.stopHotSpotService();
+      }
       showToast(starting ? t('menu.hotspotStarted') : t('menu.hotspotStopped'));
       setTimeout(refreshHotspotStatus, 400);
     } else {
@@ -73,7 +78,10 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: t('menu.itemsApnSubtitle'),
       icon: 'fa-signal',
       action: () => {
-        if (!callOne(['DtStartApnActivity', 'DtOpenApn', 'DtApn'])) {
+        const sdk = getSdk();
+        if (sdk) {
+          sdk.app.startApnActivity();
+        } else {
           showToast(t('common.notAvailableDevice'));
         }
       },
@@ -84,9 +92,10 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: t('menu.itemsBatterySubtitle'),
       icon: 'fa-bolt',
       action: () => {
-        if (
-          !callOne(['DtIgnoreBatteryOptimizations', 'DtOpenBatteryOptimization', 'DtOpenPower'])
-        ) {
+        const sdk = getSdk();
+        if (sdk) {
+          sdk.app.ignoreBatteryOptimizations();
+        } else {
           showToast(t('common.notAvailableDevice'));
         }
       },
@@ -112,8 +121,11 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: t('menu.itemsSpeedtestSubtitle'),
       icon: 'fa-gauge-high',
       action: () => {
-        if (callOne(['DtStartWebViewActivity'], 'https://www.speedtest.net/')) return;
-        if (callOne(['DtOpenExternalUrl'], 'https://fast.com')) return;
+        const sdk = getSdk();
+        if (sdk) {
+          sdk.app.startWebViewActivity('https://www.speedtest.net/');
+          return;
+        }
         window.open('https://fast.com', '_blank');
       },
     },
@@ -130,7 +142,9 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: t('menu.itemsCleanSubtitle'),
       icon: 'fa-broom',
       action: () => {
-        if (callOne(['DtCleanApp'])) {
+        const sdk = getSdk();
+        if (sdk) {
+          sdk.app.cleanApp();
           showToast(t('menu.cleanupDone'));
         } else {
           showToast(t('common.notAvailableDevice'));

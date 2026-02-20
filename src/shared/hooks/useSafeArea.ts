@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { dt } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 
 const STATUS_FALLBACK = 24;
 const NAV_FALLBACK = 48;
@@ -13,8 +13,8 @@ interface SafeAreaMetrics {
   contentHeight: number;
 }
 
-const readHeight = (apiName: string, fallback: number): number => {
-  const response = dt.call<number>(apiName);
+const readHeight = (sdkCall: () => number | null | undefined, fallback: number): number => {
+  const response = sdkCall();
   if (typeof response === 'number' && Number.isFinite(response) && response >= 0) {
     return response;
   }
@@ -32,8 +32,11 @@ const computeMetrics = (): SafeAreaMetrics => {
     };
   }
 
-  const statusBarHeight = readHeight('DtGetStatusBarHeight', STATUS_FALLBACK);
-  const navigationBarHeight = readHeight('DtGetNavigationBarHeight', NAV_FALLBACK);
+  const statusBarHeight = readHeight(() => getSdk()?.android.getStatusBarHeight(), STATUS_FALLBACK);
+  const navigationBarHeight = readHeight(
+    () => getSdk()?.android.getNavigationBarHeight(),
+    NAV_FALLBACK,
+  );
   const viewportHeight = window.innerHeight || 640;
   const totalInset = statusBarHeight + navigationBarHeight;
   const contentHeight = Math.max(viewportHeight - totalInset, MIN_CONTENT_HEIGHT);

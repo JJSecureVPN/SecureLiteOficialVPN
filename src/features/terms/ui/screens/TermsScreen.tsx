@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
-import { useVpn, callOne } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useSectionStyle, Button, Card, useIsMobilePortrait } from '@/shared';
 import { useTranslation } from '@/i18n';
 
@@ -51,7 +52,7 @@ export const TermsScreen = memo(function TermsScreen() {
   }, [setScreen]);
 
   const handleViewFullTerms = useCallback(() => {
-    callOne(['DtStartWebViewActivity'], 'https://shop.jhservices.com.ar/terminos');
+    getSdk()?.app.startWebViewActivity('https://shop.jhservices.com.ar/terminos');
   }, []);
 
   const sectionStyle = useMemo(

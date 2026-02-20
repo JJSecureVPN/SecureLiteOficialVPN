@@ -10,7 +10,7 @@
  */
 
 import { useCallback, useRef, useEffect } from 'react';
-import { useVpn, dt } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext, useServerStats } from '@/shared';
 import { useSectionStyle } from '@/shared/hooks';
@@ -185,21 +185,16 @@ export function ServersScreen() {
         } catch {}
 
         showToast(message, document.activeElement as HTMLElement);
-        window.setTimeout(() => dt.call('DtExecuteVpnStart'), 250);
+        window.setTimeout(() => getSdk()?.main.startVpn(), 250);
       };
 
       try {
         const pushCreds = () => {
           const sdk = getSdk();
-          if (sdk) {
-            sdk.config.setUsername(creds.user);
-            sdk.config.setPassword(creds.pass);
-            sdk.config.setUuid(creds.uuid);
-          } else {
-            dt.set('DtUsername', creds.user);
-            dt.set('DtPassword', creds.pass);
-            dt.set('DtUuid', creds.uuid);
-          }
+          if (!sdk) return;
+          sdk.config.setUsername(creds.user);
+          sdk.config.setPassword(creds.pass);
+          sdk.config.setUuid(creds.uuid);
         };
 
         if (status === 'CONNECTING') {
@@ -250,19 +245,17 @@ export function ServersScreen() {
       const sdk = getSdk();
       if (sdk) {
         sdk.config.openConfigDialog();
-      } else {
-        dt.call('DtExecuteDialogConfig');
       }
 
       let lastConfigId: string | null = null;
-      const currentConfig = dt.jsonConfigAtual as ServerConfig | null;
+      const currentConfig = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
       if (currentConfig?.id) {
         lastConfigId = String(currentConfig.id);
       }
 
       const checkInterval = setInterval(() => {
         try {
-          const newConfig = dt.jsonConfigAtual as ServerConfig | null;
+          const newConfig = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
           const newConfigId = newConfig?.id ? String(newConfig.id) : null;
 
           if (newConfigId && newConfigId !== lastConfigId) {

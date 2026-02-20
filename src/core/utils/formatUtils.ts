@@ -48,7 +48,7 @@ export function formatProtocol(rawMode?: string | null): string {
 
 /**
  * Extrae el dominio (Front A, Front B, Cloudflare, G-Cloud) de la descripción.
- * Ahora SOLO retorna el dominio cuando, al removerlo, queda texto adicional. 
+ * Ahora SOLO retorna el dominio cuando, al removerlo, queda texto adicional.
  * Esto evita convertir en "badge" descripciones que solo contienen el token.
  * @param description Descripción del servidor
  * @returns El dominio encontrado o null

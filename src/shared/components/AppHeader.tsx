@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
-import { callOne } from '../../features/vpn/api/vpnBridge';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTheme } from '../hooks/useTheme';
 import { useCoupons } from '../hooks/useCoupons';
 import { useNewsBadge } from '../hooks/useNewsBadge';
@@ -57,8 +57,13 @@ export const AppHeader = memo(function AppHeader({
   };
 
   const handleSubscribe = useCallback(() => {
-    if (callOne(['DtOpenExternalUrl'], 'https://shop.jhservices.com.ar/planes')) return;
-    window.open('https://shop.jhservices.com.ar/planes', '_blank');
+    const url = 'https://shop.jhservices.com.ar/planes';
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.android.openExternalUrl(url);
+      return;
+    }
+    window.open(url, '_blank');
   }, []);
 
   const handleShowCoupons = useCallback(() => {

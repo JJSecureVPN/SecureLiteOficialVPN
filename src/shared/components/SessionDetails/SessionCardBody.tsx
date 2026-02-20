@@ -31,13 +31,15 @@ export const SessionCardBody: FC<SessionCardBodyProps> = ({
         </>
       ) : (
         <>
-          <p className="session-card__title">{t('session.greeting').replace('{name}', name ?? '')}</p>
+          <p className="session-card__title">
+            {t('session.greeting').replace('{name}', name ?? '')}
+          </p>
           <p className="session-card__meta">{t('session.protected')}</p>
 
           {showRenewWarning && daysRemainingInfo && (
             <RenewWarning
               label={t('session.renewSoon').replace('{days}', daysRemainingInfo.label)}
-              className={getExpiryClass ? getExpiryClass(daysRemainingInfo.diff) ?? '' : ''}
+              className={getExpiryClass ? (getExpiryClass(daysRemainingInfo.diff) ?? '') : ''}
             />
           )}
         </>

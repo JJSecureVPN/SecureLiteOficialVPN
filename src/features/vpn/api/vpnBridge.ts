@@ -1,101 +1,27 @@
-// Centraliza la interacción con el bridge nativo DT
+// Helpers de info VPN y sistema de eventos nativos — DTunnel SDK
 
-import type { DtApiName, NativeBridge } from '@/core/types/native';
 import { getSdk } from './dtunnelSdk';
 
 type DtCallable = (...args: unknown[]) => unknown;
 
-interface DtApi {
-  execute?: DtCallable;
-  set?: (value: unknown) => void;
-}
-
-function getApi(name: DtApiName): DtApi | null {
-  try {
-    const api = (window as unknown as Record<string, unknown>)[name];
-    if (api && typeof api === 'object') return api as DtApi;
-    if (typeof api === 'function') return { execute: api as DtCallable };
-  } catch {
-    // Silenciar errores de API no disponibles para reducir ruido en logs
-  }
-  return null;
-}
-
-export const dt: NativeBridge = {
-  call<T = unknown>(name: DtApiName, ...args: unknown[]): T | null {
-    try {
-      const api = getApi(name);
-      if (!api) return null;
-      if (typeof api.execute === 'function') return api.execute(...args) as T;
-    } catch {
-      // Silenciar errores para reducir ruido
-    }
-    return null;
-  },
-
-  set(name: DtApiName, value: unknown): void {
-    try {
-      const api = getApi(name);
-      if (!api) return;
-      if (typeof api.set === 'function') {
-        api.set(value);
-      } else if (typeof api.execute === 'function') {
-        api.execute(value);
-      }
-    } catch {
-      // Silenciar errores para reducir ruido
-    }
-  },
-
-  get jsonConfigAtual() {
-    const c = this.call<string>('DtGetDefaultConfig');
-    if (!c) return null;
-    try {
-      return typeof c === 'string' ? JSON.parse(c) : c;
-    } catch {
-      return null;
-    }
-  },
-};
-
-/**
- * Intenta ejecutar la primera API disponible de una lista de candidatos
- * Útil para APIs con múltiples nombres según versión de la app
- */
-export function callOne(candidates: DtApiName[], ...args: unknown[]): boolean {
-  for (const name of candidates) {
-    const api = getApi(name);
-    if (api && typeof api.execute === 'function') {
-      dt.call(name, ...args);
-      return true;
-    }
-  }
-  return false;
-}
-
 /** Obtiene versiones de config y app (formato "vCfg/vApp") */
 export function getAppVersions(): string {
   const sdk = getSdk();
-  const vCfg = sdk
-    ? String(sdk.config.getLocalConfigVersion() ?? '-')
-    : dt.call<string>('DtGetLocalConfigVersion') || '-';
-  const vApp = sdk ? (sdk.android.getAppVersion() ?? '-') : dt.call<string>('DtAppVersion') || '-';
+  const vCfg = String(sdk?.config.getLocalConfigVersion() ?? '-');
+  const vApp = sdk?.android.getAppVersion() ?? '-';
   return `${vCfg}/${vApp}`;
 }
 
 /** Obtiene el nombre del operador de red */
 export function getOperator(): string {
-  const sdk = getSdk();
-  return (sdk ? sdk.main.getNetworkName() : dt.call<string>('DtGetNetworkName')) || '—';
+  return getSdk()?.main.getNetworkName() || '—';
 }
 
 /** Obtiene la mejor IP disponible: local → config actual → config pasada → fallback */
 export function getBestIP(config?: { ip?: string }): string {
   const sdk = getSdk();
-  const local = sdk ? sdk.main.getLocalIp() : dt.call<string>('DtGetLocalIP');
-  const defaultCfg = sdk
-    ? (sdk.config.getDefaultConfig<{ ip?: string }>()?.ip ?? null)
-    : ((dt.jsonConfigAtual?.ip as string | undefined) ?? null);
+  const local = sdk?.main.getLocalIp();
+  const defaultCfg = sdk?.config.getDefaultConfig<{ ip?: string }>()?.ip ?? null;
   const ip = local || defaultCfg || config?.ip || '—';
   const match = String(ip).match(/(\d{1,3}(?:\.\d{1,3}){3})/);
   return match ? match[1] : String(ip);
@@ -103,9 +29,8 @@ export function getBestIP(config?: { ip?: string }): string {
 
 /** Obtiene los logs VPN en formato raw */
 export function getLogs(): string {
-  const sdk = getSdk();
   try {
-    return (sdk ? sdk.main.getLogsRaw() : dt.call<string>('DtGetLogs')) || 'Nenhum log';
+    return getSdk()?.main.getLogsRaw() || 'Nenhum log';
   } catch {
     return 'Nenhum log';
   }
@@ -125,13 +50,29 @@ export function parseLogs(raw: string): string {
   }
 }
 
+/**
+ * Lee el JSON de info de usuario mediante llamada directa al SDK.
+ * DtGetUserInfo no tiene método tipado en el SDK — se usa la API genérica.
+ */
+export function getUserInfoRaw(): string | null {
+  return getSdk()?.call<string>('DtGetUserInfo', 'execute') ?? null;
+}
+
+/**
+ * Notifica al SDK nativo que el usuario aceptó los términos.
+ * DtAcceptTerms no tiene método tipado en el SDK — se usa la API genérica.
+ */
+export function acceptTermsNative(): void {
+  getSdk()?.callVoid('DtAcceptTerms', 'execute');
+}
+
 // ─── Tipos del sistema de eventos nativos ────────────────────────────────────
 
 /**
- * Nombres de eventos nativos que este bridge soporta.
- * Los 4 primeros tienen equivalente semántico en el SDK oficial.
- * Los 2 últimos (DtConfigSelectedEvent, DtCheckUserModelEvent) son eventos
- * custom de DTunnel sin soporte en el SDK — se manejan vía window directamente.
+ * Nombres de eventos nativos que este sistema de eventos soporta.
+ * La mayoría se mapean desde sdk.on(); los dos últimos
+ * (DtConfigSelectedEvent, DtCheckUserModelEvent) son eventos custom de
+ * DTunnel sin soporte en el SDK — se parchean en window directamente.
  */
 type NativeEventName =
   | 'DtVpnStateEvent'
@@ -143,7 +84,7 @@ type NativeEventName =
 
 type NativeHandler = (payload: unknown) => void;
 
-// Mapa interno de listeners (mismo API que antes — los hooks no cambian)
+// Mapa interno de listeners por nombre de evento
 const listenerMap = new Map<NativeEventName, Set<NativeHandler>>();
 let initialized = false;
 
@@ -166,14 +107,13 @@ function dispatchEvent(name: NativeEventName, payload: unknown) {
  * Instala los handlers de eventos nativos.
  *
  * Con SDK disponible (producción en WebView):
- *   - El SDK ya registra stubs en window para los 12 eventos oficiales
- *     gracias a autoRegisterNativeEvents: true.
- *   - Usamos sdk.on() para enrutar esos eventos al listenerMap interno.
- *   - Los eventos no-SDK (DtConfigSelectedEvent, DtCheckUserModelEvent)
- *     se parchean en window directamente.
+ *   - El SDK registra los stubs en window (autoRegisterNativeEvents: true).
+ *   - Usamos sdk.on() para enrutar los eventos semánticos al listenerMap.
+ *   - Los eventos sin soporte en el SDK (DtConfigSelectedEvent,
+ *     DtCheckUserModelEvent) se parchean en window directamente.
  *
  * Sin SDK (desarrollo en browser):
- *   - Se usan stubs legacy en window igual que antes.
+ *   - Se instalan stubs vacíos en window para no romper el entorno.
  */
 export function initNativeEvents() {
   if (initialized || typeof window === 'undefined') return;
@@ -273,7 +213,6 @@ export function initNativeEvents() {
 /**
  * Suscribe un handler a un evento nativo de DTunnel.
  * Devuelve una función de cleanup (unsubscribe).
- * API idéntica a la versión anterior — ningún consumidor cambia.
  */
 export function onNativeEvent<T = unknown>(name: NativeEventName, handler: (payload: T) => void) {
   if (!initialized) initNativeEvents();

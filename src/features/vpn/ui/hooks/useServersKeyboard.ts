@@ -114,8 +114,12 @@ export function useServersKeyboard(
         // If nothing is focused, move focus to the first navigable item so the initial arrow key has effect
         try {
           const root = document.querySelector('.servers-content') as HTMLElement | null;
-          if (root && (document.activeElement === document.body || !root.contains(document.activeElement))) {
-            const selector = '[data-nav], button, [role="button"], a, [tabindex]:not([tabindex="-1"])';
+          if (
+            root &&
+            (document.activeElement === document.body || !root.contains(document.activeElement))
+          ) {
+            const selector =
+              '[data-nav], button, [role="button"], a, [tabindex]:not([tabindex="-1"])';
             const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter((el) => {
               if (el.hasAttribute('disabled')) return false;
               try {

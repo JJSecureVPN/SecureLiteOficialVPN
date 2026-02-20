@@ -1,14 +1,17 @@
 import { memo, useCallback } from 'react';
 import { Button } from '../ui/Button';
-import { callOne } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTranslation } from '@/i18n';
 import { Card } from '@/shared';
 
 export const PremiumCard = memo(function PremiumCard() {
   const { t } = useTranslation();
   const openPremiumUrl = useCallback((url: string) => {
-    if (callOne(['DtStartWebViewActivity'], url)) return;
-    if (callOne(['DtOpenExternalUrl'], url)) return;
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.app.startWebViewActivity(url);
+      return;
+    }
     window.open(url, '_blank');
   }, []);
 

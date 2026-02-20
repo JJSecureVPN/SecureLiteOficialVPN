@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import type { Category, ServerConfig } from '@/core/types';
-import { dt } from '../../api/vpnBridge';
 import { getSdk } from '../../api/dtunnelSdk';
 import { appLogger } from '@/features/logs';
 
@@ -63,19 +62,7 @@ export function useServers() {
   const loadCategorias = useCallback(() => {
     try {
       // Con SDK: getConfigs() ya parsea el JSON internamente y devuelve null si falla.
-      // Sin SDK (dev): dt.call devuelve string crudo que parseamos manualmente.
-      const sdk = getSdk();
-      const cats: Category[] | null = sdk
-        ? sdk.config.getConfigs<Category[]>()
-        : (() => {
-            const raw = dt.call<string>('DtGetConfigs');
-            if (!raw || raw === '[]' || raw === '') return null;
-            try {
-              return JSON.parse(raw) as Category[];
-            } catch {
-              return null;
-            }
-          })();
+      const cats: Category[] | null = getSdk()?.config.getConfigs<Category[]>() ?? null;
 
       if (!cats || !cats.length) {
         appLogger.add('warn', '⚠️ DtGetConfigs devolvió lista vacía — usando MOCK');
@@ -94,22 +81,13 @@ export function useServers() {
   }, []);
 
   const setConfig = useCallback((c: ServerConfig) => {
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.config.setConfig(Number(c.id));
-    } else {
-      dt.call('DtSetConfig', c.id);
-    }
+    getSdk()?.config.setConfig(Number(c.id));
     setConfigState(c);
   }, []);
 
   const loadInitialConfig = useCallback(() => {
     // Con SDK: getDefaultConfig() parsea internamente.
-    // Sin SDK: dt.jsonConfigAtual ya lo parsea via dt.call.
-    const sdk = getSdk();
-    const cfg: ServerConfig | null = sdk
-      ? sdk.config.getDefaultConfig<ServerConfig>()
-      : (dt.jsonConfigAtual as ServerConfig | null);
+    const cfg: ServerConfig | null = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
 
     if (!cfg) {
       appLogger.add('warn', '⚠️ No hay config inicial (getDefaultConfig es null)');

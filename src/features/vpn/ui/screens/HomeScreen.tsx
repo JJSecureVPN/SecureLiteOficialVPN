@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useVpn, useConnectionStatus, ServerCard, callOne } from '@/features/vpn';
+import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import {
   useToastContext,
   useSectionStyle,
@@ -121,7 +122,9 @@ export function HomeScreen() {
   const handleUpdate = useCallback(() => {
     try {
       error.clearError();
-      if (callOne(['DtStartAppUpdate', 'DtExecuteDialogConfig'])) {
+      const sdk = getSdk();
+      if (sdk) {
+        sdk.main.startAppUpdate();
         showToast(t('connection.searchingUpdate'));
       } else {
         error.setError(new Error('Update not available'), ErrorCategory.Internal);

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { callOne } from '../../api/vpnBridge';
+import { acceptTermsNative } from '../../api/vpnBridge';
 import { isTermsAccepted, acceptTerms as acceptTermsStorage } from '@/core/utils';
 
 export function useTermsState() {
@@ -8,7 +8,7 @@ export function useTermsState() {
   const acceptTerms = useCallback(() => {
     acceptTermsStorage();
     setTermsAccepted(true);
-    callOne(['DtAcceptTerms']);
+    acceptTermsNative();
   }, []);
 
   return { termsAccepted, acceptTerms };

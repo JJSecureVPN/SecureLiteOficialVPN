@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { callOne } from '../../features/vpn/api/vpnBridge';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '../context/ToastContext';
 import { GlobalModal } from './GlobalModal';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -101,8 +101,11 @@ export const HeaderPromo = memo(function HeaderPromo() {
   const [manualOpen, setManualOpen] = useState(false);
 
   const tryOpenExternally = () => {
-    // Native attempt
-    if (callOne(['DtOpenExternalUrl'], PLANES_URL)) return true;
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.android.openExternalUrl(PLANES_URL);
+      return true;
+    }
 
     // Fallback: programmatic anchor click (often opens system browser)
     try {

@@ -1,7 +1,14 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Credentials, ServerConfig, UserInfo, VpnStatus } from '@/core/types';
 import { toPingNumber } from '@/core/utils';
-import { dt, getAppVersions, getBestIP, getOperator, onNativeEvent } from '../../api/vpnBridge';
+import {
+  getAppVersions,
+  getBestIP,
+  getOperator,
+  getUserInfoRaw,
+  onNativeEvent,
+} from '../../api/vpnBridge';
 import { getSdk } from '../../api/dtunnelSdk';
 
 interface UseVpnUserStateArgs {
@@ -31,8 +38,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
   }, [config]);
 
   const refreshPing = useCallback(() => {
-    const sdk = getSdk();
-    const raw = sdk ? sdk.main.getPingResult() : dt.call<string | number>('DtGetPingResult');
+    const raw = getSdk()?.main.getPingResult();
     const parsed = toPingNumber(raw ?? null);
     if (Number.isFinite(parsed)) {
       setPingMs((prev) => (prev === parsed ? prev : parsed));
@@ -94,7 +100,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
       let resolved = false;
 
       const readDirect = () => {
-        const raw = dt.call<string>('DtGetUserInfo');
+        const raw = getUserInfoRaw();
         if (raw) {
           resolved = true;
           handleUserData(raw);
@@ -103,7 +109,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
         }
       };
 
-      // Usar SDK oficial si está disponible; si no, fallback a bridge directo
+      // Dispara startCheckUser; si no hay respuesta, reintenta con llamada directa
       const sdk = getSdk();
       if (sdk) {
         sdk.main.startCheckUser();

@@ -8,7 +8,7 @@ import type {
   VpnStatus,
 } from '@/core/types';
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/core/constants';
-import { dt } from '../../api/vpnBridge';
+import { getSdk } from '../../api/dtunnelSdk';
 
 interface UseAutoConnectArgs {
   status: VpnStatus;
@@ -53,25 +53,25 @@ export function useAutoConnect({
     }
 
     const srv = auto.list[auto.i++];
-    dt.call('DtSetConfig', srv.id);
+    getSdk()?.config.setConfig(Number(srv.id));
     setConfigState(srv);
 
     setTimeout(() => {
       pushCreds();
-      dt.call('DtExecuteVpnStart');
+      getSdk()?.main.startVpn();
     }, 120);
 
     clearAutoTimers();
 
     // Timeout para probar siguiente servidor
     auto.tmo = setTimeout(() => {
-      dt.call('DtExecuteVpnStop');
+      getSdk()?.main.stopVpn();
       setTimeout(nextAuto, 350);
     }, AUTO_CONNECT_TIMEOUT_MS);
 
     // Verificación periódica del estado
     auto.ver = setInterval(() => {
-      const st = dt.call<string>('DtGetVpnState') || 'DISCONNECTED';
+      const st = getSdk()?.main.getVpnState() ?? 'DISCONNECTED';
       if (!auto.on) {
         clearAutoTimers();
         return;
@@ -82,7 +82,7 @@ export function useAutoConnect({
         auto.on = false;
       } else if (['AUTH_FAILED', 'NO_NETWORK', 'STOPPING'].includes(st)) {
         clearAutoTimers();
-        dt.call('DtExecuteVpnStop');
+        getSdk()?.main.stopVpn();
         setTimeout(nextAuto, 350);
       }
     }, 600);

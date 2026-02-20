@@ -1,5 +1,5 @@
 import { memo, useEffect, useCallback, useMemo } from 'react';
-import { callOne } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext, Button, Card, useSafeArea } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { useLogs } from '@/features/logs';
@@ -50,7 +50,9 @@ export const LogsScreen = memo(function LogsScreen() {
   }, [logs, showToast, t]);
 
   const handleClear = useCallback(() => {
-    if (callOne(['DtClearLogs'])) {
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.main.clearLogs();
       showToast(t('logs.clearedToast'));
       refresh();
     }

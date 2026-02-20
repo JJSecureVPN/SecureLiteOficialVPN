@@ -2,7 +2,8 @@ import { useCallback, useState } from 'react';
 import DOMPurify from 'dompurify';
 import { MiniHeader } from '@/shared/components';
 import { GlobalModal, useSafeArea } from '@/shared';
-import { useVpn, callOne } from '@/features/vpn';
+import { useVpn } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { saveNewsLastSeen } from '@/core/utils';
 import { useNoticias, type NoticiaItem } from '@/features/news';
 import { NewsList } from '../components/News/NewsList';
@@ -62,8 +63,12 @@ export function NewsScreen() {
       target && (target.closest ? (target.closest('a') as HTMLAnchorElement | null) : null);
     if (anchor && anchor.href) {
       e.preventDefault();
-      // Prefer native bridge if available, fallback to window.open (igual que AppHeader)
-      if (callOne(['DtOpenExternalUrl'], anchor.href)) return;
+      // Prefer native bridge if available, fallback to window.open
+      const sdk = getSdk();
+      if (sdk) {
+        sdk.android.openExternalUrl(anchor.href);
+        return;
+      }
       window.open(anchor.href, '_blank', 'noopener,noreferrer');
     }
   }, []);

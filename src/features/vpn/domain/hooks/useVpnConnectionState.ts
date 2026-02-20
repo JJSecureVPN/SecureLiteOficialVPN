@@ -7,7 +7,6 @@ import type {
   ServerConfig,
   VpnStatus,
 } from '@/core/types';
-import { dt } from '../../api/vpnBridge';
 import { getSdk } from '../../api/dtunnelSdk';
 import { useServers } from './useServers';
 import { useVpnEvents } from './useVpnEvents';
@@ -47,15 +46,10 @@ export function useVpnConnectionState({
   // Función para enviar credenciales al bridge
   const pushCreds = useCallback(() => {
     const sdk = getSdk();
-    if (sdk) {
-      sdk.config.setUsername(creds.user);
-      sdk.config.setPassword(creds.pass);
-      sdk.config.setUuid(creds.uuid);
-    } else {
-      dt.set('DtUsername', creds.user);
-      dt.set('DtPassword', creds.pass);
-      dt.set('DtUuid', creds.uuid);
-    }
+    if (!sdk) return;
+    sdk.config.setUsername(creds.user);
+    sdk.config.setPassword(creds.pass);
+    sdk.config.setUuid(creds.uuid);
   }, [creds.pass, creds.user, creds.uuid]);
 
   // Hook para auto-conexión
@@ -94,21 +88,13 @@ export function useVpnConnectionState({
     if (sdk) {
       sdk.config.setConfig(Number(config.id));
       sdk.main.startVpn();
-    } else {
-      dt.call('DtSetConfig', config.id);
-      dt.call('DtExecuteVpnStart');
     }
     setStatus('CONNECTING');
   }, [config, persistCreds, pushCreds]);
 
   const stopVpn = useCallback(() => {
     cancelAuto();
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.main.stopVpn();
-    } else {
-      dt.call('DtExecuteVpnStop');
-    }
+    getSdk()?.main.stopVpn();
     setStatus('DISCONNECTED');
   }, [cancelAuto]);
 
