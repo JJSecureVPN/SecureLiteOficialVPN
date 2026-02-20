@@ -1,10 +1,16 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useVpn, callOne } from '@/features/vpn';
-import { useSectionStyle, Button } from '@/shared';
+import { useSectionStyle, Button, Card, useIsMobilePortrait } from '@/shared';
 import { useTranslation } from '@/i18n';
 
 export const TermsScreen = memo(function TermsScreen() {
   const { acceptTerms, setScreen, termsAccepted } = useVpn();
+  const isMobilePortrait = useIsMobilePortrait();
+
+  useEffect(() => {
+    if (!isMobilePortrait) setScreen('home');
+  }, [isMobilePortrait, setScreen]);
+
   const { t } = useTranslation();
   const baseSectionStyle = useSectionStyle(16, 16);
 
@@ -65,7 +71,7 @@ export const TermsScreen = memo(function TermsScreen() {
 
         <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', paddingRight: 2 }}>
           {TERM_CARDS.map((card, i) => (
-            <div key={i} className="info-card term-card">
+            <Card key={i} className="info-card term-card">
               <div className="row" style={{ marginBottom: 'var(--space-sm)' }}>
                 <i
                   className={`fa ${card.icon}`}
@@ -76,7 +82,7 @@ export const TermsScreen = memo(function TermsScreen() {
               <p className="muted" style={{ fontSize: 'var(--font-sm)' }}>
                 {card.text}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
 

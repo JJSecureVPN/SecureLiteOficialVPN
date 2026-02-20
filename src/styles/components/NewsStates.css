@@ -8,7 +8,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 24px;
+  /* usar tokens para mantener ritmo con otras pantallas */
+  padding: calc(var(--space-xl) * 5) var(--space-lg);
   text-align: center;
   min-height: 400px;
 }

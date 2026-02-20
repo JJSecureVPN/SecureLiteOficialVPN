@@ -1,8 +1,8 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Credentials, ServerConfig, UserInfo, VpnStatus } from '@/core/types';
 import { toPingNumber } from '@/core/utils';
 import { dt, getAppVersions, getBestIP, getOperator, onNativeEvent } from '../../api/vpnBridge';
+import { getSdk } from '../../api/dtunnelSdk';
 
 interface UseVpnUserStateArgs {
   status: VpnStatus;
@@ -31,7 +31,8 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
   }, [config]);
 
   const refreshPing = useCallback(() => {
-    const raw = dt.call<string | number>('DtGetPingResult');
+    const sdk = getSdk();
+    const raw = sdk ? sdk.main.getPingResult() : dt.call<string | number>('DtGetPingResult');
     const parsed = toPingNumber(raw ?? null);
     if (Number.isFinite(parsed)) {
       setPingMs((prev) => (prev === parsed ? prev : parsed));
@@ -69,7 +70,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
 
         userFetchRef.current.pending = false;
         userFetchRef.current.lastAt = Date.now();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         userFetchRef.current.pending = false;
       }
@@ -102,22 +103,17 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
         }
       };
 
-      try {
-        const win = window as unknown as Record<string, { execute?: () => void }>;
-        const dtCheck = win.DtStartCheckUser;
-        if (dtCheck?.execute) {
-          dtCheck.execute();
-          setTimeout(() => {
-            if (!resolved) readDirect();
-          }, 600);
-          setTimeout(() => {
-            if (!resolved) readDirect();
-          }, 2000);
-          return;
-        }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        // Native API not available, continue with fallback
+      // Usar SDK oficial si está disponible; si no, fallback a bridge directo
+      const sdk = getSdk();
+      if (sdk) {
+        sdk.main.startCheckUser();
+        setTimeout(() => {
+          if (!resolved) readDirect();
+        }, 600);
+        setTimeout(() => {
+          if (!resolved) readDirect();
+        }, 2000);
+        return;
       }
 
       readDirect();
@@ -129,9 +125,20 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
     const offUserResult = onNativeEvent('DtCheckUserResultEvent', handleUserData);
     const offUserModel = onNativeEvent('DtCheckUserModelEvent', handleUserData);
 
+    // Escuchar error de verificación de usuario vía SDK oficial
+    const sdk = getSdk();
+    const offCheckError = sdk?.on('checkUserError', (e) => {
+      // El error llega como string; lo usamos solo para desbloquear el pending
+      // y loguear, sin sobreescribir los datos de usuario ya existentes
+      if (e.payload) {
+        userFetchRef.current.pending = false;
+      }
+    });
+
     return () => {
       offUserResult();
       offUserModel();
+      offCheckError?.();
     };
   }, [handleUserData]);
 

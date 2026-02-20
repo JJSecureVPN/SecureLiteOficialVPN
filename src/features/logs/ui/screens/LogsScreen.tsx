@@ -1,11 +1,10 @@
 import { memo, useEffect, useCallback, useMemo } from 'react';
-import { useVpn, callOne } from '@/features/vpn';
-import { useToastContext, Button, useSafeArea } from '@/shared';
+import { callOne } from '@/features/vpn';
+import { useToastContext, Button, Card, useSafeArea } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { useLogs } from '@/features/logs';
 
 export const LogsScreen = memo(function LogsScreen() {
-  const { setScreen } = useVpn();
   const { showToast } = useToastContext();
   const { t } = useTranslation();
   const { logs, refresh } = useLogs();
@@ -57,10 +56,6 @@ export const LogsScreen = memo(function LogsScreen() {
     }
   }, [showToast, refresh, t]);
 
-  const handleClose = useCallback(() => {
-    setScreen('home');
-  }, [setScreen]);
-
   return (
     <section className="screen logs-screen" style={screenStyle}>
       <div className="logs-header">
@@ -75,21 +70,20 @@ export const LogsScreen = memo(function LogsScreen() {
           <Button variant="soft" onClick={handleClear} disabled={!hasLogs}>
             {t('logs.clear')}
           </Button>
-          <Button onClick={handleClose}>{t('logs.close')}</Button>
         </div>
       </div>
 
-      <div className="logs-panel">
+      <Card className="logs-panel">
         {hasLogs ? (
           <div className="logs-list">
             {logEntries.map((entry, idx) => (
-              <div key={entry.id} className="log-entry">
+              <Card key={entry.id} className="log-entry" as="div" role="listitem">
                 <span className="log-line-number">#{logEntries.length - idx}</span>
                 <div className="log-entry__body">
                   {entry.meta && <span className="log-entry__meta">{entry.meta}</span>}
                   <p className="log-entry__text">{entry.message}</p>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         ) : (
@@ -99,7 +93,7 @@ export const LogsScreen = memo(function LogsScreen() {
             <small className="muted">{t('logs.generateHint')}</small>
           </div>
         )}
-      </div>
+      </Card>
     </section>
   );
 });

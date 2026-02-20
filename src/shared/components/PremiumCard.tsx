@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import { Button } from '../ui/Button';
 import { callOne } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
+import { Card } from '@/shared';
 
 export const PremiumCard = memo(function PremiumCard() {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export const PremiumCard = memo(function PremiumCard() {
   }, [openPremiumUrl]);
 
   return (
-    <div className="info-card premium-card">
+    <Card className="info-card premium-card">
       <div className="premium-card__body">
         <span className="summary-eyebrow">{t('premium.title')}</span>
         <h3>{t('premium.cta')}</h3>
@@ -34,6 +35,6 @@ export const PremiumCard = memo(function PremiumCard() {
           {t('premium.resell')}
         </Button>
       </div>
-    </div>
+    </Card>
   );
 });

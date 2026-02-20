@@ -3,11 +3,8 @@
  * Main content area: search toolbar, category grid, or server grid
  */
 
-import { useCallback } from 'react';
 import { useTranslation } from '@/i18n';
 import { Button } from '@/shared/ui';
-import { appLogger } from '@/features/logs';
-import { dt } from '@/features/vpn';
 import { ServerCategory } from './ServerCategory';
 import { ServerListItem } from './ServerListItem';
 import type { Category, ServerConfig } from '@/core/types';
@@ -51,37 +48,6 @@ export function ServersContent({
 }: ServersContentProps) {
   const { t } = useTranslation();
 
-  const handleOpenConfigurator = useCallback(() => {
-    appLogger.add('info', '🔧 Abriendo diálogo de configuración nativa de DTunnel');
-    dt.call('DtExecuteDialogConfig');
-
-    let lastConfigId: string | null = null;
-    const currentConfig = dt.jsonConfigAtual as ServerConfig | null;
-    if (currentConfig?.id) {
-      lastConfigId = String(currentConfig.id);
-    }
-
-    const checkInterval = setInterval(() => {
-      const newConfig = dt.jsonConfigAtual as ServerConfig | null;
-      const newConfigId = newConfig?.id ? String(newConfig.id) : null;
-
-      if (newConfigId && newConfigId !== lastConfigId) {
-        appLogger.add('info', `🔄 Cambio detectado: ${lastConfigId} → ${newConfigId}`);
-        if (newConfig && newConfig.id) {
-          onOpenConfigurator();
-          appLogger.add('info', `✅ Servidor actualizado: ${newConfig.name}`);
-        }
-        clearInterval(checkInterval);
-        clearTimeout(timeoutId);
-      }
-    }, 300);
-
-    const timeoutId = setTimeout(() => {
-      appLogger.add('debug', 'Timeout de polling alcanzado');
-      clearInterval(checkInterval);
-    }, 10000);
-  }, [onOpenConfigurator]);
-
   return (
     <div className="servers-content" ref={contentRef}>
       {!selectedCategory && (
@@ -111,7 +77,7 @@ export function ServersContent({
               type="button"
               className="config-btn"
               data-nav
-              onClick={handleOpenConfigurator}
+              onClick={onOpenConfigurator}
               title={t('servers.openConfiguratorTitle')}
             >
               <i className="fas fa-cog" aria-hidden="true" />
@@ -126,7 +92,7 @@ export function ServersContent({
             <i className="fas fa-wifi" aria-hidden="true" />
             <p>{t('servers.noServers')}</p>
             <small className="muted">{t('servers.checkConfigs')}</small>
-            <Button onClick={handleOpenConfigurator} className="empty-result-btn">
+            <Button onClick={onOpenConfigurator} className="empty-result-btn">
               <i className="fas fa-cog" aria-hidden="true" style={{ marginRight: '8px' }} />
               {t('servers.openConfigurator')}
             </Button>
@@ -153,7 +119,7 @@ export function ServersContent({
                     <i className="fas fa-redo" aria-hidden="true" style={{ marginRight: '8px' }} />
                     {t('servers.clearSearch')}
                   </Button>
-                  <Button onClick={handleOpenConfigurator}>
+                  <Button onClick={onOpenConfigurator}>
                     <i className="fas fa-cog" aria-hidden="true" style={{ marginRight: '8px' }} />
                     {t('servers.configurator')}
                   </Button>

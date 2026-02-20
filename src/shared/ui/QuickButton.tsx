@@ -1,5 +1,6 @@
 import { memo, type ButtonHTMLAttributes } from 'react';
 import '../../styles/components/quick-buttons.css';
+import { Card } from '@/shared';
 
 interface QuickButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: string; // e.g. 'fa-rotate'
@@ -13,7 +14,8 @@ export const QuickButton = memo(function QuickButton({
   ...props
 }: QuickButtonProps) {
   return (
-    <button
+    <Card
+      as="button"
       className={`ql-qbtn ${className}`}
       type="button"
       {...props}
@@ -21,7 +23,7 @@ export const QuickButton = memo(function QuickButton({
     >
       <i className={`fa ${icon}`} aria-hidden="true" />
       <span className="ql-qbtn-label">{label}</span>
-    </button>
+    </Card>
   );
 });
 

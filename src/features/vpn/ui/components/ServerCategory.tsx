@@ -1,12 +1,13 @@
 /**
- * ServerCategory Component
- * Category card in the servers list
+ * ServerCategory Component (Enhanced Version)
+ * Category card in the servers list with improved visual design
  */
 
 import { useCallback, useMemo, memo } from 'react';
+import '../../../../styles/components/category-card.css';
+import { Card, Badge, Pill } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { resolveSubcategory } from '@/features/vpn/ui/utils/categoryParsing';
-import { Button } from '@/shared/ui';
 import { ServerStats, type ServerLiveStats } from './ServerStats';
 import type { Category } from '@/core/types';
 
@@ -24,7 +25,7 @@ export const ServerCategory = memo(
   function ServerCategory({
     category,
     hasSelectedServer,
-    autoMode,
+    autoMode: _autoMode,
     liveStats,
     isExpanded,
     onCategoryClick,
@@ -53,66 +54,67 @@ export const ServerCategory = memo(
     }, [category.items]);
 
     return (
-      <div
+      <Card
         className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
-        tabIndex={0}
         role="button"
+        tabIndex={0}
         data-nav
         onClick={handleMainClick}
-      >
-        <button
-          type="button"
-          className="category-card__main"
-          data-nav
-          onClick={(e) => {
-            e.stopPropagation();
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
             handleMainClick();
-          }}
-        >
+          }
+        }}
+        aria-label={`${category.name} - ${category.items?.length || 0} servidores`}
+      >
+        <div className="category-card__content">
+          {/* Header: Título y badge de usuarios */}
           <div className="category-card__header">
-            <div>
-              <p className="category-card__title">{category.name}</p>
-              <small className="muted">
-                {t('servers.serverCount')} {category.items?.length || 0}
-              </small>
+            <div className="category-card__title-group">
+              <h3 className="category-card__title">{category.name}</h3>
+              <span className="category-card__count">{category.items?.length || 0}</span>
             </div>
-            <span className="badge-count" title={t('servers.usersConnected')}>
-              <i className="fas fa-users" aria-hidden="true" />
-              {liveStats?.connectedUsers ?? '-'}
-              <span className="badge-count-label" aria-hidden="true">
-                {t('servers.online')}
-              </span>
-            </span>
+
+            <Badge variant="category" iconClass="fas fa-users">
+              {liveStats?.connectedUsers ?? 0}
+            </Badge>
           </div>
-          <div className="category-card__body">
-            <span className="category-card__label">{t('servers.subcategories')}</span>
-            <div className="category-pills">
-              {subcategories.map((label) => (
-                <span key={label} className="pill">
-                  {t(`servers.subcategoriesList.${label}`)}
-                </span>
+
+          {/* Subcategorías - Solo mostrar si existen */}
+          {subcategories.length > 0 && (
+            <div className="category-card__pills">
+              {subcategories.slice(0, 3).map((label) => (
+                <Pill key={label}>{t(`servers.subcategoriesList.${label}`)}</Pill>
               ))}
+              {subcategories.length > 3 && (
+                <Pill className="category-pill--more" more>
+                  +{subcategories.length - 3}
+                </Pill>
+              )}
             </div>
+          )}
+
+          {/* Footer: botón de estadísticas */}
+          <button
+            type="button"
+            className={`category-card__stats-toggle ${isExpanded ? 'expanded' : ''}`}
+            onClick={handleStatsClick}
+            tabIndex={-1}
+            aria-label={isExpanded ? t('servers.hideStats') : t('servers.showStats')}
+            aria-expanded={isExpanded}
+          >
+            <span>{t('servers.statsShort')}</span>
+            <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'}`} aria-hidden="true" />
+          </button>
+        </div>
+
+        {isExpanded && (
+          <div className="category-card__expanded">
+            <ServerStats stats={liveStats} />
           </div>
-          <div className="category-card__footer">
-            <span>{autoMode ? t('servers.autoTest') : t('servers.manualSelect')}</span>
-            <Button
-              variant="primary"
-              className="stats-btn"
-              onClick={handleStatsClick}
-              aria-label={isExpanded ? t('servers.hideStats') : t('servers.showStats')}
-            >
-              <span className="stats-btn__label">{t('servers.statsShort')}</span>
-              <i
-                className={`fas fa-chevron-${isExpanded ? 'up' : 'down'}`}
-                aria-hidden="true"
-                style={{ marginLeft: 8 }}
-              />
-            </Button>
-          </div>
-        </button>
-        {isExpanded && <ServerStats stats={liveStats} />}
-      </div>
+        )}
+      </Card>
     );
   },
   // Custom comparator: only re-render if key data changes
@@ -121,7 +123,6 @@ export const ServerCategory = memo(
       prevProps.category.name === nextProps.category.name &&
       prevProps.category.items?.length === nextProps.category.items?.length &&
       prevProps.hasSelectedServer === nextProps.hasSelectedServer &&
-      prevProps.autoMode === nextProps.autoMode &&
       prevProps.isExpanded === nextProps.isExpanded &&
       prevProps.liveStats?.connectedUsers === nextProps.liveStats?.connectedUsers &&
       prevProps.onCategoryClick === nextProps.onCategoryClick &&

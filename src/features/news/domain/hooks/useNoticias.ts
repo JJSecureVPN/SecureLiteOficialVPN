@@ -8,7 +8,14 @@ export type NoticiaItem = {
   contenido_completo?: string;
   imagen_url?: string;
   imagen_alt?: string;
-  fecha_publicacion?: string;
+  fecha_publicacion?: string | null;
+  // Campos adicionales que vienen desde la API
+  mostrar_desde?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  prioridad?: number | null;
+  destacada?: boolean;
+  estado?: string;
   categoria_nombre?: string;
   categoria_color?: string;
 };
@@ -80,34 +87,68 @@ export function useNoticias(config: NoticiasHookConfig = {}): NoticiasHookReturn
           headers['x-vpn-api-key'] = finalConfig.apiKey;
         }
 
-        const response = await fetch(url, {
-          cache: 'no-store',
-          headers,
-          signal: AbortSignal.timeout(10000), // 10 second timeout
-        });
+        // Intentar la petición hasta 2 veces (1 retry) en caso de timeout/red intermitente
+        const maxAttempts = 2;
+        let newsData: NoticiaItem[] = [];
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+          try {
+            const response = await fetch(url, {
+              cache: 'no-store',
+              headers,
+              signal: AbortSignal.timeout(10000), // 10 second timeout
+            });
 
-        if (!response.ok) {
-          await response.text().catch(() => '');
-          throw new Error(t('news.errors.server'));
+            if (!response.ok) {
+              await response.text().catch(() => '');
+              throw new Error(t('news.errors.server'));
+            }
+
+            const contentType = response.headers.get('content-type')?.toLowerCase() || '';
+            if (!contentType.includes('application/json')) {
+              await response.text().catch(() => '');
+              throw new Error(t('news.errors.serverInvalid'));
+            }
+
+            const json = await response.json();
+
+            if (!json.success) {
+              throw new Error(json.error || t('news.errors.generic'));
+            }
+
+            newsData = (json.data || []) as NoticiaItem[];
+            break; // éxito
+          } catch (fetchErr: any) {
+            if (cancelledRef.current) return;
+            if (attempt === maxAttempts) {
+              throw fetchErr; // re-lanzar tras último intento
+            }
+            // Backoff corto antes de reintentar
+
+            console.warn(`[useNoticias] intento ${attempt} fallido — reintentando...`, fetchErr);
+            await new Promise((r) => setTimeout(r, 500 * attempt));
+          }
         }
-
-        const contentType = response.headers.get('content-type')?.toLowerCase() || '';
-        if (!contentType.includes('application/json')) {
-          await response.text().catch(() => '');
-          throw new Error(t('news.errors.serverInvalid'));
-        }
-
-        const json = await response.json();
-
-        if (!json.success) {
-          throw new Error(json.error || t('news.errors.generic'));
-        }
-
-        const newsData = (json.data || []) as NoticiaItem[];
 
         if (cancelledRef.current) return;
 
-        setItems(newsData);
+        // Ordenar: destacadas primero, luego por fecha más reciente (fecha_publicacion -> mostrar_desde -> created_at)
+        const getPublishedDate = (it: NoticiaItem): number => {
+          const d = it.fecha_publicacion || it.mostrar_desde || it.created_at || null;
+          const parsed = d ? Date.parse(d) : NaN;
+          return Number.isNaN(parsed) ? 0 : parsed;
+        };
+
+        const sorted = newsData.slice().sort((a, b) => {
+          const featuredA = !!a.destacada;
+          const featuredB = !!b.destacada;
+          if (featuredA !== featuredB) return featuredA ? -1 : 1;
+
+          const dateA = getPublishedDate(a);
+          const dateB = getPublishedDate(b);
+          return dateB - dateA; // más recientes primero
+        });
+
+        setItems(sorted);
         setFetchedAt(new Date().toISOString());
         setError(null);
       } catch (err: any) {

@@ -42,7 +42,7 @@
 .logs-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md); /* más separación entre tarjetas */
   font-family: var(--font-mono);
   overflow-y: auto;
   flex: 1;
@@ -55,8 +55,29 @@
   align-items: flex-start;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
-  background: var(--glass-65);
-  border: 1px dashed var(--border);
+  /* Alinear visualmente con otras tarjetas */
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+}
+
+.log-entry:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-md);
+}
+
+.log-entry:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .log-line-number {

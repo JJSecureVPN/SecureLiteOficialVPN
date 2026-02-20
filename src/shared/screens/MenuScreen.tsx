@@ -1,10 +1,11 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn, callOne, dt } from '@/features/vpn';
 import { useToastContext } from '../context/ToastContext';
-import { useSectionStyle } from '@/shared/hooks';
+import { useSectionStyle, useIsMobilePortrait } from '@/shared';
 import { useTranslation } from '@/i18n';
+import { openNetworkSettings } from '@/shared/lib/appFunctions';
 import type { HotspotState } from '@/core/types/native';
-import { PremiumCard } from '@/shared/components';
+import { PremiumCard, MenuRow } from '@/shared/components';
 
 interface MenuItem {
   id: string;
@@ -59,6 +60,13 @@ export const MenuScreen = memo(function MenuScreen() {
   }, []);
 
   const menuItems: MenuItem[] = [
+    {
+      id: 'network',
+      title: t('menu.itemsNetworkTitle'),
+      subtitle: t('menu.itemsNetworkSubtitle'),
+      icon: 'fa-network-wired',
+      action: openNetworkSettings,
+    },
     {
       id: 'apn',
       title: t('menu.itemsApnTitle'),
@@ -152,6 +160,9 @@ export const MenuScreen = memo(function MenuScreen() {
     },
   ];
 
+  const isMobilePortrait = useIsMobilePortrait();
+  const visibleItems = menuItems.filter((item) => item.id !== 'terms' || isMobilePortrait);
+
   return (
     <section className="screen" style={sectionStyle}>
       <div className="section-header">
@@ -161,29 +172,23 @@ export const MenuScreen = memo(function MenuScreen() {
       <PremiumCard />
 
       <div className="menu-list">
-        {menuItems.map((item) => {
+        {visibleItems.map((item) => {
           const disabled = typeof item.action !== 'function';
           return (
-            <button
+            <MenuRow
               key={item.id}
-              type="button"
-              className={`menu-row ${pressedItem === item.id ? 'menu-row--pressed' : ''}`}
+              id={item.id}
+              icon={item.icon}
+              title={item.title}
+              subtitle={item.subtitle}
+              pressed={pressedItem === item.id}
               onClick={!disabled ? item.action : undefined}
               disabled={disabled}
               onPointerDown={() => handlePressStart(item.id)}
               onPointerUp={handlePressEnd}
               onPointerLeave={handlePressEnd}
               onPointerCancel={handlePressEnd}
-            >
-              <div className="menu-row__icon" aria-hidden="true">
-                <i className={`fa ${item.icon}`} />
-              </div>
-              <div className="menu-row__body">
-                <span className="menu-row__title">{item.title}</span>
-                <span className="menu-row__subtitle">{item.subtitle}</span>
-              </div>
-              <i className="fa fa-chevron-right menu-row__chevron" aria-hidden="true" />
-            </button>
+            />
           );
         })}
       </div>

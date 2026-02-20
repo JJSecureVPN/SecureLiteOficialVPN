@@ -3,6 +3,7 @@ import { useVpn, dt } from '@/features/vpn';
 import { useSectionStyle } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
+import { StatCard, KeyValueList } from '@/shared/components';
 
 export const AccountScreen = memo(function AccountScreen() {
   const { status, user, creds, config, pingMs, topInfo } = useVpn();
@@ -137,34 +138,25 @@ export const AccountScreen = memo(function AccountScreen() {
 
       <div className="stat-grid">
         {stats.map(({ label, value, className }) => (
-          <div key={label} className="stat-card">
-            <small>{label}</small>
-            <strong className={className}>{value}</strong>
-          </div>
+          <StatCard key={String(label)} label={label} value={value} valueClass={className} />
         ))}
       </div>
 
       <div className="account-stack">
         {compactSections.map(({ title, items }) => (
-          <div key={title} className="account-card compact">
-            <div className="card-head">
-              <span>{title}</span>
-            </div>
-            <ul>
-              {items.map(({ label, value }) => {
-                const valueClass =
-                  label === t('account.fields.remainingDays')
-                    ? getExpiryClass(daysRemainingInfo?.diff)
-                    : undefined;
-                return (
-                  <li key={label}>
-                    <span>{label}</span>
-                    <strong className={valueClass}>{value}</strong>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <KeyValueList
+            key={String(title)}
+            title={title}
+            items={items.map(({ label, value }) => ({
+              label,
+              value,
+              valueClass:
+                label === t('account.fields.remainingDays')
+                  ? getExpiryClass(daysRemainingInfo?.diff)
+                  : undefined,
+            }))}
+            compact
+          />
         ))}
       </div>
     </section>

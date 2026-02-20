@@ -7,9 +7,32 @@
   gap: var(--space-lg);
   align-items: center;
   padding: var(--space-lg);
-  border-radius: var(--radius-xl);
+  /* Alineado visual con las demás tarjetas */
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
 }
 
+.premium-card:hover {
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.premium-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
+}
 .premium-card__body {
   flex: 1;
   min-width: 0;

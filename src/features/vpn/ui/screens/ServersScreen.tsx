@@ -11,6 +11,7 @@
 
 import { useCallback, useRef, useEffect } from 'react';
 import { useVpn, dt } from '@/features/vpn';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext, useServerStats } from '@/shared';
 import { useSectionStyle } from '@/shared/hooks';
 import { useTranslation } from '@/i18n';
@@ -19,8 +20,12 @@ import { useAsyncError } from '@/core/hooks';
 import { keyboardNavigationManager } from '@/core/utils';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { ErrorDisplay } from '@/core/components';
-import { useServersFilter, useServersExpand, useServersKeyboard } from '@/features/vpn/ui/hooks';
-import { resolveSubcategory, orderSubcategories } from '@/features/vpn/ui/utils/categoryParsing';
+import {
+  useServersFilter,
+  useServersExpand,
+  useServersKeyboard,
+  useGroupedServers,
+} from '@/features/vpn/ui/hooks';
 import { ServersHeader, ServersContent } from '@/features/vpn/ui/components';
 import type { Category, ServerConfig } from '@/core/types';
 
@@ -64,28 +69,25 @@ export function ServersScreen() {
     visibleGroups,
   } = useServersFilter(categorias, selectedCategory);
 
-  // Keyboard Navigation
+  // Keyboard navigation + focus management (consolidated)
   useServersKeyboard(contentRef, selectedCategory);
 
-  // Focus first element when category is opened
   useEffect(() => {
-    if (!selectedCategory) return;
     const root = contentRef.current;
     if (!root) return;
     const selector = 'button, [role="button"], a, [tabindex]:not([tabindex="-1"])';
-    const t = window.setTimeout(() => {
-      const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
-        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
-      );
-      if (items.length) items[0].focus();
-    }, 40);
-    return () => window.clearTimeout(t);
-  }, [selectedCategory]);
 
-  // Ensure focus is set when *entering* the categories list (Servers screen)
-  useEffect(() => {
-    if (selectedCategory) return;
+    if (selectedCategory) {
+      const timer = window.setTimeout(() => {
+        const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
+          (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
+        );
+        if (items.length) items[0].focus();
+      }, 40);
+      return () => window.clearTimeout(timer);
+    }
 
+    // entering categories list: prefer focusing first category card
     let mounted = true;
     const maxAttempts = 6;
     let attempt = 0;
@@ -94,23 +96,34 @@ export function ServersScreen() {
     const tryFocus = () => {
       if (!mounted) return true;
       try {
-        const root = contentRef.current;
-        if (!root) return false;
-
-        // Prefer focusing search input when available
-        const search = root.querySelector<HTMLInputElement>('.search-field input[data-nav]');
-        if (search) {
-          try {
-            search.focus();
-          } catch {}
-          try {
-            keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
-          } catch {}
-          return true;
+        // If no category is expanded/selected but a server is currently active,
+        // prefer focusing the category that contains that server so visual state
+        // (selected + focus) points to the same category.
+        if (!selectedCategory && currentConfig?.id && categorias?.length) {
+          const categoryWithSelected = categorias.find((c) =>
+            c.items?.some((s) => s.id === currentConfig.id),
+          );
+          if (categoryWithSelected?.name) {
+            const cards = Array.from(root.querySelectorAll<HTMLElement>('.category-card'));
+            const match = cards.find((card) => {
+              const title = card.querySelector<HTMLElement>('.category-card__title');
+              return title && title.textContent?.trim() === String(categoryWithSelected.name);
+            });
+            if (match) {
+              try {
+                match.focus();
+              } catch {}
+              try {
+                keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
+              } catch {}
+              return true;
+            }
+          }
         }
 
-        // Otherwise focus the first navigable category-card or element
-        const first = root.querySelector<HTMLElement>('.category-card, [data-nav], button, [role="button"]');
+        const first =
+          (root.querySelector<HTMLElement>('.category-card') as HTMLElement | null) ||
+          root.querySelector<HTMLElement>('[data-nav]:not(input), button, [role="button"]');
         if (first) {
           try {
             first.focus();
@@ -121,7 +134,7 @@ export function ServersScreen() {
           return true;
         }
       } catch {
-        // ignore
+        /* ignore */
       }
       return false;
     };
@@ -139,74 +152,78 @@ export function ServersScreen() {
       mounted = false;
       timers.forEach((t) => window.clearTimeout(t));
     };
-  }, [selectedCategory]);
+  }, [selectedCategory, categorias?.length, currentConfig?.id]);
 
   // Callbacks
-  const handleCategoryClick = useCallback(
-    (cat: Category) => {
-      setSelectedCategory(cat);
-    },
-    [setSelectedCategory],
-  );
-
   const handleServerClick = useCallback(
     (srv: ServerConfig, cat: Category) => {
-      try {
-        error.clearError();
+      error.clearError();
 
-        if (autoMode) {
-          try {
-            startAutoConnect(cat);
-            showToast(
-              `${t('auto.testing')} ${cat.name || t('auto.categoryFallback')}`,
-              document.activeElement as HTMLElement,
-            );
-          } catch (err) {
-            error.setError(err, ErrorCategory.Internal);
-            showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement);
-          }
-          return;
+      if (autoMode) {
+        try {
+          startAutoConnect(cat);
+          showToast(
+            `${t('auto.testing')} ${cat.name || t('auto.categoryFallback')}`,
+            document.activeElement as HTMLElement,
+          );
+        } catch (err) {
+          error.setError(err, ErrorCategory.Internal);
+          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement);
         }
+        return;
+      }
 
-        // Manual mode: disconnect current, set new server, start connection
-        if (status === 'CONNECTED' || status === 'CONNECTING') {
-          try {
+      const performStart = (message: string) => {
+        setConfig(srv);
+        setScreen('home');
+
+        // If a category card currently has focus, blur it so visual "selected" (via :focus-within)
+        // does not remain active in addition to the category that contains the selected server.
+        try {
+          const active = document.activeElement as HTMLElement | null;
+          if (active?.closest && active.closest('.category-card')) active.blur();
+        } catch {}
+
+        showToast(message, document.activeElement as HTMLElement);
+        window.setTimeout(() => dt.call('DtExecuteVpnStart'), 250);
+      };
+
+      try {
+        const pushCreds = () => {
+          const sdk = getSdk();
+          if (sdk) {
+            sdk.config.setUsername(creds.user);
+            sdk.config.setPassword(creds.pass);
+            sdk.config.setUuid(creds.uuid);
+          } else {
             dt.set('DtUsername', creds.user);
             dt.set('DtPassword', creds.pass);
             dt.set('DtUuid', creds.uuid);
-
-            if (status === 'CONNECTING') {
-              cancelConnecting();
-            } else {
-              disconnect();
-            }
-
-            setConfig(srv);
-            setScreen('home');
-            showToast(
-              `${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`,
-              document.activeElement as HTMLElement,
-            );
-
-            window.setTimeout(() => {
-              dt.call('DtExecuteVpnStart');
-            }, 250);
-          } catch (err) {
-            error.setError(err, ErrorCategory.Internal);
-            showToast(t('error.connectionFailed'), document.activeElement as HTMLElement);
           }
+        };
+
+        if (status === 'CONNECTING') {
+          pushCreds();
+          cancelConnecting();
+          performStart(`${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`);
           return;
         }
 
-        setConfig(srv);
-        setScreen('home');
-        showToast(t('connection.serverSelected'), document.activeElement as HTMLElement);
+        if (status === 'CONNECTED') {
+          pushCreds();
+          disconnect();
+          performStart(`${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`);
+          return;
+        }
+
+        performStart(t('connection.serverSelected'));
       } catch (err) {
         error.setError(err, ErrorCategory.Internal);
         appLogger.add(
           'error',
           `Server selection error: ${err instanceof Error ? err.message : String(err)}`,
         );
+        showToast(t('error.connectionFailed'), document.activeElement as HTMLElement);
       }
     },
     [
@@ -226,15 +243,16 @@ export function ServersScreen() {
     ],
   );
 
-  const handleClearSearch = useCallback(() => {
-    setSearchTerm('');
-  }, [setSearchTerm]);
-
   const handleOpenConfigurator = useCallback(() => {
     try {
       error.clearError();
       appLogger.add('info', '🔧 Abriendo diálogo de configuración nativa de DTunnel');
-      dt.call('DtExecuteDialogConfig');
+      const sdk = getSdk();
+      if (sdk) {
+        sdk.config.openConfigDialog();
+      } else {
+        dt.call('DtExecuteDialogConfig');
+      }
 
       let lastConfigId: string | null = null;
       const currentConfig = dt.jsonConfigAtual as ServerConfig | null;
@@ -279,26 +297,7 @@ export function ServersScreen() {
   }, [setConfig, error]);
 
   // Compute grouped servers when category is selected
-  const groupedServers = selectedCategory?.items?.length
-    ? ((): Array<{ label: string; servers: ServerConfig[] }> => {
-        const map = new Map<string, ServerConfig[]>();
-        selectedCategory.items.forEach((srv) => {
-          const label = resolveSubcategory(srv.name);
-          const list = map.get(label) || [];
-          list.push(srv);
-          map.set(label, list);
-        });
-        return orderSubcategories(Array.from(map.keys())).map((label) => ({
-          label,
-          servers: (map.get(label) || []).sort((a, b) => {
-            const sorterDiff =
-              (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
-            if (sorterDiff !== 0) return sorterDiff;
-            return a.name.localeCompare(b.name);
-          }),
-        }));
-      })()
-    : [];
+  const groupedServers = useGroupedServers(selectedCategory);
 
   return (
     <section className="screen servers-screen" style={sectionStyle}>
@@ -328,11 +327,11 @@ export function ServersScreen() {
         searchTerm={searchTerm}
         categorias={categorias}
         serversByName={serversByName}
-        onCategoryClick={handleCategoryClick}
+        onCategoryClick={setSelectedCategory}
         onServerClick={handleServerClick}
         onToggleExpand={toggleExpand}
         onSearchChange={setSearchTerm}
-        onClearSearch={handleClearSearch}
+        onClearSearch={() => setSearchTerm('')}
         onOpenConfigurator={handleOpenConfigurator}
       />
     </section>

@@ -2,6 +2,7 @@ import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
 import { extractDomain, removeDomainFromDescription } from '@/core/utils';
+import { Card, Badge } from '@/shared';
 
 interface ServerCardProps {
   config: ServerConfig | null;
@@ -48,7 +49,7 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
   );
 
   return (
-    <div
+    <Card
       className="location-card"
       onClick={disabled ? undefined : onClick}
       style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1 }}
@@ -82,13 +83,13 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
         <div className="loc-meta">
           <div className="loc-name-row">
             <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>
-            {domain && <span className="badge badge-domain">{domain}</span>}
+            {domain && <Badge className="badge badge-domain">{domain}</Badge>}
           </div>
           {config?.ip && <small className="loc-ip">{config.ip}</small>}
           {cleanDescription && <div className="loc-description">{cleanDescription}</div>}
         </div>
       </div>
       <i className="fa fa-chevron-right" aria-hidden="true" />
-    </div>
+    </Card>
   );
 });

@@ -88,13 +88,6 @@ export function parseConfigJson(text: string): ParsedConfig | null {
     const sanitized = stripCommentsAndTrailingCommas(text);
     const obj = JSON.parse(sanitized);
 
-    // Explicitly ignore any `autoConnect` field from imported JSON.
-    // Import only sets server/credentials — automatic connection must be
-    // controlled manually via the app UI (HomeScreen toggle).
-    if (obj && typeof obj === 'object' && Object.prototype.hasOwnProperty.call(obj, 'autoConnect')) {
-      // intentionally ignored
-    }
-
     const out: ParsedConfig = {};
 
     // Extract server info

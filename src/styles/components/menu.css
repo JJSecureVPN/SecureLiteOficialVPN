@@ -3,19 +3,20 @@
    =========================================== */
 
 .menu-list {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
   margin-top: var(--space-md);
-  overflow: hidden;
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
-  box-shadow: var(--shadow-sm);
+  /* Contenedor transparente: cada fila actúa como tarjeta */
+  background: transparent;
+  border: none;
+  padding: 0;
 }
-
 .menu-row {
   width: 100%;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
   color: var(--text);
   display: flex;
   align-items: center;
@@ -23,20 +24,61 @@
   padding: var(--space-md) var(--space-lg);
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  -webkit-tap-highlight-color: transparent; /* eliminar highlight móvil/Android */
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: none;
+  outline: none; /* prevenir outline cuadrado del UA */
 }
 
-.menu-row:last-child {
-  border-bottom: none;
+/* Remueve el inner focus border en Firefox */
+.menu-row::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.menu-row:hover {
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.menu-row:active {
+  /* estado activo consistente (evita pintar el fondo azul del UA) */
+  background: var(--accent-15);
+  transform: translateY(0) scale(0.995);
+  box-shadow: none;
+}
+
+.menu-row:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.menu-row + .menu-row {
+  margin-top: var(--space-sm);
 }
 
 .menu-row:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background: var(--surface-1);
 }
 
 .menu-row--pressed {
   background: var(--accent-15);
+  transform: translateY(0) scale(0.995);
+  box-shadow: none;
 }
 
 .menu-row__icon {

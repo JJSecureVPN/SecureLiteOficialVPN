@@ -8,7 +8,7 @@ import type { ServerConfig, Category } from '@/core/types';
 import { parseConfigJson, type ParsedConfig } from '../utils/configParsing';
 import { searchServers } from '../utils/serverSearch';
 
-export type ImportStep = 'input' | 'select' | 'confirm';
+export type ImportStep = 'input' | 'select' | 'confirm' | 'designer';
 
 export interface UseImportConfigReturn {
   // State
@@ -28,6 +28,7 @@ export interface UseImportConfigReturn {
   handleParse: (categorias: Category[], allServers: ServerConfig[]) => void;
   handleBack: () => void;
   handleReset: () => void;
+  handleDesignerResult: (json: string) => void;
 }
 
 export function useImportConfig(): UseImportConfigReturn {
@@ -91,6 +92,12 @@ export function useImportConfig(): UseImportConfigReturn {
     setParseError(null);
   }, []);
 
+  const handleDesignerResult = useCallback((json: string) => {
+    // When user finishes designer and wants to use the JSON
+    setRawInput(json);
+    setStep('input');
+  }, []);
+
   return {
     step,
     rawInput,
@@ -104,5 +111,6 @@ export function useImportConfig(): UseImportConfigReturn {
     handleParse,
     handleBack,
     handleReset,
+    handleDesignerResult,
   };
 }

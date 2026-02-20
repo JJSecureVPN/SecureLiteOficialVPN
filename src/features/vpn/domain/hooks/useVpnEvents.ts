@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import type { ServerConfig, VpnStatus } from '@/core/types';
 import { dt, onNativeEvent } from '../../api/vpnBridge';
+import { getSdk } from '../../api/dtunnelSdk';
 import { appLogger } from '@/features/logs';
 import { VPN_POLLING_INTERVAL_MS } from '@/core/constants';
 
@@ -70,7 +71,10 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
     let lastPolledStatus: VpnStatus | null = null;
 
     const interval = setInterval(() => {
-      const st = dt.call<string>('DtGetVpnState') as VpnStatus | null;
+      const sdk = getSdk();
+      const st = (
+        sdk ? sdk.main.getVpnState() : dt.call<string>('DtGetVpnState')
+      ) as VpnStatus | null;
       if (st && st !== lastPolledStatus) {
         lastPolledStatus = st;
         setStatus(st);

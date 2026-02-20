@@ -4,8 +4,10 @@
  */
 
 import { useTranslation } from '@/i18n';
+import { getServerCategory } from '@/features/vpn/ui/utils';
 import type { ServerConfig, Category } from '@/core/types';
 import type { ParsedConfig } from '../utils/configParsing';
+import { Card, Badge } from '@/shared';
 
 interface ImportConfirmStepProps {
   matches: ServerConfig[];
@@ -14,6 +16,7 @@ interface ImportConfirmStepProps {
   categorias: Category[];
   onBack: () => void;
   onApply: () => void;
+  onExport?: () => void;
 }
 
 export function ImportConfirmStep({
@@ -23,18 +26,14 @@ export function ImportConfirmStep({
   categorias,
   onBack,
   onApply,
+  onExport,
 }: ImportConfirmStepProps) {
   const { t } = useTranslation();
-
-  const getCategory = (server: ServerConfig) => {
-    const cat = categorias.find((c) => c.items?.some((i) => String(i.id) === String(server.id)));
-    return cat?.name || '';
-  };
 
   const selectedServer = matches.find((m) => String(m.id) === String(selectedId));
   if (!selectedServer) return null;
 
-  const category = getCategory(selectedServer);
+  const category = getServerCategory(selectedServer, categorias) || '';
 
   return (
     <div className="step-content">
@@ -57,7 +56,7 @@ export function ImportConfirmStep({
         <p>{t('import.reviewDetails')}</p>
       </div>
 
-      <div className="server-preview">
+      <Card className="server-preview">
         <div className="preview-main">
           <div className="preview-icon">
             <svg
@@ -75,7 +74,7 @@ export function ImportConfirmStep({
           </div>
           <div className="preview-details">
             <div className="preview-name">{selectedServer.name}</div>
-            {category && <div className="preview-category">{category}</div>}
+            {category && <Badge className="preview-category">{category}</Badge>}
           </div>
         </div>
 
@@ -101,7 +100,7 @@ export function ImportConfirmStep({
             </span>
           </div>
         )}
-      </div>
+      </Card>
 
       <div className="button-group">
         <button className="btn btn-secondary" onClick={onBack}>
@@ -117,19 +116,35 @@ export function ImportConfirmStep({
           </svg>
           {t('import.back')}
         </button>
-        <button className="btn btn-primary btn-success" onClick={onApply}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          {t('import.applyConfig')}
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn btn-outline" onClick={onExport}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M12 5v14" />
+              <path d="M19 12l-7-7-7 7" />
+            </svg>
+            {t('import.exportJson')}
+          </button>
+          <button className="btn btn-primary btn-success" onClick={onApply}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {t('import.applyConfig')}
+          </button>
+        </div>
       </div>
     </div>
   );

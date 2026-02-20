@@ -4,7 +4,9 @@
  */
 
 import { useTranslation } from '@/i18n';
+import { getServerCategory } from '@/features/vpn/ui/utils';
 import type { ServerConfig, Category } from '@/core/types';
+import { Card, Badge } from '@/shared';
 
 interface ImportSelectStepProps {
   matches: ServerConfig[];
@@ -25,11 +27,6 @@ export function ImportSelectStep({
 }: ImportSelectStepProps) {
   const { t } = useTranslation();
 
-  const getCategory = (server: ServerConfig) => {
-    const cat = categorias.find((c) => c.items?.some((i) => String(i.id) === String(server.id)));
-    return cat?.name || '';
-  };
-
   return (
     <div className="step-content">
       <div className="section-header">
@@ -41,11 +38,12 @@ export function ImportSelectStep({
 
       <div className="server-list">
         {matches.map((server) => {
-          const category = getCategory(server);
+          const category = getServerCategory(server, categorias) || '';
           const isSelected = String(selectedId) === String(server.id);
 
           return (
-            <label
+            <Card
+              as="label"
               key={String(server.id)}
               className={`server-card ${isSelected ? 'selected' : ''}`}
             >
@@ -57,7 +55,7 @@ export function ImportSelectStep({
               />
               <div className="server-info">
                 <div className="server-name">{server.name}</div>
-                {category && <div className="server-category">{category}</div>}
+                {category && <Badge className="server-category">{category}</Badge>}
                 {server.description && <div className="server-desc">{server.description}</div>}
               </div>
               <div className="checkmark">
@@ -72,7 +70,7 @@ export function ImportSelectStep({
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-            </label>
+            </Card>
           );
         })}
       </div>

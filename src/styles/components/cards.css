@@ -2,17 +2,35 @@
    Cards - Tarjetas generales
    =========================================== */
 
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+}
+
 /* ===========================================
    Server Card
    =========================================== */
 
 .server-card {
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  position: relative;
+  /* Adoptar el look de Category / ServerItem */
+  background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  padding: clamp(10px, 1.5vw, 12px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: clamp(12px, 1.5vw, 16px);
   margin-top: clamp(6px, 1vw, 8px);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease;
 }
 
 /* ===========================================
@@ -57,7 +75,7 @@
 .server-card .location-card {
   margin: 0;
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  background: var(--surface-1);
 }
 
 .loc-left {
@@ -184,9 +202,31 @@
 
 .stat-card {
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-md);
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  /* Alineado visual con las demás tarjetas */
+  background: var(--surface-1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .stat-card small {
@@ -216,15 +256,37 @@
 
 .account-card {
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   padding: var(--space-xl);
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  /* Unificar con apariencia de tarjetas Home/Category/ListItem */
+  background: var(--surface-1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+}
+
+.account-card:hover {
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.account-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .account-card.compact {
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
-  background: var(--cardBg2);
+  background: var(--surface-1);
   border-color: var(--border);
 }
 

@@ -1,0 +1,488 @@
+/* ===========================================
+   Category Card - Diseño minimalista y fluido
+   Optimizado para móvil con interacciones táctiles
+   =========================================== */
+
+.category-card {
+  position: relative;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  outline: none;
+}
+
+/* Hover + Focus */
+.category-card:hover {
+  border-color: var(--accent-40);
+  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.category-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--accent-20),
+    0 4px 12px rgba(109, 74, 255, 0.15);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.category-card:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.15s ease;
+}
+
+/* Estado seleccionado */
+.category-card.selected {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent-10), var(--surface-1));
+  box-shadow: 0 8px 24px rgba(109, 74, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+/* left indicator removed (UI preference) */
+
+/* ===========================================
+   Content Layout
+   =========================================== */
+
+.category-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===========================================
+   Header
+   =========================================== */
+
+.category-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.category-card__title-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.category-card__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.category-card__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: var(--accent-10);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Badge de usuarios */
+.category-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.category-card__badge i {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ===========================================
+   Pills (Subcategorías)
+   =========================================== */
+
+.category-card__pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--bg-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.category-pill--more {
+  background: var(--accent-10);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ===========================================
+   Stats Toggle Button
+   =========================================== */
+
+.category-card__stats-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-1);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.category-card__stats-toggle:hover {
+  background: var(--accent-10);
+  border-color: var(--accent-40);
+  color: var(--accent);
+}
+
+.category-card__stats-toggle:active {
+  transform: scale(0.97);
+}
+
+.category-card__stats-toggle.expanded {
+  background: var(--accent-10);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.category-card__stats-toggle i {
+  font-size: 11px;
+  transition: transform 0.3s ease;
+}
+
+.category-card__stats-toggle.expanded i {
+  transform: rotate(180deg);
+}
+
+/* ===========================================
+   Expanded Stats Area
+   =========================================== */
+
+.category-card__expanded {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-2);
+  border-radius: 10px;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stats Container */
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Métricas principales (CPU/RAM con barras) */
+.stats-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-metric__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-metric__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stat-metric__label i {
+  font-size: 12px;
+  color: var(--accent);
+  width: 16px;
+  text-align: center;
+}
+
+.stat-metric__value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de progreso */
+.stat-progress {
+  height: 6px;
+  background: var(--surface-1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-progress__bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Colores según nivel de uso */
+.stat-progress__bar[data-level='low'] {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.stat-progress__bar[data-level='medium'] {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+.stat-progress__bar[data-level='high'] {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+/* Efecto de animación en la barra */
+.stat-progress__bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Información secundaria (grid compacto) */
+.stats-secondary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.stat-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--surface-1);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.stat-info i {
+  font-size: 10px;
+  color: var(--muted);
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.stat-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================================
+   Mobile Optimizations
+   =========================================== */
+
+@media (max-width: 640px) {
+  .category-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .category-card__title {
+    font-size: 16px;
+  }
+
+  .category-card__badge {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .category-card__count {
+    min-width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .category-pill {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .category-card__stats-toggle {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  /* Stats en móvil */
+  .category-card__expanded {
+    padding: 10px;
+  }
+
+  .stats-container {
+    gap: 10px;
+  }
+
+  .stats-primary {
+    gap: 10px;
+  }
+
+  .stat-metric__label {
+    font-size: 12px;
+  }
+
+  .stat-metric__value {
+    font-size: 13px;
+  }
+
+  .stats-secondary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .stat-info {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .stat-info i {
+    font-size: 9px;
+    width: 10px;
+  }
+}
+
+/* ===========================================
+   Touch Device Optimizations
+   =========================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .category-card__stats-toggle {
+    min-height: 44px;
+  }
+
+  /* Remove hover effects, keep active */
+  .category-card:hover {
+    border-color: var(--border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transform: none;
+  }
+
+  .category-card.selected:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(109, 74, 255, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+/* ===========================================
+   Accessibility
+   =========================================== */
+/* Focus en la tarjeta principal */
+.category-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--accent-20),
+    0 4px 12px rgba(109, 74, 255, 0.15);
+  outline: none;
+}
+
+/* El botón de stats no debe tener outline visible cuando está en tabIndex -1 */
+.category-card__stats-toggle:focus {
+  outline: nonevar(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .category-card,
+  .category-card__stats-toggle,
+  .category-card__stats-toggle i,
+  .category-pill {
+    transition: none;
+  }
+
+  .category-card__expanded {
+    animation: none;
+  }
+}

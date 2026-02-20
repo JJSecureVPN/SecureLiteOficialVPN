@@ -4,7 +4,8 @@
  */
 
 import { useCallback, memo } from 'react';
-import { useTranslation } from '@/i18n';
+import '../../../../styles/components/server-item.css';
+import { Card, Badge } from '@/shared';
 import { formatProtocol, extractDomain, removeDomainFromDescription } from '@/core/utils';
 import type { ServerConfig, Category } from '@/core/types';
 
@@ -21,11 +22,9 @@ export const ServerListItem = memo(
     server,
     isActive,
     category,
-    autoMode,
+    autoMode: _autoMode,
     onSelectServer,
   }: ServerListItemProps) {
-    const { t } = useTranslation();
-
     const handleClick = useCallback(() => {
       onSelectServer(server, category);
     }, [server, category, onSelectServer]);
@@ -33,32 +32,53 @@ export const ServerListItem = memo(
     const protocolLabel = formatProtocol(server.mode) || server.mode;
     const domain = extractDomain(server.description);
     const cleanDescription = removeDomainFromDescription(server.description);
-    const actionLabel = autoMode ? t('servers.autoModeActive') : t('servers.tapToConnect');
 
     return (
-      <button
+      <Card
+        as="button"
         type="button"
         className={`server-item ${isActive ? 'selected' : ''}`}
         onClick={handleClick}
         data-nav
+        aria-label={`${server.name} - ${protocolLabel}`}
       >
+        {/* Indicador visual de servidor activo */}
+        {isActive && <div className="server-item__indicator" aria-hidden="true" />}
+
+        {/* Header: Nombre e IP */}
         <div className="server-item__header">
-          <div>
-            <p className="server-item__title">{server.name}</p>
-            {server.ip && <small className="server-item__ip">{server.ip}</small>}
+          <div className="server-item__main">
+            <h4 className="server-item__title">{server.name}</h4>
+            {server.ip && <span className="server-item__ip">{server.ip}</span>}
           </div>
-          <div className="server-item__badges">
-            <span className="pill pill-soft">{protocolLabel}</span>
-            {domain && <span className="badge badge-domain">{domain}</span>}
-            {isActive && <span className="badge badge-active">{t('servers.inUse')}</span>}
-          </div>
+
+          {/* Badge de estado activo */}
+          {isActive && (
+            <span className="server-item__status">
+              <i className="fas fa-check-circle" aria-hidden="true" />
+            </span>
+          )}
         </div>
+
+        {/* Descripción (si existe) */}
         {cleanDescription && <p className="server-item__description">{cleanDescription}</p>}
+
+        {/* Footer: Protocolo y dominio */}
         <div className="server-item__footer">
-          <span>{actionLabel}</span>
-          <i className="fas fa-chevron-right" aria-hidden="true" />
+          <div className="server-item__badges">
+            <Badge variant="protocol" iconClass="fas fa-shield-alt">
+              {protocolLabel}
+            </Badge>
+            {domain && (
+              <Badge variant="domain" iconClass="fas fa-globe">
+                {domain}
+              </Badge>
+            )}
+          </div>
+
+          <i className="fas fa-chevron-right server-item__arrow" aria-hidden="true" />
         </div>
-      </button>
+      </Card>
     );
   },
   // Custom comparator: only re-render if relevant props change
@@ -66,7 +86,6 @@ export const ServerListItem = memo(
     return (
       prevProps.server.id === nextProps.server.id &&
       prevProps.isActive === nextProps.isActive &&
-      prevProps.autoMode === nextProps.autoMode &&
       prevProps.category.name === nextProps.category.name &&
       prevProps.onSelectServer === nextProps.onSelectServer
     );

@@ -142,6 +142,19 @@ function main() {
   } else if (jsFile) {
     jsContent = readFileSync(join(distDir, jsFile), "utf8");
   }
+
+  // Prefijar el DTunnel SDK (IIFE) antes del código de la app.
+  // Esto garantiza que window.DTunnelSDK esté disponible antes de que
+  // React se monte, ya que el SDK JS no es un módulo ESM y no puede
+  // bundlearse directamente con Vite sin romper la resolución de módulos.
+  const sdkPath = join(process.cwd(), "src", "lib", "dtunnel-sdk.js");
+  if (existsSync(sdkPath)) {
+    const sdkContent = readFileSync(sdkPath, "utf8");
+    jsContent = sdkContent + "\n\n" + jsContent;
+    log("✅ DTunnel SDK prepended al bundle JS");
+  } else {
+    log("⚠️  src/lib/dtunnel-sdk.js no encontrado, omitiendo inyección del SDK");
+  }
   let cssContent = "";
   for (const cssPath of cssFiles) {
     cssContent += readFileSync(join(distDir, cssPath), "utf8") + "\n";

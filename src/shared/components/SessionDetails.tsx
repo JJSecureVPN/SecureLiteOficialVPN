@@ -4,6 +4,7 @@ import { useTranslation } from '@/i18n';
 import { getDisplayName } from '@/core/utils';
 import { SessionCardBody } from './SessionDetails/SessionCardBody';
 import { SessionActions } from './SessionDetails/SessionActions';
+import { Card } from '@/shared';
 
 /**
  * Componente principal que orquesta los subcomponentes presentacionales
@@ -59,7 +60,10 @@ export const SessionDetails = memo(function SessionDetails() {
     return { diff, label };
   }, [user?.expiration_date]);
 
-  const showRenewWarning = typeof daysRemainingInfo?.diff === 'number' && daysRemainingInfo.diff >= 0 && daysRemainingInfo.diff <= 5;
+  const showRenewWarning =
+    typeof daysRemainingInfo?.diff === 'number' &&
+    daysRemainingInfo.diff >= 0 &&
+    daysRemainingInfo.diff <= 5;
 
   const getExpiryClass = (diff?: number) => {
     if (typeof diff !== 'number') return undefined;
@@ -76,7 +80,7 @@ export const SessionDetails = memo(function SessionDetails() {
   const isFreeUser = typeof name === 'string' && name.toLowerCase().includes('free');
 
   return (
-    <div className="info-card session-card">
+    <Card className="info-card session-card">
       <SessionCardBody
         isFreeUser={isFreeUser}
         name={name}
@@ -93,6 +97,6 @@ export const SessionDetails = memo(function SessionDetails() {
         onRenew={handleOpenPlans}
         t={t}
       />
-    </div>
+    </Card>
   );
 });

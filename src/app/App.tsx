@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { destroySdk } from '@/features/vpn/api/dtunnelSdk';
 
 // VPN Feature Screens (features/vpn/ui/screens/ + api + context)
 import {
@@ -33,6 +34,7 @@ import {
   Toast, // shared/ui/Toast
   MenuScreen, // shared/screens/MenuScreen (transversal, no pertenece a feature)
   useSafeArea, // shared/hooks/useSafeArea
+  useNativeToasts, // shared/hooks/useNativeToasts
 } from '../shared';
 
 // Internationalization
@@ -97,6 +99,12 @@ function AppContent() {
   const { toast } = useToastContext();
   const { isConnected, isConnecting } = useConnectionStatus();
   const { navigationBarHeight } = useSafeArea();
+
+  // Escucha toasts y notificaciones del SDK nativo de DTunnel
+  useNativeToasts();
+
+  // Limpieza del SDK al desmontar la app (hot-reload / tests)
+  useEffect(() => () => destroySdk(), []);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [modalCoupons, setModalCoupons] = useState<Coupon[]>([]);
 

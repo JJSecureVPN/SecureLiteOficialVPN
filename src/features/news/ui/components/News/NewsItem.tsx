@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import type { NoticiaItem } from '@/features/news';
+import { Card, Badge } from '@/shared';
 
 interface NewsItemProps {
   item: NoticiaItem;
@@ -8,9 +9,11 @@ interface NewsItemProps {
 
 export function NewsItem({ item, onClick }: NewsItemProps) {
   const formattedDate = useMemo(() => {
-    if (!item.fecha_publicacion) return null;
+    // Preferir fecha_publicacion, fallback a mostrar_desde o created_at
+    const raw = item.fecha_publicacion || item.mostrar_desde || item.created_at || null;
+    if (!raw) return null;
 
-    const date = new Date(item.fecha_publicacion);
+    const date = new Date(raw);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
 
@@ -23,7 +26,7 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
       month: 'short',
       year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
     });
-  }, [item.fecha_publicacion]);
+  }, [item.fecha_publicacion, item.mostrar_desde, item.created_at]);
 
   const handleClick = () => onClick(item);
 
@@ -35,7 +38,8 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
   };
 
   return (
-    <article
+    <Card
+      as="article"
       className="news-item"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -52,12 +56,12 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
             loading="lazy"
           />
           {item.categoria_nombre && (
-            <span
+            <Badge
               className="news-item__badge"
               style={{ backgroundColor: item.categoria_color || '#007aff' }}
             >
               {item.categoria_nombre}
-            </span>
+            </Badge>
           )}
         </div>
       )}
@@ -65,18 +69,29 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
       <div className="news-item__content">
         <div className="news-item__meta">
           {!item.imagen_url && item.categoria_nombre && (
-            <span
+            <Badge
               className="news-item__category"
               style={{ backgroundColor: item.categoria_color || '#007aff' }}
             >
               {item.categoria_nombre}
-            </span>
+            </Badge>
           )}
           {formattedDate && (
-            <time className="news-item__date" dateTime={item.fecha_publicacion}>
+            <time
+              className="news-item__date"
+              dateTime={
+                item.fecha_publicacion || item.mostrar_desde || item.created_at || undefined
+              }
+            >
               {formattedDate}
             </time>
           )}
+
+          {item.destacada ? (
+            <span className="news-item__featured" aria-label="Destacada">
+              Destacada
+            </span>
+          ) : null}
         </div>
 
         <h3 className="news-item__title">{item.titulo}</h3>
@@ -104,6 +119,6 @@ export function NewsItem({ item, onClick }: NewsItemProps) {
           </span>
         </div>
       </div>
-    </article>
+    </Card>
   );
 }

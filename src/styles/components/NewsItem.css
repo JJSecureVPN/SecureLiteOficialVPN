@@ -6,47 +6,86 @@
   display: flex;
   flex-direction: column;
   background: var(--surface-1);
-  border-radius: 16px;
+  /* usar token de radius para consistencia con .card */
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--text-strong-06);
+  border: 1px solid var(--border);
+  /* base shadow igual que .card */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
   outline: none;
+  -webkit-tap-highlight-color: transparent; /* quitar cuadrado azul en móviles/touch */
+  will-change: transform, box-shadow;
 }
 
 .news-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  border-color: var(--text-strong-06);
+  border-color: var(--accent-40);
 }
 
 .news-item:active {
-  transform: translateY(-2px);
+  transform: translateY(0);
 }
 
 .news-item:focus-visible {
-  outline: 2px solid #007aff;
-  outline-offset: 2px;
+  /* Usar box-shadow redondeado para respetar border-radius y mantener accesibilidad */
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--focus-accent-15),
+    var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Ajustes específicos cuando el listado sólo contiene un único news-item -> hacerlo más prominente */
+.news-list:has(.news-item:only-child) .news-item {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.news-list:has(.news-item:only-child) .news-item:hover {
+  /* mantener prominencia del único item pero con la misma interacción que otras tarjetas */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Media (Image) */
 .news-item__media {
   position: relative;
   width: 100%;
-  height: 200px;
+  /* mantener proporción y permitir que la imagen entre completa (no recortada) */
+  aspect-ratio: 16/9;
+  height: auto;
   overflow: hidden;
   background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .news-item__image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* mostrar la imagen completa dentro del contenedor sin recortar */
+  object-fit: contain;
+  object-position: center;
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.25s;
 }
 
+/* Efecto sutil al pasar el ratón sin recortar la imagen */
 .news-item:hover .news-item__image {
-  transform: scale(1.04);
+  transform: scale(1.02);
+  filter: brightness(0.98);
 }
 
 .news-item__badge {
@@ -69,8 +108,9 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 16px;
-  gap: 10px;
+  /* tokenized spacing to match other cards */
+  padding: var(--space-xl);
+  gap: var(--space-md);
 }
 
 /* Meta */
@@ -89,6 +129,18 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.news-item__featured {
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+  color: #fff;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  box-shadow: 0 6px 14px rgba(217, 119, 6, 0.18);
 }
 
 .news-item__date {
@@ -156,8 +208,8 @@
   }
 
   .news-item:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-40);
+    box-shadow: var(--shadow-md);
   }
 
   .news-item__media {
@@ -177,7 +229,9 @@
 /* Responsive */
 @media (max-width: 640px) {
   .news-item__media {
-    height: 180px;
+    /* altura más compacta pero sin recorte */
+    aspect-ratio: 3/2;
+    height: auto;
   }
 
   .news-item__title {

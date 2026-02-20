@@ -13,7 +13,7 @@ const LOG_LEVEL_ICONS: Record<string, string> = {
 };
 
 export const AppLogsScreen = memo(function AppLogsScreen() {
-  const { setScreen } = useVpn();
+  useVpn();
   const { showToast } = useToastContext();
   const { t } = useTranslation();
   const { logs, clear } = useAppLogs();
@@ -74,10 +74,6 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
     showToast(t('applogs.clearedToast'));
   }, [clear, showToast, t]);
 
-  const handleClose = useCallback(() => {
-    setScreen('menu');
-  }, [setScreen]);
-
   return (
     <section className="screen applogs-screen" style={screenStyle}>
       <div className="applogs-header">
@@ -99,7 +95,6 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
           >
             {t('applogs.servers')}
           </Button>
-          <Button onClick={handleClose}>{t('applogs.close')}</Button>
         </div>
       </div>
 

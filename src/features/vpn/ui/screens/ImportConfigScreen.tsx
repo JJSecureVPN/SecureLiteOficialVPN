@@ -9,16 +9,18 @@
  * - ~180 lines (refactored from 628)
  */
 
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/core/types';
 import { useTranslation } from '@/i18n';
 import { useVpn } from '@/features/vpn';
-import { useToastContext, useSafeArea } from '@/shared';
+import { useToastContext, useSafeArea, Card } from '@/shared';
 import { useAsyncError } from '@/core/hooks';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { ErrorDisplay } from '@/core/components';
 import { useImportConfig } from '@/features/vpn/ui/hooks';
 import { ImportInputStep, ImportSelectStep, ImportConfirmStep } from '@/features/vpn/ui/components';
+import { ImportDesignerScreen } from '@/features/vpn/ui/screens/ImportDesignerScreen';
+import { getServerCategory } from '@/features/vpn/ui/utils';
 import '../../../../styles/components/import-screen.css';
 
 export const ImportConfigScreen = memo(function ImportConfigScreen() {
@@ -38,6 +40,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     matches,
     selectedId,
     parseError,
+    setStep,
     setRawInput,
     setSelectedId,
     handleParse: hookHandleParse,
@@ -46,16 +49,21 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
   // Load categories on mount
   useEffect(() => {
-    if (!categorias || categorias.length === 0) {
-      error.handleAsyncError(() => Promise.resolve(loadCategorias()), ErrorCategory.Internal);
+    if (!categorias?.length) {
+      // `loadCategorias` is synchronous in domain layer; wrap to preserve async error handling
+      error.handleAsyncError(async () => loadCategorias(), ErrorCategory.Internal);
     }
-  }, [categorias, loadCategorias, error]);
+  }, [categorias?.length, loadCategorias, error]);
 
-  // Compile all servers from categories
-  const allServers = categorias.reduce((acc: ServerConfig[], cat) => {
-    if (cat.items) acc.push(...cat.items);
-    return acc;
-  }, []);
+  // Compile all servers from categories (memoized)
+  const allServers = useMemo(
+    () =>
+      categorias?.reduce((acc: ServerConfig[], cat) => {
+        if (cat.items) acc.push(...cat.items);
+        return acc;
+      }, [] as ServerConfig[]) ?? [],
+    [categorias],
+  );
 
   // Handle parse and search for matching servers
   const handleParse = useCallback(() => {
@@ -70,6 +78,12 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       hookHandleBack();
     }
   }, [step, hookHandleBack, setScreen]);
+
+  // Handle opening designer
+  const handleOpenDesigner = useCallback(() => {
+    hookHandleBack(); // Reset to input step but with designer visible
+    setStep('designer');
+  }, [setStep, hookHandleBack]);
 
   // Handle applying configuration
   const handleApply = useCallback(() => {
@@ -101,6 +115,52 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
     }
   }, [matches, selectedId, parsed, setCreds, setConfig, showToast, setScreen, t, error]);
 
+  const handleExport = useCallback(async () => {
+    try {
+      const sel = matches.find((m) => String(m.id) === String(selectedId)) || matches[0];
+      if (!sel) {
+        showToast(t('import.noServerFound'), document.activeElement as HTMLElement);
+        return;
+      }
+
+      const exportJson = {
+        server: {
+          id: sel.id,
+          name: sel.name,
+          category: getServerCategory(sel, categorias) || '',
+        },
+        credentials: {
+          username: parsed?.username || '',
+          password: parsed?.password || '',
+          uuid: parsed?.uuid || '',
+        },
+      };
+
+      const text = JSON.stringify(exportJson, null, 2);
+      await navigator.clipboard.writeText(text);
+      showToast(t('import.copiedJson'), document.activeElement as HTMLElement);
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+    } catch (err) {
+      showToast(t('error.copyFailed'), document.activeElement as HTMLElement);
+    }
+  }, [matches, selectedId, parsed, categorias, showToast, t]);
+
+  // If in designer mode, show designer screen instead of normal flow
+  if (step === 'designer') {
+    return (
+      <ImportDesignerScreen
+        categorias={categorias}
+        onJsonGenerated={(json) => {
+          setRawInput(json);
+          setStep('input');
+        }}
+        onCancel={() => {
+          setStep('input');
+        }}
+      />
+    );
+  }
+
   // Styles
   const sectionStyle = {
     ['--nav-safe' as any]: `${navigationBarHeight}px`,
@@ -112,7 +172,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
   return (
     <section className="screen import-screen" style={sectionStyle}>
-      <div className="import-container" style={containerStyle}>
+      <Card className="import-container" style={containerStyle}>
         <ErrorDisplay
           error={error.error}
           category={error.category}
@@ -174,6 +234,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               parseError={parseError}
               onInputChange={setRawInput}
               onContinue={handleParse}
+              onOpenDesigner={handleOpenDesigner}
             />
           )}
 
@@ -185,9 +246,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               categorias={categorias}
               onSelectServer={setSelectedId}
               onBack={handleBack}
-              onContinue={() => {
-                /* Already handled by parent - just re-render */
-              }}
+              onContinue={() => setStep('confirm')}
             />
           )}
 
@@ -200,10 +259,11 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
               categorias={categorias}
               onBack={handleBack}
               onApply={handleApply}
+              onExport={handleExport}
             />
           )}
         </div>
-      </div>
+      </Card>
     </section>
   );
 });

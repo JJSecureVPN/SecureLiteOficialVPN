@@ -26,52 +26,82 @@ export function ServerStats({ stats }: ServerStatsProps) {
     return null;
   }
 
+  const cpuUsage = stats.cpuUsage ?? 0;
+  const memoryUsage = stats.memoryUsage ?? 0;
+
   return (
-    <div className="category-card__expanded">
-      <div className="stats-grid">
-        <div className="stat-item">
-          <i className="fas fa-microchip" aria-hidden="true" />
-          <span>CPU: {stats.cpuUsage !== undefined ? `${stats.cpuUsage.toFixed(1)}%` : '-'}</span>
+    <div className="stats-container">
+      {/* Métricas principales con barras de progreso */}
+      <div className="stats-primary">
+        <div className="stat-metric">
+          <div className="stat-metric__header">
+            <div className="stat-metric__label">
+              <i className="fas fa-microchip" aria-hidden="true" />
+              <span>CPU</span>
+            </div>
+            <span className="stat-metric__value">{cpuUsage.toFixed(1)}%</span>
+          </div>
+          <div className="stat-progress">
+            <div
+              className="stat-progress__bar"
+              style={{ width: `${Math.min(cpuUsage, 100)}%` }}
+              data-level={cpuUsage > 80 ? 'high' : cpuUsage > 50 ? 'medium' : 'low'}
+            />
+          </div>
         </div>
-        <div className="stat-item">
-          <i className="fas fa-memory" aria-hidden="true" />
-          <span>
-            RAM: {stats.memoryUsage !== undefined ? `${stats.memoryUsage.toFixed(1)}%` : '-'}
-          </span>
+
+        <div className="stat-metric">
+          <div className="stat-metric__header">
+            <div className="stat-metric__label">
+              <i className="fas fa-memory" aria-hidden="true" />
+              <span>RAM</span>
+            </div>
+            <span className="stat-metric__value">{memoryUsage.toFixed(1)}%</span>
+          </div>
+          <div className="stat-progress">
+            <div
+              className="stat-progress__bar"
+              style={{ width: `${Math.min(memoryUsage, 100)}%` }}
+              data-level={memoryUsage > 80 ? 'high' : memoryUsage > 50 ? 'medium' : 'low'}
+            />
+          </div>
         </div>
-        {stats.cpuCores && (
-          <div className="stat-item">
-            <i className="fas fa-server" aria-hidden="true" />
-            <span>
-              {t('servers.stats.cores')}: {stats.cpuCores}
-            </span>
-          </div>
-        )}
-        {stats.totalMemoryGb && (
-          <div className="stat-item">
-            <i className="fas fa-database" aria-hidden="true" />
-            <span>
-              {t('servers.stats.totalRam')}: {stats.totalMemoryGb} GB
-            </span>
-          </div>
-        )}
-        {stats.netRecvMbps !== undefined && (
-          <div className="stat-item">
-            <i className="fas fa-download" aria-hidden="true" />
-            <span>
-              {t('servers.stats.download').replace('{value}', stats.netRecvMbps.toFixed(1))}
-            </span>
-          </div>
-        )}
-        {stats.netSentMbps !== undefined && (
-          <div className="stat-item">
-            <i className="fas fa-upload" aria-hidden="true" />
-            <span>
-              {t('servers.stats.upload').replace('{value}', stats.netSentMbps.toFixed(1))}
-            </span>
-          </div>
-        )}
       </div>
+
+      {/* Información adicional en grid compacto */}
+      {(stats.cpuCores ||
+        stats.totalMemoryGb ||
+        stats.netRecvMbps !== undefined ||
+        stats.netSentMbps !== undefined) && (
+        <div className="stats-secondary">
+          {stats.cpuCores && (
+            <div className="stat-info">
+              <i className="fas fa-server" aria-hidden="true" />
+              <span>
+                {stats.cpuCores} {t('servers.stats.cores')}
+              </span>
+            </div>
+          )}
+          {stats.totalMemoryGb && (
+            <div className="stat-info">
+              <i className="fas fa-database" aria-hidden="true" />
+              <span>{stats.totalMemoryGb} GB</span>
+            </div>
+          )}
+          {stats.netRecvMbps !== undefined && (
+            <div className="stat-info">
+              <i className="fas fa-download" aria-hidden="true" />
+              <span>{stats.netRecvMbps.toFixed(1)} Mbps</span>
+            </div>
+          )}
+          {stats.netSentMbps !== undefined && (
+            <div className="stat-info">
+              <i className="fas fa-upload" aria-hidden="true" />
+              <span>{stats.netSentMbps.toFixed(1)} Mbps</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
