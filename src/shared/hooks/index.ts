@@ -1,5 +1,6 @@
 // Shared Hooks - Re-exports
 
+export { useAutoFocus } from './useAutoFocus';
 export { useCoupons } from './useCoupons';
 export { useKeyboardNavigation } from './useKeyboardNavigation';
 export { useNewsBadge } from './useNewsBadge';

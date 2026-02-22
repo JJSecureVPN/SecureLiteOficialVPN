@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { acceptTermsNative } from '../../api/vpnBridge';
+import { acceptTermsNative } from '../../api/sdkHelpers';
 import { isTermsAccepted, acceptTerms as acceptTermsStorage } from '@/core/utils';
 
 export function useTermsState() {

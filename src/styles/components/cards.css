@@ -214,12 +214,6 @@
     box-shadow 0.2s ease;
 }
 
-.stat-card:hover {
-  border-color: var(--accent-40);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
 .stat-card:focus-visible {
   outline: none;
   border-color: var(--accent);
@@ -266,12 +260,6 @@
     background 0.2s ease,
     transform 0.12s ease,
     box-shadow 0.2s ease;
-}
-
-.account-card:hover {
-  border-color: var(--accent-40);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 .account-card:focus-visible {

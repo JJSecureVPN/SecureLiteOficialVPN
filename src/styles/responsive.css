@@ -55,6 +55,79 @@
   }
 }
 
+/* ===========================================
+   Logo Responsif - Fine-tuning for different screen sizes
+   =========================================== */
+
+/* Pantallas muy pequeñas (menos de 320px) */
+@media (max-width: 319px) {
+  .logo {
+    max-width: clamp(240px, 90vw, 280px);
+    max-height: clamp(50px, 15vh, 70px);
+  }
+}
+
+/* Pantallas pequeñas (320px - 480px) */
+@media (min-width: 320px) and (max-width: 480px) {
+  .logo {
+    max-width: clamp(220px, 85vw, 380px);
+    max-height: clamp(55px, 18vh, 95px);
+  }
+
+  .logo-fallback {
+    min-height: clamp(45px, 16vh, 100px);
+  }
+
+  .logo-fallback .logo-icon {
+    font-size: clamp(24px, 7vw, 48px);
+  }
+
+  .logo-fallback .logo-text {
+    font-size: clamp(14px, 4.5vw, 24px);
+  }
+}
+
+/* Pantallas medianas (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .logo {
+    max-width: clamp(300px, 80vw, 500px);
+    max-height: clamp(75px, 18vh, 120px);
+    margin: 0 auto;
+  }
+
+  .logo-fallback {
+    min-height: clamp(60px, 18vh, 110px);
+  }
+
+  .logo-fallback .logo-icon {
+    font-size: clamp(32px, 8vw, 56px);
+  }
+
+  .logo-fallback .logo-text {
+    font-size: clamp(18px, 5vw, 28px);
+  }
+}
+
+/* Pantallas grandes (más de 768px) */
+@media (min-width: 769px) {
+  .logo {
+    max-width: clamp(350px, 75vw, 600px);
+    max-height: clamp(90px, 20vh, 180px);
+  }
+
+  .logo-fallback {
+    min-height: clamp(70px, 20vh, 140px);
+  }
+
+  .logo-fallback .logo-icon {
+    font-size: clamp(36px, 8vw, 72px);
+  }
+
+  .logo-fallback .logo-text {
+    font-size: clamp(20px, 5.5vw, 36px);
+  }
+}
+
 @media (min-width: 481px) {
   :root {
     --scale-factor: 1.1;
@@ -63,9 +136,6 @@
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-  }
-  .logo {
-    max-width: 520px;
   }
 }
 
@@ -211,7 +281,7 @@
   }
 
   .phone.is-home .logo {
-    max-height: var(--tv-logo-max-h);
+    max-height: clamp(60px, 18vh, 140px);
   }
 
   /* TV: ocultar search y botón de configuración en Servers para navegación remota */
@@ -255,7 +325,7 @@
     margin-top: var(--space-sm);
   }
 
-  .phone.is-home .connect-row {
+  .phone.is-home .connect-button {
     margin-top: var(--space-sm);
   }
 }

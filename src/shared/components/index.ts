@@ -1,6 +1,7 @@
 // Shared Components - Re-exports
 
 export { AppHeader } from './AppHeader';
+export { ConnectButton } from './ConnectButton';
 export { CouponModal } from './CouponModal';
 export { ErrorBoundary } from './ErrorBoundary';
 export { GlobalModal } from './GlobalModal';

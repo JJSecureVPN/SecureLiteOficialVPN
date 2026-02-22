@@ -21,7 +21,7 @@ export { useVpnUserState } from './domain/hooks/useVpnUserState';
 export { useConnectionStatus } from './domain/hooks/useConnectionStatus';
 
 // API
-export { initNativeEvents, getLogs, parseLogs } from './api/vpnBridge';
+export { getLogs, parseLogs } from './api/sdkHelpers';
 
 // UI Components
 export { ServerCard } from './ui/components/ServerCard';

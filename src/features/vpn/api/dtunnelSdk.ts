@@ -12,8 +12,7 @@
  *   const sdk = getSdk();
  *   if (sdk) sdk.main.startVpn();
  *
- * Esta capa NO reemplaza aún a vpnBridge.ts — convive con ella
- * mientras se migra gradualmente.
+ * Capa única para usar DTunnelSDK (legacy vpnBridge fue retirado).
  */
 
 // ─── Estado interno ───────────────────────────────────────────────────────────

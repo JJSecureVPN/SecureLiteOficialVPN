@@ -4,7 +4,6 @@ import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useSectionStyle } from '@/shared';
 import { useTranslation } from '@/i18n';
 import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
-import { StatCard, KeyValueList } from '@/shared/components';
 
 export const AccountScreen = memo(function AccountScreen() {
   const { status, user, creds, config, pingMs, topInfo } = useVpn();
@@ -26,15 +25,11 @@ export const AccountScreen = memo(function AccountScreen() {
     const exp = user?.expiration_date;
     if (!exp || exp === '-') return undefined;
 
-    // Soporta formato DD/MM/YYYY y formatos parseables por Date.parse
     let parsedDate: Date | null = null;
     const dmY = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
     const m = dmY.exec(exp);
     if (m) {
-      const dd = Number(m[1]);
-      const mm = Number(m[2]) - 1;
-      const yyyy = Number(m[3]);
-      parsedDate = new Date(yyyy, mm, dd);
+      parsedDate = new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
     } else {
       const parsed = Date.parse(exp);
       if (!Number.isNaN(parsed)) parsedDate = new Date(parsed);
@@ -55,10 +50,8 @@ export const AccountScreen = memo(function AccountScreen() {
     return { diff, label };
   }, [user?.expiration_date]);
 
-  const daysRemainingLabel = daysRemainingInfo?.label;
-
   const getExpiryClass = (diff?: number) => {
-    if (typeof diff !== 'number') return undefined;
+    if (typeof diff !== 'number') return '';
     if (diff > 30) return 'expiry-green';
     if (diff >= 8) return 'expiry-yellow';
     if (diff >= 3) return 'expiry-orange';
@@ -69,97 +62,119 @@ export const AccountScreen = memo(function AccountScreen() {
   const pCls = pingClass(pNum);
   const pShow = Number.isFinite(pNum) ? `${pNum} ms` : '—';
 
-  const statusCopy =
-    status === 'CONNECTED'
-      ? t('account.statusConnected')
-      : status === 'CONNECTING'
-        ? t('account.statusConnecting')
-        : t('account.statusDisconnected');
+  const isConnected = status === 'CONNECTED';
+  const isConnecting = status === 'CONNECTING';
 
-  const stats = useMemo(
-    () => [
-      { label: t('account.labels.status'), value: statusCopy },
-      { label: t('account.labels.latency'), value: pShow, className: pCls },
-      { label: t('account.labels.totalUsage'), value: formatBytes(used) },
-      { label: t('account.labels.activeSessions'), value: conexiones.toString() },
-    ],
-    [t, statusCopy, pShow, pCls, used, conexiones],
-  );
+  const statusLabel = isConnected
+    ? t('account.statusConnected')
+    : isConnecting
+      ? t('account.statusConnecting')
+      : t('account.statusDisconnected');
 
-  const compactSections = useMemo(
-    () => [
-      {
-        title: t('account.sections.plan'),
-        items: [
-          { label: t('account.fields.client'), value: name },
-          { label: t('account.fields.validity'), value: vence },
-          { label: t('account.fields.devices'), value: limite },
-          { label: t('account.fields.remainingDays'), value: daysRemainingLabel ?? '—' },
-        ],
-      },
-      {
-        title: t('account.sections.connection'),
-        items: [
-          { label: t('account.fields.server'), value: server },
-          { label: t('account.fields.mode'), value: mode },
-          { label: t('account.fields.operator'), value: topInfo.op },
-          { label: t('account.fields.publicIp'), value: topInfo.ip },
-        ],
-      },
-      {
-        title: t('account.sections.credentials'),
-        items: [
-          { label: t('account.fields.username'), value: creds.user || '—' },
-          ...(creds.uuid ? [{ label: t('account.fields.uuid'), value: creds.uuid }] : []),
-        ],
-      },
-    ],
-    [
-      name,
-      vence,
-      limite,
-      daysRemainingLabel,
-      daysRemainingInfo?.diff,
-      server,
-      mode,
-      topInfo.op,
-      topInfo.ip,
-      creds.user,
-      creds.uuid,
-    ],
-  );
+  const statusMod = isConnected ? 'connected' : isConnecting ? 'connecting' : 'disconnected';
 
   return (
     <section className="screen account-screen" style={sectionStyle}>
-      <div className="account-header">
-        <span className="summary-eyebrow">{t('account.titleEyebrow')}</span>
-        <h2>{t('account.hello').replace('{name}', name)}</h2>
-        <p className="summary-meta">{t('account.subtitle')}</p>
+      {/* ── Header ── */}
+      <header className="ac-header">
+        <div className="ac-header__row">
+          <span className="ac-eyebrow">{t('account.titleEyebrow')}</span>
+          <span className={`ac-pill ac-pill--${statusMod}`}>
+            <span className="ac-pill__dot" />
+            {statusLabel}
+          </span>
+        </div>
+        <h2 className="ac-header__name">{t('account.hello').replace('{name}', name)}</h2>
+        <p className="ac-header__sub">{t('account.subtitle')}</p>
+      </header>
+
+      {/* ── Metrics strip ── */}
+      <div className="ac-metrics">
+        <div className="ac-metric">
+          <span className="ac-metric__val">{formatBytes(used)}</span>
+          <span className="ac-metric__lbl">{t('account.labels.totalUsage')}</span>
+        </div>
+        <div className="ac-metric-sep" />
+        <div className="ac-metric">
+          <span className={`ac-metric__val ${pCls}`}>{pShow}</span>
+          <span className="ac-metric__lbl">{t('account.labels.latency')}</span>
+        </div>
+        <div className="ac-metric-sep" />
+        <div className="ac-metric">
+          <span className="ac-metric__val">{conexiones}</span>
+          <span className="ac-metric__lbl">{t('account.labels.activeSessions')}</span>
+        </div>
       </div>
 
-      <div className="stat-grid">
-        {stats.map(({ label, value, className }) => (
-          <StatCard key={String(label)} label={label} value={value} valueClass={className} />
-        ))}
-      </div>
+      {/* ── Info sections ── */}
+      <div className="ac-body">
+        <div className="ac-section">
+          <p className="ac-section__title">{t('account.sections.plan')}</p>
+          <div className="ac-card">
+            <AcRow label={t('account.fields.client')} value={name} />
+            <AcRow label={t('account.fields.validity')} value={vence} />
+            <AcRow label={t('account.fields.devices')} value={String(limite)} />
+            <AcRow
+              label={t('account.fields.remainingDays')}
+              value={daysRemainingInfo?.label ?? '—'}
+              valueClass={getExpiryClass(daysRemainingInfo?.diff)}
+              last
+            />
+          </div>
+        </div>
 
-      <div className="account-stack">
-        {compactSections.map(({ title, items }) => (
-          <KeyValueList
-            key={String(title)}
-            title={title}
-            items={items.map(({ label, value }) => ({
-              label,
-              value,
-              valueClass:
-                label === t('account.fields.remainingDays')
-                  ? getExpiryClass(daysRemainingInfo?.diff)
-                  : undefined,
-            }))}
-            compact
-          />
-        ))}
+        <div className="ac-section">
+          <p className="ac-section__title">{t('account.sections.connection')}</p>
+          <div className="ac-card">
+            <AcRow label={t('account.fields.server')} value={server} />
+            <AcRow label={t('account.fields.mode')} value={mode} chip />
+            <AcRow label={t('account.fields.operator')} value={topInfo.op} />
+            <AcRow label={t('account.fields.publicIp')} value={topInfo.ip} mono last />
+          </div>
+        </div>
+
+        <div className="ac-section">
+          <p className="ac-section__title">{t('account.sections.credentials')}</p>
+          <div className="ac-card">
+            <AcRow
+              label={t('account.fields.username')}
+              value={creds.user || '—'}
+              mono
+              last={!creds.uuid}
+            />
+            {creds.uuid && <AcRow label={t('account.fields.uuid')} value={creds.uuid} mono last />}
+          </div>
+        </div>
       </div>
     </section>
   );
 });
+
+function AcRow({
+  label,
+  value,
+  valueClass = '',
+  mono = false,
+  chip = false,
+  last = false,
+}: {
+  label: string;
+  value: string;
+  valueClass?: string;
+  mono?: boolean;
+  chip?: boolean;
+  last?: boolean;
+}) {
+  return (
+    <div className={`ac-row${last ? ' ac-row--last' : ''}`}>
+      <span className="ac-row__label">{label}</span>
+      {chip ? (
+        <span className={`ac-chip ${valueClass}`}>{value}</span>
+      ) : (
+        <span className={`ac-row__value${mono ? ' ac-row__value--mono' : ''} ${valueClass}`}>
+          {value}
+        </span>
+      )}
+    </div>
+  );
+}

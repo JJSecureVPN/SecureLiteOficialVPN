@@ -24,13 +24,6 @@
   overflow: hidden;
 }
 
-/* Hover */
-.server-item:hover {
-  border-color: var(--accent-40);
-  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.08);
-  transform: translateY(-2px);
-}
-
 /* Focus */
 .server-item:focus-visible {
   border-color: var(--accent);
@@ -182,11 +175,6 @@
     color 0.2s ease;
 }
 
-.server-item:hover .server-item__arrow {
-  color: var(--accent);
-  transform: translateX(3px);
-}
-
 .server-item.selected .server-item__arrow {
   color: var(--accent);
 }
@@ -236,18 +224,6 @@
 @media (hover: none) and (pointer: coarse) {
   .server-item {
     min-height: 44px;
-  }
-
-  .server-item:hover {
-    border-color: var(--border);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transform: none;
-  }
-
-  .server-item.selected:hover {
-    border-color: var(--accent);
-    box-shadow: 0 8px 24px rgba(109, 74, 255, 0.12);
-    transform: translateY(-2px);
   }
 }
 

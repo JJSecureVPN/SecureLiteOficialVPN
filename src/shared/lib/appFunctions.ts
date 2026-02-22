@@ -1,14 +1,3 @@
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
+import { openNetworkSettings } from './nativeActions';
 
-export function openNetworkSettings(): void {
-  try {
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.app.startRadioInfoActivity();
-      return;
-    }
-  } catch {
-    // ignore
-  }
-  console.debug('openNetworkSettings: native API no disponible');
-}
+export { openNetworkSettings };

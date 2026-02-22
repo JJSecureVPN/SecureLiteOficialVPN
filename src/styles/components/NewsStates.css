@@ -63,12 +63,6 @@
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.news-error__button:hover {
-  background: var(--primary-blue-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-}
-
 .news-error__button:active {
   transform: translateY(0);
 }
@@ -95,11 +89,6 @@
 
   .news-error__button {
     background: #0a84ff;
-  }
-
-  .news-error__button:hover {
-    background: #0070e0;
-    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.4);
   }
 }
 

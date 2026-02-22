@@ -12,6 +12,7 @@ import { useServers } from './useServers';
 import { useVpnEvents } from './useVpnEvents';
 import { useAutoConnect } from './useAutoConnect';
 import { useRetryLoads } from './useRetryLoads';
+import { appLogger } from '@/features/logs';
 
 interface UseVpnConnectionArgs {
   creds: Credentials;
@@ -56,7 +57,6 @@ export function useVpnConnectionState({
   const { auto, startAutoConnect, cancelAuto } = useAutoConnect({
     status,
     categorias,
-    creds,
     setStatus,
     setConfigState,
     setScreen,
@@ -81,7 +81,10 @@ export function useVpnConnectionState({
 
   // Conexión manual
   const connect = useCallback(() => {
-    if (!config) return;
+    if (!config) {
+      appLogger.add('warn', 'connect: no hay config seleccionada');
+      return;
+    }
     pushCreds();
     persistCreds();
     const sdk = getSdk();
@@ -95,7 +98,10 @@ export function useVpnConnectionState({
   const stopVpn = useCallback(() => {
     cancelAuto();
     getSdk()?.main.stopVpn();
-    setStatus('DISCONNECTED');
+    // Fallback: si el SDK no emite eventos, forzar DISCONNECTED.
+    // PERO si ya recibimos CONNECTING (reconexión a otro servidor activa), NO interrumpir.
+    // 650ms da margen suficiente para que startVpn (a 150ms) establezca CONNECTING antes que este timer.
+    setTimeout(() => setStatus((prev) => (prev === 'CONNECTING' ? prev : 'DISCONNECTED')), 650);
   }, [cancelAuto]);
 
   // Desconexión

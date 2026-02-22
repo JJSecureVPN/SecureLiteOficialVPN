@@ -10,7 +10,7 @@ import { NewsList } from '../components/News/NewsList';
 
 export function NewsScreen() {
   const demoUrl =
-    (import.meta as any).env?.VITE_NEWS_API_URL || 'http://185.194.204.192:4001/api/noticias/vpn';
+    import.meta.env.VITE_NEWS_API_URL ?? 'http://185.194.204.192:4001/api/noticias/vpn';
   const { items, loading, error, reload, isRefreshing } = useNoticias({
     limit: 50,
     pollInterval: 60_000,

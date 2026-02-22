@@ -40,6 +40,8 @@
     "itemsTermsSubtitle": "Termos e políticas",
     "itemsCleanTitle": "Limpeza",
     "itemsCleanSubtitle": "Limpar cache/configurações",
+    "cleanConfirmTitle": "Limpar o aplicativo?",
+    "cleanConfirmBody": "O cache, as configurações armazenadas e os dados temporários serão excluídos. As credenciais e configurações de servidor não serão afetadas.",
     "itemsLogsTitle": "Logs VPN",
     "itemsLogsSubtitle": "Ver e copiar logs de DTunnel",
     "itemsAppLogsTitle": "Logs do App",
@@ -104,10 +106,19 @@
     "disconnected": "Você está desconectado",
     "connected": "CONECTADO",
     "connecting": "Estabelecendo conexão…",
-    "autoConnecting": "Procurando a melhor conexão…"
+    "autoConnecting": "Procurando a melhor conexão…",
+    "connectingTo": "Conectando a"
   },
   "auto": {
-    "categoryFallback": "categoria"
+    "categoryFallback": "categoria",
+    "testing": "Testando"
+  },
+  "error": {
+    "autoConnectFailed": "Erro ao iniciar auto-conexão",
+    "connectionFailed": "Erro ao conectar",
+    "updateCheckFailed": "Erro ao verificar atualização",
+    "configApplyFailed": "Erro ao aplicar configuração",
+    "copyFailed": "Não foi possível copiar"
   },
   "servers": {
     "title": "Nossos Servidores",
@@ -241,7 +252,9 @@
     "connect": "Conectar",
     "disconnect": "Desconectar",
     "connecting": "Conectando...",
-    "disconnecting": "Desconectando..."
+    "disconnecting": "Desconectando...",
+    "logoAlt": "Logo Secure VPN",
+    "logoFallback": "Secure VPN"
   },
   "app": {
     "loadErrorTitle": "Erro ao carregar",

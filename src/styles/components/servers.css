@@ -109,12 +109,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.config-btn:hover {
-  color: var(--text);
-  border-color: var(--text);
-  background: var(--accent-10);
-}
-
 .config-btn:active,
 .config-btn:focus-visible {
   background: var(--accent-15);

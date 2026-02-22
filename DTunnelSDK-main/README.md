@@ -1,146 +1,99 @@
-# Guia de Integracao HTML com DTunnel SDK
+# DTunnel SDK
 
-## Objetivo
+SDK JavaScript/TypeScript para consumir a bridge Android (`window.Dt...`) no WebView.
 
-Guia pratico para integrar paginas HTML usando somente a API JavaScript do `DTunnelSDK`.
+## Instalacao
 
-Referencias:
-- API: `dtunnel-sdk-api-eventos.md`
-- Sem SDK: `dtunnel-sdk-chamadas-sem-sdk.md`
-- Exemplo bridge: `examples/dtunnel-sdk-bridge-example.html`
-- Exemplo SDK: `examples/dtunnel-sdk-example.html`
-- Runtime: `sdk/dtunnel-sdk.js`
+```bash
+npm install dtunnel-sdk
+```
 
-## 1. Carregamento
+## Inicializar projeto pronto
+
+Crie um projeto novo com template e `build:webview` ja configurado:
+
+```bash
+npx dtunnel-sdk init
+```
+
+Ou direto com flags:
+
+```bash
+npx dtunnel-sdk init meu-app --template react-typescript
+npx dtunnel-sdk init meu-app --template typescript --no-install
+npx dtunnel-sdk init meu-app --template cdn
+```
+
+Tambem funciona com `npm exec`:
+
+```bash
+npm exec dtunnel-sdk init meu-app --template react-typescript
+```
+
+## Uso rapido
+
+```ts
+import DTunnelSDK from 'dtunnel-sdk';
+
+const sdk = new DTunnelSDK({
+  strict: false,
+  autoRegisterNativeEvents: true,
+});
+
+sdk.on('vpnState', (event) => {
+  console.log('VPN:', event.payload);
+});
+```
+
+CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/DTunnel0/DTunnelSDK@main/sdk/dtunnel-sdk.js"></script>
-<script>
-  const sdk = new DTunnelSDK({
-    strict: false,
-    autoRegisterNativeEvents: true,
-  });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/dtunnel-sdk@latest/sdk/dtunnel-sdk.js"></script>
 ```
 
-## 2. Chamada de APIs
+## Documentacao completa
 
-Use os wrappers dos modulos:
+Toda a documentacao foi movida para `docs/`:
 
-```js
-const state = sdk.main.getVpnState();
-sdk.main.startVpn();
-const configs = sdk.config.getConfigs();
+- [Indice geral](./docs/README.md)
+- [Guia rapido](./docs/getting-started.md)
+- [Referencia da API](./docs/api-reference.md)
+- [Eventos e callbacks](./docs/events.md)
+- [Chamadas diretas sem SDK](./docs/bridge-sem-sdk.md)
+
+## Fluxo oficial (limpo)
+
+Use apenas `init` para gerar projeto pronto:
+
+```bash
+npx dtunnel-sdk init meu-app --template react-typescript
+cd meu-app
+npm run build:webview
 ```
 
-Chamadas dinamicas tambem sao suportadas:
+O resultado final para o WebView sempre sera:
+- `webview/index.html`
 
-```js
-sdk.call("DtGetVpnState", "execute");
-sdk.callJson("DtGetConfigs", "execute");
-sdk.callVoid("DtExecuteVpnStart", "execute");
+## Demos prontas
+
+Tambem deixei demos geradas no repositorio:
+
+- `demos/cdn`
+- `demos/typescript`
+- `demos/react-typescript`
+
+Guia rapido: `demos/README.md`
+
+## Testes
+
+```bash
+npm test
+npm run test:typecheck
 ```
 
-## 3. Eventos oficiais
+## Release e publicacao
 
-Registre eventos semanticos:
-
-```js
-sdk.on("vpnState", (event) => {
-  console.log(event.payload);
-});
-
-sdk.on("notification", (event) => {
-  console.log(event.payload);
-});
+```bash
+npm run release:sdk -- --version X.Y.Z
+npm run publish:npm
 ```
-
-Callbacks globais oficiais:
-- `DtVpnStateEvent`
-- `DtVpnStartedSuccessEvent`
-- `DtVpnStoppedSuccessEvent`
-- `DtNewLogEvent`
-- `DtNewDefaultConfigEvent`
-- `DtCheckUserStartedEvent`
-- `DtCheckUserResultEvent`
-- `DtCheckUserErrorEvent`
-- `DtMessageErrorEvent`
-- `DtSuccessToastEvent`
-- `DtErrorToastEvent`
-- `DtNotificationEvent`
-
-## 4. Parse de JSON
-
-```js
-function parseJsonOrRaw(payload) {
-  if (payload == null) return null;
-  if (typeof payload !== "string") return payload;
-  try {
-    return JSON.parse(payload);
-  } catch {
-    return payload;
-  }
-}
-```
-
-## 5. Modo de erro
-
-`strict: true`:
-- lanca excecao em falhas de chamada.
-
-`strict: false`:
-- retorna `null`.
-- dispara evento `error`.
-
-```js
-sdk.on("error", (event) => {
-  console.error(event.error.code, event.error.message);
-});
-```
-
-## 6. Boas praticas
-
-- criar uma instancia global unica do SDK por pagina.
-- registrar listeners antes de chamadas criticas.
-- tratar `null` como resposta valida.
-- usar `sdk.destroy()` no teardown da pagina.
-
-## 7. Checklist
-
-- [ ] `DTunnelSDK` carregado antes de usar.
-- [ ] `autoRegisterNativeEvents: true` quando precisar eventos.
-- [ ] payloads JSON com parse seguro.
-- [ ] tratamento de erro com `sdk.on("error", ...)`.
-- [ ] limpeza de listeners com `sdk.destroy()`.
-
-## 8. Download rapido do SDK
-
-Links diretos:
-
-- Raw GitHub (branch `main`):
-  - `https://raw.githubusercontent.com/DTunnel0/DTunnelSDK/main/sdk/dtunnel-sdk.js`
-- jsDelivr CDN (branch `main`):
-  - `https://cdn.jsdelivr.net/gh/DTunnel0/DTunnelSDK@main/sdk/dtunnel-sdk.js`
-- jsDelivr CDN por versao (exemplo `v1.0.1`):
-  - `https://cdn.jsdelivr.net/gh/DTunnel0/DTunnelSDK@v1.0.1/sdk/dtunnel-sdk.js`
-- Lista de releases (ZIP pronto para baixar):
-  - `https://github.com/DTunnel0/DTunnelSDK/releases`
-
-## 9. Publicar nova versao em 1 comando
-
-Com o repositorio limpo e commitado no `main`, execute:
-
-```powershell
-.\scripts\release-sdk.ps1 -Version 1.0.1
-```
-
-Esse comando:
-
-- cria a tag `v1.0.1`;
-- faz push da branch `main` e da tag;
-- dispara o workflow `.github/workflows/release-sdk.yml`, que publica automaticamente:
-  - `dtunnel-sdk.js`
-  - `dtunnel-sdk.d.ts`
-  - `README.md` do SDK
-  - `dtunnel-sdk-<versao>.zip`
-  - hash SHA-256 do ZIP

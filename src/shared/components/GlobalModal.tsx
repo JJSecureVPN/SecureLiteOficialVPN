@@ -8,6 +8,7 @@ type GlobalModalProps = {
   children?: ReactNode;
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  hideClose?: boolean;
 };
 
 export const GlobalModal = memo(function GlobalModal({
@@ -18,6 +19,7 @@ export const GlobalModal = memo(function GlobalModal({
   children,
   className = '',
   size = 'md',
+  hideClose = false,
 }: GlobalModalProps) {
   // Prevent body scroll while modal is open
   useEffect(() => {
@@ -59,16 +61,18 @@ export const GlobalModal = memo(function GlobalModal({
                 {subtitle && <p className="modal-subtitle">{subtitle}</p>}
               </div>
             </div>
-            <button className="modal-close" onClick={onClose} aria-label="Cerrar" type="button">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M15 5L5 15M5 5L15 15"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+            {!hideClose && (
+              <button className="modal-close" onClick={onClose} aria-label="Cerrar" type="button">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M15 5L5 15M5 5L15 15"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         )}
 

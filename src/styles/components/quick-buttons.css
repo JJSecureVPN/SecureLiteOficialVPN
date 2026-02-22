@@ -38,12 +38,6 @@
   border-color: var(--focus-accent-40);
 }
 
-.ql-qbtn:hover {
-  border-color: var(--accent-40);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
 .ql-qbtn i {
   display: inline-block;
   flex: 0 0 auto;

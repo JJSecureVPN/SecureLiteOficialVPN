@@ -1,229 +1,101 @@
-/* Import Screen - Optimized & Responsive */
+/* Import Screen – Minimal mobile-first */
 
-/* Base container reset */
+/* ── Base ── */
 .screen.import-screen {
   position: absolute;
   inset: var(--screen-top) 0 0;
-  padding: var(--space-xl) var(--space-lg);
-  /* allow the entire screen to scroll so header/steps can move */
+  display: flex;
+  flex-direction: column;
   overflow: auto;
-  padding-bottom: calc(var(--space-lg) + var(--nav-safe, 0px));
-}
-
-.import-screen {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
   background: var(--bg);
-}
-
-.import-screen .import-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  /* limitar ancho para mejorar legibilidad y centrar */
-  max-width: 980px;
-  margin: 0 auto;
-  /* aspecto unificado con Card */
-  background: var(--surface-1);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  overflow: visible;
-  padding: var(--space-lg);
-}
-
-/* Progress Steps */
-.import-screen .progress-steps {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(8px, 2vw, 16px);
-  padding: 16px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.import-screen .step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  opacity: 0.4;
-  transition: opacity 0.3s ease;
-}
-
-.import-screen .step.active {
-  opacity: 1;
-}
-
-.import-screen .step.completed {
-  opacity: 0.7;
-}
-
-.import-screen .step-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--bg-2);
-  color: var(--text-2);
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.import-screen .step.active .step-number {
-  background: var(--primary);
-  color: white;
-  transform: scale(1.1);
-}
-
-.import-screen .step.completed .step-number {
-  background: var(--success, var(--primary));
-  color: white;
-}
-
-.import-screen .step-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-2);
-  white-space: nowrap;
-}
-
-.import-screen .step.active .step-label {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.import-screen .step-divider {
-  width: clamp(20px, 8vw, 60px);
-  height: 2px;
-  background: var(--border);
-  border-radius: 2px;
-}
-
-/* Header */
-.import-screen .import-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.import-screen .icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--primary-soft, var(--bg-2));
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-.import-screen .header-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.import-screen .header-text h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0 0 2px 0;
-}
-
-.import-screen .header-text p {
-  font-size: 13px;
-  color: var(--text-2);
-  margin: 0;
-}
-
-/* Body - make part of normal document flow so the whole screen scrolls */
-.import-screen .import-body {
-  /* don't create an internal scroll: let the outer `.screen` scroll */
-  overflow: visible;
-  padding: 20px;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Step Content */
+/* ── Step dots ── */
+.import-screen .import-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 12px 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.import-screen .dot-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.import-screen .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.25s ease;
+}
+
+.import-screen .dot-item.active .dot {
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(109, 74, 255, 0.15);
+}
+
+.import-screen .dot-item.done .dot {
+  background: var(--success, var(--accent));
+}
+
+.import-screen .dot-label {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+.import-screen .dot-item.active .dot-label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.import-screen .dot-item.done .dot-label {
+  color: var(--text-2);
+}
+
+/* ── Main content area ── */
+.import-screen .import-main {
+  flex: 1;
+  padding: 0 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Step content ── */
 .import-screen .step-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
+  gap: 16px;
+  max-width: 560px;
   margin: 0 auto;
-  animation: fadeIn 0.3s ease;
+  animation: importFadeIn 0.2s ease;
 }
 
-/* Textarea */
-.import-screen .config-textarea {
-  width: 100%;
-  min-height: 140px;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface-2);
-  color: var(--text);
-  font-size: 13px;
-  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-  line-height: 1.5;
-  resize: vertical;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
-  box-shadow: none;
+@keyframes importFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Stronger focus rules for the Import screen (high specificity) */
-.screen.import-screen .config-textarea:focus,
-.screen.import-screen .config-textarea:focus-visible {
-  outline: none !important;
-  border-color: var(--primary) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
-  background: rgba(0, 0, 0, 0.02) !important;
-}
-
-.import-screen .config-textarea::placeholder {
-  color: var(--text-3);
-}
-
-/* Alerts & Info */
-.import-screen .alert {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.import-screen .alert-error {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-.import-screen .alert svg {
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-/* Section Header */
+/* ── Section headers ── */
 .import-screen .section-header {
   text-align: left;
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .import-screen .section-header.centered {
@@ -231,49 +103,102 @@
 }
 
 .import-screen .section-header h4 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--text);
-  margin: 0 0 6px 0;
+  margin: 0 0 4px;
 }
 
 .import-screen .section-header p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-2);
   margin: 0;
+  line-height: 1.4;
 }
 
-/* Server List */
+/* ── Textarea ── */
+.import-screen .config-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-2);
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
+  line-height: 1.5;
+  resize: vertical;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.screen.import-screen .config-textarea:focus,
+.screen.import-screen .config-textarea:focus-visible {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(109, 74, 255, 0.12) !important;
+}
+
+.import-screen .config-textarea::placeholder {
+  color: var(--text-3);
+  font-size: 12px;
+}
+
+/* ── Alerts ── */
+.import-screen .alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.import-screen .alert-error {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.import-screen .alert svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Server list (step 2) ── */
 .import-screen .server-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-height: 400px;
+  gap: 8px;
+  max-height: 50vh;
   overflow-y: auto;
-  padding: 4px;
 }
 
 .import-screen .server-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: 1.5px solid var(--border);
   border-radius: 10px;
   background: var(--bg-2);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
   position: relative;
 }
 
-.import-screen .server-card:hover {
-  border-color: var(--primary);
-  background: var(--primary-soft, var(--bg-2));
+.import-screen .server-card:active {
+  background: var(--bg-3, var(--bg-2));
 }
 
 .import-screen .server-card.selected {
-  border-color: var(--primary);
-  background: var(--primary-soft, var(--bg-2));
+  border-color: var(--accent);
+  background: rgba(109, 74, 255, 0.06);
 }
 
 .import-screen .server-card input[type='radio'] {
@@ -288,47 +213,45 @@
 }
 
 .import-screen .server-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .import-screen .server-category {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  color: var(--primary);
-  margin-bottom: 3px;
+  color: var(--accent);
 }
 
 .import-screen .server-desc {
   font-size: 12px;
   color: var(--text-2);
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .import-screen .checkmark {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: transparent;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   flex-shrink: 0;
 }
 
 .import-screen .server-card.selected .checkmark {
-  border-color: var(--primary);
-  background: var(--primary);
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 .import-screen .checkmark svg {
   opacity: 0;
   transform: scale(0.5);
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .import-screen .server-card.selected .checkmark svg {
@@ -337,16 +260,18 @@
   color: white;
 }
 
-/* Success Icon */
+/* ── Success icon (step 3) ── */
 .import-screen .success-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .import-screen .success-icon svg {
-  color: var(--success, var(--primary));
-  animation: successPop 0.5s ease;
+  color: var(--success, var(--accent));
+  width: 48px;
+  height: 48px;
+  animation: successPop 0.4s ease;
 }
 
 @keyframes successPop {
@@ -354,8 +279,8 @@
     transform: scale(0.5);
     opacity: 0;
   }
-  50% {
-    transform: scale(1.1);
+  60% {
+    transform: scale(1.08);
   }
   100% {
     transform: scale(1);
@@ -363,13 +288,13 @@
   }
 }
 
-/* Server Preview (Confirmation) */
+/* ── Server preview (step 3) ── */
 .import-screen .server-preview {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 10px;
   background: var(--bg-2);
   border: 1px solid var(--border);
 }
@@ -377,18 +302,18 @@
 .import-screen .preview-main {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .import-screen .preview-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--primary-soft, var(--bg));
-  color: var(--primary);
+  background: rgba(109, 74, 255, 0.1);
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -398,32 +323,31 @@
 }
 
 .import-screen .preview-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .import-screen .preview-category {
   display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: 6px;
-  background: var(--primary-soft, var(--bg));
-  color: var(--primary);
-  font-size: 12px;
+  background: rgba(109, 74, 255, 0.1);
+  color: var(--accent);
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .import-screen .preview-description {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 8px;
   background: var(--bg);
   font-size: 13px;
   color: var(--text-2);
-  line-height: 1.5;
+  line-height: 1.4;
   border: 1px solid var(--border);
 }
 
@@ -431,7 +355,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -444,55 +368,44 @@
   flex-shrink: 0;
 }
 
-/* Button Group */
+/* ── Buttons ── */
 .import-screen .button-group {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  flex-direction: column-reverse;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .import-screen .btn {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 14px 20px;
+  gap: 6px;
+  width: 100%;
+  padding: 13px 16px;
   border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.1s ease;
   white-space: nowrap;
 }
 
 .import-screen .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
+.import-screen .btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
 .import-screen .btn-primary {
-  /* Purple gradient for stronger emphasis */
-  background: linear-gradient(180deg, #6d4aff, #5b3fd6);
+  background: var(--accent);
   color: white;
-  box-shadow: 0 6px 18px rgba(109, 74, 255, 0.18);
-}
-
-.import-screen .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #5b3fd6, #4a32ad);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(109, 74, 255, 0.22);
-}
-
-.import-screen .btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.14);
-}
-
-.import-screen .btn-primary:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 6px rgba(109, 74, 255, 0.12) !important;
 }
 
 .import-screen .btn-secondary {
@@ -501,195 +414,137 @@
   border: 1px solid var(--border);
 }
 
-.import-screen .btn-secondary:hover:not(:disabled) {
-  background: var(--bg-3, var(--bg-2));
-  border-color: var(--text-3);
-}
-
-.import-screen .btn-large {
-  padding: 16px 24px;
-  font-size: 16px;
-}
-
 .import-screen .btn-success {
-  /* Purple gradient to match primary action */
-  background: linear-gradient(180deg, #6d4aff, #5b3fd6);
+  background: var(--success, #1f8a63);
   color: white;
-  box-shadow: 0 6px 18px rgba(109, 74, 255, 0.18);
 }
 
-.import-screen .btn-success:hover:not(:disabled) {
-  background: linear-gradient(180deg, #5b3fd6, #4a32ad);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(109, 74, 255, 0.22);
-}
-
-.import-screen .btn-success:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.14);
-}
-
-.import-screen .btn-success:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 6px rgba(109, 74, 255, 0.12) !important;
+.import-screen .btn-outline {
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid var(--border);
 }
 
 .import-screen .btn svg {
   flex-shrink: 0;
 }
 
-/* Mobile Responsive */
-@media (max-width: 640px) {
-  .import-screen .import-container {
-    height: 100vh;
-  }
-
-  .import-screen .progress-steps {
-    padding: 12px 8px;
-    gap: 6px;
-  }
-
-  .import-screen .step-number {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
-  }
-
-  .import-screen .step-label {
-    font-size: 11px;
-  }
-
-  .import-screen .step-divider {
-    width: 16px;
-  }
-
-  .import-screen .import-header {
-    padding: 14px 16px;
-  }
-
-  .import-screen .icon-wrapper {
-    width: 36px;
-    height: 36px;
-  }
-
-  .import-screen .header-text h3 {
-    font-size: 16px;
-  }
-
-  .import-screen .header-text p {
-    font-size: 12px;
-  }
-
-  .import-screen .import-body {
-    padding: 16px;
-  }
-
-  .import-screen .section-header h4 {
-    font-size: 18px;
-  }
-
-  .import-screen .server-card {
-    padding: 12px 14px;
-  }
-
-  .import-screen .preview-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .import-screen .preview-name {
-    font-size: 16px;
-  }
-
-  .import-screen .btn {
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-
-  .import-screen .btn-large {
-    padding: 14px 20px;
-    font-size: 15px;
-  }
-
-  .import-screen .button-group {
-    flex-direction: column-reverse;
-  }
-
-  .import-screen .button-group .btn {
-    width: 100%;
-  }
+/* ── Import footer (fixed bottom) ── */
+.import-screen .import-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px calc(12px + var(--nav-safe, 0px));
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  /* ensure footer stays above any overlays and is clickable on mobile */
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  pointer-events: auto;
 }
 
-/* Import Actions - Enhanced button styles */
+/* ── Import actions ── */
 .import-screen .import-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-}
-
-.import-screen .btn-action {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 16px 20px;
-  font-size: 15px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-.import-screen .btn-action:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+.import-screen .btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    transform 0.1s ease;
 }
 
 .import-screen .btn-action:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: scale(0.98);
+}
+
+.import-screen .btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .import-screen .btn-action.btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-  border: none;
-}
-.import-screen .btn-action.btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--primary-hover), var(--primary));
-  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.3);
+  background: var(--accent);
+  color: white;
 }
 
 .import-screen .btn-action.btn-outline {
-  background: var(--surface-01);
-  border: 2px solid var(--surface-06);
-  color: var(--text-01);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
 }
 
-.import-screen .btn-action.btn-outline:hover:not(:disabled) {
-  border-color: var(--primary);
-  background: var(--primary-05);
-  color: var(--primary);
+/* Designer link – subtle text link */
+.import-screen .import-designer-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: color 0.15s ease;
+  pointer-events: auto; /* explicitly allow touches */
+  z-index: 11; /* sit above footer container if needed */
 }
 
-/* Small mobile */
+.import-screen .import-designer-link:active {
+  color: var(--accent);
+}
+
+.import-screen .import-designer-link svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ── Responsive – tablet+ ── */
+@media (min-width: 640px) {
+  .import-screen .import-main {
+    padding: 0 24px;
+    padding-bottom: calc(24px + var(--nav-safe, 0px));
+  }
+
+  .import-screen .button-group {
+    flex-direction: row;
+  }
+
+  .import-screen .import-actions {
+    flex-direction: row;
+  }
+
+  .import-screen .btn-action,
+  .import-screen .btn {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* ── Small mobile ── */
 @media (max-width: 380px) {
-  .import-screen .step-label {
-    display: none;
+  .import-screen .dot-label {
+    font-size: 10px;
   }
 
-  .import-screen .step {
-    gap: 0;
-  }
-
-  .import-screen .import-actions {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Mobile optimization for action buttons */
-@media (max-width: 520px) {
-  .import-screen .import-actions {
-    grid-template-columns: 1fr;
+  .import-screen .import-dots {
+    gap: 16px;
   }
 }

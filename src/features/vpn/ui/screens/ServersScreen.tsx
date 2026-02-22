@@ -13,12 +13,12 @@ import { useCallback, useRef, useEffect } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext, useServerStats } from '@/shared';
-import { useSectionStyle } from '@/shared/hooks';
+import { useSectionStyle, useAutoFocus } from '@/shared/hooks';
 import { useTranslation } from '@/i18n';
 import { appLogger } from '@/features/logs';
 import { useAsyncError } from '@/core/hooks';
-import { keyboardNavigationManager } from '@/core/utils';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
+import { useDTunnelEvent } from '@/lib/dtunnel-sdk-react';
 import { ErrorDisplay } from '@/core/components';
 import {
   useServersFilter,
@@ -72,87 +72,49 @@ export function ServersScreen() {
   // Keyboard navigation + focus management (consolidated)
   useServersKeyboard(contentRef, selectedCategory);
 
+  // Cuando se entra a una categoría, enfocar el primer elemento disponible
   useEffect(() => {
+    if (!selectedCategory) return;
     const root = contentRef.current;
     if (!root) return;
     const selector = 'button, [role="button"], a, [tabindex]:not([tabindex="-1"])';
+    const timer = window.setTimeout(() => {
+      const el = Array.from(root.querySelectorAll<HTMLElement>(selector)).find(
+        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
+      );
+      el?.focus();
+    }, 40);
+    return () => window.clearTimeout(timer);
+  }, [selectedCategory]);
 
-    if (selectedCategory) {
-      const timer = window.setTimeout(() => {
-        const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
-          (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
-        );
-        if (items.length) items[0].focus();
-      }, 40);
-      return () => window.clearTimeout(timer);
-    }
+  // Cuando se vuelve a la lista de categorías, enfocar la categoría del servidor activo
+  useAutoFocus(
+    () => {
+      if (selectedCategory) return null;
+      const root = contentRef.current;
+      if (!root) return null;
 
-    // entering categories list: prefer focusing first category card
-    let mounted = true;
-    const maxAttempts = 6;
-    let attempt = 0;
-    const timers: number[] = [];
-
-    const tryFocus = () => {
-      if (!mounted) return true;
-      try {
-        // If no category is expanded/selected but a server is currently active,
-        // prefer focusing the category that contains that server so visual state
-        // (selected + focus) points to the same category.
-        if (!selectedCategory && currentConfig?.id && categorias?.length) {
-          const categoryWithSelected = categorias.find((c) =>
-            c.items?.some((s) => s.id === currentConfig.id),
-          );
-          if (categoryWithSelected?.name) {
-            const cards = Array.from(root.querySelectorAll<HTMLElement>('.category-card'));
-            const match = cards.find((card) => {
-              const title = card.querySelector<HTMLElement>('.category-card__title');
-              return title && title.textContent?.trim() === String(categoryWithSelected.name);
-            });
-            if (match) {
-              try {
-                match.focus();
-              } catch {}
-              try {
-                keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
-              } catch {}
-              return true;
-            }
-          }
+      // Buscar la categoría que contiene el servidor actualmente conectado
+      if (currentConfig?.id && categorias?.length) {
+        const catWithSrv = categorias.find((c) => c.items?.some((s) => s.id === currentConfig.id));
+        if (catWithSrv?.name) {
+          const cards = Array.from(root.querySelectorAll<HTMLElement>('.category-card'));
+          const match = cards.find((card) => {
+            const title = card.querySelector<HTMLElement>('.category-card__title');
+            return title?.textContent?.trim() === String(catWithSrv.name);
+          });
+          if (match) return match;
         }
-
-        const first =
-          (root.querySelector<HTMLElement>('.category-card') as HTMLElement | null) ||
-          root.querySelector<HTMLElement>('[data-nav]:not(input), button, [role="button"]');
-        if (first) {
-          try {
-            first.focus();
-          } catch {}
-          try {
-            keyboardNavigationManager.enable('.servers-content', { includeFormControls: true });
-          } catch {}
-          return true;
-        }
-      } catch {
-        /* ignore */
       }
-      return false;
-    };
 
-    const schedule = () => {
-      const ok = tryFocus();
-      attempt++;
-      if (!ok && attempt < maxAttempts) {
-        timers.push(window.setTimeout(schedule, 40 * attempt));
-      }
-    };
-
-    timers.push(window.setTimeout(schedule, 20));
-    return () => {
-      mounted = false;
-      timers.forEach((t) => window.clearTimeout(t));
-    };
-  }, [selectedCategory, categorias?.length, currentConfig?.id]);
+      return (
+        root.querySelector<HTMLElement>('.category-card') ??
+        root.querySelector<HTMLElement>('[data-nav]:not(input), button, [role="button"]')
+      );
+    },
+    [selectedCategory, categorias?.length, currentConfig?.id],
+    '.servers-content',
+  );
 
   // Callbacks
   const handleServerClick = useCallback(
@@ -168,7 +130,7 @@ export function ServersScreen() {
           );
         } catch (err) {
           error.setError(err, ErrorCategory.Internal);
-          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement);
+          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement, 'error');
         }
         return;
       }
@@ -185,7 +147,7 @@ export function ServersScreen() {
         } catch {}
 
         showToast(message, document.activeElement as HTMLElement);
-        window.setTimeout(() => getSdk()?.main.startVpn(), 250);
+        window.setTimeout(() => getSdk()?.main.startVpn(), 150);
       };
 
       try {
@@ -218,7 +180,7 @@ export function ServersScreen() {
           'error',
           `Server selection error: ${err instanceof Error ? err.message : String(err)}`,
         );
-        showToast(t('error.connectionFailed'), document.activeElement as HTMLElement);
+        showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
       }
     },
     [
@@ -242,44 +204,8 @@ export function ServersScreen() {
     try {
       error.clearError();
       appLogger.add('info', '🔧 Abriendo diálogo de configuración nativa de DTunnel');
-      const sdk = getSdk();
-      if (sdk) {
-        sdk.config.openConfigDialog();
-      }
-
-      let lastConfigId: string | null = null;
-      const currentConfig = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
-      if (currentConfig?.id) {
-        lastConfigId = String(currentConfig.id);
-      }
-
-      const checkInterval = setInterval(() => {
-        try {
-          const newConfig = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
-          const newConfigId = newConfig?.id ? String(newConfig.id) : null;
-
-          if (newConfigId && newConfigId !== lastConfigId) {
-            appLogger.add('info', `🔄 Cambio detectado: ${lastConfigId} → ${newConfigId}`);
-            if (newConfig && newConfig.id) {
-              setConfig(newConfig);
-              appLogger.add('info', `✅ Servidor actualizado: ${newConfig.name}`);
-            }
-            clearInterval(checkInterval);
-            clearTimeout(timeoutId);
-          }
-        } catch (err) {
-          appLogger.add(
-            'error',
-            `Error polling config: ${err instanceof Error ? err.message : String(err)}`,
-          );
-          clearInterval(checkInterval);
-        }
-      }, 300);
-
-      const timeoutId = setTimeout(() => {
-        appLogger.add('debug', 'Timeout de polling alcanzado');
-        clearInterval(checkInterval);
-      }, 10000);
+      getSdk()?.config.openConfigDialog();
+      // Los cambios de config se capturan automáticamente via useDTunnelEvent('newDefaultConfig')
     } catch (err) {
       error.setError(err, ErrorCategory.Internal);
       appLogger.add(
@@ -287,7 +213,16 @@ export function ServersScreen() {
         `Error opening configurator: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
-  }, [setConfig, error]);
+  }, [error]);
+
+  // Escuchar evento newDefaultConfig para actualizar servidor cuando el usuario elige desde el diálogo nativo
+  useDTunnelEvent('newDefaultConfig', () => {
+    const newCfg = getSdk()?.config.getDefaultConfig<ServerConfig>() ?? null;
+    if (newCfg?.id) {
+      setConfig(newCfg);
+      appLogger.add('info', `✅ Servidor actualizado via newDefaultConfig: ${newCfg.name}`);
+    }
+  });
 
   // Compute grouped servers when category is selected
   const groupedServers = useGroupedServers(selectedCategory);

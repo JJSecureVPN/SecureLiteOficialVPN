@@ -40,6 +40,8 @@
     "itemsTermsSubtitle": "Terms and policies",
     "itemsCleanTitle": "Cleanup",
     "itemsCleanSubtitle": "Clean cache/settings",
+    "cleanConfirmTitle": "Clean the app?",
+    "cleanConfirmBody": "Cache, stored settings and temporary data will be deleted. Credentials and server configurations will not be affected.",
     "itemsLogsTitle": "VPN Logs",
     "itemsLogsSubtitle": "View and copy DTunnel logs",
     "itemsAppLogsTitle": "App Logs",
@@ -104,10 +106,19 @@
     "disconnected": "You are disconnected",
     "connected": "CONNECTED",
     "connecting": "Establishing connection…",
-    "autoConnecting": "Finding best connection…"
+    "autoConnecting": "Finding best connection…",
+    "connectingTo": "Connecting to"
   },
   "auto": {
-    "categoryFallback": "category"
+    "categoryFallback": "category",
+    "testing": "Testing"
+  },
+  "error": {
+    "autoConnectFailed": "Failed to start auto-connect",
+    "connectionFailed": "Connection error",
+    "updateCheckFailed": "Failed to check for updates",
+    "configApplyFailed": "Failed to apply configuration",
+    "copyFailed": "Could not copy"
   },
   "servers": {
     "title": "Our Servers",

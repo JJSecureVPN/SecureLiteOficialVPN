@@ -6,15 +6,12 @@ import {
   useSectionStyle,
   HeaderPromo,
   CredentialFields,
-  Toggle,
-  Button,
   QuickButton,
   SessionDetails,
+  useAutoFocus,
+  ConnectButton,
 } from '@/shared';
 import { useTranslation } from '@/i18n';
-import { useAsyncError } from '@/core/hooks';
-import { ErrorCategory } from '@/core/utils/ErrorHandler';
-import { ErrorDisplay } from '@/core/components';
 import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
@@ -37,8 +34,7 @@ export function HomeScreen() {
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
 
-  // Error Handling
-  const error = useAsyncError();
+  // Error Handling eliminado — los toasts cubren todo el feedback al usuario
 
   // Determinar qué campos mostrar (mostrar también cuando hay error para permitir corregir credenciales)
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
@@ -51,8 +47,6 @@ export function HomeScreen() {
 
   const handleConnect = useCallback(() => {
     try {
-      error.clearError();
-
       if (isConnected) {
         disconnect();
         return;
@@ -64,39 +58,34 @@ export function HomeScreen() {
       }
       // Validar
       if (!config) {
-        error.setError(new Error('No server selected'), ErrorCategory.Validation);
-        showToast(t('connection.selectServer'));
+        showToast(t('connection.selectServer'), null, 'warning');
         return;
       }
       if (!hasEmbeddedAuth) {
         if (isV2Ray && !creds.uuid.trim()) {
-          error.setError(new Error('UUID is required'), ErrorCategory.Validation);
-          showToast(t('connection.enterUuid'));
+          showToast(t('connection.enterUuid'), null, 'warning');
           return;
         }
         if (!isV2Ray && (!creds.user.trim() || !creds.pass.trim())) {
-          error.setError(new Error('Credentials are required'), ErrorCategory.Validation);
-          showToast(t('connection.enterCredentials'));
+          showToast(t('connection.enterCredentials'), null, 'warning');
           return;
         }
       }
       if (autoMode) {
         try {
           startAutoConnect();
-        } catch (err) {
-          error.setError(err, ErrorCategory.Internal);
-          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement);
+        } catch {
+          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement, 'error');
         }
       } else {
         try {
           connect();
-        } catch (err) {
-          error.setError(err, ErrorCategory.Internal);
-          showToast(t('error.connectionFailed'), document.activeElement as HTMLElement);
+        } catch {
+          showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
         }
       }
-    } catch (err) {
-      error.setError(err, ErrorCategory.Internal);
+    } catch {
+      showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
     }
   }, [
     isConnected,
@@ -112,7 +101,6 @@ export function HomeScreen() {
     startAutoConnect,
     connect,
     t,
-    error,
   ]);
 
   const handleServerClick = useCallback(() => {
@@ -121,37 +109,29 @@ export function HomeScreen() {
 
   const handleUpdate = useCallback(() => {
     try {
-      error.clearError();
       const sdk = getSdk();
       if (sdk) {
         sdk.main.startAppUpdate();
         showToast(t('connection.searchingUpdate'));
       } else {
-        error.setError(new Error('Update not available'), ErrorCategory.Internal);
         showToast(t('connection.updateNotAvailable'));
       }
-    } catch (err) {
-      error.setError(err, ErrorCategory.Internal);
-      showToast(t('error.updateCheckFailed'), document.activeElement as HTMLElement);
+    } catch {
+      showToast(t('error.updateCheckFailed'), document.activeElement as HTMLElement, 'error');
     }
-  }, [showToast, t, error]);
+  }, [showToast, t]);
 
   const handleLogs = useCallback(() => {
-    try {
-      error.clearError();
-      setScreen('logs');
-    } catch (err) {
-      error.setError(err, ErrorCategory.Internal);
-    }
-  }, [setScreen, error]);
+    setScreen('logs');
+  }, [setScreen]);
 
-  const buttonText = isConnected
-    ? t('buttons.disconnect')
+  const connectButtonState = isConnected
+    ? 'connected'
     : isConnecting
-      ? t('buttons.stop')
+      ? 'connecting'
       : isError
-        ? t('buttons.retry')
-        : t('buttons.connect');
+        ? 'error'
+        : 'disconnected';
 
   const [logoError, setLogoError] = useState(false);
 
@@ -170,48 +150,11 @@ export function HomeScreen() {
   }, []);
 
   // Ensure focus returns to the server card when arriving at Home
-  useEffect(() => {
-    let mounted = true;
-    const maxAttempts = 6;
-    let attempt = 0;
-    const timers: number[] = [];
-
-    const tryFocus = () => {
-      if (!mounted) return true;
-      try {
-        const el = document.querySelector<HTMLElement>('.home-main .location-card');
-        if (el) {
-          try {
-            el.focus();
-          } catch {}
-          try {
-            // ensure manager is enabled for keyboard navigation
-            keyboardNavigationManager.enable('.home-main', { includeFormControls: true });
-          } catch {}
-          return true;
-        }
-      } catch {
-        // ignore
-      }
-      return false;
-    };
-
-    const schedule = () => {
-      const ok = tryFocus();
-      attempt++;
-      if (!ok && attempt < maxAttempts) {
-        const t = window.setTimeout(schedule, 40 * attempt);
-        timers.push(t);
-      }
-    };
-
-    timers.push(window.setTimeout(schedule, 20));
-
-    return () => {
-      mounted = false;
-      timers.forEach((t) => window.clearTimeout(t));
-    };
-  }, []);
+  useAutoFocus(
+    () => document.querySelector<HTMLElement>('.home-main .location-card'),
+    [],
+    '.home-main',
+  );
 
   return (
     <section className="screen home-screen" style={sectionStyle}>
@@ -254,17 +197,12 @@ export function HomeScreen() {
 
             {isConnected && <SessionDetails />}
 
-            <div className="row connect-row">
-              <Button
-                variant="primary"
-                onClick={handleConnect}
-                className={isConnected ? 'danger' : ''}
-                data-nav
-              >
-                {buttonText}
-              </Button>
-              <Toggle checked={autoMode} onChange={setAutoMode} label={t('home.auto')} />
-            </div>
+            <ConnectButton
+              state={connectButtonState}
+              onClick={handleConnect}
+              autoMode={autoMode}
+              onAutoModeChange={setAutoMode}
+            />
 
             <div className="quick-grid ql-quick-grid">
               <QuickButton
@@ -291,8 +229,6 @@ export function HomeScreen() {
             </div>
           </div>
         </div>
-
-        {error.error && <ErrorDisplay {...error} />}
       </div>
     </section>
   );

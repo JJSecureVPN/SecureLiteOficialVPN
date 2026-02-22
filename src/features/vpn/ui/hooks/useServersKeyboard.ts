@@ -94,6 +94,30 @@ function findNearestInRowByX(row: GridNode[], x: number) {
   return best;
 }
 
+const HEADER_BACK_SELECTOR = [
+  'header.topbar [data-nav]',
+  'header.topbar button.btn.hotzone',
+  'header.topbar .btn.hotzone',
+  'header.topbar .hotzone',
+].join(',');
+
+/**
+ * Helper: Focus the back/header button with tabindex fix
+ */
+function focusHeaderBack() {
+  const back = document.querySelector<HTMLElement>(HEADER_BACK_SELECTOR);
+  if (!back) return;
+  try {
+    back.setAttribute('tabindex', '0');
+    back.setAttribute('data-nav', '1');
+  } catch {}
+  setTimeout(() => {
+    try {
+      back.focus();
+    } catch {}
+  }, 0);
+}
+
 export function useServersKeyboard(
   contentRef: React.RefObject<HTMLDivElement | null>,
   selectedCategory: any,
@@ -213,29 +237,8 @@ export function useServersKeyboard(
           e.preventDefault();
         }
       } else if (e.key === 'ArrowLeft') {
-        // Focus back button in header
-        const selectors = [
-          'header.topbar [data-nav]',
-          'header.topbar button.btn.hotzone',
-          'header.topbar .btn.hotzone',
-          'header.topbar .hotzone',
-        ];
-
-        const back = document.querySelector<HTMLElement>(selectors.join(','));
-        if (back) {
-          try {
-            back.setAttribute('tabindex', '0');
-            back.setAttribute('data-nav', '1');
-          } catch {}
-
-          setTimeout(() => {
-            try {
-              back.focus();
-            } catch {}
-          }, 0);
-
-          e.preventDefault();
-        }
+        focusHeaderBack();
+        e.preventDefault();
       }
     };
 
@@ -305,29 +308,8 @@ export function useServersKeyboard(
           target = { row: prevRow, col: colInPrev };
         }
       } else if (e.key === 'ArrowLeft') {
-        // Focus back to header
-        const selectors = [
-          'header.topbar [data-nav]',
-          'header.topbar button.btn.hotzone',
-          'header.topbar .btn.hotzone',
-          'header.topbar .hotzone',
-        ];
-
-        const back = document.querySelector<HTMLElement>(selectors.join(','));
-        if (back) {
-          try {
-            back.setAttribute('tabindex', '0');
-            back.setAttribute('data-nav', '1');
-          } catch {}
-
-          setTimeout(() => {
-            try {
-              back.focus();
-            } catch {}
-          }, 0);
-
-          return;
-        }
+        focusHeaderBack();
+        return;
       }
 
       if (target) {

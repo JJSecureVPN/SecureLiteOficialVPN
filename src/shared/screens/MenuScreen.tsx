@@ -1,13 +1,19 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '../context/ToastContext';
 import { useSectionStyle, useIsMobilePortrait } from '@/shared';
 import { useTranslation } from '@/i18n';
-import { openNetworkSettings } from '@/shared/lib/appFunctions';
-import { PremiumCard, MenuRow } from '@/shared/components';
-
-type HotspotState = 'RUNNING' | 'STOPPED' | 'UNKNOWN';
+import {
+  cleanApp,
+  getHotspotStatus,
+  ignoreBatteryOptimizations,
+  openApnSettings,
+  openNetworkSettings,
+  startSpeedtest,
+  toggleHotspot as toggleHotspotAction,
+} from '@/shared/lib/nativeActions';
+import type { HotspotState } from '@/shared/lib/nativeActions';
+import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
 
 interface MenuItem {
   id: string;
@@ -23,36 +29,27 @@ export const MenuScreen = memo(function MenuScreen() {
   const { showToast } = useToastContext();
   const [hotspotStatus, setHotspotStatus] = useState<HotspotState>('UNKNOWN');
   const [pressedItem, setPressedItem] = useState<string | null>(null);
+  const [showCleanConfirm, setShowCleanConfirm] = useState(false);
 
   const sectionStyle = useSectionStyle();
 
   const refreshHotspotStatus = useCallback(() => {
-    const status = getSdk()?.android.getHotSpotStatus();
-    if (status === 'RUNNING' || status === 'STOPPED') {
-      setHotspotStatus(status);
-    } else {
-      setHotspotStatus('UNKNOWN');
-    }
+    setHotspotStatus(getHotspotStatus());
   }, []);
 
   useEffect(() => {
     refreshHotspotStatus();
   }, [refreshHotspotStatus]);
 
-  const toggleHotspot = useCallback(() => {
-    const sdk = getSdk();
-    const starting = hotspotStatus !== 'RUNNING';
-    if (sdk) {
-      if (starting) {
-        sdk.android.startHotSpotService();
-      } else {
-        sdk.android.stopHotSpotService();
-      }
-      showToast(starting ? t('menu.hotspotStarted') : t('menu.hotspotStopped'));
+  const handleToggleHotspot = useCallback(() => {
+    const next = toggleHotspotAction(hotspotStatus, showToast, {
+      started: t('menu.hotspotStarted'),
+      stopped: t('menu.hotspotStopped'),
+      unavailable: t('common.notAvailableDevice'),
+    });
+    setHotspotStatus(next);
+    if (next !== 'UNKNOWN') {
       setTimeout(refreshHotspotStatus, 400);
-    } else {
-      showToast(t('common.notAvailableDevice'));
-      setHotspotStatus('UNKNOWN');
     }
   }, [hotspotStatus, showToast, refreshHotspotStatus, t]);
 
@@ -77,28 +74,14 @@ export const MenuScreen = memo(function MenuScreen() {
       title: t('menu.itemsApnTitle'),
       subtitle: t('menu.itemsApnSubtitle'),
       icon: 'fa-signal',
-      action: () => {
-        const sdk = getSdk();
-        if (sdk) {
-          sdk.app.startApnActivity();
-        } else {
-          showToast(t('common.notAvailableDevice'));
-        }
-      },
+      action: () => openApnSettings(showToast, t('common.notAvailableDevice')),
     },
     {
       id: 'battery',
       title: t('menu.itemsBatteryTitle'),
       subtitle: t('menu.itemsBatterySubtitle'),
       icon: 'fa-bolt',
-      action: () => {
-        const sdk = getSdk();
-        if (sdk) {
-          sdk.app.ignoreBatteryOptimizations();
-        } else {
-          showToast(t('common.notAvailableDevice'));
-        }
-      },
+      action: () => ignoreBatteryOptimizations(showToast, t('common.notAvailableDevice')),
     },
     {
       id: 'hotspot',
@@ -113,21 +96,14 @@ export const MenuScreen = memo(function MenuScreen() {
             ? t('menu.itemsHotspotSubtitleOff')
             : t('menu.itemsHotspotSubtitleUnknown'),
       icon: 'fa-wifi',
-      action: hotspotStatus === 'UNKNOWN' ? undefined : toggleHotspot,
+      action: hotspotStatus === 'UNKNOWN' ? undefined : handleToggleHotspot,
     },
     {
       id: 'speedtest',
       title: t('menu.itemsSpeedtestTitle'),
       subtitle: t('menu.itemsSpeedtestSubtitle'),
       icon: 'fa-gauge-high',
-      action: () => {
-        const sdk = getSdk();
-        if (sdk) {
-          sdk.app.startWebViewActivity('https://www.speedtest.net/');
-          return;
-        }
-        window.open('https://fast.com', '_blank');
-      },
+      action: () => startSpeedtest(showToast, t('common.notAvailableDevice')),
     },
     {
       id: 'terms',
@@ -141,22 +117,7 @@ export const MenuScreen = memo(function MenuScreen() {
       title: t('menu.itemsCleanTitle'),
       subtitle: t('menu.itemsCleanSubtitle'),
       icon: 'fa-broom',
-      action: () => {
-        const sdk = getSdk();
-        if (sdk) {
-          sdk.app.cleanApp();
-          showToast(t('menu.cleanupDone'));
-        } else {
-          showToast(t('common.notAvailableDevice'));
-        }
-      },
-    },
-    {
-      id: 'logs',
-      title: t('menu.itemsLogsTitle'),
-      subtitle: t('menu.itemsLogsSubtitle'),
-      icon: 'fa-terminal',
-      action: () => setScreen('logs'),
+      action: () => setShowCleanConfirm(true),
     },
     {
       id: 'applogs',
@@ -164,13 +125,6 @@ export const MenuScreen = memo(function MenuScreen() {
       subtitle: t('menu.itemsAppLogsSubtitle'),
       icon: 'fa-list',
       action: () => setScreen('applogs'),
-    },
-    {
-      id: 'import',
-      title: t('menu.itemsImportTitle'),
-      subtitle: t('menu.itemsImportSubtitle'),
-      icon: 'fa-file-import',
-      action: () => setScreen('import'),
     },
   ];
 
@@ -184,6 +138,52 @@ export const MenuScreen = memo(function MenuScreen() {
       </div>
 
       <PremiumCard />
+
+      {showCleanConfirm && (
+        <GlobalModal
+          onClose={() => setShowCleanConfirm(false)}
+          title={t('menu.cleanConfirmTitle')}
+          subtitle={t('menu.cleanConfirmBody')}
+          icon={
+            <i className="fa fa-triangle-exclamation" style={{ color: '#fff', fontSize: '18px' }} />
+          }
+          size="sm"
+          className="clean-confirm-modal"
+          hideClose
+        >
+          <div className="button-group" style={{ marginTop: 0 }}>
+            <button
+              className="btn"
+              style={{
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                color: 'var(--text)',
+              }}
+              onClick={() => setShowCleanConfirm(false)}
+              type="button"
+            >
+              {t('common.cancel')}
+            </button>
+            <button
+              className="btn"
+              style={{
+                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                color: '#fff',
+                border: 'none',
+                boxShadow: '0 2px 8px rgba(239,68,68,0.35)',
+              }}
+              onClick={() => {
+                setShowCleanConfirm(false);
+                cleanApp(showToast, t('menu.cleanupDone'), t('common.notAvailableDevice'));
+              }}
+              type="button"
+            >
+              <i className="fa fa-broom" style={{ fontSize: '13px' }} />
+              {t('menu.itemsCleanTitle')}
+            </button>
+          </div>
+        </GlobalModal>
+      )}
 
       <div className="menu-list">
         {visibleItems.map((item) => {

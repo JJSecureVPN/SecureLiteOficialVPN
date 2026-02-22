@@ -13,12 +13,17 @@ import { memo, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/core/types';
 import { useTranslation } from '@/i18n';
 import { useVpn } from '@/features/vpn';
-import { useToastContext, useSafeArea, Card } from '@/shared';
+import { useToastContext, useSafeArea } from '@/shared';
 import { useAsyncError } from '@/core/hooks';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { ErrorDisplay } from '@/core/components';
 import { useImportConfig } from '@/features/vpn/ui/hooks';
-import { ImportInputStep, ImportSelectStep, ImportConfirmStep } from '@/features/vpn/ui/components';
+import {
+  ImportInputStep,
+  ImportInputFooter,
+  ImportSelectStep,
+  ImportConfirmStep,
+} from '@/features/vpn/ui/components';
 import { ImportDesignerScreen } from '@/features/vpn/ui/screens/ImportDesignerScreen';
 import { getServerCategory } from '@/features/vpn/ui/utils';
 import '../../../../styles/components/import-screen.css';
@@ -81,6 +86,13 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
 
   // Handle opening designer
   const handleOpenDesigner = useCallback(() => {
+    // if keyboard is open we want to dismiss it otherwise the footer
+    // may stay hidden behind the virtual keyboard and taps will be
+    // swallowed by the input element / keyboard overlay.
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     hookHandleBack(); // Reset to input step but with designer visible
     setStep('designer');
   }, [setStep, hookHandleBack]);
@@ -111,7 +123,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       setScreen('home');
     } catch (err) {
       error.setError(err, ErrorCategory.Internal);
-      showToast(t('error.configApplyFailed'), document.activeElement as HTMLElement);
+      showToast(t('error.configApplyFailed'), document.activeElement as HTMLElement, 'error');
     }
   }, [matches, selectedId, parsed, setCreds, setConfig, showToast, setScreen, t, error]);
 
@@ -141,7 +153,7 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
       showToast(t('import.copiedJson'), document.activeElement as HTMLElement);
       // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (err) {
-      showToast(t('error.copyFailed'), document.activeElement as HTMLElement);
+      showToast(t('error.copyFailed'), document.activeElement as HTMLElement, 'error');
     }
   }, [matches, selectedId, parsed, categorias, showToast, t]);
 
@@ -164,15 +176,30 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
   // Styles
   const sectionStyle = {
     ['--nav-safe' as any]: `${navigationBarHeight}px`,
+    ['--status-safe' as any]: `${statusBarHeight}px`,
   } as const;
-  const containerStyle = {
-    paddingTop: `calc(${statusBarHeight}px + var(--space-lg))`,
-    paddingBottom: `calc(${navigationBarHeight}px + var(--space-lg))`,
-  } as const;
+
+  const stepLabels = [t('import.steps.input'), t('import.steps.select'), t('import.steps.confirm')];
+  const stepKeys = ['input', 'select', 'confirm'] as const;
+  const currentStepIndex = Math.max(0, stepKeys.indexOf(step as (typeof stepKeys)[number]));
 
   return (
     <section className="screen import-screen" style={sectionStyle}>
-      <Card className="import-container" style={containerStyle}>
+      {/* Step indicator */}
+      <div className="import-dots">
+        {stepLabels.map((label, i) => (
+          <div
+            key={i}
+            className={`dot-item ${i === currentStepIndex ? 'active' : i < currentStepIndex ? 'done' : ''}`}
+          >
+            <span className="dot" />
+            <span className="dot-label">{label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Main content */}
+      <div className="import-main">
         <ErrorDisplay
           error={error.error}
           category={error.category}
@@ -182,88 +209,46 @@ export const ImportConfigScreen = memo(function ImportConfigScreen() {
           onDismiss={error.clearError}
         />
 
-        {/* Progress Steps */}
-        <div className="progress-steps">
-          <div className={`step ${step === 'input' ? 'active' : 'completed'}`}>
-            <div className="step-number">1</div>
-            <span className="step-label">{t('import.steps.input')}</span>
-          </div>
-          <div className="step-divider" />
-          <div
-            className={`step ${step === 'select' ? 'active' : step === 'confirm' ? 'completed' : ''}`}
-          >
-            <div className="step-number">2</div>
-            <span className="step-label">{t('import.steps.select')}</span>
-          </div>
-          <div className="step-divider" />
-          <div className={`step ${step === 'confirm' ? 'active' : ''}`}>
-            <div className="step-number">3</div>
-            <span className="step-label">{t('import.steps.confirm')}</span>
-          </div>
-        </div>
+        {step === 'input' && (
+          <ImportInputStep
+            rawInput={rawInput}
+            parseError={parseError}
+            onInputChange={setRawInput}
+          />
+        )}
 
-        {/* Header */}
-        <div className="import-header">
-          <div className="icon-wrapper">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="12" y1="18" x2="12" y2="12" />
-              <line x1="9" y1="15" x2="15" y2="15" />
-            </svg>
-          </div>
-          <div className="header-text">
-            <h3>{t('import.title')}</h3>
-            <p>{t('import.subtitle')}</p>
-          </div>
-        </div>
+        {step === 'select' && matches.length > 1 && (
+          <ImportSelectStep
+            matches={matches}
+            selectedId={selectedId}
+            categorias={categorias}
+            onSelectServer={setSelectedId}
+            onBack={handleBack}
+            onContinue={() => setStep('confirm')}
+          />
+        )}
 
-        {/* Body */}
-        <div className="import-body">
-          {/* Step 1: Input */}
-          {step === 'input' && (
-            <ImportInputStep
-              rawInput={rawInput}
-              parseError={parseError}
-              onInputChange={setRawInput}
-              onContinue={handleParse}
-              onOpenDesigner={handleOpenDesigner}
-            />
-          )}
+        {step === 'confirm' && (
+          <ImportConfirmStep
+            matches={matches}
+            selectedId={selectedId}
+            parsed={parsed}
+            categorias={categorias}
+            onBack={handleBack}
+            onApply={handleApply}
+            onExport={handleExport}
+          />
+        )}
+      </div>
 
-          {/* Step 2: Select Server */}
-          {step === 'select' && matches.length > 1 && (
-            <ImportSelectStep
-              matches={matches}
-              selectedId={selectedId}
-              categorias={categorias}
-              onSelectServer={setSelectedId}
-              onBack={handleBack}
-              onContinue={() => setStep('confirm')}
-            />
-          )}
-
-          {/* Step 3: Confirm */}
-          {step === 'confirm' && (
-            <ImportConfirmStep
-              matches={matches}
-              selectedId={selectedId}
-              parsed={parsed}
-              categorias={categorias}
-              onBack={handleBack}
-              onApply={handleApply}
-              onExport={handleExport}
-            />
-          )}
-        </div>
-      </Card>
+      {/* Fixed footer for input step */}
+      {step === 'input' && (
+        <ImportInputFooter
+          rawInput={rawInput}
+          onContinue={handleParse}
+          onOpenDesigner={handleOpenDesigner}
+        />
+      )}
     </section>
   );
 });

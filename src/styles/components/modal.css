@@ -69,10 +69,6 @@
   border-radius: var(--radius-sm);
 }
 
-.modal-close:hover {
-  background: var(--bg-2);
-}
-
 .modal-body {
   padding: var(--space-lg);
   overflow-y: auto;
@@ -233,10 +229,6 @@
   .modal-close {
     color: #999999;
   }
-  .modal-close:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
-  }
 }
 
 .modal-body {
@@ -280,11 +272,6 @@
     background: linear-gradient(135deg, #252525 0%, #1f1f1f 100%);
     border-color: rgba(255, 255, 255, 0.08);
   }
-}
-
-.coupon-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .coupon-header {
@@ -401,11 +388,6 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
 }
 
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
-}
-
 .btn-primary:active {
   transform: translateY(0);
 }
@@ -439,10 +421,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .btn-copy:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
 }
 
 .btn-copy:active {
@@ -696,11 +674,6 @@
   border-radius: 8px;
 }
 
-.modal-content.import-config .modal-close:hover {
-  background: var(--bg-2);
-  color: var(--text-strong);
-}
-
 /* Progress Steps */
 .progress-steps {
   display: flex;
@@ -930,6 +903,60 @@
 
   .modal-content.import-config .btn {
     width: 100%;
+  }
+}
+
+/* Clean confirm modal — warning/danger theme */
+.modal-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.modal-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: var(--font-lg, 16px);
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.modal-subtitle {
+  margin: 0;
+  font-size: var(--font-sm, 12px);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modal-icon-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.clean-confirm-modal .modal-icon-wrapper {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+.clean-confirm-modal .modal-title {
+  color: #dc2626;
+}
+
+@media (prefers-color-scheme: dark) {
+  .clean-confirm-modal .modal-title {
+    color: #f87171;
   }
 }
 

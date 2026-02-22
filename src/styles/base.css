@@ -207,8 +207,6 @@ body {
   flex-wrap: wrap;
 }
 
-.connect-row {
+.connect-button {
   margin-top: clamp(6px, 1vw, 8px);
-  align-items: center;
-  flex-wrap: nowrap;
 }

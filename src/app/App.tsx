@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { destroySdk } from '@/features/vpn/api/dtunnelSdk';
 
 // VPN Feature Screens (features/vpn/ui/screens/ + api + context)
@@ -124,14 +124,14 @@ function AppContent() {
     ['--nav-safe' as any]: `${navigationBarHeight}px`,
   };
 
-  const handleShowCouponModal = (coupons: Coupon[]) => {
+  const handleShowCouponModal = useCallback((coupons: Coupon[]) => {
     setModalCoupons(coupons);
     setShowCouponModal(true);
-  };
+  }, []);
 
-  const handleCloseCouponModal = () => {
+  const handleCloseCouponModal = useCallback(() => {
     setShowCouponModal(false);
-  };
+  }, []);
 
   return (
     <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
@@ -149,7 +149,7 @@ function AppContent() {
 
       <ScreenComponent />
 
-      <Toast message={toast.message} visible={toast.visible} />
+      <Toast message={toast.message} visible={toast.visible} variant={toast.variant} />
 
       {showCouponModal && <CouponModal coupons={modalCoupons} onClose={handleCloseCouponModal} />}
     </div>

@@ -6,6 +6,15 @@ declare module '*.css' {
   export default content;
 }
 
+// Variables de entorno definidas en el proyecto
+interface ImportMetaEnv {
+  readonly VITE_NEWS_API_URL?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 // ─── DTunnel SDK – disponible en window cuando el SDK está cargado ────────────
 // Los tipos completos (DTunnelSDK, módulos, callbacks Dt*Event, etc.)
 // provienen de src/lib/dtunnel-sdk.d.ts referenciado arriba con /// <reference path>.

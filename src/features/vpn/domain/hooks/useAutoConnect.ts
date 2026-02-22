@@ -1,19 +1,11 @@
 import { useCallback, useRef } from 'react';
-import type {
-  AutoState,
-  Category,
-  Credentials,
-  ScreenType,
-  ServerConfig,
-  VpnStatus,
-} from '@/core/types';
+import type { AutoState, Category, ScreenType, ServerConfig, VpnStatus } from '@/core/types';
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/core/constants';
 import { getSdk } from '../../api/dtunnelSdk';
 
 interface UseAutoConnectArgs {
   status: VpnStatus;
   categorias: Category[];
-  creds: Credentials;
   setStatus: (status: VpnStatus) => void;
   setConfigState: (config: ServerConfig) => void;
   setScreen: (screen: ScreenType) => void;

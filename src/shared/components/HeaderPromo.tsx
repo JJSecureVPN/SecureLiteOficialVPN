@@ -32,22 +32,15 @@ export const HeaderPromo = memo(function HeaderPromo() {
   const [promo, setPromo] = useState<PromoStatus | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
-  const expiresAt = useMemo(() => {
-    if (!promo?.activa || !promo.activada_en || !promo.duracion_horas) return null;
+  const { remaining, remainingMs } = useMemo(() => {
+    if (!promo?.activa || !promo.activada_en || !promo.duracion_horas) {
+      return { remaining: null, remainingMs: null };
+    }
     const start = new Date(promo.activada_en).getTime();
-    if (!Number.isFinite(start)) return null;
-    return start + promo.duracion_horas * 60 * 60 * 1000;
-  }, [promo]);
-
-  const remainingMs = useMemo(() => {
-    if (!expiresAt) return null;
-    return expiresAt - now;
-  }, [expiresAt, now]);
-
-  const remaining = useMemo(() => {
-    if (remainingMs == null) return null;
-    return toRemainingParts(remainingMs);
-  }, [remainingMs]);
+    if (!Number.isFinite(start)) return { remaining: null, remainingMs: null };
+    const ms = start + promo.duracion_horas * 60 * 60 * 1000 - now;
+    return { remaining: toRemainingParts(ms), remainingMs: ms };
+  }, [promo, now]);
 
   const visible = Boolean(promo?.activa) && (remainingMs == null || remainingMs > 0);
 

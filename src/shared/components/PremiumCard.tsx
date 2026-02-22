@@ -1,18 +1,13 @@
 import { memo, useCallback } from 'react';
-import { Button } from '../ui/Button';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTranslation } from '@/i18n';
-import { Card } from '@/shared';
 
 export const PremiumCard = memo(function PremiumCard() {
   const { t } = useTranslation();
+
   const openPremiumUrl = useCallback((url: string) => {
     const sdk = getSdk();
-    if (sdk) {
-      sdk.app.startWebViewActivity(url);
-      return;
-    }
-    window.open(url, '_blank');
+    sdk ? sdk.app.startWebViewActivity(url) : window.open(url, '_blank');
   }, []);
 
   const handleBuy = useCallback(() => {
@@ -24,20 +19,31 @@ export const PremiumCard = memo(function PremiumCard() {
   }, [openPremiumUrl]);
 
   return (
-    <Card className="info-card premium-card">
-      <div className="premium-card__body">
-        <span className="summary-eyebrow">{t('premium.title')}</span>
-        <h3>{t('premium.cta')}</h3>
-        <p className="summary-meta">{t('premium.description')}</p>
+    <div className="pc">
+      {/* Shimmer accent line */}
+      <span className="pc__shine" aria-hidden="true" />
+
+      <div className="pc__left">
+        <span className="pc__badge">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path
+              d="M5 0L6.18 3.45H9.75L6.9 5.58L7.94 9L5 7L2.06 9L3.1 5.58L.25 3.45H3.82L5 0Z"
+              fill="currentColor"
+            />
+          </svg>
+          {t('premium.title')}
+        </span>
+        <p className="pc__cta">{t('premium.cta')}</p>
       </div>
-      <div className="premium-card__actions">
-        <Button variant="soft" onClick={handleBuy}>
+
+      <div className="pc__actions">
+        <button className="pc__btn pc__btn--primary" onClick={handleBuy} type="button">
           {t('premium.buy')}
-        </Button>
-        <Button variant="soft" onClick={handleResell}>
+        </button>
+        <button className="pc__btn pc__btn--ghost" onClick={handleResell} type="button">
           {t('premium.resell')}
-        </Button>
+        </button>
       </div>
-    </Card>
+    </div>
   );
 });

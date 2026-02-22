@@ -1,15 +1,9 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Credentials, ServerConfig, UserInfo, VpnStatus } from '@/core/types';
 import { toPingNumber } from '@/core/utils';
-import {
-  getAppVersions,
-  getBestIP,
-  getOperator,
-  getUserInfoRaw,
-  onNativeEvent,
-} from '../../api/vpnBridge';
+import { getAppVersions, getBestIP, getOperator, getUserInfoRaw } from '../../api/sdkHelpers';
 import { getSdk } from '../../api/dtunnelSdk';
+import { useDTunnelEvent } from '@/lib/dtunnel-sdk-react';
 
 interface UseVpnUserStateArgs {
   status: VpnStatus;
@@ -76,8 +70,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
 
         userFetchRef.current.pending = false;
         userFetchRef.current.lastAt = Date.now();
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
+      } catch {
         userFetchRef.current.pending = false;
       }
     },
@@ -97,56 +90,45 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
       userFetchRef.current.pending = true;
       userFetchRef.current.lastAt = now;
 
-      let resolved = false;
-
-      const readDirect = () => {
-        const raw = getUserInfoRaw();
-        if (raw) {
-          resolved = true;
-          handleUserData(raw);
-        } else {
-          userFetchRef.current.pending = false;
-        }
-      };
-
-      // Dispara startCheckUser; si no hay respuesta, reintenta con llamada directa
       const sdk = getSdk();
       if (sdk) {
         sdk.main.startCheckUser();
-        setTimeout(() => {
-          if (!resolved) readDirect();
-        }, 600);
-        setTimeout(() => {
-          if (!resolved) readDirect();
-        }, 2000);
+
+        // Fallback único si no llega evento en 1.2s
+        const fallback = setTimeout(() => {
+          const raw = getUserInfoRaw();
+          if (raw) {
+            handleUserData(raw);
+          } else {
+            userFetchRef.current.pending = false;
+          }
+        }, 1200);
+
+        // Limpia el timeout si llega el evento primero
+        sdk.once('checkUserResult', () => clearTimeout(fallback));
+        sdk.once('checkUserError', () => clearTimeout(fallback));
         return;
       }
 
-      readDirect();
+      // Sin SDK: leer directo
+      const raw = getUserInfoRaw();
+      if (raw) {
+        handleUserData(raw);
+      } else {
+        userFetchRef.current.pending = false;
+      }
     },
     [handleUserData],
   );
 
-  useEffect(() => {
-    const offUserResult = onNativeEvent('DtCheckUserResultEvent', handleUserData);
-    const offUserModel = onNativeEvent('DtCheckUserModelEvent', handleUserData);
+  useDTunnelEvent('checkUserResult', (e) => {
+    handleUserData(e.payload);
+  });
 
-    // Escuchar error de verificación de usuario vía SDK oficial
-    const sdk = getSdk();
-    const offCheckError = sdk?.on('checkUserError', (e) => {
-      // El error llega como string; lo usamos solo para desbloquear el pending
-      // y loguear, sin sobreescribir los datos de usuario ya existentes
-      if (e.payload) {
-        userFetchRef.current.pending = false;
-      }
-    });
-
-    return () => {
-      offUserResult();
-      offUserModel();
-      offCheckError?.();
-    };
-  }, [handleUserData]);
+  useDTunnelEvent('checkUserError', (e) => {
+    // El error llega como string; desbloquear pending sin sobreescribir datos existentes
+    if (e.payload) userFetchRef.current.pending = false;
+  });
 
   useEffect(() => {
     if (status === 'CONNECTED') {

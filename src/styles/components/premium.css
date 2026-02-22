@@ -1,70 +1,157 @@
-/* ===========================================
-   Premium Card
-   =========================================== */
+/* ============================================
+   Premium Card — Mobile-first, compact & fluid
+   ============================================ */
 
-.premium-card {
+.pc {
+  position: relative;
   display: flex;
-  gap: var(--space-lg);
   align-items: center;
-  padding: var(--space-lg);
-  /* Alineado visual con las demás tarjetas */
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.12s ease,
-    box-shadow 0.2s ease;
-}
-
-.premium-card:hover {
-  border-color: var(--accent-40);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.premium-card:focus-visible {
-  outline: none;
-  border-color: var(--accent);
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  overflow: hidden;
+  /* Glass-luxury background */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 12%, var(--surface-1)) 0%,
+    var(--surface-1) 60%
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
   box-shadow:
-    0 0 0 3px var(--focus-accent-15),
-    var(--shadow-md);
-  transform: translateY(-2px);
+    0 1px 0 0 color-mix(in srgb, white 8%, transparent) inset,
+    0 2px 8px -2px color-mix(in srgb, var(--accent) 18%, transparent);
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.premium-card__body {
+
+/* Active press feel on mobile */
+.pc:active {
+  transform: scale(0.985);
+}
+
+/* ── Shimmer top-edge accent ── */
+.pc__shine {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 70%, white) 40%,
+    color-mix(in srgb, var(--accent) 40%, white) 60%,
+    transparent 100%
+  );
+  border-radius: 14px 14px 0 0;
+  animation: pc-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes pc-shimmer {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ── Left content ── */
+.pc__left {
   flex: 1;
   min-width: 0;
-}
-
-.premium-card__body h3 {
-  margin: var(--space-xs) 0;
-  font-size: var(--font-xl);
-}
-
-.premium-card__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  min-width: clamp(160px, 32%, 200px);
+  gap: 2px;
 }
 
-.premium-card__actions .btn {
-  width: 100%;
+.pc__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.9;
 }
 
-.premium-card__actions .btn.soft {
-  justify-content: center;
+.pc__badge svg {
+  flex-shrink: 0;
+  opacity: 0.85;
 }
 
-/* Responsive - móvil */
-.premium-card {
-  flex-direction: column;
-  align-items: flex-start;
+.pc__cta {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.premium-card__actions {
-  width: 100%;
-  min-width: 0;
+/* ── Action buttons ── */
+.pc__actions {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pc__btn {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 6px 11px;
+  border-radius: 9px;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pc__btn:active {
+  transform: scale(0.93);
+  opacity: 0.85;
+}
+
+/* Primary — accent fill */
+.pc__btn--primary {
+  background: var(--accent);
+  color: var(--accent-foreground, #fff);
+  box-shadow: 0 1px 4px -1px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+/* Ghost — outlined */
+.pc__btn--ghost {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ── Very small screens: stack vertically ── */
+@media (max-width: 320px) {
+  .pc {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 12px;
+  }
+
+  .pc__actions {
+    width: 100%;
+  }
+
+  .pc__btn {
+    flex: 1;
+    text-align: center;
+  }
 }

@@ -1,0 +1,25 @@
+/* ===========================================
+   Connect Button - Botón y Toggle de conexión
+   =========================================== */
+
+.connect-button {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.connect-button .btn.primary {
+  flex: 1;
+  min-width: 0;
+  box-shadow: none;
+}
+
+.connect-button .toggle {
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+.connect-button .auto-switch-label {
+  display: none;
+}

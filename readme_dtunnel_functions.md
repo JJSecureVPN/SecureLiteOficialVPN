@@ -1,325 +1,275 @@
-# DTunnel - Documentação da API
+# DTunnelSDK — Referencia completa de APIs (versión integrada)
 
-Esta é a documentação da API JavaScript para uso dos hooks nativos fornecidos pelo sistema DTunnel, disponível via `window.Dt*`. Abaixo estão listados todos os métodos/interfaces disponíveis, agrupados por categoria, com descrições, parâmetros, retornos e exemplos de uso.
+> Este archivo ahora documenta **todas** las APIs públicas del `DTunnelSDK` (métodos, módulos y eventos). Sustituye el uso directo de `window.Dt*` por el SDK.
 
-> **Importante:** Todos os métodos devem ser chamados a partir de JavaScript. Certifique-se de que o contexto `window.Dt*` está disponível antes de utilizá-los.
+Resumen rápido:
+- Uso recomendado: crear una instancia única `const sdk = new DTunnelSDK(options)` y usar `sdk.config`, `sdk.main`, `sdk.text`, `sdk.app`, `sdk.android`.
+- Soporta llamadas directas (`sdk.main.startVpn()`), llamadas dinámicas (`sdk.call*`) y eventos semánticos (`sdk.on('vpnState', ...)`).
 
 ---
 
 ## Índice
-
-* [Configuração](#configuração)
-* [Ambiente de Rede](#ambiente-de-rede)
-* [VPN](#vpn)
-* [Interface Nativa](#interface-nativa)
-* [Informações de Dispositivo](#informações-de-dispositivo)
-* [Usuário e Autenticação](#usuário-e-autenticação)
-* [Logs](#logs)
-* [Tradução](#tradução)
-* [Notificações](#notificações)
-* [Web Views e URLs Externas](#web-views-e-urls-externas)
-* [HotSpot](#hotspot)
-* [Modo Avião](#modo-avião)
-* [Outros](#outros)
-* [Eventos Disponíveis](#eventos-disponíveis)
+- Uso rápido
+- Clase principal: `DTunnelSDK`
+- Módulos y sus métodos (`config`, `main`, `text`, `app`, `android`)
+- Eventos semánticos y callbacks globales
+- Errores y manejo
+- Mapeo completo `window.Dt*` → `sdk.*`
+- Ejemplos de migración y shim
+- Checklist
 
 ---
 
-## Configuração
-
-### `window.DtGetConfigs.execute()`
-
-Retorna um *array* de categorias com itens de configuração.
-
-```js
-const configs = window.DtGetConfigs.execute();
-// Exemplo de retorno:
-// [ { id:1, name:'Categoria', sorter:1, color:'#FFF', items:[ {...} ] } ]
-```
-
-### `window.DtSetConfig.execute(id: number): void`
-
-Define o item de configuração ativo pelo seu `id`.
-
-```js
-window.DtSetConfig.execute(1000);
-```
-
-### `window.DtGetDefaultConfig.execute(): Config | undefined`
-
-Retorna o item selecionado ou `undefined` se nenhum estiver ativo.
-
-```js
-const current = window.DtGetDefaultConfig.execute();
-if (current) console.log(current.name);
+## Uso rápido
+```html
+<script src="./DTunnelSDK-main/sdk/dtunnel-sdk.js"></script>
+<script>
+  const sdk = new DTunnelSDK({ strict: false, autoRegisterNativeEvents: true });
+  sdk.on('vpnState', e => console.log(e.payload));
+  const state = sdk.main.getVpnState();
+</script>
 ```
 
 ---
 
-## Ambiente de Rede
+## Clase principal: `DTunnelSDK`
+`constructor(options?: DTunnelSDKOptions)` — opciones: `{ window?, strict?, logger?, autoRegisterNativeEvents? }`.
 
-### `window.DtGetLocalIP.execute(): string`
+Propiedades estáticas y utilitarias:
+- `DTunnelSDK.VERSION` — string
+- `DTunnelSDK.BRIDGE_OBJECTS` — lista de objetos puente disponibles
+- `DTunnelSDK.EVENT_DEFINITIONS` — definiciones de eventos y si parsean JSON
+- `DTunnelSDK.DTunnelBridgeError` — clase de error específica
 
-Retorna o IP local (e.g., `'192.168.1.100'`).
+Propiedades de instancia:
+- `version`, `window`, `strict`, `autoRegisterNativeEvents`
+- `config: DTunnelConfigModule`
+- `main: DTunnelMainModule`
+- `text: DTunnelTextModule`
+- `app: DTunnelAppModule`
+- `android: DTunnelAndroidModule`
 
-### `window.DtGetNetworkName.execute(): string`
-
-Nome da rede atual (e.g., `'WIFI'`, `'MOBILE'`).
-
-### `window.DtGetPingResult.execute(): number`
-
-Tempo de ping em milissegundos.
-
-### `window.DtGetNetworkData.execute(): { type_name:'MOBILE'|'WIFI', type:number, extra_info:string, detailed_state:string, reason?:string }`
-
-Retorna objeto com detalhes do estado de rede.
-
----
-
-## VPN
-
-### `window.DtGetVpnState.execute(): 'CONNECTED'|'DISCONNECTED'|'CONNECTING'|'STOPPING'|'NO_NETWORK'|'AUTH'|'AUTH_FAILED'`
-
-Estado atual da VPN.
-
-### `window.DtExecuteVpnStart.execute(): void`
-
-Inicia a conexão VPN.
-
-### `window.DtExecuteVpnStop.execute(): void`
-
-Para a conexão VPN.
+Métodos principales:
+- `on(eventName, listener)` / `once(eventName, listener)` / `off(eventName, listener)` — gestión de eventos (incluye `'nativeEvent'`, `'error'` y `native:<object>`).
+- `removeAllListeners(eventName?)` — eliminar listeners.
+- `onNativeEvent(fn)` / `onError(fn)` — atajos.
+- `getBridgeObject<T = unknown>(objectName: string): T | undefined` — obtener objeto puente.
+- `hasBridgeObject(objectName: string): boolean` — availability check.
+- `getBridgeAvailability(): Record<string, boolean>` — estado de bridges.
+- `isReady(requiredObjects?: string[]): boolean` — está listo para usar.
+- `call<T>(objectName, methodName, args?) : T | null` — llamada sin parse.
+- `callJson<T>(objectName, methodName, args?) : T | null` — parse JSON de retorno.
+- `callVoid(objectName, methodName, args?) : void` — llamadas void.
+- `registerNativeEventHandlers()` / `unregisterNativeEventHandlers()` — registra / quita handlers globales.
+- `createDebugSnapshot()` — devuelve info para depuración.
+- `destroy()` — limpieza.
 
 ---
 
-## Interface Nativa
+## Módulos y sus métodos (referencia completa)
 
-### `window.DtExecuteDialogConfig.execute(): void`
+### `sdk.config` — DTunnelConfigModule
+- `setConfig(id: number): void` — seleccionar configuración.
+- `getConfigsRaw(): string | null` — raw JSON.
+- `getConfigs<T = unknown>(): T | null` — parsed configs.
+- `getDefaultConfigRaw(): string | null`
+- `getDefaultConfig<T = unknown>(): T | null`
+- `openConfigDialog(): void` — abre diálogo nativo.
+- `getUsername(): string | null`
+- `setUsername(value: string): void`
+- `getPassword(): string | null`
+- `setPassword(value: string): void`
+- `getLocalConfigVersion(): number | null`
+- `getCdnCount(): number | null`
+- `getUuid(): string | null`
+- `setUuid(value: string): void`
 
-Abre diálogo de configurações nativo.
+### `sdk.main` — DTunnelMainModule
+- `getLogsRaw(): string | null`
+- `getLogs<T = unknown>(): T | null`
+- `clearLogs(): void`
+- `startVpn(): void`
+- `stopVpn(): void`
+- `getVpnState(): string | null` — p.ej. `'CONNECTED' | 'DISCONNECTED' | ...'`
+- `startAppUpdate(): void`
+- `startCheckUser(): void`
+- `showLoggerDialog(): void`
+- `getLocalIp(): string | null`
+- `activateAirplaneMode(): void`
+- `deactivateAirplaneMode(): void`
+- `getAirplaneState(): 'ACTIVE'|'INACTIVE'|null`
+- `getAssistantState(): 'ENABLED'|'DISABLED'|null`
+- `isCurrentAssistantEnabled(): boolean`
+- `showMenuDialog(): void`
+- `getNetworkName(): string | null`
+- `getPingResult(): string | null`
 
-### `window.DtShowLoggerDialog.execute(): void`
+### `sdk.text` — DTunnelTextModule
+- `translate(label: string | null): string | null`
 
-Abre diálogo de logs de conexão.
+### `sdk.app` — DTunnelAppModule
+- `cleanApp(): void`
+- `goToVoiceInputSettings(): void`
+- `getAppConfigRaw(name: string): string | null`
+- `getAppConfig<T = unknown>(name: string): T | null`
+- `ignoreBatteryOptimizations(): void`
+- `startApnActivity(): void`
+- `startNetworkActivity(): void`
+- `startWebViewActivity(url?: string | null): void`
+- `startRadioInfoActivity(): void`
 
-### `window.DtShowMenuDialog.execute(): void`
-
-Abre menu de ferramentas nativas.
+### `sdk.android` — DTunnelAndroidModule
+- `getDeviceId(): string | null`
+- `sendNotification(title: string, message: string, imageUrl?: string | null): void`
+- `getNetworkDataRaw(): string | null`
+- `getNetworkData<T = unknown>(): T | null`
+- `getStatusBarHeight(): number | null`
+- `getNavigationBarHeight(): number | null`
+- `openExternalUrl(url: string): void`
+- `startHotSpotService(port?: number): void`
+- `stopHotSpotService(): void`
+- `getHotSpotStatus(): 'RUNNING'|'STOPPED'|null`
+- `isHotSpotRunning(): boolean`
+- `getNetworkDownloadBytes(): number | null`
+- `getNetworkUploadBytes(): number | null`
+- `getAppVersion(): string | null`
+- `handleAction(action: string): void`
+- `closeApp(): void`
 
 ---
 
-## Informações de Dispositivo
+## Eventos semánticos (nombres y payloads)
+Usar `sdk.on('<eventName>', handler)`.
 
-### `window.DtGetStatusBarHeight.execute(): number`
+Eventos disponibles:
+- `vpnState` — payload: `string | null` (estado VPN).
+- `vpnStartedSuccess` — void
+- `vpnStoppedSuccess` — void
+- `newLog` — void
+- `configClick` — void
+- `checkUserStarted` — void
+- `checkUserResult` — object | null (payload JSON)
+- `checkUserError` — string | null
+- `messageError` — object | null
+- `showSuccessToast` — string | null
+- `showErrorToast` — string | null
+- `notification` — object | null
 
-Altura da barra de status (pixels).
-
-### `window.DtGetNavigationBarHeight.execute(): number`
-
-Altura da barra de navegação (pixels).
-
-### `window.DtGetDeviceID.execute(): string`
-
-ID único do dispositivo.
-
-### `window.DtAppVersion.execute(): string`
-
-Versão atual do aplicativo.
-
----
-
-## Usuário e Autenticação
-
-### `window.DtUsername.get(): string` / `DtUsername.set(username: string): void`
-
-Obtem/define nome de usuário.
-
-### `window.DtPassword.get(): string` / `DtPassword.set(password: string): void`
-
-Obtem/define senha.
-
-### `window.DtUuid.get(): string` / `DtUuid.set(uuid: string): void`
-
-Obtem/define UUID (v2ray).
-
----
-
-## Logs
-
-### `window.DtGetLogs.execute(): string`
-
-Retorna JSON com todos os logs.
-
-### `window.DtClearLogs.execute(): void`
-
-Limpa todos os logs.
-
----
-
-## Tradução
-
-### `window.DtTranslateText.execute(label: string): string`
-
-Retorna texto traduzido para a chave.
-
+Ejemplo:
 ```js
-const label = window.DtTranslateText.execute("LBL_START");
+sdk.on('vpnState', event => console.log(event.payload));
+// o atajo para callbacks globales (legacy)
+window.DtVpnStateEvent = state => console.log(state);
 ```
 
 ---
 
-## Notificações
+## Errores
+- `DTunnelBridgeError` — clase de error con `code`, `message` y `details`.
+- El SDK emite evento `'error'` con `{ error: DTunnelBridgeError }` cuando `strict: false` detecta problemas internos.
 
-### `window.DtSendNotification.execute(title: string, message: string, imageUrl: string): void`
-
-Envia notificação local.
-
----
-
-## Web Views e URLs Externas
-
-### `window.DtStartWebViewActivity.execute(url: string): void`
-
-Abre página interna via WebView.
-
-### `window.DtOpenExternalUrl.execute(url: string): void`
-
-Abre URL no navegador padrão.
+Manejo recomendado:
+```js
+sdk.on('error', ({ error }) => console.error(error.code, error.details));
+```
 
 ---
 
-## HotSpot
+## Mapeo completo: `window.Dt*` → `sdk.*`
+(Útil para migración automática)
 
-### `window.DtGetStatusHotSpotService.execute(): 'STOPPED'|'RUNNING'`
-
-Status do serviço HotSpot.
-
-### `window.DtStartHotSpotService.execute(): void`
-
-Inicia HotSpot.
-
-### `window.DtStopHotSpotService.execute(): void`
-
-Para HotSpot.
-
-### `window.DtGetNetworkDownloadBytes.execute(): number`
-
-Total de bytes baixados.
-
-### `window.DtGetNetworkUploadBytes.execute(): number`
-
-Total de bytes enviados.
-
----
-
-## Modo Avião
-
-### `window.DtAirplaneState.execute(): 'ACTIVE'|'INACTIVE'`
-
-Estado do modo avião.
-
-### `window.DtAirplaneActivate.execute(): void`
-
-Ativa modo avião.
-
-### `window.DtAirplaneDeactivate.execute(): void`
-
-Desativa modo avião.
-
----
-
-## Outros
-
-### `window.DtGetLocalConfigVersion.execute(): string`
-
-Versão da configuração local (e.g., `'1.2.3'`).
-
-### `window.DtStartAppUpdate.execute(): void`
-
-Inicia processo de atualização da aplicação.
-
-### `window.DtStartCheckUser.execute(): void`
-
-Abre diálogo de checagem de usuário.
-
-### `window.DtAppIsCurrentAssistant.execute(): boolean`
-
-Verifica se app é assistente de voz padrão.
-
-### `window.DtGoToVoiceInputSettings.execute(): void`
-
-Abre configurações de assistente de voz.
+- `window.DtGetConfigs.execute()` → `sdk.config.getConfigs()` / `sdk.config.getConfigsRaw()`
+- `window.DtSetConfig.execute(id)` → `sdk.config.setConfig(id)`
+- `window.DtGetDefaultConfig.execute()` → `sdk.config.getDefaultConfig()`
+- `window.DtGetLocalIP.execute()` → `sdk.main.getLocalIp()`
+- `window.DtGetNetworkName.execute()` → `sdk.main.getNetworkName()`
+- `window.DtGetPingResult.execute()` → `sdk.main.getPingResult()`
+- `window.DtGetNetworkData.execute()` → `sdk.android.getNetworkData()`
+- `window.DtGetVpnState.execute()` → `sdk.main.getVpnState()`
+- `window.DtExecuteVpnStart.execute()` → `sdk.main.startVpn()`
+- `window.DtExecuteVpnStop.execute()` → `sdk.main.stopVpn()`
+- `window.DtExecuteDialogConfig.execute()` → `sdk.config.openConfigDialog()`
+- `window.DtShowLoggerDialog.execute()` → `sdk.main.showLoggerDialog()`
+- `window.DtShowMenuDialog.execute()` → `sdk.main.showMenuDialog()`
+- `window.DtGetStatusBarHeight.execute()` → `sdk.android.getStatusBarHeight()`
+- `window.DtGetNavigationBarHeight.execute()` → `sdk.android.getNavigationBarHeight()`
+- `window.DtGetDeviceID.execute()` → `sdk.android.getDeviceId()`
+- `window.DtAppVersion.execute()` → `sdk.android.getAppVersion()`
+- `window.DtUsername.get()` → `sdk.config.getUsername()` / `DtUsername.set()` → `sdk.config.setUsername()`
+- `window.DtPassword.get()` → `sdk.config.getPassword()` / `DtPassword.set()` → `sdk.config.setPassword()`
+- `window.DtUuid.get()` → `sdk.config.getUuid()` / `DtUuid.set()` → `sdk.config.setUuid()`
+- `window.DtGetLogs.execute()` → `sdk.main.getLogs()`
+- `window.DtClearLogs.execute()` → `sdk.main.clearLogs()`
+- `window.DtTranslateText.execute(label)` → `sdk.text.translate(label)`
+- `window.DtSendNotification.execute(title, message, imageUrl)` → `sdk.android.sendNotification(...)`
+- `window.DtStartWebViewActivity.execute(url)` → `sdk.app.startWebViewActivity(url)`
+- `window.DtOpenExternalUrl.execute(url)` → `sdk.android.openExternalUrl(url)`
+- `window.DtGetStatusHotSpotService.execute()` → `sdk.android.getHotSpotStatus()`
+- `window.DtStartHotSpotService.execute()` → `sdk.android.startHotSpotService()`
+- `window.DtStopHotSpotService.execute()` → `sdk.android.stopHotSpotService()`
+- `window.DtGetNetworkDownloadBytes.execute()` → `sdk.android.getNetworkDownloadBytes()`
+- `window.DtGetNetworkUploadBytes.execute()` → `sdk.android.getNetworkUploadBytes()`
+- `window.DtAirplaneState.execute()` → `sdk.main.getAirplaneState()`
+- `window.DtAirplaneActivate.execute()` → `sdk.main.activateAirplaneMode()`
+- `window.DtAirplaneDeactivate.execute()` → `sdk.main.deactivateAirplaneMode()`
+- `window.DtGetLocalConfigVersion.execute()` → `sdk.config.getLocalConfigVersion()`
+- `window.DtStartAppUpdate.execute()` → `sdk.main.startAppUpdate()`
+- `window.DtStartCheckUser.execute()` → `sdk.main.startCheckUser()`
+- `window.DtAppIsCurrentAssistant.execute()` → `sdk.main.isCurrentAssistantEnabled()`
+- `window.DtGoToVoiceInputSettings.execute()` → `sdk.app.goToVoiceInputSettings()`
 
 ---
 
-## Eventos Disponíveis
+## Ejemplos de uso (completos)
+```js
+// Instancia global
+const sdk = new DTunnelSDK({ strict: false, autoRegisterNativeEvents: true });
 
-Além dos métodos acessíveis via `window.Dt*`, o sistema DTunnel emite eventos JavaScript diretamente para o escopo global. Estes eventos podem ser capturados definindo funções com os nomes correspondentes no `window`, como por exemplo:
+// Llamada wrapper directa
+sdk.main.startVpn();
+
+// Llamada dinámica (equivalente a window.Dt...)
+sdk.callVoid('DtExecuteVpnStart', 'execute');
+
+// Obtener configs parseadas
+const configs = sdk.config.getConfigs();
+
+// Escuchar evento semántico
+const off = sdk.on('vpnState', e => console.log('VPN:', e.payload));
+// quitar listener
+off();
+
+// Acceso a bridge directamente (si existe)
+const raw = sdk.getBridgeObject('DtGetConfigs');
+```
+
+---
+
+## Shim automático (ejemplo completo)
+Colocar en `index.html` o en `src/lib/dtunnel-shim.ts` durante la migración:
 
 ```js
-window.DtVpnStateEvent = function(state) {
-  console.log("Estado da VPN:", state);
+const sdk = new DTunnelSDK({ strict: false, autoRegisterNativeEvents: true });
+
+const map = {
+  DtGetVpnState: () => sdk.main.getVpnState(),
+  DtExecuteVpnStart: () => sdk.main.startVpn(),
+  DtExecuteVpnStop: () => sdk.main.stopVpn(),
+  DtGetConfigs: () => sdk.config.getConfigs(),
+  // añadir entradas según el mapeo completo arriba
 };
+
+Object.keys(map).forEach(k => {
+  window[k] = { execute: map[k] };
+});
 ```
-
-Abaixo está a lista dos eventos atualmente disponíveis e exemplos de payload:
-
-| Evento                     | Payload/Exemplo                                                                                       | Descrição                                                               |
-|----------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| `DtCheckUserStartedEvent`  | `undefined`                                                                                           | Emitido quando o processo de checagem de usuário inicia.                |
-| `DtCheckUserModelEvent`    | `{ "expiration_days": "983", "limit_connections": "09", "expiration_date": "02/03/2028", "username": "094d26d6-fe52-42f6-bfac-ef99dcdd3e50", "count_connections": "01" }` | Fornece informações detalhadas do modelo do usuário durante a checagem. |
-| `DtNewDefaultConfigEvent`  | `undefined`                                                                                           | Disparado ao definir uma nova configuração padrão.                      |
-| `DtMessageErrorEvent`      | `undefined`                                                                                           | Mensagem de erro genérica do sistema.                                   |
-| `DtNewLogEvent`            | `undefined`                                                                                           | Enviado quando um novo log de conexão é registrado.                     |
-| `DtErrorToastEvent`        | `undefined`                                                                                           | Usado para exibir mensagens de erro em forma de toast.                  |
-| `DtSuccessToastEvent`      | `undefined`                                                                                           | Exibe notificações de sucesso via toast.                                |
-| `DtVpnStartedSuccessEvent` | `undefined`                                                                                           | Indica que a VPN foi iniciada com sucesso.                              |
-| `DtVpnStateEvent`          | `'STOPPING'`, `'CONNECTING'`, `'CONNECTED'`, `'AUTH'`, `'AUTH_FAILED'`, `'DISCONNECTED'`             | Reflete mudanças no estado da VPN.                                      |
-| `DtVpnStoppedSuccessEvent` | `undefined`                                                                                           | Disparado quando a VPN é parada com sucesso.                            |
-| `DtConfigSelectedEvent`    | `{...}` (ver exemplos abaixo)                                                                         | Disparado ao selecionar uma configuração.                               |
-
-**Exemplo de payload para `DtConfigSelectedEvent` (V2RAY):**
-
-```json
-{
-  "auth": { "v2ray_uuid": "6897ee2e-a49f-4d5d-b169-cd497d7b8cd9" },
-  "category_id": 45300,
-  "config_openvpn": "",
-  "config_payload": { "payload": "", "sni": "" },
-  "config_v2ray": "dmxlc3M6Ly9zZXUtdXVpZEBjZG5iLmRpYWxteWFwcC5jb206NDQzP21vZGU9YXV0byZwYXRoPSUyRiZzZWN1cml0eT10bHMmZW5jcnlwdGlvbj1ub25lJmhvc3Q9djJwcmVtaXVtLTF0LmItY2RuLm5ldCZ0eXBlPXhodHRwJnNuaT1jZG5iLmRpYWxteWFwcC5jb20jQ0xBUk8lMjBWMiUyMFNTSFQ=",
-  "description": "claro pré/planos",
-  "dns_server": { "dns1": "8.8.8.8", "dns2": "8.8.4.4" },
-  "dnstt_key": "",
-  "dnstt_name_server": "",
-  "dnstt_server": "",
-  "icon": "https://raw.githubusercontent.com/TelksBr/SSH_T_PROJECT_VPN/page/null/IC/CLARO_P.png",
-  "id": 695925,
-  "mode": "V2RAY",
-  "name": "✅ CLARO V2RAY [1]",
-  "proxy": { "host": "", "port": 0 },
-  "server": { "host": "", "port": 0 },
-  "sorter": 5,
-  "tls_version": "TLSv1.2",
-  "udp_ports": [7300],
-  "url_check_user": "https://bot.sshtproject.com"
-}
-```
-
-**Exemplo de payload para `DtConfigSelectedEvent` (SSH):**
-
-```json
-{
-  "id": 696010,
-  "name": "VIVO CLOUDFLARE [6]",
-  "description": "Vivo Easy Prime → Vivo Controle",
-  "mode": "SSH_PROXY",
-  "sorter": 6,
-  "icon": "https://raw.githubusercontent.com/TelksBr/SSH_T_PROJECT_VPN/page/null/IC/VIVO_P.png"
-}
-```
-
-> **Dica:** para fins de debug, é possível interceptar todos os eventos criando funções globais no `window` com os nomes acima. Essas funções serão chamadas automaticamente quando o evento ocorrer.
 
 ---
 
-*Esta documentação será atualizada conforme novos métodos e eventos forem descobertos.*
+## Checklist final ✅
+- [ ] `readme_dtunnel_functions.md` actualizado (esta versión).
+- [ ] Reemplazar llamadas `window.Dt*` en `src/` (opcionalmente automatizado).
+- [ ] Añadir shim temporal si la migración será gradual.
+- [ ] Probar eventos y parseo JSON en e2e/manual.
+
+---

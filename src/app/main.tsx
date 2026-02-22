@@ -1,9 +1,11 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { initNativeEvents } from '@/features/vpn';
 import { appLogger } from '@/features/logs';
 import { initializePerformanceMonitoring } from '../core/utils';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
+import { DTunnelSDKProvider } from '@/lib/dtunnel-sdk-react';
 
 // Small i18n helper for bootstrap path (no React available)
 import en from '../i18n/locales/en.json';
@@ -67,9 +69,6 @@ import '../styles/responsive.css';
 // Inicializar logger de la app
 appLogger.add('info', '🚀 Aplicación iniciada');
 
-// Inicializar eventos nativos
-initNativeEvents();
-
 // Inicializar monitoreo de performance
 initializePerformanceMonitoring();
 
@@ -83,12 +82,18 @@ function renderApp() {
 
   try {
     const root = createRoot(rootElement);
+    // Pre-inicializar el singleton antes de que React se monte,
+    // y pasarlo al Provider para que toda la app comparta la misma instancia.
+    const sdkInstance = getSdk() ?? undefined;
     const Wrapper = import.meta.env.DEV ? StrictMode : ({ children }: any) => children;
     root.render(
       <Wrapper>
-        <App />
+        <DTunnelSDKProvider sdk={sdkInstance}>
+          <App />
+        </DTunnelSDKProvider>
       </Wrapper>,
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     // Mostrar mensaje de error básico en caso de fallo total
     rootElement.innerHTML = `

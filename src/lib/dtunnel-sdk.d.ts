@@ -3,7 +3,7 @@ type DTunnelSemanticEventName =
   | 'vpnStartedSuccess'
   | 'vpnStoppedSuccess'
   | 'newLog'
-  | 'configClick'
+  | 'newDefaultConfig'
   | 'checkUserStarted'
   | 'checkUserResult'
   | 'checkUserError'
@@ -31,7 +31,7 @@ interface DTunnelEventRawPayloadMap {
   vpnStartedSuccess: undefined;
   vpnStoppedSuccess: undefined;
   newLog: undefined;
-  configClick: undefined;
+  newDefaultConfig: undefined;
   checkUserStarted: undefined;
   checkUserResult: string | null;
   checkUserError: string | null;
@@ -46,7 +46,7 @@ interface DTunnelEventArgsMap {
   vpnStartedSuccess: [];
   vpnStoppedSuccess: [];
   newLog: [];
-  configClick: [];
+  newDefaultConfig: [];
   checkUserStarted: [];
   checkUserResult: [dataJson: string | null];
   checkUserError: [message: string | null];
@@ -61,7 +61,7 @@ interface DTunnelEventPayloadMap {
   vpnStartedSuccess: void;
   vpnStoppedSuccess: void;
   newLog: void;
-  configClick: void;
+  newDefaultConfig: void;
   checkUserStarted: void;
   checkUserResult: unknown | null;
   checkUserError: string | null;
@@ -76,7 +76,7 @@ interface DTunnelEventCallbackMap {
   vpnStartedSuccess: 'DtVpnStartedSuccessEvent';
   vpnStoppedSuccess: 'DtVpnStoppedSuccessEvent';
   newLog: 'DtNewLogEvent';
-  configClick: 'DtNewDefaultConfigEvent';
+  newDefaultConfig: 'DtNewDefaultConfigEvent';
   checkUserStarted: 'DtCheckUserStartedEvent';
   checkUserResult: 'DtCheckUserResultEvent';
   checkUserError: 'DtCheckUserErrorEvent';
@@ -105,7 +105,7 @@ type DTunnelNativeCallbackArgsMap = {
   DtVpnStartedSuccessEvent: DTunnelEventArgsMap['vpnStartedSuccess'];
   DtVpnStoppedSuccessEvent: DTunnelEventArgsMap['vpnStoppedSuccess'];
   DtNewLogEvent: DTunnelEventArgsMap['newLog'];
-  DtNewDefaultConfigEvent: DTunnelEventArgsMap['configClick'];
+  DtNewDefaultConfigEvent: DTunnelEventArgsMap['newDefaultConfig'];
   DtCheckUserStartedEvent: DTunnelEventArgsMap['checkUserStarted'];
   DtCheckUserResultEvent: DTunnelEventArgsMap['checkUserResult'];
   DtCheckUserErrorEvent: DTunnelEventArgsMap['checkUserError'];

@@ -7,12 +7,6 @@
   cursor: default;
 }
 
-.news-item--skeleton:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: rgba(0, 0, 0, 0.06);
-}
-
 /* Skeleton animation */
 .skeleton {
   background: linear-gradient(90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%);
@@ -64,9 +58,5 @@
   .skeleton {
     background: linear-gradient(90deg, #2a2a2a 0%, #333333 50%, #2a2a2a 100%);
     background-size: 200% 100%;
-  }
-
-  .news-item--skeleton:hover {
-    border-color: rgba(255, 255, 255, 0.1);
   }
 }

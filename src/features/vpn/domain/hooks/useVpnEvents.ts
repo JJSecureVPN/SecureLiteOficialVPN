@@ -1,9 +1,16 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import type { ServerConfig, VpnStatus } from '@/core/types';
-import { getSdk } from '../../api/dtunnelSdk';
-import { onNativeEvent } from '../../api/vpnBridge';
+import { useDTunnelSDK, useDTunnelEvent, useDTunnelError } from '@/lib/dtunnel-sdk-react';
 import { appLogger } from '@/features/logs';
-import { VPN_POLLING_INTERVAL_MS } from '@/core/constants';
+
+/** Handler global de errores de bridge */
+function useBridgeErrorLogger() {
+  useDTunnelError((e) => {
+    const code = e?.error?.code ?? 'UNKNOWN';
+    const message = e?.error?.message ?? 'Sin mensaje';
+    appLogger.add('error', `Bridge error ${code}: ${message}`);
+  });
+}
 
 interface UseVpnEventsArgs {
   setStatus: (status: VpnStatus) => void;
@@ -12,71 +19,86 @@ interface UseVpnEventsArgs {
 }
 
 /**
- * Hook para suscribirse a eventos nativos de VPN
+ * Hook para suscribirse a eventos nativos de VPN (usa `DTunnelSDK` directamente)
  */
 export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseVpnEventsArgs) {
-  // Suscripción a eventos nativos
-  useEffect(() => {
-    let lastStatus: VpnStatus | null = null;
+  const sdk = useDTunnelSDK();
+  useBridgeErrorLogger();
 
-    const offVpn = onNativeEvent('DtVpnStateEvent', (state) => {
-      const st = (typeof state === 'string' ? state : String(state || 'DISCONNECTED')) as VpnStatus;
+  // Debounce unificado para cualquier estado que produce UI roja/gris-parado.
+  // Android puede emitir DISCONNECTED, AUTH_FAILED, etc. de forma transitoria
+  // durante una conexión exitosa (justo antes de CONNECTED/vpnStartedSuccess).
+  // Ventana de 500ms: si CONNECTED/CONNECTING llega antes, se cancela sin flash.
+  const pendingNonActiveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-      // ✅ Solo loguear cambios reales, no cada polling
-      if (st !== lastStatus) {
-        appLogger.add('info', `Estado VPN: ${st}`);
-        lastStatus = st;
-      }
+  const cancelPending = () => {
+    if (pendingNonActiveRef.current !== null) {
+      clearTimeout(pendingNonActiveRef.current);
+      pendingNonActiveRef.current = null;
+    }
+  };
 
+  const scheduleStatus = (st: VpnStatus, delayMs: number) => {
+    cancelPending();
+    pendingNonActiveRef.current = setTimeout(() => {
+      pendingNonActiveRef.current = null;
+      appLogger.add('info', `Estado VPN: ${st}`);
       setStatus(st);
-    });
+    }, delayMs);
+  };
 
-    const offConfigSelected = onNativeEvent('DtConfigSelectedEvent', (payload) => {
-      try {
-        appLogger.add('info', `🔵 Evento DtConfigSelectedEvent recibido`);
-        if (!payload) {
-          appLogger.add('warn', 'DtConfigSelectedEvent: payload vacío');
-          return;
-        }
+  useDTunnelEvent('vpnState', (e) => {
+    const st = (
+      typeof e.payload === 'string' ? e.payload : String(e.payload || 'DISCONNECTED')
+    ) as VpnStatus;
 
-        const nativeConfig = (
-          typeof payload === 'string' ? JSON.parse(payload) : payload
-        ) as ServerConfig;
+    if (st === 'CONNECTED' || st === 'CONNECTING') {
+      // Positivos: cancela cualquier estado pendiente y aplica de inmediato
+      cancelPending();
+      appLogger.add('info', `Estado VPN: ${st}`);
+      setStatus(st);
+    } else {
+      // DISCONNECTED, STOPPING, AUTH_FAILED, NO_NETWORK, etc.:
+      // todos pasan por debounce de 500ms para absorber transitorios durante conexión
+      scheduleStatus(st, 500);
+    }
+  });
+
+  useDTunnelEvent('vpnStartedSuccess', () => {
+    // Confirmación definitiva de conexión: cancela cualquier estado pendiente
+    cancelPending();
+    appLogger.add('info', `Estado VPN: CONNECTED`);
+    setStatus('CONNECTED');
+    try {
+      sdk?.main.startCheckUser();
+    } catch (error) {
+      appLogger.add('warn', `startCheckUser tras vpnStartedSuccess falló: ${String(error)}`);
+    }
+  });
+
+  useDTunnelEvent('vpnStoppedSuccess', () => {
+    // Si CONNECTING llega justo después (cambio de servidor), se cancela sin flash
+    scheduleStatus('DISCONNECTED', 500);
+  });
+
+  // newDefaultConfig (antes: configClick) — config seleccionada desde la app nativa
+  useDTunnelEvent('newDefaultConfig', () => {
+    try {
+      const nativeConfig = sdk?.config.getDefaultConfig() as ServerConfig | null;
+      if (!nativeConfig) {
+        appLogger.add('warn', 'newDefaultConfig: default config vacío');
+      } else {
         appLogger.add(
           'info',
           `✅ Servidor desde evento DTunnel: ${nativeConfig.name || nativeConfig.id}`,
         );
-
-        // Actualizar directamente el servidor
         setConfigState(nativeConfig);
-      } catch (error) {
-        appLogger.add('error', `❌ Error en DtConfigSelectedEvent: ${String(error)}`);
       }
-    });
+    } catch (error) {
+      appLogger.add('error', `❌ Error en newDefaultConfig: ${String(error)}`);
+    }
 
-    const offNewDefault = onNativeEvent('DtNewDefaultConfigEvent', () => {
-      appLogger.add('info', 'Evento DtNewDefaultConfigEvent: recargando categorías');
-      loadCategorias();
-    });
-
-    return () => {
-      offVpn();
-      offConfigSelected();
-      offNewDefault();
-    };
-  }, [setStatus, setConfigState, loadCategorias]);
-
-  // Polling de estado VPN como fallback
-  useEffect(() => {
-    let lastPolledStatus: VpnStatus | null = null;
-
-    const interval = setInterval(() => {
-      const st = (getSdk()?.main.getVpnState() ?? null) as VpnStatus | null;
-      if (st && st !== lastPolledStatus) {
-        lastPolledStatus = st;
-        setStatus(st);
-      }
-    }, VPN_POLLING_INTERVAL_MS);
-    return () => clearInterval(interval);
-  }, [setStatus]);
+    appLogger.add('info', 'Evento newDefaultConfig: recargando categorías');
+    loadCategorias();
+  });
 }

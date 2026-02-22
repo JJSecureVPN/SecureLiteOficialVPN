@@ -27,17 +27,13 @@ interface AppHeaderProps {
   onShowCouponModal: (coupons: Coupon[]) => void;
 }
 
-/**
- * Barra superior de navegación de la app
- * Anteriormente llamado "TopBar"
- */
+/** Barra superior de navegación de la app */
 export const AppHeader = memo(function AppHeader({
   onMenuClick,
   onShowCouponModal,
 }: AppHeaderProps) {
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
   const { theme, toggleTheme } = useTheme();
-  // Use hooks to encapsulate side effects and make AppHeader smaller
   const { coupons } = useCoupons();
   const { hasUnreadNews } = useNewsBadge();
 

@@ -26,15 +26,8 @@ header.topbar .btn.hotzone:focus,
 header.topbar .btn.hotzone:focus-visible,
 .hotzone:focus,
 .hotzone:focus-visible {
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  color: var(--on-accent);
-  transform: translateZ(0) scale(1.03);
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.32),
-    0 0 0 6px rgba(0, 0, 0, 0.08),
-    0 0 0 4px rgba(255, 255, 255, 0.06) inset;
-  border-color: rgba(255, 255, 255, 0.12);
   outline: none;
+  transform: scale(0.98);
 }
 
 /* foco más visible para botones primarios (alto contraste sobre fondo acentuado) */
@@ -55,23 +48,23 @@ header.topbar .btn.hotzone:focus-visible,
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   border: 1px solid var(--accent-40);
   color: var(--on-accent);
+  transition:
+    transform 0.1s ease,
+    filter 0.1s ease;
+}
+
+.btn.primary:active {
+  transform: scale(0.96);
+  filter: brightness(0.88);
+  transition:
+    transform 0.05s ease,
+    filter 0.05s ease;
 }
 
 .btn.primary.danger {
   background: linear-gradient(180deg, var(--status-bad-90), var(--status-bad-55));
   border-color: var(--status-bad-55);
   color: var(--on-accent);
-}
-
-.connect-row .btn.primary {
-  flex: 1;
-  min-width: 0;
-  box-shadow: none;
-}
-
-.connect-row .toggle {
-  margin-left: var(--space-sm);
-  flex: 0 0 auto;
 }
 
 .btn.soft {
@@ -150,8 +143,4 @@ header.topbar .btn.hotzone:focus-visible,
   color: var(--muted);
   cursor: pointer;
   padding: 0;
-}
-
-.clear-btn:hover {
-  color: var(--text);
 }

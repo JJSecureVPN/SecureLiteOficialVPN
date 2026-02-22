@@ -20,12 +20,6 @@
     box-shadow 0.2s ease;
 }
 
-.session-card:hover {
-  border-color: var(--accent-40);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
 .session-card:focus-visible {
   outline: none;
   border-color: var(--accent);
@@ -122,11 +116,6 @@
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   letter-spacing: 0.3px;
   box-shadow: 0 2px 8px rgba(109, 74, 255, 0.2);
-}
-
-.session-card__button.button--renew:hover {
-  box-shadow: 0 4px 14px rgba(109, 74, 255, 0.35);
-  transform: translateY(-1px);
 }
 
 /* Eyebrow label */
