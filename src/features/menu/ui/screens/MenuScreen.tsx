@@ -1,7 +1,8 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
-import { useToastContext } from '../context/ToastContext';
-import { useSectionStyle, useIsMobilePortrait } from '@/shared';
+import { useToastContext } from '@/shared/context/ToastContext';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
 import { useTranslation } from '@/i18n';
 import {
   cleanApp,

@@ -8,7 +8,8 @@
 import { memo, useState, useCallback } from 'react';
 import type { ServerConfig, Category } from '@/core/types';
 import { useTranslation } from '@/i18n';
-import { useToastContext, useSafeArea } from '@/shared';
+import { useToastContext } from '@/shared/context/ToastContext';
+import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import '../../../../styles/components/import-designer-screen.css';
 
 interface ImportDesignerScreenProps {

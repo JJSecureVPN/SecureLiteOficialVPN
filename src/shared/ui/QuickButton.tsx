@@ -1,6 +1,6 @@
 import { memo, type ButtonHTMLAttributes } from 'react';
 import '../../styles/components/quick-buttons.css';
-import { Card } from '@/shared';
+import { Card } from '@/shared/ui';
 
 interface QuickButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: string; // e.g. 'fa-rotate'

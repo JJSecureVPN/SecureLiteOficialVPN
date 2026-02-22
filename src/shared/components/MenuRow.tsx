@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { Card } from '@/shared';
+import { Card } from '@/shared/ui';
 
 interface MenuRowProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'title'> {
   id: string;

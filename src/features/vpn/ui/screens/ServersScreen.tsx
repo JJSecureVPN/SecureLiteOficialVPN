@@ -12,8 +12,10 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useToastContext, useServerStats } from '@/shared';
-import { useSectionStyle, useAutoFocus } from '@/shared/hooks';
+import { useToastContext } from '@/shared/context/ToastContext';
+import { useServerStats } from '@/shared/hooks/useServerStats';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
 import { useTranslation } from '@/i18n';
 import { appLogger } from '@/features/logs';
 import { useAsyncError } from '@/core/hooks';

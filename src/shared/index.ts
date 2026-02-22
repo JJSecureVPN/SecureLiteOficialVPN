@@ -11,6 +11,3 @@ export * from './hooks';
 
 // Context
 export { ToastProvider, useToastContext } from './context/ToastContext';
-
-// Screens
-export { MenuScreen } from './screens/MenuScreen';

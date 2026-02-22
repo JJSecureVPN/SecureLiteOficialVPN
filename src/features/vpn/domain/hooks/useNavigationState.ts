@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ScreenType } from '@/core/types';
 import { SCREENS } from '@/core/constants';
-import { useIsMobilePortrait } from '@/shared';
+import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
 
 export function useNavigationState(termsAccepted: boolean) {
   const [screen, setScreenState] = useState<ScreenType>('home');

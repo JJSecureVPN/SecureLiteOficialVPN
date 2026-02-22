@@ -5,7 +5,7 @@
 
 import { useCallback, useMemo, memo } from 'react';
 import '../../../../styles/components/category-card.css';
-import { Card, Badge, Pill } from '@/shared';
+import { Card, Badge, Pill } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { resolveSubcategory } from '@/features/vpn/ui/utils/categoryParsing';
 import { ServerStats, type ServerLiveStats } from './ServerStats';

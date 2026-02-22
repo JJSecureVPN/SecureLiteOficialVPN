@@ -1,16 +1,11 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import {
-  useToastContext,
-  useSectionStyle,
-  HeaderPromo,
-  CredentialFields,
-  QuickButton,
-  SessionDetails,
-  useAutoFocus,
-  ConnectButton,
-} from '@/shared';
+import { useToastContext } from '@/shared/context/ToastContext';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
+import { HeaderPromo, SessionDetails, ConnectButton } from '@/shared/components';
+import { CredentialFields, QuickButton } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)

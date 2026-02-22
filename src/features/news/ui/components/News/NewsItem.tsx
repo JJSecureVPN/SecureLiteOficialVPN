@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { NoticiaItem } from '@/features/news';
-import { Card, Badge } from '@/shared';
+import { Card, Badge } from '@/shared/ui';
 
 interface NewsItemProps {
   item: NoticiaItem;

@@ -6,7 +6,7 @@
 import { useTranslation } from '@/i18n';
 import { getServerCategory } from '@/features/vpn/ui/utils';
 import type { ServerConfig, Category } from '@/core/types';
-import { Card, Badge } from '@/shared';
+import { Card, Badge } from '@/shared/ui';
 
 interface ImportSelectStepProps {
   matches: ServerConfig[];

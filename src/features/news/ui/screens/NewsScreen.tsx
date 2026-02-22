@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import DOMPurify from 'dompurify';
 import { MiniHeader } from '@/shared/components';
-import { GlobalModal, useSafeArea } from '@/shared';
+import { GlobalModal } from '@/shared/components';
+import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { saveNewsLastSeen } from '@/core/utils';

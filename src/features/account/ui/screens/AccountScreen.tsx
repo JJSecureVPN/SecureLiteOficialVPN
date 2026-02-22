@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useSectionStyle } from '@/shared';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useTranslation } from '@/i18n';
 import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
 

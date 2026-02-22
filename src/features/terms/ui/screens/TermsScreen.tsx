@@ -1,7 +1,9 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useSectionStyle, Button, Card, useIsMobilePortrait } from '@/shared';
+import { Button, Card } from '@/shared/ui';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
 import { useTranslation } from '@/i18n';
 
 export const TermsScreen = memo(function TermsScreen() {

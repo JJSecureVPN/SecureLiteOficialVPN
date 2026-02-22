@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Card } from '@/shared';
+import { Card } from '@/shared/ui';
 
 type KVItem = { label: React.ReactNode; value: React.ReactNode; valueClass?: string };
 

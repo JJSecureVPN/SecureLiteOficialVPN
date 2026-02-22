@@ -13,6 +13,7 @@ Una aplicación VPN moderna construida con **React 19**, **TypeScript**, y **Vit
 - [Instalación](#instalación)
 - [Scripts Disponibles](#scripts-disponibles)
 - [Arquitectura](#arquitectura)
+- [Guía Operativa de Arquitectura](ARCHITECTURE.md)
 - [Sistema de Error Handling](#sistema-de-error-handling)
 - [Optimizaciones de Performance](#optimizaciones-de-performance)
 - [Testing](#testing)
@@ -105,6 +106,8 @@ npx knip                 # Detecta archivos/imports no utilizados
 
 ## 🏗️ Arquitectura
 
+Guía operativa actualizada (reglas de capas, imports y ubicación): [ARCHITECTURE.md](ARCHITECTURE.md)
+
 ### Filosofía de Diseño
 
 Se implementó una arquitectura **modular y escalable** basada en principios SOLID:
@@ -169,16 +172,8 @@ src/
 │   │   └── model/                    # State/hooks de negocio
 │   │       └── useConnectionStatus.ts
 │   └── logs/                         # Logs feature (similar structure)
-│
-├── pages/                            # Screen components (wiring layer)
-│   ├── HomeScreen.tsx
-│   ├── ServersScreen.tsx
-│   ├── AccountScreen.tsx
-│   ├── AppLogsScreen.tsx
-│   ├── LogsScreen.tsx
-│   ├── MenuScreen.tsx
-│   ├── NewsScreen.tsx
-│   └── TermsScreen.tsx
+│   └── menu/                         # Feature de menú
+│       └── ui/screens/MenuScreen.tsx
 │
 ├── shared/                           # Componentes & utilities reutilizables
 │   ├── components/                   # Shared UI components
@@ -658,7 +653,7 @@ src/styles/
 
 1. **Crear componente de pantalla**
    ```tsx
-   // src/pages/NewScreen.tsx
+  // src/features/<feature>/ui/screens/NewScreen.tsx
    export function NewScreen() {
      return <div>Nueva pantalla</div>;
    }
@@ -666,9 +661,9 @@ src/styles/
 
 2. **Integración en App.tsx**
    ```tsx
-   import { NewScreen } from '@/pages/NewScreen';
+  import { NewScreen } from '@/features/<feature>';
    
-   {screen === 'new' && <NewScreen />}
+  // SCREEN_COMPONENTS['new'] = NewScreen
    ```
 
 ### Agregar un Nuevo Hook

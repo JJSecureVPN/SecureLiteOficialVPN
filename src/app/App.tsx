@@ -24,18 +24,17 @@ import { TermsScreen } from '../features/terms';
 // Account Feature Screens (features/account/ui/screens/)
 import { AccountScreen } from '../features/account';
 
-// Shared Transversal Code (shared/components, shared/context, shared/hooks, shared/screens)
-import {
-  ToastProvider, // shared/context/ToastContext
-  useToastContext, // shared/context/ToastContext
-  ErrorBoundary, // shared/components/ErrorBoundary
-  AppHeader, // shared/components/AppHeader
-  CouponModal, // shared/components/CouponModal
-  Toast, // shared/ui/Toast
-  MenuScreen, // shared/screens/MenuScreen (transversal, no pertenece a feature)
-  useSafeArea, // shared/hooks/useSafeArea
-  useNativeToasts, // shared/hooks/useNativeToasts
-} from '../shared';
+// Menu Feature Screens (features/menu/ui/screens/)
+import { MenuScreen } from '../features/menu';
+
+// Shared Transversal Code (imports directos)
+import { ToastProvider, useToastContext } from '../shared/context/ToastContext';
+import { ErrorBoundary } from '../shared/components/ErrorBoundary';
+import { AppHeader } from '../shared/components/AppHeader';
+import { CouponModal } from '../shared/components/CouponModal';
+import { Toast } from '../shared/ui/Toast';
+import { useSafeArea } from '../shared/hooks/useSafeArea';
+import { useNativeToasts } from '../shared/hooks/useNativeToasts';
 
 // Internationalization
 import { LanguageProvider } from '../i18n/context';
@@ -63,7 +62,7 @@ type Coupon = {
  * - features/logs/ui/screens/    → LogsScreen, AppLogsScreen
  * - features/account/ui/screens/ → AccountScreen
  * - features/terms/ui/screens/   → TermsScreen
- * - shared/screens/              → MenuScreen (transversal, not feature-specific)
+ * - features/menu/ui/screens/    → MenuScreen
  *
  * This co-location pattern provides:
  * ✅ Clarity: Screens live next to their logic (hooks, types, context)
@@ -90,7 +89,7 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
   // Terms Feature (features/terms/ui/screens/)
   terms: TermsScreen, // Terms and conditions screen
 
-  // Shared (shared/screens/) - Transversal, not bound to a single feature
+  // Menu Feature (features/menu/ui/screens/)
   menu: MenuScreen, // Main menu screen
 };
 

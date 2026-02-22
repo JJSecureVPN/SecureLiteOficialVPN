@@ -7,7 +7,7 @@ import { useTranslation } from '@/i18n';
 import { getServerCategory } from '@/features/vpn/ui/utils';
 import type { ServerConfig, Category } from '@/core/types';
 import type { ParsedConfig } from '../utils/configParsing';
-import { Card, Badge } from '@/shared';
+import { Card, Badge } from '@/shared/ui';
 
 interface ImportConfirmStepProps {
   matches: ServerConfig[];

@@ -1,6 +1,8 @@
 import { memo, useEffect, useCallback, useMemo } from 'react';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useToastContext, Button, Card, useSafeArea } from '@/shared';
+import { useToastContext } from '@/shared/context/ToastContext';
+import { Button, Card } from '@/shared/ui';
+import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import { useTranslation } from '@/i18n';
 import { useLogs } from '@/features/logs';
 

@@ -5,7 +5,7 @@
 
 import { useCallback, memo } from 'react';
 import '../../../../styles/components/server-item.css';
-import { Card, Badge } from '@/shared';
+import { Card, Badge } from '@/shared/ui';
 import { formatProtocol, extractDomain, removeDomainFromDescription } from '@/core/utils';
 import type { ServerConfig, Category } from '@/core/types';
 

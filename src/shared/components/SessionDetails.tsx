@@ -5,7 +5,7 @@ import { useTranslation } from '@/i18n';
 import { getDisplayName } from '@/core/utils';
 import { SessionCardBody } from './SessionDetails/SessionCardBody';
 import { SessionActions } from './SessionDetails/SessionActions';
-import { Card } from '@/shared';
+import { Card } from '@/shared/ui';
 
 /**
  * Componente principal que orquesta los subcomponentes presentacionales

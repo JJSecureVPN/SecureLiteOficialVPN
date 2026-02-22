@@ -29,6 +29,7 @@
       "@/features/logs/*": ["./src/features/logs/*"],
       "@/features/account/*": ["./src/features/account/*"],
       "@/features/terms/*": ["./src/features/terms/*"],
+      "@/features/menu/*": ["./src/features/menu/*"],
       "@/i18n/*": ["./src/i18n/*"]
     }
   },

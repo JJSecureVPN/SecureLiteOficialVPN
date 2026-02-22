@@ -1,8 +1,9 @@
 import { memo, useCallback, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
-import { useToastContext } from '@/shared';
+import { useToastContext } from '@/shared/context/ToastContext';
 import { useAppLogs } from '@/features/logs';
-import { useSafeArea, Button } from '@/shared';
+import { useSafeArea } from '@/shared/hooks/useSafeArea';
+import { Button } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 
 const LOG_LEVEL_ICONS: Record<string, string> = {

@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
 import { extractDomain, removeDomainFromDescription } from '@/core/utils';
-import { Card, Badge } from '@/shared';
+import { Card, Badge } from '@/shared/ui';
 
 interface ServerCardProps {
   config: ServerConfig | null;
