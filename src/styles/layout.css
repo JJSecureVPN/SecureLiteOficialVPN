@@ -48,6 +48,16 @@
   background: linear-gradient(180deg, var(--muted-2-85), var(--muted-2-45) 40%, transparent);
 }
 
+.state-error .top-strip {
+  background-color: var(--status-warn);
+  background: linear-gradient(
+    180deg,
+    var(--status-warn-85),
+    var(--status-warn-35) 40%,
+    transparent
+  );
+}
+
 .state-connected .top-strip {
   background-color: var(--status-ok);
   background: linear-gradient(180deg, var(--status-ok-85), var(--status-ok-45) 40%, transparent);
@@ -246,46 +256,6 @@ header.topbar .row {
 }
 
 /* ===========================================
-   Hero Section
-   =========================================== */
-
-.hero {
-  position: absolute;
-  top: var(--hero-top);
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-sm);
-  text-align: center;
-  z-index: 1;
-}
-
-.hero .hero-lock--connected {
-  color: var(--status-ok);
-}
-
-.hero .hero-lock--error {
-  color: var(--status-bad);
-}
-
-.hero .title {
-  font-family: var(--font-serif);
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-size: var(--font-lg);
-  color: var(--text-strong);
-  text-shadow: 0 1px 0 rgba(239, 234, 255, 0.7);
-}
-
-.hero-detail {
-  font-size: var(--font-sm);
-  color: var(--muted);
-  margin-top: var(--space-xs);
-}
-
-/* ===========================================
    Screen Container
    =========================================== */
 
@@ -303,6 +273,9 @@ header.topbar .row {
 
 .logo-container {
   text-align: center;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
 }
 
 .logo {

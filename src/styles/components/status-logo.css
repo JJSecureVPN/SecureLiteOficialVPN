@@ -1,0 +1,264 @@
+/* ===========================================
+   StatusLogo - Logo profesional con indicador de estado
+   =========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+/* Animaciones */
+@keyframes metallic-shine {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes lightning-glow {
+  /* glow reducido al mínimo: solo sombra negra, sin tonos amarillos */
+  0%,
+  100% {
+    filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.8));
+    transform: translateY(0.04em) scaleX(1);
+  }
+  50% {
+    filter: drop-shadow(1px 3px 6px rgba(0, 0, 0, 0.9));
+    transform: translateY(0.04em) scaleX(1.06);
+  }
+}
+
+@keyframes connected-glow {
+  0%,
+  100% {
+    filter: brightness(1) drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+  }
+  50% {
+    filter: brightness(1.12) drop-shadow(0 0 18px rgba(16, 185, 129, 0.7));
+  }
+}
+
+@keyframes connecting-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes status-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Contenedor principal */
+.status-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  user-select: none;
+  overflow: visible;
+}
+
+/* Fila de marca */
+.status-logo__brand {
+  display: flex;
+  align-items: baseline;
+  line-height: 1.05;
+  position: relative;
+  overflow: visible;
+  padding-top: 0.12em;
+  padding-bottom: 0.08em;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+  z-index: 2;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.65))
+    drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.15));
+}
+
+/* "Secur" con efecto metálico plateado */
+.status-logo__text {
+  position: relative;
+  z-index: 3; /* garantizar que el texto quede encima de cualquier otro elemento dentro de .status-logo__brand */
+  font-family: 'Black Han Sans', 'Arial Black', Impact, var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 1em;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  align-self: baseline;
+  background: linear-gradient(
+    165deg,
+    #ffffff 0%,
+    #e8e8e8 18%,
+    #b0b0b0 35%,
+    #ffffff 50%,
+    #d8d8d8 62%,
+    #909090 75%,
+    #d0d0d0 88%,
+    #ffffff 100%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: metallic-shine 3s ease-in-out infinite;
+  filter: none;
+}
+
+/* Rayo SVG — degradado metálico en fill, glow en CSS filter */
+.status-logo__lightning {
+  display: inline-block;
+  /* mantiene la animación metálica de .status-logo__text */
+  margin-left: -0.18em;
+  margin-right: 0.06em;
+  display: inline-block;
+  align-self: baseline;
+  /* opcional: sombra ligera negra para profundidad */
+  filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.8));
+}
+
+/* Bloque VPN con subtitle */
+.status-logo__vpn-block {
+  position: relative;
+  z-index: 1; /* debajo del texto */
+  display: inline-flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-start;
+  line-height: 1;
+  align-self: baseline;
+  margin-left: -0.25em; /* más a la izquierda para juntar 'e' con VPN */
+  margin-top: -0.45em; /* eleva más para mayor superposición */
+}
+
+/* Etiqueta VPN con trapezoide */
+.status-logo__vpn {
+  font-family: 'Black Han Sans', 'Arial Black', Impact, var(--font-display), sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #fff;
+  /* padding-left menor para acortar el trapezoide hacia la izquierda */
+  padding: 0.14em 0.6em 0.14em 0.8em;
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.25),
+    0 2px 6px rgba(0, 0, 0, 0.6),
+    1px 1px 3px rgba(0, 0, 0, 0.4);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.status-logo__vpn-text {
+  display: inline-block;
+  transform: translate(0.05em, 0.05em);
+}
+
+/* Fondo trapezoidal */
+.status-logo__vpn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--vpn-grad);
+  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  box-shadow:
+    0 6px 20px var(--vpn-glow),
+    0 2px 8px var(--vpn-glow-mid),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  z-index: -1;
+  transition:
+    background 0.4s ease,
+    box-shadow 0.4s ease;
+  animation: var(--vpn-anim);
+}
+
+/* Brillo superior */
+.status-logo__vpn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.12) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  clip-path: polygon(10% 0%, 100% 0%, 94% 100%, 4% 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Contenedor de subtitle con altura fija */
+.status-logo__subtitle-wrap {
+  height: 0.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0;
+  align-self: stretch;
+}
+
+/* Texto del subtitle */
+.status-logo__subtitle {
+  font-family: 'Black Han Sans', 'Arial Black', Impact, var(--font-display), sans-serif;
+  font-size: 0.2em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #c8c8c8;
+  text-transform: uppercase;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  white-space: nowrap;
+  animation: status-fade-in 0.3s ease;
+  padding-top: 0.02em;
+}
+
+/* Tamaños */
+.status-logo--small {
+  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+}
+.status-logo--medium {
+  font-size: clamp(1.8rem, 5.2vw, 2.8rem);
+}
+.status-logo--large {
+  font-size: clamp(2.6rem, 8vw, 4.5rem);
+}
+
+/* Modo oscuro */
+[data-theme='dark'] .status-logo__text {
+  filter: brightness(1.05);
+}
+[data-theme='dark'] .status-logo__subtitle {
+  color: #a8a8a8;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .status-logo {
+    align-items: center;
+    padding: 0.2em 0.4em 0.1em;
+    overflow: visible;
+  }
+  .status-logo__brand {
+    gap: 0.1rem;
+    padding-right: 0.35em;
+    padding-top: 0.14em;
+    overflow: visible;
+  }
+}

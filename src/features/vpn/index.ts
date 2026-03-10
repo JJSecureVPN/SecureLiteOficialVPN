@@ -25,7 +25,6 @@ export { getLogs, parseLogs } from './api/sdkHelpers';
 
 // UI Components
 export { ServerCard } from './ui/components/ServerCard';
-export { ConnectionStatusBanner as ConnectionBanner } from './ui/components/ConnectionBanner';
 
 // UI Screens
 export { HomeScreen } from './ui/screens/HomeScreen';

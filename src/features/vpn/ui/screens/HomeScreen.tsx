@@ -1,10 +1,10 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
-import { HeaderPromo, SessionDetails, ConnectButton } from '@/shared/components';
+import { HeaderPromo, SessionDetails, ConnectButton, StatusLogo } from '@/shared/components';
 import { CredentialFields, QuickButton } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
@@ -128,8 +128,6 @@ export function HomeScreen() {
         ? 'error'
         : 'disconnected';
 
-  const [logoError, setLogoError] = useState(false);
-
   // Activar navigation manager automáticamente al primer evento de teclado/remote en Home
   useEffect(() => {
     const onFirstKey = (e: KeyboardEvent) => {
@@ -155,20 +153,7 @@ export function HomeScreen() {
     <section className="screen home-screen" style={sectionStyle}>
       <div className="home-main">
         <div className="logo-container">
-          {logoError ? (
-            <div className="logo-fallback">
-              <span className="logo-text">{t('home.logoFallback')}</span>
-            </div>
-          ) : (
-            <img
-              src="https://i.postimg.cc/15fhQj0d/Secure-VPN-(2).avif"
-              alt={t('home.logoAlt')}
-              className="logo"
-              draggable={false}
-              onContextMenu={(e) => e.preventDefault()}
-              onError={() => setLogoError(true)}
-            />
-          )}
+          <StatusLogo size="large" showStatus />
         </div>
 
         <div className="server-card-wrapper">

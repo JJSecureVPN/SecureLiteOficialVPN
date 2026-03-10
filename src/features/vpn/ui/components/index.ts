@@ -1,7 +1,6 @@
 /**
  * Barrel exports for VPN UI components
  */
-export { ConnectionStatusBanner } from './ConnectionBanner';
 export { ServerCard } from './ServerCard';
 export { ServerCategory } from './ServerCategory';
 export { ServerListItem } from './ServerListItem';

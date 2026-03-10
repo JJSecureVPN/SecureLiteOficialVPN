@@ -9,7 +9,6 @@ import {
   ServersScreen, // VPN Feature: Selección de servidores
   ImportConfigScreen, // VPN Feature: Importar configuración
   useConnectionStatus, // VPN Feature: Hook de estado
-  ConnectionBanner, // VPN Feature: Componente de conexión
 } from '../features/vpn';
 
 // News Feature Screens (features/news/ui/screens/ + hooks)
@@ -96,7 +95,7 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
 function AppContent() {
   const { screen, setScreen } = useVpn();
   const { toast } = useToastContext();
-  const { isConnected, isConnecting } = useConnectionStatus();
+  const { isConnected, isConnecting, isError } = useConnectionStatus();
   const { navigationBarHeight } = useSafeArea();
 
   // Escucha toasts y notificaciones del SDK nativo de DTunnel
@@ -110,9 +109,11 @@ function AppContent() {
   // Determinar clase de estado (isConnecting incluye auto.on para evitar flash rojo)
   const stateClass = isConnected
     ? 'state-connected'
-    : isConnecting
-      ? 'state-connecting'
-      : 'state-disconnected';
+    : isError
+      ? 'state-error'
+      : isConnecting
+        ? 'state-connecting'
+        : 'state-disconnected';
 
   // Obtener componente de pantalla
   const ScreenComponent = SCREEN_COMPONENTS[screen] || HomeScreen;
@@ -142,7 +143,6 @@ function AppContent() {
             onMenuClick={() => setScreen('menu')}
             onShowCouponModal={handleShowCouponModal}
           />
-          {screen === 'home' && <ConnectionBanner />}
         </>
       )}
 

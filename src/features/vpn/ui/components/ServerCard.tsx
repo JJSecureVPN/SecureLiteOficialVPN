@@ -13,7 +13,6 @@ interface ServerCardProps {
 /**
  * Tarjeta que muestra el servidor seleccionado
  * Anteriormente llamado "LocationCard"
- * Nota: El estado de conexión se muestra en ConnectionStatusBanner
  */
 export const ServerCard = memo(function ServerCard({ config, onClick, disabled }: ServerCardProps) {
   const icon = config?.icon?.trim();

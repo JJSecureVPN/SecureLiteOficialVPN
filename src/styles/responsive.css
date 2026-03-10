@@ -22,6 +22,13 @@
   .field.full {
     grid-column: auto;
   }
+  .logo-container {
+    padding: 0.35rem 0.55rem 0.2rem;
+    overflow: visible;
+  }
+  .phone.is-home .screen.home-screen {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 340px) {
@@ -30,7 +37,6 @@
     --header-padding: 30px;
     --screen-top: 130px;
     --top-strip-height: 130px;
-    --hero-top: 110px;
   }
   .fields {
     grid-template-columns: 1fr;
@@ -178,6 +184,16 @@
     background: linear-gradient(90deg, var(--muted-2-85), var(--muted-2-45) 40%, transparent);
   }
 
+  .phone.is-home.state-error .top-strip,
+  .phone.is-servers.state-error .top-strip {
+    background: linear-gradient(
+      90deg,
+      var(--status-warn-85),
+      var(--status-warn-35) 40%,
+      transparent
+    );
+  }
+
   .phone.is-home.state-connected .top-strip,
   .phone.is-servers.state-connected .top-strip {
     background: linear-gradient(90deg, var(--status-ok-85), var(--status-ok-45) 40%, transparent);
@@ -214,38 +230,6 @@
   .phone.is-home header.topbar .dots,
   .phone.is-servers header.topbar .dots {
     display: none;
-  }
-
-  /* Banner (hero) pasa de absolute a flujo normal en el rail */
-  .phone.is-home .hero {
-    grid-column: 1;
-    grid-row: 2;
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    padding: 0 var(--tv-rail-pad-x);
-    margin-top: 0;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  /* TV: estado de conexión en vertical para mejor lectura en rail */
-  .phone.is-home .hero .title {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    letter-spacing: 0.12em;
-    font-size: clamp(14px, 2.2vh, 20px);
-    line-height: 1;
-    margin-top: var(--space-xs);
-    max-height: calc(100vh - (var(--tv-rail-pad-y) * 2));
-    overflow: hidden;
-  }
-
-  .phone.is-home .hero i {
-    font-size: clamp(18px, 3vh, 34px);
   }
 
   /* Home a la derecha: desactiva layout absoluto de .screen SOLO para Home */

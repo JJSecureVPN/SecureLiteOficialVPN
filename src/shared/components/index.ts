@@ -13,3 +13,4 @@ export * from './AppHeader';
 export { StatCard } from './StatCard';
 export { KeyValueList } from './KeyValueList';
 export { MenuRow } from './MenuRow';
+export { StatusLogo } from './StatusLogo';
