@@ -1,4 +1,4 @@
-import { memo, useEffect, useCallback, useMemo } from 'react';
+import { memo, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { Button, Card } from '@/shared/ui';
@@ -11,6 +11,13 @@ export const LogsScreen = memo(function LogsScreen() {
   const { t } = useTranslation();
   const { logs, refresh } = useLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   const screenStyle = useMemo(
     () => ({
@@ -79,13 +86,16 @@ export const LogsScreen = memo(function LogsScreen() {
 
       <Card className="logs-panel">
         {hasLogs ? (
-          <div className="logs-list">
+          <div className="logs-list" ref={listRef}>
             {logEntries.map((entry, idx) => (
               <Card key={entry.id} className="log-entry" as="div" role="listitem">
                 <span className="log-line-number">#{logEntries.length - idx}</span>
                 <div className="log-entry__body">
                   {entry.meta && <span className="log-entry__meta">{entry.meta}</span>}
-                  <p className="log-entry__text">{entry.message}</p>
+                  <p
+                    className="log-entry__text"
+                    dangerouslySetInnerHTML={{ __html: entry.message }}
+                  />
                 </div>
               </Card>
             ))}

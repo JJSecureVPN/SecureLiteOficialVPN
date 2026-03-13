@@ -2,8 +2,6 @@
    Home Screen - Estilos específicos
    =========================================== */
 
-/* Los estilos del hero ya están en layout.css */
-
 /* Eyebrow y meta del resumen */
 .summary-eyebrow {
   font-family: var(--font-display);

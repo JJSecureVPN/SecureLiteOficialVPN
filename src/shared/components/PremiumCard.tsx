@@ -7,7 +7,11 @@ export const PremiumCard = memo(function PremiumCard() {
 
   const openPremiumUrl = useCallback((url: string) => {
     const sdk = getSdk();
-    sdk ? sdk.app.startWebViewActivity(url) : window.open(url, '_blank');
+    if (sdk) {
+      sdk.android.openExternalUrl(url);
+    } else {
+      window.open(url, '_blank');
+    }
   }, []);
 
   const handleBuy = useCallback(() => {

@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useAppLogs } from '@/features/logs';
@@ -19,6 +19,13 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
   const { t } = useTranslation();
   const { logs, clear } = useAppLogs();
   const { statusBarHeight, navigationBarHeight } = useSafeArea();
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   const screenStyle = useMemo(
     () => ({
@@ -101,7 +108,7 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
 
       <div className="applogs-panel">
         {hasLogs ? (
-          <div className="applogs-list">
+          <div className="applogs-list" ref={listRef}>
             {logs.map((log, idx) => (
               <div
                 key={`${log.timestamp}-${idx}`}
@@ -113,7 +120,10 @@ export const AppLogsScreen = memo(function AppLogsScreen() {
                 <div className="applog-entry__body">
                   <span className="applog-entry__timestamp">{log.timestamp}</span>
                   <span className="applog-entry__level">{log.level.toUpperCase()}</span>
-                  <p className="applog-entry__message">{log.message}</p>
+                  <p
+                    className="applog-entry__message"
+                    dangerouslySetInnerHTML={{ __html: log.message }}
+                  />
                 </div>
               </div>
             ))}
