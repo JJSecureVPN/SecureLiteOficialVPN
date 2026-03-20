@@ -37,5 +37,3 @@ export const KeyValueList = memo(function KeyValueList({
     </Card>
   );
 });
-
-export default KeyValueList;

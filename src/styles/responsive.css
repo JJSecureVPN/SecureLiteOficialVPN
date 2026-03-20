@@ -220,12 +220,6 @@
     display: none;
   }
 
-  /* TV: ocultar botón de Noticias en el header (modo horizontal/TV) */
-  .phone.is-home header.topbar .news-btn,
-  .phone.is-servers header.topbar .news-btn {
-    display: none;
-  }
-
   /* TV: ocultar botón de menú (dots) en Home/Servers */
   .phone.is-home header.topbar .dots,
   .phone.is-servers header.topbar .dots {

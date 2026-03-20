@@ -217,8 +217,14 @@ html[data-theme='dark'] {
     --toggle-height: clamp(28px, calc(33px * var(--scale-factor)), 40px);
     --thumb-size: clamp(22px, calc(25px * var(--scale-factor)), 32px);
 
+    /* Safe Areas */
+    --safe-area-top: 0px;
+    --safe-area-bottom: 0px;
+
     /* Layout responsivo */
-    --header-padding: clamp(35px, calc(45px * var(--scale-factor)), 55px);
+    --header-padding: calc(
+      clamp(35px, calc(45px * var(--scale-factor)), 55px) + var(--safe-area-top, 0px)
+    );
     --screen-top: clamp(140px, calc(170px * var(--scale-factor)), 200px);
     --top-strip-height: clamp(140px, calc(170px * var(--scale-factor)), 200px);
     --hero-top: clamp(120px, calc(145px * var(--scale-factor)), 170px);

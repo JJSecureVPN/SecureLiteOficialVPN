@@ -1,8 +1,6 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useToastContext } from '@/shared/context/ToastContext';
-import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
-import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
 import { useTranslation } from '@/i18n';
 import {
   cleanApp,
@@ -15,6 +13,7 @@ import {
 } from '@/shared/lib/nativeActions';
 import type { HotspotState } from '@/shared/lib/nativeActions';
 import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
+import { BottomSheet } from './BottomSheet';
 
 interface MenuItem {
   id: string;
@@ -24,7 +23,15 @@ interface MenuItem {
   action?: () => void;
 }
 
-export const MenuScreen = memo(function MenuScreen() {
+interface ExtrasBottomSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
+  isOpen,
+  onClose,
+}: ExtrasBottomSheetProps) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
   const { showToast } = useToastContext();
@@ -32,15 +39,15 @@ export const MenuScreen = memo(function MenuScreen() {
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [showCleanConfirm, setShowCleanConfirm] = useState(false);
 
-  const sectionStyle = useSectionStyle();
-
   const refreshHotspotStatus = useCallback(() => {
     setHotspotStatus(getHotspotStatus());
   }, []);
 
   useEffect(() => {
-    refreshHotspotStatus();
-  }, [refreshHotspotStatus]);
+    if (isOpen) {
+      refreshHotspotStatus();
+    }
+  }, [isOpen, refreshHotspotStatus]);
 
   const handleToggleHotspot = useCallback(() => {
     const next = toggleHotspotAction(hotspotStatus, showToast, {
@@ -111,14 +118,20 @@ export const MenuScreen = memo(function MenuScreen() {
       title: t('menu.itemsSupportTitle'),
       subtitle: t('menu.itemsSupportSubtitle'),
       icon: 'fa-headset',
-      action: () => setScreen('support'),
+      action: () => {
+        setScreen('support');
+        onClose();
+      },
     },
     {
       id: 'terms',
       title: t('menu.itemsTermsTitle'),
       subtitle: t('menu.itemsTermsSubtitle'),
       icon: 'fa-file-lines',
-      action: () => setScreen('terms'),
+      action: () => {
+        setScreen('terms');
+        onClose();
+      },
     },
     {
       id: 'clean',
@@ -132,19 +145,22 @@ export const MenuScreen = memo(function MenuScreen() {
       title: t('menu.itemsAppLogsTitle'),
       subtitle: t('menu.itemsAppLogsSubtitle'),
       icon: 'fa-list',
-      action: () => setScreen('applogs'),
+      action: () => {
+        setScreen('applogs');
+        onClose();
+      },
     },
   ];
 
-  const isMobilePortrait = useIsMobilePortrait();
-  const visibleItems = menuItems.filter((item) => item.id !== 'terms' || isMobilePortrait);
-
   return (
-    <section className="screen" style={sectionStyle}>
-      <div className="section-header">
-        <div className="panel-title">{t('menu.title')}</div>
-      </div>
-
+    <BottomSheet
+      isOpen={isOpen}
+      onClose={onClose}
+      title={t('menu.title')}
+      subtitle="Gestión de herramientas y red"
+      icon={<i className="fa fa-bars-staggered" />}
+      className="extras-bottom-sheet"
+    >
       <PremiumCard />
 
       {showCleanConfirm && (
@@ -194,7 +210,7 @@ export const MenuScreen = memo(function MenuScreen() {
       )}
 
       <div className="menu-list">
-        {visibleItems.map((item) => {
+        {menuItems.map((item) => {
           const disabled = typeof item.action !== 'function';
           return (
             <MenuRow
@@ -214,6 +230,6 @@ export const MenuScreen = memo(function MenuScreen() {
           );
         })}
       </div>
-    </section>
+    </BottomSheet>
   );
 });

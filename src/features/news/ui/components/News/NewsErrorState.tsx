@@ -45,5 +45,3 @@ export function NewsErrorState({ error, onRetry }: NewsErrorStateProps) {
     </div>
   );
 }
-
-export default NewsErrorState;

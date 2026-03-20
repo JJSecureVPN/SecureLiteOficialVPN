@@ -99,5 +99,3 @@ export const GlobalModal = memo(function GlobalModal({
     </div>
   );
 });
-
-export default GlobalModal;

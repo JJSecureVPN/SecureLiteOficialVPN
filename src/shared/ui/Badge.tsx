@@ -37,5 +37,3 @@ export const Badge = memo(function Badge({
     </span>
   );
 });
-
-export default Badge;

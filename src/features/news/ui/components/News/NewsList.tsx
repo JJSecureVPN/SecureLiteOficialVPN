@@ -1,8 +1,8 @@
 import type { NoticiaItem } from '@/features/news';
 import { NewsItem } from './NewsItem';
-import NewsItemSkeleton from './NewsItemSkeleton';
-import NewsEmptyState from './NewsEmptyState';
-import NewsErrorState from './NewsErrorState';
+import { NewsItemSkeleton } from './NewsItemSkeleton';
+import { NewsEmptyState } from './NewsEmptyState';
+import { NewsErrorState } from './NewsErrorState';
 
 interface NewsListProps {
   items: NoticiaItem[];

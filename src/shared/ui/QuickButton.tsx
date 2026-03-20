@@ -26,5 +26,3 @@ export const QuickButton = memo(function QuickButton({
     </Card>
   );
 });
-
-export default QuickButton;

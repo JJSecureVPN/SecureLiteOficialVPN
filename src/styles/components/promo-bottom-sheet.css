@@ -1,0 +1,343 @@
+/* ===========================================
+   PromoBottomSheet - Estilos premium (Rocket-Vue)
+   =========================================== */
+
+.promo-sheet-container .bottom-sheet-content {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-sheet-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Badge dot en el header */
+.promo-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7f77dd;
+  box-shadow: 0 0 10px rgba(127, 119, 221, 0.5);
+}
+
+/* Tabs */
+.promo-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.promo-tab-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #8e8e93;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.promo-tab-btn.active {
+  background: rgba(127, 119, 221, 0.1);
+  border-color: rgba(127, 119, 221, 0.3);
+  color: #7f77dd;
+}
+
+/* Body */
+.promo-body {
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+/* Promo Card */
+.promo-card-featured {
+  background: linear-gradient(135deg, rgba(127, 119, 221, 0.1) 0%, rgba(109, 74, 255, 0.05) 100%);
+  border: 1px solid rgba(127, 119, 221, 0.2);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-card-featured::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(127, 119, 221, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.promo-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.promo-info-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-lbl-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7f77dd;
+  margin-bottom: 4px;
+}
+
+.promo-value-main {
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.promo-timer-box {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: #8e8e93;
+  text-transform: uppercase;
+}
+
+.timer-divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timer-val {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #7f77dd;
+}
+
+.promo-action-btn {
+  background: #7f77dd;
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  box-shadow: 0 4px 15px rgba(127, 119, 221, 0.3);
+}
+
+.promo-action-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* Coupons Section */
+.coupons-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-label-tiny {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8e8e93;
+  padding-left: 4px;
+}
+
+.coupons-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coupon-item-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.coupon-item-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.coupon-item-card.is-copied {
+  border-color: #1d9e75;
+  background: rgba(29, 158, 117, 0.05);
+}
+
+.coupon-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coupon-type-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8e8e93;
+  letter-spacing: 0.05em;
+}
+
+.copy-success-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #1d9e75;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.copy-success-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.success-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #1d9e75;
+}
+
+.coupon-item-code {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.coupon-item-meta {
+  display: flex;
+  gap: 24px;
+}
+
+.meta-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 10px;
+  color: #8e8e93;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.meta-value.accent {
+  color: #7f77dd;
+}
+
+.coupon-item-footer {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #8e8e93;
+}
+
+.footer-icon {
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+
+.coupon-item-card.is-copied .coupon-item-footer {
+  color: #1d9e75;
+  border-top-color: rgba(29, 158, 117, 0.1);
+}
+
+/* Empty State */
+.promo-empty-msg {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8e8e93;
+  font-size: 14px;
+}
+
+.promo-footer-note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #5e5a73;
+  text-align: center;
+}
+
+/* Light Theme Overrides */
+html[data-theme='light'] .promo-tab-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: #64748b;
+}
+
+html[data-theme='light'] .promo-tab-btn.active {
+  background: rgba(127, 119, 221, 0.1);
+  color: #7f77dd;
+}
+
+html[data-theme='light'] .coupon-item-card {
+  background: #f8f9ff;
+  border-color: rgba(0, 0, 0, 0.03);
+}
+
+html[data-theme='light'] .coupon-item-code {
+  color: #1e293b;
+}
+
+html[data-theme='light'] .meta-value {
+  color: #475569;
+}

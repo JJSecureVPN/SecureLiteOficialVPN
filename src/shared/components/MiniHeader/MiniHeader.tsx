@@ -61,5 +61,3 @@ export function MiniHeader({
     </header>
   );
 }
-
-export default MiniHeader;

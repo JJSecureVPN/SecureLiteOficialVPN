@@ -36,6 +36,8 @@
     "itemsHotspotSubtitleUnknown": "Estado desconocido",
     "itemsSpeedtestTitle": "Speedtest",
     "itemsSpeedtestSubtitle": "Prueba de velocidad",
+    "itemsSupportTitle": "Soporte",
+    "itemsSupportSubtitle": "Chat con asistencia automatizada",
     "itemsTermsTitle": "Términos",
     "itemsTermsSubtitle": "Términos y políticas",
     "itemsCleanTitle": "Limpieza",
@@ -256,6 +258,18 @@
     "logoAlt": "Logo Secure VPN",
     "logoFallback": "Secure VPN"
   },
+  "support": {
+    "title": "Soporte",
+    "subtitle": "Chat con nuestro asistente",
+    "welcome": "¡Hola! Soy el soporte de Secure Lite. ¿En qué puedo ayudarte?",
+    "placeholder": "Escribe tu pregunta...",
+    "send": "Enviar",
+    "sending": "Pensando...",
+    "timeout": "Tiempo agotado. Verifica tu conexión e intenta de nuevo.",
+    "noApiKey": "No hay una clave de API configurada para el soporte. Contacta al equipo.",
+    "error": "Ocurrió un error. Intenta de nuevo más tarde.",
+    "clearHistory": "Borrar historial"
+  },
   "app": {
     "loadErrorTitle": "Error al cargar",
     "restartPrompt": "Por favor, reinicia la aplicación"
@@ -285,7 +299,15 @@
       "opening": "Abriendo en el navegador predeterminado...",
       "tryOpen": "Intentando abrir...",
       "copied": "Enlace copiado al portapapeles"
-    }
+    },
+    "activeBadge": "Oferta activa",
+    "headTitle": "Aprovechá el descuento antes de que termine",
+    "tabLabel": "Oferta",
+    "specialOffer": "Oferta especial",
+    "endsIn": "Finaliza en",
+    "viewPlans": "Ver planes",
+    "emptyNovedades": "No hay novedades disponibles en este momento.",
+    "limitedTimeNote": "Oferta por tiempo limitado."
   },
   "coupon": {
     "title": "Cupones disponibles",
@@ -298,7 +320,17 @@
     "description": "Aplicable en la compra de cualquier plan",
     "copied": "Copiado",
     "copy": "Copiar",
-    "openPlans": "Ver planes"
+    "openPlans": "Ver planes",
+    "activeBadge": "Cupones activos",
+    "headTitle": "Tocá un cupón para copiar el código",
+    "tabLabel": "Cupones",
+    "availableList": "Cupones disponibles",
+    "tag": "CUPÓN",
+    "copiedHint": "Código copiado al portapapeles",
+    "copyHint": "Tocar para copiar el código",
+    "applyNote": "Los cupones se aplican al finalizar la compra.",
+    "discount": "Descuento",
+    "remaining": "Usos restantes"
   },
   "news": {
     "title": "Noticias",

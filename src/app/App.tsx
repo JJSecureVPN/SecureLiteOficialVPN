@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { destroySdk } from '@/features/vpn/api/dtunnelSdk';
+import { destroySdk, getSdk } from '@/features/vpn/api/dtunnelSdk';
 
 // VPN Feature Screens (features/vpn/ui/screens/ + api + context)
 import {
@@ -26,31 +26,29 @@ import { AccountScreen } from '../features/account';
 // Menu Feature Screens (features/menu/ui/screens/)
 import { MenuScreen } from '../features/menu';
 
+// Support Feature Screens (features/support/ui/screens/)
+import { SupportScreen } from '../features/support';
+
 // Shared Transversal Code (imports directos)
 import { ToastProvider, useToastContext } from '../shared/context/ToastContext';
 import { ErrorBoundary } from '../shared/components/ErrorBoundary';
-import { AppHeader } from '../shared/components/AppHeader';
-import { CouponModal } from '../shared/components/CouponModal';
+import {
+  AppHeader,
+  BottomTabs,
+  ExtrasBottomSheet,
+  PromoBottomSheet,
+  LogsBottomSheet,
+} from '../shared/components';
 import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
 import { useNativeToasts } from '../shared/hooks/useNativeToasts';
-
-// Internationalization
+import { useCoupons } from '../shared/hooks/useCoupons';
+import { usePromo } from '../shared/hooks/usePromo';
+import { useTranslation } from '../i18n';
 import { LanguageProvider } from '../i18n/context';
 
 // Core Types
 import type { ScreenType } from '../core/types';
-
-type Coupon = {
-  id: number;
-  codigo: string;
-  tipo: string;
-  valor: number;
-  limite_uso: number;
-  usos_actuales: number;
-  activo: boolean;
-  oculto: boolean;
-};
 
 /**
  * SCREEN MAPPING - Feature-First Architecture
@@ -90,21 +88,40 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
 
   // Menu Feature (features/menu/ui/screens/)
   menu: MenuScreen, // Main menu screen
+
+  // Support Feature (features/support/ui/screens/)
+  support: SupportScreen, // AI support chat screen
 };
 
 function AppContent() {
   const { screen, setScreen } = useVpn();
-  const { toast } = useToastContext();
+  const { navigationBarHeight, statusBarHeight } = useSafeArea();
+  const { t } = useTranslation();
+  const { toast, showToast } = useToastContext();
   const { isConnected, isConnecting, isError } = useConnectionStatus();
-  const { navigationBarHeight } = useSafeArea();
 
   // Escucha toasts y notificaciones del SDK nativo de DTunnel
   useNativeToasts();
 
   // Limpieza del SDK al desmontar la app (hot-reload / tests)
   useEffect(() => () => destroySdk(), []);
-  const [showCouponModal, setShowCouponModal] = useState(false);
-  const [modalCoupons, setModalCoupons] = useState<Coupon[]>([]);
+  const [showPromoSheet, setShowPromoSheet] = useState(false);
+  const [showLogsSheet, setShowLogsSheet] = useState(false);
+  const [showExtrasBottomSheet, setShowExtrasBottomSheet] = useState(false);
+
+  const handleUpdate = useCallback(() => {
+    try {
+      const sdk = getSdk();
+      if (sdk) {
+        sdk.main.startAppUpdate();
+        showToast(t('connection.searchingUpdate'));
+      } else {
+        showToast(t('connection.updateNotAvailable'));
+      }
+    } catch {
+      showToast(t('error.updateCheckFailed'), null, 'error');
+    }
+  }, [showToast, t]);
 
   // Determinar clase de estado (isConnecting incluye auto.on para evitar flash rojo)
   const stateClass = isConnected
@@ -122,35 +139,46 @@ function AppContent() {
 
   const phoneStyle = {
     ['--nav-safe' as any]: `${navigationBarHeight}px`,
+    ['--safe-area-bottom' as any]: `${navigationBarHeight}px`,
+    ['--safe-area-top' as any]: `${statusBarHeight}px`,
   };
 
-  const handleShowCouponModal = useCallback((coupons: Coupon[]) => {
-    setModalCoupons(coupons);
-    setShowCouponModal(true);
-  }, []);
-
-  const handleCloseCouponModal = useCallback(() => {
-    setShowCouponModal(false);
-  }, []);
+  const { coupons } = useCoupons();
+  const { isPromoActive } = usePromo();
+  const dealsActive = coupons.length > 0 || isPromoActive;
 
   return (
     <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
-      {screen !== 'news' && <div className="top-strip" />}
+      <div className="top-strip" />
 
-      {screen !== 'terms' && screen !== 'news' && (
-        <>
-          <AppHeader
-            onMenuClick={() => setScreen('menu')}
-            onShowCouponModal={handleShowCouponModal}
-          />
-        </>
+      {screen === 'home' && (
+        <AppHeader
+          onMenuClick={() => setShowExtrasBottomSheet(true)}
+          onShowCouponModal={() => setShowPromoSheet(true)}
+        />
       )}
 
       <ScreenComponent />
 
+      <BottomTabs
+        onShowLogs={() => setShowLogsSheet(true)}
+        onShowPromo={() => setShowPromoSheet(true)}
+        onShowSpeedtest={() => setScreen('support')}
+        onShowExtras={() => setShowExtrasBottomSheet(true)}
+        onUpdate={handleUpdate}
+        hasActiveCoupons={dealsActive}
+      />
+
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} />
 
-      {showCouponModal && <CouponModal coupons={modalCoupons} onClose={handleCloseCouponModal} />}
+      <PromoBottomSheet isOpen={showPromoSheet} onClose={() => setShowPromoSheet(false)} />
+
+      <LogsBottomSheet isOpen={showLogsSheet} onClose={() => setShowLogsSheet(false)} />
+
+      <ExtrasBottomSheet
+        isOpen={showExtrasBottomSheet}
+        onClose={() => setShowExtrasBottomSheet(false)}
+      />
     </div>
   );
 }

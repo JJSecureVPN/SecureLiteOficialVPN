@@ -22,5 +22,3 @@ export const StatCard = memo(function StatCard({
     </Card>
   );
 });
-
-export default StatCard;

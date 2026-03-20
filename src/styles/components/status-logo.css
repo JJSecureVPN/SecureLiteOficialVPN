@@ -261,4 +261,23 @@
     padding-top: 0.14em;
     overflow: visible;
   }
+  .status-logo--large {
+    font-size: clamp(1.8rem, 6.5vw, 2.8rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .status-logo--large {
+    font-size: clamp(1.4rem, 5.5vw, 2rem);
+  }
+}
+
+@media (max-width: 320px) {
+  .status-logo {
+    align-items: center;
+    max-width: 100%;
+  }
+  .status-logo--large {
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+  }
 }

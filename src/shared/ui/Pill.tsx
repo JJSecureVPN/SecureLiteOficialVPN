@@ -13,5 +13,3 @@ export const Pill = memo(function Pill({ children, className = '', more = false 
     .join(' ');
   return <span className={classes}>{children}</span>;
 });
-
-export default Pill;

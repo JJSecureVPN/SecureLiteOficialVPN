@@ -61,6 +61,7 @@ import '../styles/screens/news.css';
 
 import '../styles/components/error-boundary.css';
 import '../styles/components/modal.css';
+import '../styles/components/support-screen.css';
 import '../styles/screens/home.css';
 import '../styles/screens/account.css';
 import '../styles/screens/terms.css';

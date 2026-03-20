@@ -25,5 +25,3 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
     </Tag>
   );
 });
-
-export default Card;

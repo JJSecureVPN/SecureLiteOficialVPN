@@ -72,5 +72,3 @@ export const MenuRow = memo(function MenuRow({
     </Card>
   );
 });
-
-export default MenuRow;

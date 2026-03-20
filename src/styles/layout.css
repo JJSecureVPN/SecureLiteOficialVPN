@@ -186,65 +186,7 @@ header.topbar .row {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* News button small dot */
-.news-btn {
-  color: var(--text-strong-35);
-  position: relative;
-}
-
-.news-btn i {
-  color: var(--text-strong-35);
-}
-
-.news-attention {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: var(--accent);
-  color: var(--on-accent);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  z-index: 5;
-}
-
-/* Pulsa/atrae atención sutilmente */
-@keyframes newsPulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(109, 74, 255, 0.25);
-  }
-  70% {
-    transform: scale(1.6);
-    opacity: 0.8;
-    box-shadow: 0 0 10px 6px rgba(109, 74, 255, 0.06);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(109, 74, 255, 0);
-  }
-}
-
-.news-attention.pulse {
-  animation: newsPulse 1.6s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .news-attention.pulse {
-    animation: none;
-  }
-}
-
-/* News icon badge */
-.news-btn {
-  color: var(--text-strong-35);
-  position: relative;
-}
-
-/* Ensure cart and theme icons share the same subtle color as the news icon */
+/* Ensure cart and theme icons share the same subtle color */
 .subscribe-btn,
 .theme-btn {
   color: var(--text-strong-35);
@@ -272,10 +214,13 @@ header.topbar .row {
    =========================================== */
 
 .logo-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: visible;
   position: relative;
   z-index: 2;
+  width: 100%;
 }
 
 .logo {

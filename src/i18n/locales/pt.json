@@ -36,6 +36,8 @@
     "itemsHotspotSubtitleUnknown": "Status desconhecido",
     "itemsSpeedtestTitle": "Speedtest",
     "itemsSpeedtestSubtitle": "Teste de velocidade",
+    "itemsSupportTitle": "Suporte",
+    "itemsSupportSubtitle": "Chat com assistente automatizado",
     "itemsTermsTitle": "Termos",
     "itemsTermsSubtitle": "Termos e políticas",
     "itemsCleanTitle": "Limpeza",
@@ -255,6 +257,18 @@
     "disconnecting": "Desconectando...",
     "logoAlt": "Logo Secure VPN",
     "logoFallback": "Secure VPN"
+  },
+  "support": {
+    "title": "Suporte",
+    "subtitle": "Chat com nosso assistente",
+    "welcome": "Olá! Sou o suporte da Secure Lite. Em que posso ajudar?",
+    "placeholder": "Escreva sua pergunta...",
+    "send": "Enviar",
+    "sending": "Pensando...",
+    "timeout": "Tempo esgotado. Verifique sua conexão e tente novamente.",
+    "noApiKey": "Nenhuma chave de API configurada para suporte. Entre em contato com a equipe.",
+    "error": "Ocorreu um erro. Tente novamente mais tarde.",
+    "clearHistory": "Limpar histórico"
   },
   "app": {
     "loadErrorTitle": "Erro ao carregar",

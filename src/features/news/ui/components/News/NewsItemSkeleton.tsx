@@ -20,5 +20,3 @@ export function NewsItemSkeleton() {
     </article>
   );
 }
-
-export default NewsItemSkeleton;

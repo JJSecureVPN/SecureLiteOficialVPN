@@ -47,5 +47,3 @@ export function NewsEmptyState() {
     </div>
   );
 }
-
-export default NewsEmptyState;

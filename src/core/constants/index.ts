@@ -16,6 +16,7 @@ export const SCREENS = [
   'news',
   'servers',
   'menu',
+  'support',
   'import',
   'logs',
   'applogs',
@@ -25,9 +26,6 @@ export const SCREENS = [
 
 /** Duración del toast en milisegundos */
 export const TOAST_DURATION_MS = 2500;
-
-/** Intervalo de polling para estado VPN en milisegundos */
-export const VPN_POLLING_INTERVAL_MS = 800;
 
 /** Timeout para auto-conexión por servidor en milisegundos */
 export const AUTO_CONNECT_TIMEOUT_MS = 10000;
