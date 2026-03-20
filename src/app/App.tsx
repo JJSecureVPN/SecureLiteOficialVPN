@@ -15,13 +15,13 @@ import {
 import { NewsScreen } from '../features/news';
 
 // Logs Feature Screens (features/logs/ui/screens/ + hooks)
-import { LogsScreen, AppLogsScreen } from '../features/logs';
+import { AppLogsScreen } from '../features/logs';
 
 // Terms Feature Screens (features/terms/ui/screens/)
 import { TermsScreen } from '../features/terms';
 
-// Account Feature Screens (features/account/ui/screens/)
-import { AccountScreen } from '../features/account';
+// Account Feature Screens (features/account/ui/screens/) - Migrated to BottomSheet
+// import { AccountScreen } from '../features/account';
 
 // Menu Feature Screens (features/menu/ui/screens/)
 import { MenuScreen } from '../features/menu';
@@ -38,6 +38,7 @@ import {
   ExtrasBottomSheet,
   PromoBottomSheet,
   LogsBottomSheet,
+  AccountBottomSheet,
 } from '../shared/components';
 import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
@@ -67,7 +68,7 @@ import type { ScreenType } from '../core/types';
  * ✅ Scalability: Adding new features doesn't require changes here
  * ✅ Maintainability: All VPN-related code is in features/vpn/
  */
-const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
+const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType<{ onShowAccount?: () => void }>> = {
   // VPN Feature (features/vpn/ui/screens/)
   home: HomeScreen, // VPN home screen with connection status
   servers: ServersScreen, // VPN server selection screen
@@ -76,12 +77,12 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType> = {
   // News Feature (features/news/ui/screens/)
   news: NewsScreen, // News list and reader screen
 
-  // Logs Feature (features/logs/ui/screens/)
-  logs: LogsScreen, // VPN logs screen
+  // Logs Feature (features/logs/ui/screens/) - Migrated to LogsBottomSheet
+  logs: () => null,
   applogs: AppLogsScreen, // Application logs screen
 
-  // Account Feature (features/account/ui/screens/)
-  account: AccountScreen, // User account information screen
+  // Account Feature (features/account/ui/screens/) - Migrated to BottomSheet
+  account: () => null,
 
   // Terms Feature (features/terms/ui/screens/)
   terms: TermsScreen, // Terms and conditions screen
@@ -107,6 +108,7 @@ function AppContent() {
   useEffect(() => () => destroySdk(), []);
   const [showPromoSheet, setShowPromoSheet] = useState(false);
   const [showLogsSheet, setShowLogsSheet] = useState(false);
+  const [showAccountSheet, setShowAccountSheet] = useState(false);
   const [showExtrasBottomSheet, setShowExtrasBottomSheet] = useState(false);
 
   const handleUpdate = useCallback(() => {
@@ -158,7 +160,7 @@ function AppContent() {
         />
       )}
 
-      <ScreenComponent />
+      <ScreenComponent onShowAccount={() => setShowAccountSheet(true)} />
 
       <BottomTabs
         onShowLogs={() => setShowLogsSheet(true)}
@@ -174,6 +176,8 @@ function AppContent() {
       <PromoBottomSheet isOpen={showPromoSheet} onClose={() => setShowPromoSheet(false)} />
 
       <LogsBottomSheet isOpen={showLogsSheet} onClose={() => setShowLogsSheet(false)} />
+
+      <AccountBottomSheet isOpen={showAccountSheet} onClose={() => setShowAccountSheet(false)} />
 
       <ExtrasBottomSheet
         isOpen={showExtrasBottomSheet}
