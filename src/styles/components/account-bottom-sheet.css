@@ -1,0 +1,238 @@
+/* ===========================================
+   AccountBottomSheet - Estilos premium
+   =========================================== */
+
+.account-bottom-sheet .bottom-sheet-content {
+  padding: 0;
+}
+
+.account-sheet-content {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 24px;
+  gap: 20px;
+}
+
+/* Metrics Grid (Usage, Latency, Sessions) */
+.account-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 4px 4px 12px;
+}
+
+.mt-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.mt-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.mt-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-strong, #ffffff);
+  letter-spacing: -0.01em;
+}
+
+.mt-lbl {
+  font-size: 10px;
+  color: var(--muted, #8e8e93);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* Specific Ping Coloring */
+.mt-val.ping-excellent {
+  color: #10b981;
+}
+.mt-val.ping-good {
+  color: #f59e0b;
+}
+.mt-val.ping-bad {
+  color: #ef4444;
+}
+
+/* Info Sections */
+.account-info-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ac-section-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ac-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent, #007aff);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+  padding-left: 4px;
+}
+
+.ac-details-card {
+  background: var(--surface-2, #1a1c29);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.ac-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.ac-row-item.is-last {
+  border-bottom: none;
+}
+
+.ac-label {
+  font-size: 13px;
+  color: var(--muted, #a1a1aa);
+}
+
+.ac-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.ac-value.is-mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+
+/* Expiry Colors */
+.expiry-green {
+  color: #10b981;
+}
+.expiry-yellow {
+  color: #f59e0b;
+}
+.expiry-orange {
+  color: #f97316;
+}
+.expiry-red {
+  color: #ef4444;
+}
+
+.blinking {
+  animation: bg-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes bg-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Chips */
+.ac-chip {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* Status Pill in Footer */
+.account-sheet-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #8e8e93;
+}
+
+.status-pill.connected {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-pill.connecting {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+/* Icon Box Status */
+.account-status-dot-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: grid;
+  place-items: center;
+  color: #52525b;
+}
+
+.account-status-dot-box.connected {
+  color: #10b981;
+}
+.account-status-dot-box.connecting {
+  color: #f59e0b;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Light Mode Overrides */
+html[data-theme='light'] .ac-details-card {
+  background: #f1f5f9;
+}
+
+html[data-theme='light'] .mt-card {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme='light'] .ac-value {
+  color: #1e293b;
+}
+
+html[data-theme='light'] .ac-chip {
+  background: rgba(0, 0, 0, 0.05);
+  color: #475569;
+}

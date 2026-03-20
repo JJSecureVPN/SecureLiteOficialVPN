@@ -7,7 +7,6 @@ import {
   useVpn,
   HomeScreen, // VPN Feature: Screen principal
   ServersScreen, // VPN Feature: Selección de servidores
-  ImportConfigScreen, // VPN Feature: Importar configuración
   useConnectionStatus, // VPN Feature: Hook de estado
 } from '../features/vpn';
 
@@ -39,6 +38,7 @@ import {
   PromoBottomSheet,
   LogsBottomSheet,
   AccountBottomSheet,
+  ImportBottomSheet,
 } from '../shared/components';
 import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
@@ -55,7 +55,7 @@ import type { ScreenType } from '../core/types';
  * SCREEN MAPPING - Feature-First Architecture
  *
  * Each screen is located within its feature folder:
- * - features/vpn/ui/screens/     → HomeScreen, ServersScreen, ImportConfigScreen
+ * - features/vpn/ui/screens/     → HomeScreen, ServersScreen
  * - features/news/ui/screens/    → NewsScreen
  * - features/logs/ui/screens/    → LogsScreen, AppLogsScreen
  * - features/account/ui/screens/ → AccountScreen
@@ -72,7 +72,8 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType<{ onShowAccount?
   // VPN Feature (features/vpn/ui/screens/)
   home: HomeScreen, // VPN home screen with connection status
   servers: ServersScreen, // VPN server selection screen
-  import: ImportConfigScreen, // VPN configuration import screen
+  // VPN Feature (features/vpn/ui/screens/) - Migrated to BottomSheet
+  import: () => null,
 
   // News Feature (features/news/ui/screens/)
   news: NewsScreen, // News list and reader screen
@@ -100,6 +101,7 @@ function AppContent() {
   const { t } = useTranslation();
   const { toast, showToast } = useToastContext();
   const { isConnected, isConnecting, isError } = useConnectionStatus();
+  const { user } = useVpn();
 
   // Escucha toasts y notificaciones del SDK nativo de DTunnel
   useNativeToasts();
@@ -109,7 +111,27 @@ function AppContent() {
   const [showPromoSheet, setShowPromoSheet] = useState(false);
   const [showLogsSheet, setShowLogsSheet] = useState(false);
   const [showAccountSheet, setShowAccountSheet] = useState(false);
+  const [showImportSheet, setShowImportSheet] = useState(false);
   const [showExtrasBottomSheet, setShowExtrasBottomSheet] = useState(false);
+  const [hasAutoOpenedAccount, setHasAutoOpenedAccount] = useState(false);
+
+  // Auto-abrir AccountBottomSheet cuando conecta y hay datos
+  useEffect(() => {
+    if (!isConnected) {
+      setHasAutoOpenedAccount(false);
+      return;
+    }
+
+    if (
+      isConnected &&
+      user?.expiration_date &&
+      user.expiration_date !== '-' &&
+      !hasAutoOpenedAccount
+    ) {
+      setShowAccountSheet(true);
+      setHasAutoOpenedAccount(true);
+    }
+  }, [isConnected, user, hasAutoOpenedAccount, setShowAccountSheet]);
 
   const handleUpdate = useCallback(() => {
     try {
@@ -179,9 +201,12 @@ function AppContent() {
 
       <AccountBottomSheet isOpen={showAccountSheet} onClose={() => setShowAccountSheet(false)} />
 
+      <ImportBottomSheet isOpen={showImportSheet} onClose={() => setShowImportSheet(false)} />
+
       <ExtrasBottomSheet
         isOpen={showExtrasBottomSheet}
         onClose={() => setShowExtrasBottomSheet(false)}
+        onShowImport={() => setShowImportSheet(true)}
       />
     </div>
   );

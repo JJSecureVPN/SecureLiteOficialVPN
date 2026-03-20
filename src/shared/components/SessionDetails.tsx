@@ -12,13 +12,17 @@ import { Card } from '@/shared/ui';
  * (SessionCardBody + SessionActions). La lógica de expiración se conserva
  * aquí para mantener un único origen de verdad.
  */
-export const SessionDetails = memo(function SessionDetails() {
-  const { status, user, creds, config, setScreen } = useVpn();
+export const SessionDetails = memo(function SessionDetails({
+  onViewDetails,
+}: {
+  onViewDetails: () => void;
+}) {
+  const { status, user, creds, config } = useVpn();
   const { t } = useTranslation();
 
   const handleViewDetails = useCallback(() => {
-    setScreen('account');
-  }, [setScreen]);
+    onViewDetails();
+  }, [onViewDetails]);
 
   const handleOpenPlans = useCallback(() => {
     const base = 'https://shop.jhservices.com.ar/planes';

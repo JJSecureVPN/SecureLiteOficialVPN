@@ -1,16 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
 import { HeaderPromo, SessionDetails, ConnectButton, StatusLogo } from '@/shared/components';
-import { CredentialFields, QuickButton } from '@/shared/ui';
+import { CredentialFields } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
-export function HomeScreen() {
+export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
   const { t } = useTranslation();
   const {
     config,
@@ -102,24 +101,6 @@ export function HomeScreen() {
     setScreen('servers');
   }, [setScreen]);
 
-  const handleUpdate = useCallback(() => {
-    try {
-      const sdk = getSdk();
-      if (sdk) {
-        sdk.main.startAppUpdate();
-        showToast(t('connection.searchingUpdate'));
-      } else {
-        showToast(t('connection.updateNotAvailable'));
-      }
-    } catch {
-      showToast(t('error.updateCheckFailed'), document.activeElement as HTMLElement, 'error');
-    }
-  }, [showToast, t]);
-
-  const handleLogs = useCallback(() => {
-    setScreen('logs');
-  }, [setScreen]);
-
   const connectButtonState = isConnected
     ? 'connected'
     : isConnecting
@@ -175,7 +156,7 @@ export function HomeScreen() {
               />
             )}
 
-            {isConnected && <SessionDetails />}
+            {isConnected && <SessionDetails onViewDetails={() => onShowAccount?.()} />}
 
             <ConnectButton
               state={connectButtonState}
@@ -183,30 +164,6 @@ export function HomeScreen() {
               autoMode={autoMode}
               onAutoModeChange={setAutoMode}
             />
-
-            <div className="quick-grid ql-quick-grid">
-              <QuickButton
-                icon="fa-rotate"
-                label={t('buttons.update')}
-                onClick={handleUpdate}
-                data-nav
-                aria-label={t('buttons.update')}
-              />
-              <QuickButton
-                icon="fa-file-import"
-                label={t('import.shortTitle')}
-                onClick={() => setScreen('import')}
-                data-nav
-                aria-label={t('import.shortTitle')}
-              />
-              <QuickButton
-                icon="fa-terminal"
-                label={t('buttons.logs')}
-                onClick={handleLogs}
-                data-nav
-                aria-label={t('buttons.logs')}
-              />
-            </div>
           </div>
         </div>
       </div>

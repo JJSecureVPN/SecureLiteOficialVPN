@@ -135,7 +135,7 @@ export const ImportDesignerScreen = memo(function ImportDesignerScreen({
   ];
 
   return (
-    <section className="screen designer-screen" style={sectionStyle}>
+    <div className="designer-screen" style={sectionStyle}>
       {/* Top bar */}
       <header className="designer-topbar">
         <button className="designer-back" onClick={handleBack}>
@@ -347,6 +347,6 @@ export const ImportDesignerScreen = memo(function ImportDesignerScreen({
           </button>
         </footer>
       )}
-    </section>
+    </div>
   );
 });

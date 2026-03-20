@@ -26,11 +26,13 @@ interface MenuItem {
 interface ExtrasBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  onShowImport?: () => void;
 }
 
 export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
   isOpen,
   onClose,
+  onShowImport,
 }: ExtrasBottomSheetProps) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
@@ -147,6 +149,16 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       icon: 'fa-list',
       action: () => {
         setScreen('applogs');
+        onClose();
+      },
+    },
+    {
+      id: 'import',
+      title: t('menu.itemsImportTitle'),
+      subtitle: t('menu.itemsImportSubtitle'),
+      icon: 'fa-file-import',
+      action: () => {
+        onShowImport?.();
         onClose();
       },
     },
