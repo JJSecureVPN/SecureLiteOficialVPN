@@ -13,8 +13,8 @@ import {
 // News Feature Screens (features/news/ui/screens/ + hooks)
 import { NewsScreen } from '../features/news';
 
-// Logs Feature Screens (features/logs/ui/screens/ + hooks)
-import { AppLogsScreen } from '../features/logs';
+// Logs Feature Screens (features/logs/ui/screens/)
+// Logs migrado a LogsBottomSheet
 
 // Terms Feature Screens (features/terms/ui/screens/)
 import { TermsScreen } from '../features/terms';
@@ -49,7 +49,7 @@ import { useTranslation } from '../i18n';
 import { LanguageProvider } from '../i18n/context';
 
 // Core Types
-import type { ScreenType } from '../core/types';
+import type { ScreenType, ActiveSheet } from '../core/types';
 
 /**
  * SCREEN MAPPING - Feature-First Architecture
@@ -73,17 +73,9 @@ const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType<{ onShowAccount?
   home: HomeScreen, // VPN home screen with connection status
   servers: ServersScreen, // VPN server selection screen
   // VPN Feature (features/vpn/ui/screens/) - Migrated to BottomSheet
-  import: () => null,
 
   // News Feature (features/news/ui/screens/)
   news: NewsScreen, // News list and reader screen
-
-  // Logs Feature (features/logs/ui/screens/) - Migrated to LogsBottomSheet
-  logs: () => null,
-  applogs: AppLogsScreen, // Application logs screen
-
-  // Account Feature (features/account/ui/screens/) - Migrated to BottomSheet
-  account: () => null,
 
   // Terms Feature (features/terms/ui/screens/)
   terms: TermsScreen, // Terms and conditions screen
@@ -108,11 +100,8 @@ function AppContent() {
 
   // Limpieza del SDK al desmontar la app (hot-reload / tests)
   useEffect(() => () => destroySdk(), []);
-  const [showPromoSheet, setShowPromoSheet] = useState(false);
-  const [showLogsSheet, setShowLogsSheet] = useState(false);
-  const [showAccountSheet, setShowAccountSheet] = useState(false);
-  const [showImportSheet, setShowImportSheet] = useState(false);
-  const [showExtrasBottomSheet, setShowExtrasBottomSheet] = useState(false);
+
+  const [activeSheet, setActiveSheet] = useState<ActiveSheet>(null);
   const [hasAutoOpenedAccount, setHasAutoOpenedAccount] = useState(false);
 
   // Auto-abrir AccountBottomSheet cuando conecta y hay datos
@@ -128,10 +117,10 @@ function AppContent() {
       user.expiration_date !== '-' &&
       !hasAutoOpenedAccount
     ) {
-      setShowAccountSheet(true);
+      setActiveSheet('account');
       setHasAutoOpenedAccount(true);
     }
-  }, [isConnected, user, hasAutoOpenedAccount, setShowAccountSheet]);
+  }, [isConnected, user, hasAutoOpenedAccount, setActiveSheet]);
 
   const handleUpdate = useCallback(() => {
     try {
@@ -175,38 +164,33 @@ function AppContent() {
     <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
       <div className="top-strip" />
 
-      {screen === 'home' && (
-        <AppHeader
-          onMenuClick={() => setShowExtrasBottomSheet(true)}
-          onShowCouponModal={() => setShowPromoSheet(true)}
-        />
-      )}
+      <AppHeader onMenuClick={() => setActiveSheet('extras')} />
 
-      <ScreenComponent onShowAccount={() => setShowAccountSheet(true)} />
+      <ScreenComponent onShowAccount={() => setActiveSheet('account')} />
 
       <BottomTabs
-        onShowLogs={() => setShowLogsSheet(true)}
-        onShowPromo={() => setShowPromoSheet(true)}
-        onShowSpeedtest={() => setScreen('support')}
-        onShowExtras={() => setShowExtrasBottomSheet(true)}
+        onShowLogs={() => setActiveSheet('logs')}
+        onShowPromo={() => setActiveSheet('promo')}
+        onShowSupport={() => setScreen('support')}
+        onShowExtras={() => setActiveSheet('extras')}
         onUpdate={handleUpdate}
         hasActiveCoupons={dealsActive}
       />
 
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} />
 
-      <PromoBottomSheet isOpen={showPromoSheet} onClose={() => setShowPromoSheet(false)} />
+      <PromoBottomSheet isOpen={activeSheet === 'promo'} onClose={() => setActiveSheet(null)} />
 
-      <LogsBottomSheet isOpen={showLogsSheet} onClose={() => setShowLogsSheet(false)} />
+      <LogsBottomSheet isOpen={activeSheet === 'logs'} onClose={() => setActiveSheet(null)} />
 
-      <AccountBottomSheet isOpen={showAccountSheet} onClose={() => setShowAccountSheet(false)} />
+      <AccountBottomSheet isOpen={activeSheet === 'account'} onClose={() => setActiveSheet(null)} />
 
-      <ImportBottomSheet isOpen={showImportSheet} onClose={() => setShowImportSheet(false)} />
+      <ImportBottomSheet isOpen={activeSheet === 'import'} onClose={() => setActiveSheet(null)} />
 
       <ExtrasBottomSheet
-        isOpen={showExtrasBottomSheet}
-        onClose={() => setShowExtrasBottomSheet(false)}
-        onShowImport={() => setShowImportSheet(true)}
+        isOpen={activeSheet === 'extras'}
+        onClose={() => setActiveSheet(null)}
+        onShowImport={() => setActiveSheet('import')}
       />
     </div>
   );

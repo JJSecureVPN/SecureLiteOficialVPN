@@ -71,7 +71,8 @@ header.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--header-padding) var(--space-xl);
+  padding: calc(var(--header-padding) + var(--safe-area-top, 0px)) var(--space-xl)
+    var(--header-padding);
   position: relative;
   z-index: 2;
 }
@@ -84,9 +85,16 @@ header.topbar > .dots {
 }
 
 header.topbar .row {
+  flex: 1 1 auto;
+  display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
   gap: var(--space-md);
+}
+
+/* Ensure header has just one row container, with controls aligned right */
+header.topbar {
+  justify-content: flex-end;
 }
 
 .hotzone {
@@ -203,8 +211,9 @@ header.topbar .row {
 
 .screen {
   position: absolute;
-  inset: var(--screen-top) 0 0;
-  padding: var(--space-xl) var(--space-lg);
+  /* Global: Respetar espacio de BottomTabs + Safe Area */
+  inset: var(--screen-top) 0 var(--tabs-space);
+  padding: var(--space-xl) var(--space-lg) var(--space-xl);
   overflow: auto;
   z-index: 1;
 }
@@ -227,7 +236,7 @@ header.topbar .row {
   width: 100%;
   max-width: clamp(280px, 85vw, 550px);
   height: auto;
-  max-height: clamp(60px, 20vh, 160px);
+  max-height: clamp(50px, 15vh, 100px);
   object-fit: contain;
   pointer-events: none;
   -webkit-user-select: none;
@@ -259,4 +268,32 @@ header.topbar .row {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 1px;
+}
+
+/* ===========================================
+   Servers Screen Layout (Fixed Header)
+   =========================================== */
+
+.servers-screen {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  height: 100%;
+}
+
+.servers-screen .section-header {
+  flex: 0 0 auto;
+  padding-bottom: var(--space-md);
+}
+
+.servers-screen .servers-content {
+  flex: 1;
+  overflow-y: auto !important;
+  /* El espacio inferior ya lo maneja el inset de .screen */
+  padding-bottom: var(--space-xl);
+  scrollbar-width: none;
+}
+
+.servers-screen .servers-content::-webkit-scrollbar {
+  display: none;
 }

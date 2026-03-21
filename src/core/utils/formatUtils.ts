@@ -1,14 +1,21 @@
 // Utilidades para formateo
 
-export function formatBytes(n: number): string {
+export function formatBytes(n: number, decimals = 2): string {
   n = +n || 0;
   const KB = 1024;
   const MB = KB * 1024;
   const GB = MB * 1024;
-  if (n >= GB) return (n / GB).toFixed(2) + ' GB';
-  if (n >= MB) return (n / MB).toFixed(2) + ' MB';
-  if (n >= KB) return (n / KB).toFixed(2) + ' KB';
-  return n + ' B';
+
+  const format = (value: number) => {
+    if (Number.isNaN(value) || !Number.isFinite(value)) return '0';
+    const rounded = Number.isInteger(value) ? value : Number(value.toFixed(decimals));
+    return rounded.toLocaleString('es-ES', { maximumFractionDigits: decimals });
+  };
+
+  if (n >= GB) return `${format(n / GB)} GB`;
+  if (n >= MB) return `${format(n / MB)} MB`;
+  if (n >= KB) return `${format(n / KB)} KB`;
+  return `${Math.round(n)} B`;
 }
 
 export function toPingNumber(raw: string | number | null): number {

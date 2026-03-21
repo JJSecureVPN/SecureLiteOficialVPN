@@ -22,7 +22,7 @@ const DTunnelSDKContext = createContext<DTunnelSDK | null>(null);
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
-export interface DTunnelSDKProviderProps {
+interface DTunnelSDKProviderProps {
   children?: ReactNode;
   /** Instancia ya creada (singleton externo). Si se omite el Provider crea una. */
   sdk?: DTunnelSDK;
@@ -98,13 +98,6 @@ export function useDTunnelEvent(
       listenerRef.current(event);
     });
   }, [sdk, eventName]);
-}
-
-/** Suscribe a cualquier evento nativo (`nativeEvent`). */
-export function useDTunnelNativeEvent(
-  listener: (event: DTunnelAnySemanticEventEnvelope) => void,
-): void {
-  useDTunnelEvent('nativeEvent', listener);
 }
 
 /** Suscribe a errores de bridge del SDK. */

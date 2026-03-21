@@ -6,7 +6,7 @@ interface BottomTabsProps {
   onShowLogs?: () => void;
   onShowExtras?: () => void;
   onShowPromo?: () => void;
-  onShowSpeedtest?: () => void;
+  onShowSupport?: () => void;
   onUpdate?: () => void;
   hasActiveCoupons?: boolean;
   promoActive?: boolean;
@@ -15,7 +15,7 @@ interface BottomTabsProps {
 export const BottomTabs = memo(function BottomTabs({
   onShowLogs,
   onShowPromo,
-  onShowSpeedtest,
+  onShowSupport,
   onShowExtras,
   onUpdate,
   hasActiveCoupons: propHasActiveCoupons,
@@ -51,7 +51,7 @@ export const BottomTabs = memo(function BottomTabs({
   return (
     <nav className="bottom-tabs">
       <button
-        className={`tab-btn ${activeTab === 'logs' ? 'active' : ''}`}
+        className={`tab-btn ${(activeTab as string) === 'logs' ? 'active' : ''}`}
         type="button"
         onClick={() => onShowLogs?.()}
       >
@@ -122,9 +122,9 @@ export const BottomTabs = memo(function BottomTabs({
       </div>
 
       <button
-        className={`tab-btn ${(activeTab as string) === 'speedtest' ? 'active' : ''}`}
+        className={`tab-btn ${(activeTab as string) === 'support' ? 'active' : ''}`}
         type="button"
-        onClick={onShowSpeedtest}
+        onClick={onShowSupport}
       >
         <svg
           className="icon-svg"
@@ -133,9 +133,12 @@ export const BottomTabs = memo(function BottomTabs({
           stroke="currentColor"
           strokeWidth="2"
         >
-          <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path d="M18 8a6 6 0 00-12 0v3a6 6 0 0012 0V8z" />
+          <path d="M6 14h12" />
+          <path d="M9 14v4" />
+          <path d="M15 14v4" />
         </svg>
-        Speedtest
+        Soporte
       </button>
 
       <button

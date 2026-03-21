@@ -45,7 +45,6 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
     setRawInput,
     setSelectedId,
     handleParse: hookHandleParse,
-    handleBack: _hookHandleBack,
   } = useImportConfig();
 
   // Load categories on mount

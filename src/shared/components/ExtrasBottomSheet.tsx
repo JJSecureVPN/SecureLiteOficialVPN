@@ -143,16 +143,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       action: () => setShowCleanConfirm(true),
     },
     {
-      id: 'applogs',
-      title: t('menu.itemsAppLogsTitle'),
-      subtitle: t('menu.itemsAppLogsSubtitle'),
-      icon: 'fa-list',
-      action: () => {
-        setScreen('applogs');
-        onClose();
-      },
-    },
-    {
       id: 'import',
       title: t('menu.itemsImportTitle'),
       subtitle: t('menu.itemsImportSubtitle'),

@@ -127,13 +127,6 @@ export const MenuScreen = memo(function MenuScreen() {
       icon: 'fa-broom',
       action: () => setShowCleanConfirm(true),
     },
-    {
-      id: 'applogs',
-      title: t('menu.itemsAppLogsTitle'),
-      subtitle: t('menu.itemsAppLogsSubtitle'),
-      icon: 'fa-list',
-      action: () => setScreen('applogs'),
-    },
   ];
 
   const isMobilePortrait = useIsMobilePortrait();

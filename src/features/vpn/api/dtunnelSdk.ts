@@ -22,14 +22,6 @@ let _instance: DTunnelSDK | null = null;
 // ─── API pública ──────────────────────────────────────────────────────────────
 
 /**
- * Verifica si el SDK está disponible en este entorno.
- * Devuelve false en entornos sin WebView nativo (ej: browser de desarrollo).
- */
-export function isSdkAvailable(): boolean {
-  return typeof window !== 'undefined' && typeof window.DTunnelSDK === 'function';
-}
-
-/**
  * Inicializa y devuelve la instancia del SDK.
  * Si ya fue inicializada, devuelve la misma instancia (singleton).
  * Si el SDK no está disponible, devuelve null sin lanzar errores.
@@ -61,12 +53,4 @@ export function destroySdk(): void {
     }
     _instance = null;
   }
-}
-
-/**
- * Snapshot de debug del SDK (qué objetos del bridge están disponibles, etc.).
- * Solo útil en desarrollo — devuelve null si el SDK no está disponible.
- */
-export function getSdkDebugSnapshot(): ReturnType<DTunnelSDK['createDebugSnapshot']> | null {
-  return getSdk()?.createDebugSnapshot() ?? null;
 }

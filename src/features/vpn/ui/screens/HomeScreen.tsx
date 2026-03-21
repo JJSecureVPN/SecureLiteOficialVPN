@@ -3,13 +3,13 @@ import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
-import { HeaderPromo, SessionDetails, ConnectButton, StatusLogo } from '@/shared/components';
+import { HeaderPromo, TrafficDetails, ConnectButton, StatusLogo } from '@/shared/components';
 import { CredentialFields } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 // Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
 
-export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
+export function HomeScreen() {
   const { t } = useTranslation();
   const {
     config,
@@ -156,7 +156,7 @@ export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
               />
             )}
 
-            {isConnected && <SessionDetails onViewDetails={() => onShowAccount?.()} />}
+            <TrafficDetails />
 
             <ConnectButton
               state={connectButtonState}

@@ -1,0 +1,148 @@
+/* Traffic Details Card - Premium Stats Panel */
+
+.traffic-details-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: clamp(12px, 1.5vw, 16px);
+  margin-top: clamp(10px, 1.2vw, 12px);
+  margin-bottom: clamp(6px, 1vw, 8px);
+  color: var(--text);
+  min-width: 0;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease;
+  animation: trafficFadeIn 0.3s ease;
+}
+
+.traffic-details-card:hover {
+  border-color: var(--focus-accent-40);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Fallback: for security if info-card left, keep server-card style */
+.traffic-details-card.info-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+@keyframes trafficFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.traffic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.traffic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.traffic-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Colors inspired by rocket-vue styles */
+.icon-down {
+  background: rgba(93, 202, 165, 0.12);
+  color: #5dcaa5;
+}
+.icon-up {
+  background: rgba(109, 74, 255, 0.12);
+  color: var(--accent);
+}
+.icon-ping {
+  background: rgba(239, 159, 39, 0.12);
+  color: #ef9f27;
+}
+.icon-total {
+  background: rgba(155, 150, 184, 0.12);
+  color: var(--text-2);
+}
+
+.traffic-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.traffic-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.traffic-value {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-mono, 'SF Mono', 'Courier New', monospace);
+  color: var(--text);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.traffic-value[data-full]::after {
+  content: attr(data-full);
+  position: absolute;
+  z-index: 999;
+  visibility: hidden;
+  width: auto;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.txt-green {
+  color: #5dcaa5 !important;
+}
+.txt-accent {
+  color: var(--accent) !important;
+}
+.txt-amber {
+  color: #ef9f27 !important;
+}
+.txt-red {
+  color: #ff4a4a !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+  .traffic-grid {
+    gap: 12px;
+  }
+  .traffic-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .traffic-value {
+    font-size: 13px;
+  }
+}

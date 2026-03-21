@@ -52,7 +52,7 @@ export function ServersScreen() {
   const { t } = useTranslation();
   const { showToast } = useToastContext();
   // Reducir un poco el espacio superior en la pantalla de Servidores
-  const sectionStyle = useSectionStyle(8);
+  const sectionStyle = useSectionStyle(8, 95);
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Error Handling

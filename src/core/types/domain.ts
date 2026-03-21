@@ -65,6 +65,8 @@ export type VpnStatus =
 
 export type ScreenType = (typeof SCREENS)[number];
 
+export type ActiveSheet = 'promo' | 'logs' | 'account' | 'import' | 'extras' | null;
+
 export interface ServerRealtimeStat {
   serverId: number;
   serverName: string;

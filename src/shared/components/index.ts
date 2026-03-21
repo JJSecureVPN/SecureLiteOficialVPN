@@ -5,7 +5,7 @@ export { ErrorBoundary } from './ErrorBoundary';
 export { GlobalModal } from './GlobalModal';
 export { HeaderPromo } from './HeaderPromo';
 export { PremiumCard } from './PremiumCard';
-export { SessionDetails } from './SessionDetails';
+export { TrafficDetails } from './TrafficDetails';
 export { MiniHeader } from './MiniHeader/MiniHeader';
 export { StatCard } from './StatCard';
 export { KeyValueList } from './KeyValueList';

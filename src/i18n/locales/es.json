@@ -43,35 +43,9 @@
     "itemsCleanTitle": "Limpieza",
     "itemsCleanSubtitle": "Limpiar caché/ajustes",
     "cleanConfirmTitle": "¿Limpiar la aplicación?",
-    "cleanConfirmBody": "Se borrarán la caché, los ajustes almacenados y los datos temporales. Las credenciales y configuraciones de servidor no se verán afectadas.",
-    "itemsLogsTitle": "Registros VPN",
-    "itemsLogsSubtitle": "Ver y copiar logs de DTunnel",
-    "itemsAppLogsTitle": "Logs de App",
-    "itemsAppLogsSubtitle": "Ver logs de la aplicación",
-    "itemsImportTitle": "Importar configuración",
-    "itemsImportSubtitle": "Importar JSON de configuración (offline)"
-  },
-  "applogs": {
-    "title": "Logs de App",
-    "subtitle": "Performance, errores y eventos",
-    "copy": "Copiar",
-    "clear": "Limpiar",
-    "close": "Cerrar",
-    "servers": "Servidores",
-    "copiedToast": "Logs copiados",
-    "copyFailedToast": "No fue posible copiar los logs",
-    "clearedToast": "Logs limpiados",
-    "serversCopiedToast": "Lista de servidores copiada",
-    "serversCopyFailedToast": "No fue posible copiar la lista de servidores",
-    "empty": "No hay logs de la aplicación",
-    "emptyHint": "Los logs se registrarán automáticamente al detectar:",
-    "hints": {
-      "slowOps": "⏱️ Operaciones lentas (>1s)",
-      "slowRenders": "🐌 Renders lentos (>500ms)",
-      "uncaughtErrors": "❌ Errores no capturados",
-      "promiseRejected": "⚠️ Promises rechazadas",
-      "visibilityChanges": "👁️ Cambios de visibilidad"
-    }
+    "cleanConfirmBody": "Se borrarán la caché, los ajustes almacenados y los datos temporales.",
+    "itemsImportTitle": "Importar",
+    "itemsImportSubtitle": "Importar JSON de configuración"
   },
   "errorBoundary": {
     "title": "Algo salió mal",
@@ -243,9 +217,8 @@
     "portuguese": "Português"
   },
   "header": {
-    "coupons": "Cupones",
     "news": "Noticias",
-    "subscribe": "Suscribirse a un plan",
+    "subscribe": "Suscribirse",
     "unreadNews": "Tienes noticias sin leer"
   },
   "home": {

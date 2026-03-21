@@ -10,14 +10,7 @@ export function BackButton({ isSubScreen, isCategoryDetail, onClick }: Props) {
   const { t } = useTranslation();
 
   if (!isSubScreen) {
-    return (
-      <div className="dots hotzone" onClick={onClick} aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
-    );
+    return null;
   }
 
   const backText = isCategoryDetail ? t('servers.backToCategories') : t('buttons.back');

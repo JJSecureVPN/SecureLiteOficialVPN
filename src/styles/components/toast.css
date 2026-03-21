@@ -4,13 +4,13 @@
 
 .toast-wrap {
   position: fixed;
-  /* sit above navigation / safe area */
-  bottom: calc(16px + var(--nav-safe, 0px));
+  /* sit above BottomTabs / safe area with very generous margin */
+  bottom: calc(var(--tabs-space, 16px) + 50px);
   left: 50%;
   transform: translateX(-50%);
   max-width: clamp(520px, calc(54vw * var(--scale-factor)), 760px);
   width: min(92%, 760px);
-  z-index: 80;
+  z-index: 3000;
 }
 
 .toast {
