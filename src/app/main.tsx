@@ -39,7 +39,6 @@ import '../styles/base.css';
 import '../styles/layout.css';
 import '../styles/components/buttons.css';
 import '../styles/components/cards.css';
-import '../styles/components/session-card.css';
 import '../styles/components/forms.css';
 import '../styles/components/menu.css';
 import '../styles/components/chips.css';

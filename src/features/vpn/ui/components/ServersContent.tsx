@@ -3,6 +3,7 @@
  * Main content area: search toolbar, category grid, or server grid
  */
 
+import { memo } from 'react';
 import { useTranslation } from '@/i18n';
 import { Button } from '@/shared/ui';
 import { ServerCategory } from './ServerCategory';
@@ -28,7 +29,7 @@ interface ServersContentProps {
   onOpenConfigurator: () => void;
 }
 
-export function ServersContent({
+export const ServersContent = memo(function ServersContent({
   contentRef,
   selectedCategory,
   filteredCategories,
@@ -106,15 +107,7 @@ export function ServersContent({
                   {t('servers.noSearchResults')} {searchTerm}
                 </p>
                 <small className="muted">{t('servers.noSearchHint')}</small>
-                <div
-                  style={{
-                    marginTop: '16px',
-                    display: 'flex',
-                    gap: '8px',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                  }}
-                >
+                <div className="empty-result-actions">
                   <Button variant="soft" onClick={onClearSearch}>
                     <i className="fas fa-redo" aria-hidden="true" style={{ marginRight: '8px' }} />
                     {t('servers.clearSearch')}
@@ -178,4 +171,4 @@ export function ServersContent({
       )}
     </div>
   );
-}
+});

@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useTranslation } from '@/i18n';
 import { groqSend, GroqMessage } from '../../features/support/api/groq';
@@ -266,32 +266,40 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
   }, [t]);
 
   // Group messages by date for date labels
-  const groupedMessages = messages.reduce<{ dateLabel: string; msgs: Message[] }[]>((acc, msg) => {
-    const label = formatDateLabel(msg.ts);
-    const last = acc[acc.length - 1];
-    if (last && last.dateLabel === label) {
-      last.msgs.push(msg);
-    } else {
-      acc.push({ dateLabel: label, msgs: [msg] });
-    }
-    return acc;
-  }, []);
+  const groupedMessages = useMemo(() => {
+    return messages.reduce<{ dateLabel: string; msgs: Message[] }[]>((acc, msg) => {
+      const label = formatDateLabel(msg.ts);
+      const last = acc[acc.length - 1];
+      if (last && last.dateLabel === label) {
+        last.msgs.push(msg);
+      } else {
+        acc.push({ dateLabel: label, msgs: [msg] });
+      }
+      return acc;
+    }, []);
+  }, [messages]);
 
-  const headerIcon = (
-    <div className="support-header-avatar">
-      <BotIcon />
-      <span className="support-status-ring" />
-    </div>
+  const headerIcon = useMemo(
+    () => (
+      <div className="support-header-avatar">
+        <BotIcon />
+        <span className="support-status-ring" />
+      </div>
+    ),
+    [],
   );
 
-  const headerActions = (
-    <button
-      className="support-clear-btn"
-      onClick={handleClearHistory}
-      title={t('support.clearHistory')}
-    >
-      <TrashIcon />
-    </button>
+  const headerActions = useMemo(
+    () => (
+      <button
+        className="support-clear-btn"
+        onClick={handleClearHistory}
+        title={t('support.clearHistory')}
+      >
+        <TrashIcon />
+      </button>
+    ),
+    [handleClearHistory, t],
   );
 
   return (

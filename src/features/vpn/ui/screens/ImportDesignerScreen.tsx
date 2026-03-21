@@ -5,7 +5,7 @@
  * MOBILE-FIRST & FULLY RESPONSIVE
  */
 
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 import type { ServerConfig, Category } from '@/core/types';
 import { useTranslation } from '@/i18n';
 import { useToastContext } from '@/shared/context/ToastContext';
@@ -124,15 +124,22 @@ export const ImportDesignerScreen = memo(function ImportDesignerScreen({
     }
   }, [step, onCancel]);
 
-  const sectionStyle = {
-    ['--nav-safe' as any]: `${navigationBarHeight}px`,
-  } as const;
+  const sectionStyle = useMemo(
+    () =>
+      ({
+        '--nav-safe': `${navigationBarHeight}px`,
+      }) as React.CSSProperties,
+    [navigationBarHeight],
+  );
 
-  const stepLabels = [
-    t('import.category') || 'Categoría',
-    t('import.server') || 'Servidor',
-    t('import.credentials') || 'Credenciales',
-  ];
+  const stepLabels = useMemo(
+    () => [
+      t('import.category') || 'Categoría',
+      t('import.server') || 'Servidor',
+      t('import.credentials') || 'Credenciales',
+    ],
+    [t],
+  );
 
   return (
     <div className="designer-screen" style={sectionStyle}>

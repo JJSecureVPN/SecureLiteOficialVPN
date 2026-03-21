@@ -146,26 +146,9 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
         ) : (
           <>
             {/* Dots / Steps indicator can be simplified here or kept if space allowing */}
-            <div
-              className="import-steps-mini"
-              style={{
-                display: 'flex',
-                gap: '8px',
-                justifyContent: 'center',
-                marginBottom: '16px',
-                opacity: 0.8,
-              }}
-            >
+            <div className="import-steps-mini">
               {['input', 'select', 'confirm'].map((s) => (
-                <div
-                  key={s}
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: step === s ? 'var(--accent)' : 'var(--border)',
-                  }}
-                />
+                <div key={s} className={`import-dot-mini ${step === s ? 'active' : ''}`} />
               ))}
             </div>
 

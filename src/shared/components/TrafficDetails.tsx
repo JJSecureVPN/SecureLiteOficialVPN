@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useTrafficStats } from '@/features/vpn/domain/hooks/useTrafficStats';
 import { useTranslation } from '@/i18n';
@@ -20,12 +20,12 @@ export const TrafficDetails = memo(function TrafficDetails() {
   const pingDisplay = typeof pingMs === 'number' ? `${Math.round(pingMs)} ms` : '—';
 
   // Ping class logic (simplified variant for the traffic card)
-  const getPingClass = () => {
+  const pingClass = useMemo(() => {
     if (typeof pingMs !== 'number') return '';
     if (pingMs < 150) return 'txt-green';
     if (pingMs < 350) return 'txt-amber';
     return 'txt-red';
-  };
+  }, [pingMs]);
 
   return (
     <div className="traffic-details-card">
@@ -59,7 +59,7 @@ export const TrafficDetails = memo(function TrafficDetails() {
           </div>
           <div className="traffic-meta">
             <span className="traffic-label">{t('traffic.ping') || 'Ping'}</span>
-            <span className={`traffic-value ${getPingClass()}`}>{pingDisplay}</span>
+            <span className={`traffic-value ${pingClass}`}>{pingDisplay}</span>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { destroySdk, getSdk } from '@/features/vpn/api/dtunnelSdk';
 
 // VPN Feature Screens (features/vpn/ui/screens/ + api + context)
@@ -164,11 +164,15 @@ function AppContent() {
 
   const screenClass = screen === 'home' ? 'is-home' : `is-${screen}`;
 
-  const phoneStyle = {
-    ['--nav-safe' as any]: `${navigationBarHeight}px`,
-    ['--safe-area-bottom' as any]: `${navigationBarHeight}px`,
-    ['--safe-area-top' as any]: `${statusBarHeight}px`,
-  };
+  const phoneStyle = useMemo(
+    () =>
+      ({
+        '--nav-safe': `${navigationBarHeight}px`,
+        '--safe-area-bottom': `${navigationBarHeight}px`,
+        '--safe-area-top': `${statusBarHeight}px`,
+      }) as React.CSSProperties,
+    [navigationBarHeight, statusBarHeight],
+  );
 
   const { hasActiveCoupon } = useCoupons();
   const { isPromoActive } = usePromo();

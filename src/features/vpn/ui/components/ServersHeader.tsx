@@ -3,6 +3,7 @@
  * Header section with title, subtitle, and subcategory filters
  */
 
+import { memo } from 'react';
 import { useTranslation } from '@/i18n';
 import type { Category } from '@/core/types';
 
@@ -16,7 +17,7 @@ interface ServersHeaderProps {
 
 const ALL_SUBCATEGORIES = 'all';
 
-export function ServersHeader({
+export const ServersHeader = memo(function ServersHeader({
   selectedCategory,
   groupedServers,
   subcategoryFilter,
@@ -86,4 +87,4 @@ export function ServersHeader({
       <p className="section-subtitle">{t('servers.subtitle')}</p>
     </div>
   );
-}
+});

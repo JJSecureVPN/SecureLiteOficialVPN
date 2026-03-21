@@ -1,5 +1,25 @@
 /* Import Screen – Minimal mobile-first */
 
+.import-steps-mini {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.import-dot-mini {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s ease;
+}
+
+.import-dot-mini.active {
+  background: var(--accent);
+}
+
 /* ── Base ── */
 .screen.import-screen {
   position: absolute;

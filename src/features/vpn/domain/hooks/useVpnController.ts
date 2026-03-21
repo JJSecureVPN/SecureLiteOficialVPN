@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import type { Category } from '@/core/types';
 import type { VpnContextType } from '../types';
 import { useCredentialsState } from './useCredentialsState';
@@ -27,35 +27,65 @@ export function useVpnController(): VpnContextType {
     }
   }, [screen, selectedCategory]);
 
-  const setAutoMode = (on: boolean) => {
+  const setAutoMode = useCallback((on: boolean) => {
     setAutoModeState(on);
     saveAutoMode(on);
-  };
+  }, []);
 
-  return {
-    status: connection.status,
-    config: connection.config,
-    categorias: connection.categorias,
-    selectedCategory,
-    user: userState.user,
-    creds,
-    auto: connection.auto,
-    autoProgress: connection.autoProgress,
-    screen,
-    termsAccepted,
-    autoMode,
-    setScreen,
-    setConfig: connection.setConfig,
-    setCreds,
-    setSelectedCategory,
-    setAutoMode,
-    connect: connection.connect,
-    disconnect: connection.disconnect,
-    cancelConnecting: connection.cancelConnecting,
-    startAutoConnect: connection.startAutoConnect,
-    loadCategorias: connection.loadCategorias,
-    acceptTerms,
-    topInfo: userState.topInfo,
-    pingMs: userState.pingMs,
-  };
+  const value = useMemo(
+    () => ({
+      status: connection.status,
+      config: connection.config,
+      categorias: connection.categorias,
+      selectedCategory,
+      user: userState.user,
+      creds,
+      auto: connection.auto,
+      autoProgress: connection.autoProgress,
+      screen,
+      termsAccepted,
+      autoMode,
+      setScreen,
+      setConfig: connection.setConfig,
+      setCreds,
+      setSelectedCategory,
+      setAutoMode,
+      connect: connection.connect,
+      disconnect: connection.disconnect,
+      cancelConnecting: connection.cancelConnecting,
+      startAutoConnect: connection.startAutoConnect,
+      loadCategorias: connection.loadCategorias,
+      acceptTerms,
+      topInfo: userState.topInfo,
+      pingMs: userState.pingMs,
+    }),
+    [
+      connection.status,
+      connection.config,
+      connection.categorias,
+      selectedCategory,
+      userState.user,
+      creds,
+      connection.auto,
+      connection.autoProgress,
+      screen,
+      termsAccepted,
+      autoMode,
+      setScreen,
+      connection.setConfig,
+      setCreds,
+      setSelectedCategory,
+      setAutoMode,
+      connection.connect,
+      connection.disconnect,
+      connection.cancelConnecting,
+      connection.startAutoConnect,
+      connection.loadCategorias,
+      acceptTerms,
+      userState.topInfo,
+      userState.pingMs,
+    ],
+  );
+
+  return value;
 }

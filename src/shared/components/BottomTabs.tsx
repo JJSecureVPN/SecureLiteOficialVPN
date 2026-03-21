@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { memo } from 'react';
 import { useVpn } from '@/features/vpn';
 import '../../styles/components/bottom-tabs.css';
 
@@ -26,24 +26,8 @@ export const BottomTabs = memo(function BottomTabs({
   activeSheet,
 }: BottomTabsProps) {
   const { setScreen, screen } = useVpn();
-  const [activeTab, setActiveTab] = useState(screen);
-  const [internalHasCoupons, setInternalHasCoupons] = useState(false);
-
   // Determinar si hay cupones activos (desde props o interno)
-  const isDealActive = propHasActiveCoupons || promoActive || internalHasCoupons;
-
-  // Sincronizar tab activa con el estado global de la pantalla
-  useEffect(() => {
-    setActiveTab(screen);
-  }, [screen]);
-
-  // Simulación de detección de cupones
-  useEffect(() => {
-    const checkCoupons = () => {
-      setInternalHasCoupons(false);
-    };
-    checkCoupons();
-  }, []);
+  const isDealActive = propHasActiveCoupons || promoActive;
 
   const handleUpdate = () => {
     if (onUpdate) {
@@ -72,7 +56,7 @@ export const BottomTabs = memo(function BottomTabs({
       </button>
 
       <button
-        className={`tab-btn ${(activeTab as string) === 'update' ? 'active' : ''}`}
+        className={`tab-btn ${(screen as string) === 'update' ? 'active' : ''}`}
         type="button"
         onClick={handleUpdate}
         aria-label="Actualizar"
@@ -91,7 +75,7 @@ export const BottomTabs = memo(function BottomTabs({
       <div className="center-tab-wrapper">
         <button
           className={`tab-btn center-home ${
-            activeSheet === 'promo' || (!activeSheet && activeTab === 'home') ? 'active' : ''
+            activeSheet === 'promo' || (!activeSheet && screen === 'home') ? 'active' : ''
           } ${isDealActive && activeSheet !== 'account' ? 'deal-active' : ''}`}
           type="button"
           onClick={() => {
