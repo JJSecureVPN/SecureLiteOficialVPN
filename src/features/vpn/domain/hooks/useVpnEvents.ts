@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import type { ServerConfig, VpnStatus } from '@/core/types';
 import { useDTunnelSDK, useDTunnelEvent, useDTunnelError } from '@/lib/dtunnel-sdk-react';
 import { appLogger } from '@/features/logs';
@@ -46,6 +46,47 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
       setStatus(st);
     }, delayMs);
   };
+
+  // Sincronizar estado real al volver a primer plano o al montar
+  useEffect(() => {
+    if (!sdk) return;
+
+    const syncState = () => {
+      try {
+        const currentState = sdk.main.getVpnState() as VpnStatus | null;
+        if (currentState && currentState !== 'DISCONNECTED') {
+          appLogger.add('info', `Sync state on resume/mount: ${currentState}`);
+          if (pendingNonActiveRef.current !== null) {
+            clearTimeout(pendingNonActiveRef.current);
+            pendingNonActiveRef.current = null;
+          }
+          setStatus(currentState);
+        }
+      } catch (error) {
+        appLogger.add('warn', `syncState error: ${String(error)}`);
+      }
+    };
+
+    syncState();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncState();
+      }
+    };
+
+    const handleFocus = () => {
+      syncState();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [sdk, setStatus]);
 
   useDTunnelEvent('vpnState', (e) => {
     const st = (

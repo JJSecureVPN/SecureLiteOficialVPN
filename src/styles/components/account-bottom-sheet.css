@@ -9,7 +9,7 @@
 .account-sheet-content {
   display: flex;
   flex-direction: column;
-  padding: 8px 16px 24px;
+  padding: 8px 16px 16px;
   gap: 20px;
 }
 
@@ -216,23 +216,4 @@
   height: 6px;
   border-radius: 50%;
   background: currentColor;
-}
-
-/* Light Mode Overrides */
-html[data-theme='light'] .ac-details-card {
-  background: #f1f5f9;
-}
-
-html[data-theme='light'] .mt-card {
-  background: #fff;
-  border-color: rgba(0, 0, 0, 0.05);
-}
-
-html[data-theme='light'] .ac-value {
-  color: #1e293b;
-}
-
-html[data-theme='light'] .ac-chip {
-  background: rgba(0, 0, 0, 0.05);
-  color: #475569;
 }

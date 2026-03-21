@@ -1,4 +1,4 @@
-import { memo, useEffect, type ReactNode } from 'react';
+import { memo, useEffect, type ReactNode, useState, useCallback } from 'react';
 
 type GlobalModalProps = {
   onClose: () => void;
@@ -21,28 +21,47 @@ export const GlobalModal = memo(function GlobalModal({
   size = 'md',
   hideClose = false,
 }: GlobalModalProps) {
-  // Prevent body scroll while modal is open
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // Entrance and Exit animation lifecycle
   useEffect(() => {
-    const previous = document.body.style.overflow;
+    let rafId: number;
+    // Iniciamos la animación de entrada
+    rafId = requestAnimationFrame(() => {
+      rafId = requestAnimationFrame(() => {
+        setIsAnimating(true);
+      });
+    });
+
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+
     return () => {
-      document.body.style.overflow = previous;
+      document.body.style.overflow = previousOverflow;
+      cancelAnimationFrame(rafId);
     };
   }, []);
+
+  const handleClose = useCallback(() => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Sincronizado con el CSS de modal.css (slideUp duration)
+  }, [onClose]);
 
   // Close on Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') handleClose();
     };
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
+  }, [handleClose]);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={`modal-overlay ${isAnimating ? 'open' : ''}`} onClick={handleClose}>
       <div
-        className={`modal-content modal-content--${size} ${className}`}
+        className={`modal-content modal-content--${size} ${isAnimating ? 'open' : ''} ${className}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -62,7 +81,12 @@ export const GlobalModal = memo(function GlobalModal({
               </div>
             </div>
             {!hideClose && (
-              <button className="modal-close" onClick={onClose} aria-label="Cerrar" type="button">
+              <button
+                className="modal-close"
+                onClick={handleClose}
+                aria-label="Cerrar"
+                type="button"
+              >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
                     d="M15 5L5 15M5 5L15 15"
@@ -79,7 +103,7 @@ export const GlobalModal = memo(function GlobalModal({
         {!title && !subtitle && !icon && (
           <button
             className="modal-close modal-close--standalone"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Cerrar"
             type="button"
           >

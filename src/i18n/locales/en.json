@@ -11,7 +11,8 @@
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
-    "add": "Add"
+    "add": "Add",
+    "servers": "Servers"
   },
   "credentials": {
     "usernamePlaceholder": "Username",
@@ -216,11 +217,6 @@
     "english": "English",
     "portuguese": "Português"
   },
-  "header": {
-    "news": "News",
-    "subscribe": "Subscribe",
-    "unreadNews": "You have unread news"
-  },
   "home": {
     "title": "Home",
     "auto": "Auto",
@@ -260,19 +256,7 @@
     "title": "Limited time offer",
     "timerAria": "Remaining time",
     "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "GET",
-    "modal": {
-      "title": "Open in browser",
-      "subtitle": "Could not open automatically in your default browser",
-      "manualHint": "If you prefer, you can open the offer manually in your browser.",
-      "openButton": "Open in browser",
-      "copyButton": "Copy link"
-    },
-    "toast": {
-      "opening": "Opening in default browser...",
-      "tryOpen": "Trying to open...",
-      "copied": "Link copied to clipboard"
-    }
+    "cta": "GET"
   },
   "coupon": {
     "title": "Available coupons",
@@ -286,20 +270,6 @@
     "copied": "Copied",
     "copy": "Copy",
     "openPlans": "View plans"
-  },
-  "news": {
-    "title": "News",
-    "noNews": "No news available",
-    "loading": "Loading news...",
-    "errorTitle": "Failed to load news",
-    "retry": "Retry",
-    "emptyDescription": "Come back later to see the latest updates",
-    "errors": {
-      "generic": "Failed to load news",
-      "timeout": "The connection timed out",
-      "network": "Could not connect to the server",
-      "serverInvalid": "Server returned an invalid response"
-    }
   },
   "logs": {
     "title": "Logs",
@@ -358,31 +328,15 @@
     "protected": "Your connection is protected. Check your account information when needed.",
     "renewSoon": "Your plan expires in {days}. Renew now."
   },
+  "serverCard": {
+    "ariaChooseServer": "Choose server",
+    "altServer": "Server",
+    "pickServer": "Choose a server"
+  },
   "traffic": {
     "download": "Download",
     "upload": "Upload",
     "ping": "Ping",
     "total": "Total Usage"
-  },
-  "statusCard": {
-    "connectionDetails": "Connection Details",
-    "liveTraffic": "Live Traffic",
-    "server": "Server",
-    "tabRed": "Network",
-    "tabTraffic": "Traffic",
-    "tabStats": "Stats",
-    "localIp": "Local IP",
-    "network": "Network",
-    "config": "Configuration",
-    "app": "App",
-    "users": "Users",
-    "cpu": "CPU",
-    "ram": "RAM",
-    "servers": "Online"
-  },
-  "serverCard": {
-    "ariaChooseServer": "Choose server",
-    "altServer": "Server",
-    "pickServer": "Choose a server"
   }
 }

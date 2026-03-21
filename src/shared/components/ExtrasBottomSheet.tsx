@@ -27,12 +27,14 @@ interface ExtrasBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onShowImport?: () => void;
+  onShowSupport?: () => void;
 }
 
 export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
   isOpen,
   onClose,
   onShowImport,
+  onShowSupport,
 }: ExtrasBottomSheetProps) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
@@ -121,8 +123,7 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       subtitle: t('menu.itemsSupportSubtitle'),
       icon: 'fa-headset',
       action: () => {
-        setScreen('support');
-        onClose();
+        onShowSupport?.();
       },
     },
     {
@@ -149,7 +150,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       icon: 'fa-file-import',
       action: () => {
         onShowImport?.();
-        onClose();
       },
     },
   ];

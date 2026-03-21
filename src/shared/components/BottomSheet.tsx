@@ -1,6 +1,31 @@
 import { memo, useEffect, type ReactNode, useState, useCallback } from 'react';
 import '../../styles/components/bottom-sheet.css';
 
+// Hook corregido: solo expone la altura visible, NO mueve el overlay
+function useVisualViewportHeight(enabled: boolean) {
+  const [vvHeight, setVvHeight] = useState(
+    () => window.visualViewport?.height ?? window.innerHeight,
+  );
+
+  useEffect(() => {
+    if (!enabled) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const update = () => setVvHeight(vv.height);
+
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, [enabled]);
+
+  return vvHeight;
+}
+
 interface BottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -11,6 +36,7 @@ interface BottomSheetProps {
   height?: string;
   className?: string;
   headerActions?: ReactNode;
+  style?: React.CSSProperties;
 }
 
 export const BottomSheet = memo(function BottomSheet({
@@ -23,23 +49,39 @@ export const BottomSheet = memo(function BottomSheet({
   height = '75%',
   className = '',
   headerActions,
+  style,
 }: BottomSheetProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Solo activar el hook cuando el sheet está montado
+  const vvHeight = useVisualViewportHeight(shouldRender);
+
   useEffect(() => {
+    let rafId: number;
+    let timeoutId: number;
+
     if (isOpen) {
       setShouldRender(true);
-      // Pequeño delay para asegurar que el DOM esté listo antes de animar
-      const timer = setTimeout(() => setIsAnimating(true), 10);
+      // Doble raf garantiza que se procese el render antes de aplicar la clase de apertura
+      rafId = requestAnimationFrame(() => {
+        rafId = requestAnimationFrame(() => {
+          setIsAnimating(true);
+        });
+      });
       document.body.style.overflow = 'hidden';
-      return () => clearTimeout(timer);
     } else {
       setIsAnimating(false);
-      const timer = setTimeout(() => setShouldRender(false), 400); // Coincidir con la transición CSS
+      timeoutId = window.setTimeout(() => {
+        setShouldRender(false);
+      }, 400);
       document.body.style.overflow = '';
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timeoutId);
+    };
   }, [isOpen]);
 
   const handleOverlayClick = useCallback(() => {
@@ -47,6 +89,20 @@ export const BottomSheet = memo(function BottomSheet({
   }, [onClose]);
 
   if (!shouldRender) return null;
+
+  // Calcular altura del sheet en px desde el visualViewport real
+  let sheetHeight: string | number;
+  if (height === 'auto') {
+    sheetHeight = 'auto';
+  } else if (height.endsWith('%')) {
+    const pct = parseFloat(height) / 100;
+    sheetHeight = Math.floor(vvHeight * pct);
+  } else if (height.endsWith('vh')) {
+    const pct = parseFloat(height.replace('vh', '')) / 100;
+    sheetHeight = Math.floor(vvHeight * pct);
+  } else {
+    sheetHeight = height; // px u otro valor, respetar tal cual
+  }
 
   return (
     <div
@@ -56,8 +112,9 @@ export const BottomSheet = memo(function BottomSheet({
       <div
         className={`bottom-sheet-content ${isAnimating ? 'open' : ''} ${className}`}
         style={{
-          height: height === 'auto' ? 'auto' : height,
-          maxHeight: height === 'auto' ? '85vh' : undefined,
+          height: sheetHeight === 'auto' ? 'auto' : sheetHeight,
+          maxHeight: height === 'auto' ? vvHeight * 0.85 : undefined,
+          ...style,
         }}
         onClick={(e) => e.stopPropagation()}
       >

@@ -1,8 +1,9 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
-import { extractDomain, removeDomainFromDescription } from '@/core/utils';
+import { extractDomain, removeDomainFromDescription, formatProtocol } from '@/core/utils';
 import { Card, Badge } from '@/shared/ui';
+import '@/styles/components/server-item.css';
 
 interface ServerCardProps {
   config: ServerConfig | null;
@@ -11,8 +12,8 @@ interface ServerCardProps {
 }
 
 /**
- * Tarjeta que muestra el servidor seleccionado
- * Anteriormente llamado "LocationCard"
+ * Tarjeta que muestra el servidor seleccionado en el Home
+ * Ahora alineada visualmente con ServerListItem
  */
 export const ServerCard = memo(function ServerCard({ config, onClick, disabled }: ServerCardProps) {
   const icon = config?.icon?.trim();
@@ -27,67 +28,79 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       (u.startsWith('/') && (u.includes('.') || u.includes(':')))
     );
   }, [icon]);
+
   const [imgError, setImgError] = useState(false);
-
   const handleImgError = useCallback(() => setImgError(true), []);
-
-  // Reset error state when icon changes
   useEffect(() => {
     setImgError(false);
   }, [icon]);
 
-  const showFallback = useMemo(() => !isImg || !icon || imgError, [isImg, icon, imgError]);
-  const fallbackEmoji = useMemo(() => (icon && !isImg ? icon : '🌐'), [icon, isImg]);
+  const showFallback = !isImg || !icon || imgError;
+  const fallbackEmoji = icon && !isImg ? icon : '🌐';
   const { t } = useTranslation();
 
-  // Extract additional information from config
   const domain = useMemo(() => extractDomain(config?.description || ''), [config?.description]);
   const cleanDescription = useMemo(
     () => removeDomainFromDescription(config?.description || ''),
     [config?.description],
   );
+  const protocolLabel = useMemo(
+    () => formatProtocol(config?.mode || '') || config?.mode,
+    [config?.mode],
+  );
 
   return (
     <Card
-      className="location-card"
+      as="button"
+      type="button"
+      className="server-item location-card-home"
       onClick={disabled ? undefined : onClick}
       style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1 }}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
       data-nav
       aria-label={t('serverCard.ariaChooseServer')}
-      onKeyDown={useCallback(
-        (e: React.KeyboardEvent) => {
-          if (disabled) return;
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onClick();
-          }
-        },
-        [disabled, onClick],
-      )}
     >
-      <div className="loc-left">
-        {showFallback ? (
-          <span className="loc-icon-naked">{fallbackEmoji}</span>
-        ) : (
-          <img
-            className="loc-icon-naked"
-            src={icon}
-            alt={config?.name || t('serverCard.altServer')}
-            onError={handleImgError}
-          />
-        )}
-        <div className="loc-meta">
-          <div className="loc-name-row">
-            <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>
-            {domain && <Badge className="badge badge-domain">{domain}</Badge>}
+      {/* Header: Icono + Nombre + IP */}
+      <div className="server-item__header">
+        <div className="loc-left-compact">
+          {showFallback ? (
+            <span className="loc-icon-naked">{fallbackEmoji}</span>
+          ) : (
+            <img
+              className="loc-icon-naked"
+              src={icon}
+              alt={config?.name || t('serverCard.altServer')}
+              onError={handleImgError}
+            />
+          )}
+          <div className="server-item__main">
+            <h4 className="server-item__title">{config?.name || t('serverCard.pickServer')}</h4>
+            {config?.ip && <span className="server-item__ip">{config.ip}</span>}
           </div>
-          {config?.ip && <small className="loc-ip">{config.ip}</small>}
-          {cleanDescription && <div className="loc-description">{cleanDescription}</div>}
         </div>
+
+        <i className="fas fa-chevron-right server-item__arrow" aria-hidden="true" />
       </div>
-      <i className="fa fa-chevron-right" aria-hidden="true" />
+
+      {/* Descripción (si existe) */}
+      {cleanDescription && <p className="server-item__description">{cleanDescription}</p>}
+
+      {/* Footer: Protocolo y Dominio */}
+      {(protocolLabel || domain) && (
+        <div className="server-item__footer">
+          <div className="server-item__badges">
+            {protocolLabel && (
+              <Badge variant="protocol" iconClass="fas fa-shield-alt">
+                {protocolLabel}
+              </Badge>
+            )}
+            {domain && (
+              <Badge variant="domain" iconClass="fas fa-globe">
+                {domain}
+              </Badge>
+            )}
+          </div>
+        </div>
+      )}
     </Card>
   );
 });

@@ -37,28 +37,14 @@
 
 /* Warning — amarillo ámbar */
 .toast--warning.show {
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
   border-color: var(--status-warn-35);
-  color: #92400e;
-}
-
-@media (prefers-color-scheme: dark) {
-  .toast--warning.show {
-    color: #fcd34d;
-    background: linear-gradient(180deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
-  }
+  color: #fcd34d;
 }
 
 /* Error — rojo */
 .toast--error.show {
-  background: linear-gradient(180deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.22), rgba(239, 68, 68, 0.1));
   border-color: var(--status-bad-35);
-  color: #991b1b;
-}
-
-@media (prefers-color-scheme: dark) {
-  .toast--error.show {
-    color: #fca5a5;
-    background: linear-gradient(180deg, rgba(239, 68, 68, 0.22), rgba(239, 68, 68, 0.1));
-  }
+  color: #fca5a5;
 }

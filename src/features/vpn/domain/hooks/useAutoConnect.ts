@@ -1,7 +1,8 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { AutoState, Category, ScreenType, ServerConfig, VpnStatus } from '@/core/types';
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/core/constants';
 import { getSdk } from '../../api/dtunnelSdk';
+import { appLogger } from '@/features/logs';
 
 interface UseAutoConnectArgs {
   status: VpnStatus;
@@ -26,6 +27,11 @@ export function useAutoConnect({
   pushCreds,
 }: UseAutoConnectArgs) {
   const autoRef = useRef<AutoState>({ on: false, tmo: null, ver: null, list: [], i: 0 });
+  const [progress, setProgress] = useState({
+    i: 0,
+    total: 0,
+    current: null as ServerConfig | null,
+  });
 
   const clearAutoTimers = useCallback(() => {
     if (autoRef.current.tmo) clearTimeout(autoRef.current.tmo);
@@ -39,14 +45,25 @@ export function useAutoConnect({
     if (!auto.on) return;
 
     if (auto.i >= auto.list.length) {
+      appLogger.add('info', 'Auto-conexión: Se han probado todos los servidores sin éxito.');
       auto.on = false;
       setStatus('DISCONNECTED');
+      setProgress({ i: 0, total: 0, current: null });
       return;
     }
 
     const srv = auto.list[auto.i++];
+    const currentIndex = auto.i;
+    const totalCount = auto.list.length;
+
+    appLogger.add(
+      'info',
+      `Auto-conexión: Probando servidor ${currentIndex}/${totalCount}: ${srv.name}`,
+    );
+
     getSdk()?.config.setConfig(Number(srv.id));
     setConfigState(srv);
+    setProgress({ i: currentIndex, total: totalCount, current: srv });
 
     setTimeout(() => {
       pushCreds();
@@ -57,6 +74,10 @@ export function useAutoConnect({
 
     // Timeout para probar siguiente servidor
     auto.tmo = setTimeout(() => {
+      appLogger.add(
+        'warn',
+        `Auto-conexión: Tiempo de espera agotado para ${srv.name}. Probando siguiente...`,
+      );
       getSdk()?.main.stopVpn();
       setTimeout(nextAuto, 350);
     }, AUTO_CONNECT_TIMEOUT_MS);
@@ -69,10 +90,16 @@ export function useAutoConnect({
         return;
       }
       if (st === 'CONNECTED') {
+        appLogger.add('info', `Auto-conexión: ¡Conexión exitosa a ${srv.name}!`);
         clearAutoTimers();
         setStatus('CONNECTED');
         auto.on = false;
+        // Mantenemos el progreso actual para que el UI pueda mostrar el éxito antes de desaparecer (si se desea)
       } else if (['AUTH_FAILED', 'NO_NETWORK', 'STOPPING'].includes(st)) {
+        appLogger.add(
+          'warn',
+          `Auto-conexión: Fallo en ${srv.name} (Estado: ${st}). Reintentando con otro...`,
+        );
         clearAutoTimers();
         getSdk()?.main.stopVpn();
         setTimeout(nextAuto, 350);
@@ -95,11 +122,17 @@ export function useAutoConnect({
         categorias.forEach((c) => c.items && list.push(...c.items));
       }
 
-      if (!list.length) return;
+      if (!list.length) {
+        appLogger.add('error', 'Auto-conexión: No hay servidores disponibles para auto-conectar.');
+        return;
+      }
+
+      appLogger.add('info', `Auto-conexión iniciada. Total servidores: ${list.length}`);
 
       autoRef.current.on = true;
       autoRef.current.list = list;
       autoRef.current.i = 0;
+
       setStatus('CONNECTING');
       setScreen('home');
       nextAuto();
@@ -108,12 +141,17 @@ export function useAutoConnect({
   );
 
   const cancelAuto = useCallback(() => {
+    if (autoRef.current.on) {
+      appLogger.add('info', 'Auto-conexión cancelada por el usuario.');
+    }
     autoRef.current.on = false;
     clearAutoTimers();
+    setProgress({ i: 0, total: 0, current: null });
   }, [clearAutoTimers]);
 
   return {
     auto: autoRef.current,
+    autoProgress: progress,
     startAutoConnect,
     cancelAuto,
     clearAutoTimers,

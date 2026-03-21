@@ -34,7 +34,7 @@ export function ConnectButton({ state, onClick, autoMode, onAutoModeChange }: Co
     disconnected: t('buttons.connect'),
   }[state];
 
-  const isDanger = state === 'connected';
+  const isDanger = state === 'connected' || state === 'error';
 
   return (
     <div className="connect-button">

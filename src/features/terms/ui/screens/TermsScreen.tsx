@@ -61,18 +61,28 @@ export const TermsScreen = memo(function TermsScreen() {
     () => ({
       ...baseSectionStyle,
       inset: 0,
+      padding: 0,
     }),
     [baseSectionStyle],
   );
 
   return (
     <section className="screen" style={sectionStyle}>
+      <style>{`
+        .terms-scroll::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+      `}</style>
       <div className="pad" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div className="panel-title center" style={{ marginBottom: 'var(--space-xl)' }}>
+        <div
+          className="panel-title center"
+          style={{ marginBottom: 'var(--space-xl)', paddingTop: 'var(--safe-area-top)' }}
+        >
           {t('terms.title')}
         </div>
 
-        <div className="terms-scroll" style={{ flex: 1, overflowY: 'auto', paddingRight: 2 }}>
+        <div
+          className="terms-scroll"
+          style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {TERM_CARDS.map((card, i) => (
             <Card key={i} className="info-card term-card">
               <div className="row" style={{ marginBottom: 'var(--space-sm)' }}>
@@ -91,7 +101,10 @@ export const TermsScreen = memo(function TermsScreen() {
 
         <div
           style={{
-            padding: 'var(--space-xl) 0',
+            paddingTop: 'var(--space-xl)',
+            paddingBottom: 'calc(var(--space-xl) + var(--safe-area-bottom))',
+            paddingLeft: 0,
+            paddingRight: 0,
             borderTop: '1px solid rgba(255,255,255,.05)',
             display: 'flex',
             flexDirection: 'column',

@@ -58,18 +58,18 @@
 }
 
 .language-btn[aria-expanded='true'] {
-  background-color: var(--color-surface-active, rgba(0, 0, 0, 0.08));
-  border-color: var(--color-border-light, rgba(0, 0, 0, 0.15));
+  background-color: var(--color-surface-active, rgba(255, 255, 255, 0.12));
+  border-color: var(--color-border-light, rgba(255, 255, 255, 0.2));
 }
 
 .language-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background-color: var(--color-background, #fff);
-  border: 1px solid var(--color-border, #e0e0e0);
+  background-color: var(--color-background, #1a1a1a);
+  border: 1px solid var(--color-border, #333);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   min-width: 160px;
   overflow: hidden;
   z-index: 100;
@@ -104,7 +104,7 @@
   padding: 0.6rem 1rem;
   border: none;
   background-color: transparent;
-  color: var(--color-text, #1a1a1a);
+  color: var(--color-text, #f0f0f0);
   text-align: left;
   cursor: pointer;
   font-size: 0.9rem;
@@ -113,32 +113,11 @@
 }
 
 .language-option.active {
-  background-color: var(--color-surface-active, rgba(0, 0, 0, 0.1));
-  color: var(--color-primary, #007bff);
+  background-color: var(--color-surface-active, rgba(255, 255, 255, 0.15));
+  color: var(--color-primary, #4dabf7);
   font-weight: 600;
 }
 
 .language-option + .language-option {
-  border-top: 1px solid var(--color-border-light, rgba(0, 0, 0, 0.05));
-}
-
-/* Dark mode support */
-[data-theme='dark'] .language-btn[aria-expanded='true'] {
-  background-color: var(--color-surface-active, rgba(255, 255, 255, 0.12));
-  border-color: var(--color-border-light, rgba(255, 255, 255, 0.2));
-}
-
-[data-theme='dark'] .language-dropdown {
-  background-color: var(--color-background, #1a1a1a);
-  border-color: var(--color-border, #333);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-[data-theme='dark'] .language-option {
-  color: var(--color-text, #f0f0f0);
-}
-
-[data-theme='dark'] .language-option.active {
-  background-color: var(--color-surface-active, rgba(255, 255, 255, 0.15));
-  color: var(--color-primary, #4dabf7);
+  border-top: 1px solid var(--color-border-light, rgba(255, 255, 255, 0.1));
 }

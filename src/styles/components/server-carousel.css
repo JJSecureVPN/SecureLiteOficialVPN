@@ -1,0 +1,167 @@
+:root {
+  --carousel-card-w: 280px;
+  --carousel-gap: var(--space-md);
+  --carousel-padding: 24px;
+}
+
+.home-carousel-container {
+  display: none;
+  width: 100%;
+}
+
+.server-carousel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: var(--space-md) 0;
+}
+
+@media (orientation: landscape) and (min-width: 900px) {
+  :root {
+    --carousel-card-w: 320px;
+  }
+  .home-carousel-container {
+    display: block;
+  }
+}
+
+/* 1080p+ / Grandes monitores */
+@media (min-width: 1600px) {
+  :root {
+    --carousel-card-w: 380px;
+    --carousel-gap: var(--space-lg);
+  }
+  .server-carousel {
+    gap: var(--space-2xl);
+  }
+}
+
+/* 4K / UHD */
+@media (min-width: 2500px) {
+  :root {
+    --carousel-card-w: 520px;
+    --carousel-gap: var(--space-xl);
+  }
+}
+
+.carousel-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0 var(--carousel-padding);
+}
+
+.carousel-title {
+  font-family: var(--font-display);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrado */
+  gap: 16px;
+  width: 100%;
+}
+
+.carousel-title::before,
+.carousel-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+.carousel-title::before {
+  background: linear-gradient(90deg, transparent, var(--border));
+}
+
+.carousel-title::after {
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* Contenedor del scroll horizontal */
+.carousel-track-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible; /* Permitir que el escalado y sombras respiren */
+  padding: 24px 0 32px; /* Aumento agresivo del padding vertical */
+  margin-top: -24px; /* Compensar el padding para no desplazar el título */
+  margin-bottom: -16px;
+  /* Ocultar barra de scroll pero permitir scroll */
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
+  -webkit-overflow-scrolling: touch;
+
+  /* Gradiente de difuminado a los costados */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 60px,
+    black calc(100% - 60px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 60px,
+    black calc(100% - 60px),
+    transparent 100%
+  );
+}
+
+.carousel-track-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.carousel-track {
+  display: flex;
+  gap: var(--carousel-gap);
+  padding: 0 40px;
+  width: max-content;
+  min-width: 100%;
+  justify-content: center; /* Centrar items */
+}
+
+/* Ajustes para los items dentro del carrusel */
+.carousel-item-wrapper {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.carousel-track .server-item {
+  width: var(--carousel-card-w);
+  flex-shrink: 0;
+  margin: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto hover/focus premium */
+.carousel-track .server-item:hover,
+.carousel-track .server-item:focus-within {
+  transform: translateY(-8px) scale(1.05); /* Escalado más pronunciado en TV */
+  border-color: var(--accent-40);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px var(--accent-20);
+  z-index: 10;
+}
+
+/* Animación de entrada por fila */
+@keyframes carouselSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.carousel-section {
+  animation: carouselSlideIn 0.5s ease-out var(--delay, 0s) both;
+}

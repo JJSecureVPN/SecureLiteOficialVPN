@@ -21,5 +21,12 @@
 }
 
 .connect-button .auto-switch-label {
-  display: none;
+  display: inline-block;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-right: calc(4px * var(--scale-factor));
+  align-self: center;
 }

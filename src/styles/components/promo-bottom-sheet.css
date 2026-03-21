@@ -51,7 +51,7 @@
 
 /* Body */
 .promo-body {
-  padding: 12px 20px 20px;
+  padding: 12px 20px 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -111,9 +111,9 @@
 }
 
 .promo-timer-box {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4); /* Fondo más opaco */
+  /* backdrop-filter: blur(4px); */
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 8px 12px;
   display: flex;
@@ -315,29 +315,4 @@
   font-size: 11px;
   color: #5e5a73;
   text-align: center;
-}
-
-/* Light Theme Overrides */
-html[data-theme='light'] .promo-tab-btn {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.05);
-  color: #64748b;
-}
-
-html[data-theme='light'] .promo-tab-btn.active {
-  background: rgba(127, 119, 221, 0.1);
-  color: #7f77dd;
-}
-
-html[data-theme='light'] .coupon-item-card {
-  background: #f8f9ff;
-  border-color: rgba(0, 0, 0, 0.03);
-}
-
-html[data-theme='light'] .coupon-item-code {
-  color: #1e293b;
-}
-
-html[data-theme='light'] .meta-value {
-  color: #475569;
 }

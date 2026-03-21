@@ -20,12 +20,31 @@ export const LogsBottomSheet = memo(function LogsBottomSheet({
   const { logs, refresh } = useLogs();
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll logic
-  useEffect(() => {
-    if (isOpen && listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'auto') => {
+    if (listRef.current) {
+      listRef.current.scrollTo({
+        top: listRef.current.scrollHeight,
+        behavior,
+      });
     }
-  }, [logs, isOpen]);
+  }, []);
+
+  // Auto-scroll logic when logs change
+  useEffect(() => {
+    if (isOpen && logs) {
+      scrollToBottom();
+    }
+  }, [logs, isOpen, scrollToBottom]);
+
+  // Initial scroll when opening
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        scrollToBottom('auto');
+      }, 150); // Delay to ensure DOM is ready and animated
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, scrollToBottom]);
 
   // Refresh logs when opening
   useEffect(() => {

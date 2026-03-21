@@ -1,21 +1,19 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useTheme } from '../hooks/useTheme';
 import { SupportButton } from './AppHeader/SupportButton';
 import { SubscribeButton } from './AppHeader/SubscribeButton';
-import { ThemeButton } from './AppHeader/ThemeButton';
 import { LanguageButton } from './AppHeader/LanguageButton';
 import { BackButton } from './AppHeader/BackButton';
 
 interface AppHeaderProps {
   onMenuClick: () => void;
+  onShowSupport?: () => void;
 }
 
 /** Barra superior de navegación de la app */
-export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps) {
+export const AppHeader = memo(function AppHeader({ onMenuClick, onShowSupport }: AppHeaderProps) {
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
-  const { theme, toggleTheme } = useTheme();
 
   const isSubScreen = screen !== 'home';
   const isCategoryDetail = screen === 'servers' && Boolean(selectedCategory);
@@ -51,11 +49,9 @@ export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps
           onClick={handleClick}
         />
 
-        <SupportButton onClick={() => setScreen('support')} />
+        <SupportButton onClick={onShowSupport || (() => {})} />
 
         <SubscribeButton onClick={handleSubscribe} />
-
-        <ThemeButton theme={theme} onToggle={toggleTheme} />
 
         <LanguageButton />
       </div>

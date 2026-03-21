@@ -25,6 +25,7 @@ interface UseVpnConnectionState {
   config: ServerConfig | null;
   categorias: Category[];
   auto: AutoState;
+  autoProgress: { i: number; total: number; current: ServerConfig | null };
   setConfig: (config: ServerConfig) => void;
   connect: () => void;
   disconnect: () => void;
@@ -54,7 +55,7 @@ export function useVpnConnectionState({
   }, [creds.pass, creds.user, creds.uuid]);
 
   // Hook para auto-conexión
-  const { auto, startAutoConnect, cancelAuto } = useAutoConnect({
+  const { auto, autoProgress, startAutoConnect, cancelAuto } = useAutoConnect({
     status,
     categorias,
     setStatus,
@@ -122,6 +123,7 @@ export function useVpnConnectionState({
     config,
     categorias,
     auto,
+    autoProgress,
     setConfig,
     connect,
     disconnect,

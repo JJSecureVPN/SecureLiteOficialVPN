@@ -10,9 +10,6 @@ import {
   useConnectionStatus, // VPN Feature: Hook de estado
 } from '../features/vpn';
 
-// News Feature Screens (features/news/ui/screens/ + hooks)
-import { NewsScreen } from '../features/news';
-
 // Logs Feature Screens (features/logs/ui/screens/)
 // Logs migrado a LogsBottomSheet
 
@@ -25,8 +22,8 @@ import { TermsScreen } from '../features/terms';
 // Menu Feature Screens (features/menu/ui/screens/)
 import { MenuScreen } from '../features/menu';
 
-// Support Feature Screens (features/support/ui/screens/)
-import { SupportScreen } from '../features/support';
+// Support Feature - Migrated to BottomSheet
+// import { SupportScreen } from '../features/support';
 
 // Shared Transversal Code (imports directos)
 import { ToastProvider, useToastContext } from '../shared/context/ToastContext';
@@ -39,6 +36,7 @@ import {
   LogsBottomSheet,
   AccountBottomSheet,
   ImportBottomSheet,
+  SupportBottomSheet,
 } from '../shared/components';
 import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
@@ -69,27 +67,22 @@ import type { ScreenType, ActiveSheet } from '../core/types';
  * ✅ Scalability: Adding new features doesn't require changes here
  * ✅ Maintainability: All VPN-related code is in features/vpn/
  */
-const SCREEN_COMPONENTS: Record<ScreenType, React.ComponentType<{ onShowAccount?: () => void }>> = {
+const SCREEN_COMPONENTS: Record<
+  ScreenType,
+  React.ComponentType<{ onShowAccount?: () => void; onShowSupport?: () => void }>
+> = {
   // VPN Feature (features/vpn/ui/screens/)
-  home: HomeScreen, // VPN home screen with connection status
+  home: HomeScreen, // VPN home screen
   servers: ServersScreen, // VPN server selection screen
-  // VPN Feature (features/vpn/ui/screens/) - Migrated to BottomSheet
-
-  // News Feature (features/news/ui/screens/)
-  news: NewsScreen, // News list and reader screen
 
   // Terms Feature (features/terms/ui/screens/)
-  terms: TermsScreen, // Terms and conditions screen
-
+  terms: TermsScreen,
   // Menu Feature (features/menu/ui/screens/)
-  menu: MenuScreen, // Main menu screen
-
-  // Support Feature (features/support/ui/screens/)
-  support: SupportScreen, // AI support chat screen
+  menu: MenuScreen,
 };
 
 function AppContent() {
-  const { screen, setScreen } = useVpn();
+  const { screen } = useVpn();
   const { navigationBarHeight, statusBarHeight } = useSafeArea();
   const { t } = useTranslation();
   const { toast, showToast } = useToastContext();
@@ -140,6 +133,23 @@ function AppContent() {
     }
   }, [showToast, t]);
 
+  const toggleSheet = useCallback((sheet: ActiveSheet) => {
+    setActiveSheet((prev) => (prev === sheet ? null : sheet));
+  }, []);
+
+  // Keyboard detection to hide BottomTabs and adjust layout
+  useEffect(() => {
+    if (!window.visualViewport) return;
+    const handleResize = () => {
+      const vv = window.visualViewport!;
+      // Si la altura del viewport cae por debajo del 85%, el teclado está probablemente abierto
+      const isKeyboardOpen = vv.height < window.innerHeight * 0.85;
+      document.body.classList.toggle('keyboard-open', isKeyboardOpen);
+    };
+    window.visualViewport.addEventListener('resize', handleResize);
+    return () => window.visualViewport?.removeEventListener('resize', handleResize);
+  }, []);
+
   // Determinar clase de estado (isConnecting incluye auto.on para evitar flash rojo)
   const stateClass = isConnected
     ? 'state-connected'
@@ -160,26 +170,42 @@ function AppContent() {
     ['--safe-area-top' as any]: `${statusBarHeight}px`,
   };
 
-  const { coupons } = useCoupons();
+  const { hasActiveCoupon } = useCoupons();
   const { isPromoActive } = usePromo();
-  const dealsActive = coupons.length > 0 || isPromoActive;
 
   return (
-    <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
+    <div
+      className={`phone ${stateClass} ${screenClass} ${activeSheet === 'support' ? 'hide-bg-for-support' : ''}`}
+      id="app"
+      style={phoneStyle}
+    >
       <div className="top-strip" />
 
-      <AppHeader onMenuClick={() => setActiveSheet('extras')} />
+      {screen !== 'terms' && (
+        <AppHeader
+          onMenuClick={() => toggleSheet('extras')}
+          onShowSupport={() => toggleSheet('support')}
+        />
+      )}
 
-      <ScreenComponent onShowAccount={() => setActiveSheet('account')} />
-
-      <BottomTabs
-        onShowLogs={() => setActiveSheet('logs')}
-        onShowPromo={() => setActiveSheet('promo')}
-        onShowSupport={() => setScreen('support')}
-        onShowExtras={() => setActiveSheet('extras')}
-        onUpdate={handleUpdate}
-        hasActiveCoupons={dealsActive}
+      <ScreenComponent
+        onShowAccount={() => toggleSheet('account')}
+        onShowSupport={() => toggleSheet('support')}
       />
+
+      {screen !== 'terms' && (
+        <BottomTabs
+          onShowLogs={() => toggleSheet('logs')}
+          onShowPromo={() => toggleSheet('promo')}
+          onShowSupport={() => toggleSheet('support')}
+          onShowExtras={() => toggleSheet('extras')}
+          onShowAccount={() => toggleSheet('account')}
+          onUpdate={handleUpdate}
+          hasActiveCoupons={hasActiveCoupon}
+          promoActive={isPromoActive}
+          activeSheet={activeSheet}
+        />
+      )}
 
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} />
 
@@ -195,7 +221,9 @@ function AppContent() {
         isOpen={activeSheet === 'extras'}
         onClose={() => setActiveSheet(null)}
         onShowImport={() => setActiveSheet('import')}
+        onShowSupport={() => setActiveSheet('support')}
       />
+      <SupportBottomSheet isOpen={activeSheet === 'support'} onClose={() => setActiveSheet(null)} />
     </div>
   );
 }

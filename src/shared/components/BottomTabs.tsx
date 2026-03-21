@@ -7,9 +7,11 @@ interface BottomTabsProps {
   onShowExtras?: () => void;
   onShowPromo?: () => void;
   onShowSupport?: () => void;
+  onShowAccount?: () => void;
   onUpdate?: () => void;
   hasActiveCoupons?: boolean;
   promoActive?: boolean;
+  activeSheet?: string | null;
 }
 
 export const BottomTabs = memo(function BottomTabs({
@@ -17,9 +19,11 @@ export const BottomTabs = memo(function BottomTabs({
   onShowPromo,
   onShowSupport,
   onShowExtras,
+  onShowAccount,
   onUpdate,
   hasActiveCoupons: propHasActiveCoupons,
   promoActive,
+  activeSheet,
 }: BottomTabsProps) {
   const { setScreen, screen } = useVpn();
   const [activeTab, setActiveTab] = useState(screen);
@@ -51,66 +55,76 @@ export const BottomTabs = memo(function BottomTabs({
   return (
     <nav className="bottom-tabs">
       <button
-        className={`tab-btn ${(activeTab as string) === 'logs' ? 'active' : ''}`}
+        className={`tab-btn ${activeSheet === 'logs' ? 'active' : ''}`}
         type="button"
         onClick={() => onShowLogs?.()}
+        aria-label="Logs"
       >
         <svg
           className="icon-svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
         >
           <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" />
         </svg>
-        Logs
       </button>
 
       <button
         className={`tab-btn ${(activeTab as string) === 'update' ? 'active' : ''}`}
         type="button"
         onClick={handleUpdate}
+        aria-label="Actualizar"
       >
         <svg
           className="icon-svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
         >
           <path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" />
         </svg>
-        Actualizar
       </button>
 
       <div className="center-tab-wrapper">
         <button
-          className={`tab-btn center-home ${activeTab === 'home' ? 'active' : ''} ${
-            isDealActive ? 'deal-active' : ''
-          }`}
+          className={`tab-btn center-home ${
+            activeSheet === 'promo' || (!activeSheet && activeTab === 'home') ? 'active' : ''
+          } ${isDealActive && activeSheet !== 'account' ? 'deal-active' : ''}`}
           type="button"
           onClick={() => {
-            if (isDealActive) {
+            if (activeSheet === 'account') {
+              onShowAccount?.();
+            } else if (isDealActive) {
               onShowPromo?.();
             } else {
               setScreen('home');
             }
           }}
+          aria-label={activeSheet === 'account' ? 'Cerrar' : 'Home'}
         >
-          {!isDealActive ? (
-            <>
-              <svg
-                className="icon-svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <span className="center-label">HOME</span>
-            </>
+          {activeSheet === 'account' ? (
+            <svg
+              className="icon-svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : !isDealActive ? (
+            <svg
+              className="icon-svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
           ) : (
             <span className="notif-bell" aria-label="Descuento activo">
               <svg viewBox="0 0 24 24" fill="currentColor">
@@ -122,40 +136,36 @@ export const BottomTabs = memo(function BottomTabs({
       </div>
 
       <button
-        className={`tab-btn ${(activeTab as string) === 'support' ? 'active' : ''}`}
+        className={`tab-btn ${activeSheet === 'support' ? 'active' : ''}`}
         type="button"
         onClick={onShowSupport}
+        aria-label="Soporte"
       >
-        <svg
-          className="icon-svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M18 8a6 6 0 00-12 0v3a6 6 0 0012 0V8z" />
-          <path d="M6 14h12" />
-          <path d="M9 14v4" />
-          <path d="M15 14v4" />
+        <svg className="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12,2a8,8,0,0,0-8,8v1.9A2.92,2.92,0,0,0,3,14a2.88,2.88,0,0,0,1.94,2.61C6.24,19.72,8.85,22,12,22h3V20H12c-2.26,0-4.31-1.7-5.34-4.39l-.21-.55L5.86,15A1,1,0,0,1,5,14a1,1,0,0,1,.5-.86l.5-.29V11a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1v5H13.91a1.5,1.5,0,1,0-1.52,2H20a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2V10A8,8,0,0,0,12,2Z" />
         </svg>
-        Soporte
       </button>
 
       <button
-        className={`tab-btn ${(activeTab as string) === 'extras' ? 'active' : ''}`}
+        className={`tab-btn ${activeSheet === 'extras' ? 'active' : ''}`}
         type="button"
         onClick={onShowExtras}
+        aria-label="Extras"
       >
         <svg
           className="icon-svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
         </svg>
-        Extras
       </button>
     </nav>
   );

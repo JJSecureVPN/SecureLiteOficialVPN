@@ -11,7 +11,8 @@
     "save": "Guardar",
     "delete": "Eliminar",
     "edit": "Editar",
-    "add": "Agregar"
+    "add": "Agregar",
+    "servers": "Servidores"
   },
   "credentials": {
     "usernamePlaceholder": "Usuario",
@@ -216,11 +217,6 @@
     "english": "English",
     "portuguese": "Português"
   },
-  "header": {
-    "news": "Noticias",
-    "subscribe": "Suscribirse",
-    "unreadNews": "Tienes noticias sin leer"
-  },
   "home": {
     "title": "Inicio",
     "auto": "Auto",
@@ -305,20 +301,6 @@
     "discount": "Descuento",
     "remaining": "Usos restantes"
   },
-  "news": {
-    "title": "Noticias",
-    "noNews": "No hay noticias disponibles",
-    "loading": "Cargando noticias...",
-    "errorTitle": "Error al cargar noticias",
-    "retry": "Reintentar",
-    "emptyDescription": "Vuelve más tarde para ver las últimas actualizaciones",
-    "errors": {
-      "generic": "Error al cargar noticias",
-      "timeout": "La conexión tardó demasiado tiempo",
-      "network": "No se pudo conectar con el servidor",
-      "serverInvalid": "El servidor retornó una respuesta inválida"
-    }
-  },
   "logs": {
     "title": "Registros",
     "subtitle": "Ver y copiar los registros de DTunnel",
@@ -376,31 +358,15 @@
     "protected": "Tu conexión está protegida. Consulta los datos de tu cuenta cuando lo necesites.",
     "renewSoon": "Tu plan vence en {days}. Renueva ahora."
   },
-  "traffic": {
-    "download": "Descarga",
-    "upload": "Subida",
-    "ping": "Ping",
-    "total": "Uso total"
-  },
-  "statusCard": {
-    "connectionDetails": "Detalles de conexión",
-    "liveTraffic": "Tráfico en vivo",
-    "server": "Servidor",
-    "tabRed": "Red",
-    "tabTraffic": "Tráfico",
-    "tabStats": "Stats",
-    "localIp": "IP local",
-    "network": "Red",
-    "config": "Configuración",
-    "app": "App",
-    "users": "Usuarios",
-    "cpu": "CPU",
-    "ram": "RAM",
-    "servers": "Online"
-  },
   "serverCard": {
     "ariaChooseServer": "Elegir servidor",
     "altServer": "Servidor",
     "pickServer": "Elige un servidor"
+  },
+  "traffic": {
+    "download": "Descarga",
+    "upload": "Subida",
+    "ping": "Ping",
+    "total": "Uso Total"
   }
 }

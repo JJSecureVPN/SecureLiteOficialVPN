@@ -40,6 +40,7 @@ export function useVpnController(): VpnContextType {
     user: userState.user,
     creds,
     auto: connection.auto,
+    autoProgress: connection.autoProgress,
     screen,
     termsAccepted,
     autoMode,

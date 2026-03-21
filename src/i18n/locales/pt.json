@@ -11,7 +11,8 @@
     "save": "Salvar",
     "delete": "Excluir",
     "edit": "Editar",
-    "add": "Adicionar"
+    "add": "Adicionar",
+    "servers": "Servidores"
   },
   "credentials": {
     "usernamePlaceholder": "Usuário",
@@ -216,11 +217,6 @@
     "english": "English",
     "portuguese": "Português"
   },
-  "header": {
-    "news": "Notícias",
-    "subscribe": "Inscrever-se",
-    "unreadNews": "Você tem notícias não lidas"
-  },
   "home": {
     "title": "Início",
     "auto": "Auto",
@@ -260,19 +256,7 @@
     "title": "Oferta por tempo limitado",
     "timerAria": "Tempo restante",
     "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "OBTER",
-    "modal": {
-      "title": "Abrir no navegador",
-      "subtitle": "Não foi possível abrir automaticamente no seu navegador padrão",
-      "manualHint": "Se preferir, pode abrir a oferta manualmente no seu navegador.",
-      "openButton": "Abrir no navegador",
-      "copyButton": "Copiar link"
-    },
-    "toast": {
-      "opening": "Abrindo no navegador padrão...",
-      "tryOpen": "Tentando abrir...",
-      "copied": "Link copiado para a área de transferência"
-    }
+    "cta": "OBTER"
   },
   "coupon": {
     "title": "Cupons disponíveis",
@@ -286,14 +270,6 @@
     "copied": "Copiado",
     "copy": "Copiar",
     "openPlans": "Ver planos"
-  },
-  "news": {
-    "title": "Notícias",
-    "noNews": "Nenhuma notícia disponível",
-    "loading": "Carregando notícias...",
-    "errorTitle": "Erro ao carregar notícias",
-    "retry": "Tentar novamente",
-    "emptyDescription": "Volte mais tarde para ver as últimas atualizações"
   },
   "logs": {
     "title": "Registros",
@@ -352,31 +328,15 @@
     "protected": "Sua conexão está protegida. Verifique os dados da sua conta quando necessário.",
     "renewSoon": "Seu plano expira em {days}. Renove agora."
   },
-  "traffic": {
-    "download": "Download",
-    "upload": "Upload",
-    "ping": "Ping",
-    "total": "Uso total"
-  },
-  "statusCard": {
-    "connectionDetails": "Detalhes da conexão",
-    "liveTraffic": "Tráfego ao vivo",
-    "server": "Servidor",
-    "tabRed": "Rede",
-    "tabTraffic": "Tráfego",
-    "tabStats": "Stats",
-    "localIp": "IP local",
-    "network": "Rede",
-    "config": "Configuração",
-    "app": "App",
-    "users": "Usuários",
-    "cpu": "CPU",
-    "ram": "RAM",
-    "servers": "Online"
-  },
   "serverCard": {
     "ariaChooseServer": "Escolher servidor",
     "altServer": "Servidor",
     "pickServer": "Escolha um servidor"
+  },
+  "traffic": {
+    "download": "Download",
+    "upload": "Upload",
+    "ping": "Ping",
+    "total": "Uso Total"
   }
 }

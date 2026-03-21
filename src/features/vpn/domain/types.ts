@@ -16,6 +16,7 @@ export interface VpnContextType {
   user: UserInfo | null;
   creds: Credentials;
   auto: AutoState;
+  autoProgress: { i: number; total: number; current: ServerConfig | null };
   screen: ScreenType;
   termsAccepted: boolean;
   autoMode: boolean;

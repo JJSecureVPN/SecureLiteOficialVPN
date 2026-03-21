@@ -46,20 +46,10 @@ import '../styles/components/chips.css';
 import '../styles/components/servers.css';
 import '../styles/components/toast.css';
 import '../styles/components/premium.css';
-import '../styles/components/promo-header.css';
 import '../styles/components/language-selector.css';
-
-/* News components (refined) */
-import '../styles/components/MiniHeader.css';
-import '../styles/components/NewsList.css';
-import '../styles/components/NewsItem.css';
-import '../styles/components/NewsItemSkeleton.css';
-import '../styles/components/NewsStates.css';
-import '../styles/screens/news.css';
 
 import '../styles/components/error-boundary.css';
 import '../styles/components/modal.css';
-import '../styles/components/support-screen.css';
 import '../styles/screens/home.css';
 import '../styles/screens/terms.css';
 import '../styles/responsive.css';

@@ -154,130 +154,198 @@
 @media (orientation: landscape) and (min-width: 900px) {
   .phone.is-home,
   .phone.is-servers {
-    --tv-rail-width: clamp(260px, 26vw, 360px);
-    --tv-rail-pad-x: var(--space-lg);
-    --tv-rail-pad-y: clamp(16px, 2.2vh, 28px);
-    --tv-home-pad: clamp(12px, 2.2vh, 22px);
-    --tv-logo-max-h: clamp(60px, 14vh, 110px);
-
-    display: grid;
-    grid-template-columns: var(--tv-rail-width) 1fr;
-    grid-template-rows: auto 1fr;
-    overflow: hidden;
-  }
-
-  /* Degradé (top-strip) como rail vertical izquierdo */
-  .phone.is-home .top-strip,
-  .phone.is-servers .top-strip {
-    height: 100%;
-    width: var(--tv-rail-width);
-    inset: 0 auto 0 0;
-  }
-
-  .phone.is-home.state-disconnected .top-strip,
-  .phone.is-servers.state-disconnected .top-strip {
-    background: linear-gradient(90deg, var(--status-bad-90), var(--status-bad-55) 40%, transparent);
-  }
-
-  .phone.is-home.state-connecting .top-strip,
-  .phone.is-servers.state-connecting .top-strip {
-    background: linear-gradient(90deg, var(--muted-2-85), var(--muted-2-45) 40%, transparent);
-  }
-
-  .phone.is-home.state-error .top-strip,
-  .phone.is-servers.state-error .top-strip {
-    background: linear-gradient(
-      90deg,
-      var(--status-warn-85),
-      var(--status-warn-35) 40%,
-      transparent
-    );
-  }
-
-  .phone.is-home.state-connected .top-strip,
-  .phone.is-servers.state-connected .top-strip {
-    background: linear-gradient(90deg, var(--status-ok-85), var(--status-ok-45) 40%, transparent);
-  }
-
-  /* Header a la izquierda (compacto) */
-  .phone.is-home header.topbar,
-  .phone.is-servers header.topbar {
-    grid-column: 1;
-    grid-row: 1;
-    padding: var(--tv-rail-pad-y) var(--tv-rail-pad-x);
-    align-items: flex-start;
-  }
-
-  /* TV: ocultar CTA de suscripción (solo en el header) */
-  .phone.is-home header.topbar .subscribe-btn,
-  .phone.is-servers header.topbar .subscribe-btn {
-    display: none;
-  }
-
-  /* TV: ocultar toggle de tema en el header */
-  .phone.is-home header.topbar .theme-btn,
-  .phone.is-servers header.topbar .theme-btn {
-    display: none;
-  }
-
-  /* TV: ocultar botón de menú (dots) en Home/Servers */
-  .phone.is-home header.topbar .dots,
-  .phone.is-servers header.topbar .dots {
-    display: none;
-  }
-
-  /* Home a la derecha: desactiva layout absoluto de .screen SOLO para Home */
-  .phone.is-home .screen.home-screen {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    position: relative;
-    inset: auto;
-    height: 100%;
-    padding: var(--tv-home-pad);
-    overflow: auto; /* fallback si algo excede el alto */
-
+    --tv-home-pad: clamp(12px, 3vh, 32px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 100vh;
+    background: linear-gradient(
+      180deg,
+      var(--bg-2),
+      var(--bg-1)
+    ); /* Color original con degradado */
   }
 
-  /* Servers a la derecha: mismo patrón que Home, sin el centrado vertical */
+  /* Ocultar elementos secundarios para foco total */
+  .bottom-tabs,
+  header.topbar,
+  .top-strip {
+    display: none !important;
+  }
+
+  /* Centrado total de la pantalla de Home */
+  .phone.is-home .screen.home-screen,
   .phone.is-servers .screen.servers-screen {
-    grid-column: 2;
-    grid-row: 1 / span 2;
     position: relative;
     inset: auto;
-    height: 100%;
+    width: 100%;
+    max-width: min(1400px, 98vw); /* Expandido para carruseles más anchos en TV */
+    height: 100%; /* Restaurado a 100% para que el scroll funcione dentro */
     padding: var(--tv-home-pad);
-    overflow: auto; /* fallback */
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: none;
+    overflow-y: auto; /* Permitir scroll vertical */
+    scrollbar-width: none;
   }
 
-  /* Centrado vertical del contenido principal (logo + card)
-     - Si no hay espacio, los márgenes auto se colapsan a 0 y queda arriba */
+  .phone.is-home .home-main {
+    max-width: none; /* Quitar restricción de móvil para TV */
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center;
+  }
+
+  .phone.is-home .home-spacer-top,
+  .phone.is-home .home-spacer-mid,
+  .phone.is-home .home-spacer-bottom {
+    display: none; /* Quitar espaciadores de móvil para que el carrusel respire */
+  }
+
+  .phone.is-home .server-selector-card-container {
+    display: none !important;
+  }
+
+  .phone.is-servers .screen.servers-screen {
+    justify-content: flex-start;
+    max-height: 98vh;
+  }
+
+  /* Header compacto en TV */
+  .phone.is-servers .section-header {
+    margin-bottom: var(--space-md);
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .phone.is-servers .section-header .panel-title {
+    font-size: var(--font-lg);
+    margin: 0;
+  }
+
+  .phone.is-servers .section-header .section-subtitle,
+  .phone.is-servers .section-header .section-eyebrow {
+    display: none; /* Eliminar elementos secundarios para ganar espacio */
+  }
+
+  /* Grillas de Servidores y Categorías en TV */
+  .phone.is-servers .category-grid,
+  .phone.is-servers .server-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+    gap: var(--space-md) !important;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .phone.is-servers .subcategory-block {
+    width: 100%;
+    margin-top: var(--space-lg);
+  }
+
+  .phone.is-servers .category-card {
+    height: 100%;
+  }
+
+  /* Centrado vertical del contenido principal */
   .phone.is-home .screen.home-screen .home-main {
     width: 100%;
-    margin: auto 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .phone.is-home .logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-xl);
   }
 
   .phone.is-home .logo {
-    max-height: clamp(60px, 18vh, 140px);
+    max-height: clamp(80px, 20vh, 160px);
+    width: auto;
   }
 
-  /* TV: ocultar search y botón de configuración en Servers para navegación remota */
-  .phone.is-servers .servers-content .search-field,
-  .phone.is-servers .servers-content .config-btn {
-    display: none;
+  /* Compactar card en TV */
+  .phone.is-home .server-card-wrapper {
+    width: 100%;
+    max-width: 600px;
   }
 
-  /* Card y spacing más compactos en TV */
   .phone.is-home .server-card {
-    margin-top: var(--space-sm);
-    padding: var(--space-md);
-    max-width: min(620px, 100%);
+    margin: 0 auto;
+    padding: var(--space-lg);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
   }
 
-  .phone.is-home .quick-grid {
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
+  /* Servers screen en TV: también centrado pero con scroll si hay muchos items */
+  .phone.is-servers .screen.servers-screen {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* 1080p+ / Grandes monitores / Smart TVs standard */
+@media (orientation: landscape) and (min-width: 1600px) {
+  .phone.is-home .logo-container .logo {
+    max-width: 750px;
+    max-height: 160px;
+  }
+
+  .phone.is-home .server-card-wrapper {
+    max-width: 700px;
+  }
+
+  .phone.is-home .screen.home-screen {
+    max-width: min(1600px, 98vw);
+    padding: 60px var(--tv-home-pad) 80px; /* Más aire abajo para scroll */
+  }
+}
+
+/* 4K / Ultra HD TVs / Pantallas gigantes */
+@media (orientation: landscape) and (min-width: 2500px) {
+  .phone.is-home .logo-container .logo {
+    max-width: 1000px;
+    max-height: 220px;
+  }
+
+  .phone.is-home .server-card-wrapper {
+    max-width: 1000px;
+  }
+
+  .phone.is-home .server-card {
+    padding: var(--space-2xl);
+  }
+
+  .phone.is-home .screen.home-screen {
+    max-width: min(2400px, 98vw);
+    padding: 100px var(--tv-home-pad) 140px;
+  }
+
+  :root {
+    --text-base: 22px;
+    --font-lg: 32px;
+    --font-xl: 42px;
   }
 }
 

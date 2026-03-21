@@ -2,41 +2,46 @@
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  backdrop-filter: blur(2px);
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.modal-overlay.open {
+  background: rgba(0, 0, 0, 0.65);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .modal-content {
   background: var(--bg-1);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
   max-width: 90vw;
   max-height: 90vh;
+  width: 480px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: modalFadeIn 0.2s ease-out;
-  pointer-events: auto;
+  opacity: 0;
+  transform: scale(0.96) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.modal-content.open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
 }
 
 .modal-header {
@@ -92,69 +97,14 @@
   display: block;
   margin-bottom: 16px;
 }
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  backdrop-filter: blur(8px);
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.modal-content {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 480px;
-  width: 92vw;
-  max-height: 85vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-content {
-    background: #1a1a1a;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+/* Removidas definiciones duplicadas que se movieron al bloque principal arriba */
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 24px 24px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-  }
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .header-content {
@@ -183,26 +133,14 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #ffffff;
   letter-spacing: -0.01em;
-}
-
-@media (prefers-color-scheme: dark) {
-  .header-text h3 {
-    color: #ffffff;
-  }
 }
 
 .header-text p {
   margin: 2px 0 0;
   font-size: 13px;
-  color: #666666;
-}
-
-@media (prefers-color-scheme: dark) {
-  .header-text p {
-    color: #999999;
-  }
+  color: #999999;
 }
 
 .modal-close {
@@ -215,20 +153,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #666666;
+  color: #999999;
   transition: all 0.15s ease;
   flex-shrink: 0;
-}
-
-.modal-close:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #1a1a1a;
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-close {
-    color: #999999;
-  }
 }
 
 .modal-body {
@@ -243,14 +170,8 @@
 
 .empty-state p {
   margin: 0;
-  color: #666666;
+  color: #999999;
   font-size: 14px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .empty-state p {
-    color: #999999;
-  }
 }
 
 .coupons-grid {
@@ -260,18 +181,11 @@
 }
 
 .coupon-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #252525 0%, #1f1f1f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 18px;
   transition: all 0.2s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  .coupon-card {
-    background: linear-gradient(135deg, #252525 0%, #1f1f1f 100%);
-    border-color: rgba(255, 255, 255, 0.08);
-  }
 }
 
 .coupon-header {
@@ -342,13 +256,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #666666;
-}
-
-@media (prefers-color-scheme: dark) {
-  .info-item {
-    color: #999999;
-  }
+  color: #999999;
 }
 
 .info-item svg {
@@ -360,13 +268,7 @@
   margin: 0 0 16px;
   font-size: 13px;
   line-height: 1.5;
-  color: #666666;
-}
-
-@media (prefers-color-scheme: dark) {
-  .coupon-description {
-    color: #999999;
-  }
+  color: #999999;
 }
 
 .coupon-actions {
@@ -394,8 +296,8 @@
 
 .btn-copy {
   background: transparent;
-  border: 1.5px solid rgba(0, 0, 0, 0.12);
-  color: #1a1a1a;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   padding: 11px 14px;
   border-radius: 8px;
   font-weight: 500;
@@ -408,19 +310,9 @@
   white-space: nowrap;
 }
 
-@media (prefers-color-scheme: dark) {
-  .btn-copy {
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-  }
-}
-
 .btn-copy:hover {
   background: rgba(0, 0, 0, 0.03);
   border-color: rgba(0, 0, 0, 0.18);
-}
-
-@media (prefers-color-scheme: dark) {
 }
 
 .btn-copy:active {
@@ -441,24 +333,12 @@
 }
 
 .modal-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .modal-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-  }
-}
-
 .modal-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* Server Stats Modal */
@@ -567,30 +447,6 @@
   font-weight: 500;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .server-stats-modal {
-    background: var(--surface-2);
-    border-color: var(--border);
-  }
-
-  .server-stats-header {
-    border-color: var(--border);
-  }
-
-  .server-stats-icon {
-    background: var(--accent-20);
-  }
-
-  .server-stats-item {
-    background: var(--cardBg2);
-  }
-
-  .server-stats-metric {
-    background: var(--cardBg1);
-  }
-}
-
 /* Import Config Modal - Scoped styles that extend the global modal */
 
 /* Use the global overlay and modal structure. This component adds only scoped appearance tweaks */
@@ -615,14 +471,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 24px 24px 20px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: var(--bg-2);
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal-content.import-config .modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-  }
 }
 
 .modal-content.import-config .header-content {
@@ -951,13 +801,7 @@
 }
 
 .clean-confirm-modal .modal-title {
-  color: #dc2626;
-}
-
-@media (prefers-color-scheme: dark) {
-  .clean-confirm-modal .modal-title {
-    color: #f87171;
-  }
+  color: #f87171;
 }
 
 /* Final override: ensure Import screen textarea never shows a strong white border on focus */

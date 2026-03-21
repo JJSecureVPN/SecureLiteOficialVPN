@@ -69,14 +69,20 @@ export function ServersHeader({
   return (
     <div className="section-header">
       <div className="panel-title">{t('servers.title')}</div>
-      {typeof totalOnline === 'number' && (
-        <div className="servers-total" aria-hidden>
-          <span className="servers-total__dot servers-total__dot--left" aria-hidden />
-          <span className="servers-total__label">{t('servers.totalOnline')}</span>
-          <span className="servers-total__count">{totalOnline.toLocaleString()}</span>
-          <span className="servers-total__dot servers-total__dot--right" aria-hidden />
-        </div>
-      )}
+
+      {/* Reservamos el espacio para evitar saltos de layout */}
+      <div
+        className={`servers-total ${!totalOnline && totalOnline !== 0 ? 'is-loading' : ''}`}
+        aria-hidden
+      >
+        <span className="servers-total__dot servers-total__dot--left" aria-hidden />
+        <span className="servers-total__label">{t('servers.totalOnline')}</span>
+        <span className="servers-total__count">
+          {totalOnline !== null && totalOnline !== undefined ? totalOnline.toLocaleString() : '---'}
+        </span>
+        <span className="servers-total__dot servers-total__dot--right" aria-hidden />
+      </div>
+
       <p className="section-subtitle">{t('servers.subtitle')}</p>
     </div>
   );

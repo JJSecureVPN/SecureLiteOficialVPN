@@ -24,7 +24,11 @@ interface MenuItem {
   action?: () => void;
 }
 
-export const MenuScreen = memo(function MenuScreen() {
+export const MenuScreen = memo(function MenuScreen({
+  onShowSupport,
+}: {
+  onShowSupport?: () => void;
+}) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
   const { showToast } = useToastContext();
@@ -111,7 +115,7 @@ export const MenuScreen = memo(function MenuScreen() {
       title: t('menu.itemsSupportTitle'),
       subtitle: t('menu.itemsSupportSubtitle'),
       icon: 'fa-headset',
-      action: () => setScreen('support'),
+      action: () => onShowSupport?.(),
     },
     {
       id: 'terms',

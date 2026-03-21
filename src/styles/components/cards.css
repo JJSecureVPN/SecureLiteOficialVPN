@@ -76,13 +76,14 @@
   box-shadow: inset 0 0 0 2px var(--focus-accent-15);
 }
 
-.server-card .location-card {
+.server-item.location-card-home {
   margin: 0;
   border-radius: var(--radius-lg);
   background: var(--surface-1);
 }
 
-.loc-left {
+.loc-left,
+.loc-left-compact {
   display: flex;
   align-items: center;
   gap: var(--space-md);

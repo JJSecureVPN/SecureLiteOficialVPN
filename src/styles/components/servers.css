@@ -19,6 +19,17 @@
   font-weight: 700;
   text-transform: uppercase;
   margin-bottom: var(--space-xs);
+  transition: all 0.3s ease;
+  min-height: calc(1.5rem * var(--scale-factor)); /* Reservar altura */
+}
+
+.servers-total.is-loading {
+  opacity: 0.5;
+}
+
+.servers-total.is-loading .servers-total__dot {
+  animation: none;
+  background: var(--muted-45);
 }
 
 .servers-total__count {

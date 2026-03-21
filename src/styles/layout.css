@@ -3,9 +3,13 @@
    =========================================== */
 
 .phone {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background-color: var(--bg-1);
   background-image: linear-gradient(180deg, var(--bg-2), var(--bg-1));
@@ -37,30 +41,11 @@
   transition: background 0.25s ease;
 }
 
-.state-disconnected .top-strip {
-  /* Fallback sólido primero */
-  background-color: var(--status-bad);
-  background: linear-gradient(180deg, var(--status-bad-90), var(--status-bad-55) 40%, transparent);
-}
-
-.state-connecting .top-strip {
-  background-color: var(--muted-2);
-  background: linear-gradient(180deg, var(--muted-2-85), var(--muted-2-45) 40%, transparent);
-}
-
-.state-error .top-strip {
-  background-color: var(--status-warn);
-  background: linear-gradient(
-    180deg,
-    var(--status-warn-85),
-    var(--status-warn-35) 40%,
-    transparent
-  );
-}
-
+.state-disconnected .top-strip,
+.state-connecting .top-strip,
+.state-error .top-strip,
 .state-connected .top-strip {
-  background-color: var(--status-ok);
-  background: linear-gradient(180deg, var(--status-ok-85), var(--status-ok-45) 40%, transparent);
+  background: transparent !important;
 }
 
 /* ===========================================
@@ -280,7 +265,6 @@ header.topbar {
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
-  height: 100%;
 }
 
 .servers-screen .section-header {

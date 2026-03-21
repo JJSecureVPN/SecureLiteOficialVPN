@@ -3,11 +3,13 @@ import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
-import { HeaderPromo, VpnStatusCard, ConnectButton, StatusLogo } from '@/shared/components';
+import { TrafficDetails, ConnectButton, StatusLogo } from '@/shared/components';
 import { CredentialFields } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
-// Nota: stats en tiempo real se muestran a nivel de categorías (ServersScreen)
+import { ServerCarousel } from '../components/ServerCarousel';
+import { AutoConnectStatus } from '../components/AutoConnectStatus';
+import type { ServerConfig, Category } from '@/core/types';
 
 export function HomeScreen() {
   const { t } = useTranslation();
@@ -21,16 +23,17 @@ export function HomeScreen() {
     cancelConnecting,
     startAutoConnect,
     autoMode,
+    autoProgress,
     setAutoMode,
+    categorias,
+    setConfig,
   } = useVpn();
   const { showToast } = useToastContext();
   const sectionStyle = useSectionStyle();
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
 
-  // Error Handling eliminado — los toasts cubren todo el feedback al usuario
-
-  // Determinar qué campos mostrar (mostrar también cuando hay error para permitir corregir credenciales)
+  // Determinar qué campos mostrar
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
   const isFreeServer = (config?.name || '').toLowerCase().includes('gratuito');
   const hasEmbeddedAuth =
@@ -50,7 +53,6 @@ export function HomeScreen() {
         showToast(t('connection.cancel'));
         return;
       }
-      // Validar
       if (!config) {
         showToast(t('connection.selectServer'), null, 'warning');
         return;
@@ -97,9 +99,18 @@ export function HomeScreen() {
     t,
   ]);
 
-  const handleServerClick = useCallback(() => {
+  // Navegación original a la pantalla de servidores (para móvil)
+  const handleServerCardClick = useCallback(() => {
     setScreen('servers');
   }, [setScreen]);
+
+  const handleSelectServer = useCallback(
+    (srv: ServerConfig, _cat: Category) => {
+      setConfig(srv);
+      showToast(`${t('status.serverSelected')}: ${srv.name}`);
+    },
+    [setConfig, showToast, t],
+  );
 
   const connectButtonState = isConnected
     ? 'connected'
@@ -109,7 +120,7 @@ export function HomeScreen() {
         ? 'error'
         : 'disconnected';
 
-  // Activar navigation manager automáticamente al primer evento de teclado/remote en Home
+  // Activar navigation manager automáticamente
   useEffect(() => {
     const onFirstKey = (e: KeyboardEvent) => {
       const keys = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Enter', ' '];
@@ -123,9 +134,9 @@ export function HomeScreen() {
     return () => window.removeEventListener('keydown', onFirstKey);
   }, []);
 
-  // Ensure focus returns to the server card when arriving at Home
+  // Autofocus en el botón de conectar al entrar
   useAutoFocus(
-    () => document.querySelector<HTMLElement>('.home-main .location-card'),
+    () => document.querySelector<HTMLElement>('.home-main .connect-button'),
     [],
     '.home-main',
   );
@@ -143,9 +154,10 @@ export function HomeScreen() {
 
         <div className="server-card-wrapper">
           <div className="server-card">
-            <ServerCard config={config} onClick={handleServerClick} disabled={false} />
-
-            <HeaderPromo />
+            {/* ServerCard solo visible para navegación en móvil (ocultado vía CSS en landscape) */}
+            <div className="server-selector-card-container">
+              <ServerCard config={config} onClick={handleServerCardClick} disabled={false} />
+            </div>
 
             {canEditCredentials && (
               <CredentialFields
@@ -160,7 +172,10 @@ export function HomeScreen() {
               />
             )}
 
-            <VpnStatusCard />
+            {isConnecting && autoMode && autoProgress.total > 0 && (
+              <AutoConnectStatus progress={autoProgress} />
+            )}
+            <TrafficDetails />
 
             <ConnectButton
               state={connectButtonState}
@@ -169,6 +184,16 @@ export function HomeScreen() {
               onAutoModeChange={setAutoMode}
             />
           </div>
+        </div>
+
+        {/* Carrusel de Servidores integrado directamente en el Home */}
+        <div className="home-carousel-container">
+          <ServerCarousel
+            categorias={categorias}
+            currentConfig={config}
+            onSelectServer={handleSelectServer}
+            autoMode={autoMode}
+          />
         </div>
 
         <div className="home-spacer-bottom" />
