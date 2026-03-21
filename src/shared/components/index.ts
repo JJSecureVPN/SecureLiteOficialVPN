@@ -6,6 +6,7 @@ export { GlobalModal } from './GlobalModal';
 export { HeaderPromo } from './HeaderPromo';
 export { PremiumCard } from './PremiumCard';
 export { TrafficDetails } from './TrafficDetails';
+export { VpnStatusCard } from './VpnStatusCard';
 export { MiniHeader } from './MiniHeader/MiniHeader';
 export { StatCard } from './StatCard';
 export { KeyValueList } from './KeyValueList';

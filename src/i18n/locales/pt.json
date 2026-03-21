@@ -352,6 +352,28 @@
     "protected": "Sua conexão está protegida. Verifique os dados da sua conta quando necessário.",
     "renewSoon": "Seu plano expira em {days}. Renove agora."
   },
+  "traffic": {
+    "download": "Download",
+    "upload": "Upload",
+    "ping": "Ping",
+    "total": "Uso total"
+  },
+  "statusCard": {
+    "connectionDetails": "Detalhes da conexão",
+    "liveTraffic": "Tráfego ao vivo",
+    "server": "Servidor",
+    "tabRed": "Rede",
+    "tabTraffic": "Tráfego",
+    "tabStats": "Stats",
+    "localIp": "IP local",
+    "network": "Rede",
+    "config": "Configuração",
+    "app": "App",
+    "users": "Usuários",
+    "cpu": "CPU",
+    "ram": "RAM",
+    "servers": "Online"
+  },
   "serverCard": {
     "ariaChooseServer": "Escolher servidor",
     "altServer": "Servidor",

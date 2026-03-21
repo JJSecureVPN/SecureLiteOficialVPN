@@ -3,7 +3,7 @@ import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
-import { HeaderPromo, TrafficDetails, ConnectButton, StatusLogo } from '@/shared/components';
+import { HeaderPromo, VpnStatusCard, ConnectButton, StatusLogo } from '@/shared/components';
 import { CredentialFields } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
@@ -133,9 +133,13 @@ export function HomeScreen() {
   return (
     <section className="screen home-screen" style={sectionStyle}>
       <div className="home-main">
+        <div className="home-spacer-top" />
+
         <div className="logo-container">
           <StatusLogo size="large" showStatus />
         </div>
+
+        <div className="home-spacer-mid" />
 
         <div className="server-card-wrapper">
           <div className="server-card">
@@ -156,7 +160,7 @@ export function HomeScreen() {
               />
             )}
 
-            <TrafficDetails />
+            <VpnStatusCard />
 
             <ConnectButton
               state={connectButtonState}
@@ -166,6 +170,8 @@ export function HomeScreen() {
             />
           </div>
         </div>
+
+        <div className="home-spacer-bottom" />
       </div>
     </section>
   );

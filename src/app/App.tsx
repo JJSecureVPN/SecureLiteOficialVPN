@@ -45,6 +45,7 @@ import { useSafeArea } from '../shared/hooks/useSafeArea';
 import { useNativeToasts } from '../shared/hooks/useNativeToasts';
 import { useCoupons } from '../shared/hooks/useCoupons';
 import { usePromo } from '../shared/hooks/usePromo';
+import { useResponsiveScale } from '../shared/hooks/useResponsiveScale';
 import { useTranslation } from '../i18n';
 import { LanguageProvider } from '../i18n/context';
 
@@ -97,6 +98,9 @@ function AppContent() {
 
   // Escucha toasts y notificaciones del SDK nativo de DTunnel
   useNativeToasts();
+
+  // Activa el escalado responsivo dinámico
+  useResponsiveScale();
 
   // Limpieza del SDK al desmontar la app (hot-reload / tests)
   useEffect(() => () => destroySdk(), []);

@@ -61,9 +61,12 @@
 
 /* Contenedor principal */
 .status-logo {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: 100%;
   user-select: none;
   overflow: visible;
 }
@@ -229,55 +232,20 @@
   padding-top: 0.02em;
 }
 
-/* Tamaños */
+/* Tamaños Dinámicos con --scale-factor */
 .status-logo--small {
-  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+  font-size: calc(1.4rem * var(--scale-factor));
 }
 .status-logo--medium {
-  font-size: clamp(1.8rem, 5.2vw, 2.8rem);
+  font-size: calc(2.3rem * var(--scale-factor));
 }
 .status-logo--large {
-  font-size: clamp(2.6rem, 8vw, 4.5rem);
+  font-size: calc(3.6rem * var(--scale-factor));
 }
 
-/* Modo oscuro */
-[data-theme='dark'] .status-logo__text {
-  filter: brightness(1.05);
-}
-[data-theme='dark'] .status-logo__subtitle {
-  color: #a8a8a8;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .status-logo {
-    align-items: center;
-    padding: 0.2em 0.4em 0.1em;
-    overflow: visible;
-  }
-  .status-logo__brand {
-    gap: 0.1rem;
-    padding-right: 0.35em;
-    padding-top: 0.14em;
-    overflow: visible;
-  }
-  .status-logo--large {
-    font-size: clamp(1.8rem, 6.5vw, 2.8rem);
-  }
-}
-
-@media (max-width: 380px) {
-  .status-logo--large {
-    font-size: clamp(1.4rem, 5.5vw, 2rem);
-  }
-}
-
+/* Responsive Overrides (solo para pantallas muy pequeñas donde el escalado no llega) */
 @media (max-width: 320px) {
-  .status-logo {
-    align-items: center;
-    max-width: 100%;
-  }
   .status-logo--large {
-    font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+    font-size: calc(2rem * var(--scale-factor));
   }
 }

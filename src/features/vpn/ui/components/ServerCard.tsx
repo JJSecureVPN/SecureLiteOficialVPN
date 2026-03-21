@@ -68,17 +68,16 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       )}
     >
       <div className="loc-left">
-        <div className="flag">
-          {showFallback ? (
-            <span className="flag-fallback">{fallbackEmoji}</span>
-          ) : (
-            <img
-              src={icon}
-              alt={config?.name || t('serverCard.altServer')}
-              onError={handleImgError}
-            />
-          )}
-        </div>
+        {showFallback ? (
+          <span className="loc-icon-naked">{fallbackEmoji}</span>
+        ) : (
+          <img
+            className="loc-icon-naked"
+            src={icon}
+            alt={config?.name || t('serverCard.altServer')}
+            onError={handleImgError}
+          />
+        )}
         <div className="loc-meta">
           <div className="loc-name-row">
             <div className="loc-name">{config?.name || t('serverCard.pickServer')}</div>

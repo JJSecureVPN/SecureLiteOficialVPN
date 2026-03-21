@@ -1,0 +1,278 @@
+/* ===========================================
+   VPN Status Card - Pro / Tabbed Layout
+   Inspired by Rocket StatusCard structure
+   =========================================== */
+
+.vpn-status-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: var(--space-lg);
+}
+
+/* --- Header & Tabs (Minimalist) --- */
+.vsc-head {
+  height: calc(32px * var(--scale-factor));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.vsc-label {
+  font-size: calc(11px * var(--scale-factor));
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+  opacity: 0.8;
+}
+
+.vsc-tabs {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.tab-btn {
+  background: var(--surface-2);
+  border: none;
+  border-radius: calc(6px * var(--scale-factor));
+  padding: calc(4px * var(--scale-factor)) calc(12px * var(--scale-factor));
+  font-size: calc(10px * var(--scale-factor));
+  font-weight: 600;
+  color: var(--muted-2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+
+/* --- Stats Grid (Minimalist) --- */
+.vsc-grid-container {
+  position: relative;
+  min-height: calc(90px * var(--scale-factor));
+}
+
+.vsc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.vsc-cell {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: calc(2px * var(--scale-factor));
+  padding: var(--space-sm);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.vsc-cell:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-30);
+}
+
+.vsc-lbl {
+  font-size: calc(9px * var(--scale-factor));
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vsc-val {
+  font-size: calc(15px * var(--scale-factor));
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+/* --- Footer (Minimalist) --- */
+.vsc-foot {
+  margin-top: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--space-xs);
+}
+
+.vsc-foot-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.vsc-foot-lbl {
+  font-size: calc(10px * var(--scale-factor));
+  font-weight: 500;
+  color: var(--muted-2);
+}
+
+.vsc-foot-val {
+  font-size: calc(10px * var(--scale-factor));
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* --- Progress Bars (Mini) --- */
+.vsc-bar-wrap {
+  width: calc(56px * var(--scale-factor));
+  height: calc(3px * var(--scale-factor));
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.vsc-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vsc-bar-purple {
+  background: var(--accent);
+}
+.vsc-bar-amber {
+  background: var(--status-warn);
+}
+.vsc-bar-green {
+  background: var(--status-ok);
+}
+
+/* --- Speed Layout --- */
+.vsc-cell.speed {
+  flex-direction: row;
+  gap: var(--space-sm);
+  justify-content: center;
+  padding: 0 var(--space-sm);
+}
+
+.vsc-ico {
+  width: calc(22px * var(--scale-factor));
+  height: calc(22px * var(--scale-factor));
+  border-radius: calc(7px * var(--scale-factor));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.vsc-ico-down {
+  background: var(--accent-10);
+  color: var(--status-ok);
+}
+.vsc-ico-up {
+  background: var(--accent-10);
+  color: var(--accent);
+}
+.vsc-ico-ping {
+  background: var(--accent-10);
+  color: var(--status-warn);
+}
+
+.vsc-ico i {
+  font-size: calc(10px * var(--scale-factor));
+}
+
+.vsc-speed-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-items: flex-start;
+}
+.vsc-speed-inner .vsc-lbl {
+  text-align: left;
+}
+
+/* --- Footer --- */
+.vsc-foot {
+  height: calc(36px * var(--scale-factor));
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  opacity: 0.9;
+}
+
+.vsc-foot-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 var(--space-sm);
+  gap: 1px;
+}
+
+.vsc-foot-cell + .vsc-foot-cell {
+  border-left: 1px solid var(--border);
+}
+
+.vsc-foot-lbl {
+  font-size: calc(9px * var(--scale-factor));
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.vsc-foot-val {
+  font-size: calc(11px * var(--scale-factor));
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.vsc-foot-val.online {
+  color: var(--status-ok);
+}
+
+/* --- Animations --- */
+@keyframes vsc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vsc-tab-active {
+  animation: vsc-fade-in 0.3s ease-out forwards;
+}
+
+/* Skeleton Support */
+.vsc-skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: vsc-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes vsc-loading {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

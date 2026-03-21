@@ -11,150 +11,88 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
-  padding: 8px 12px calc(14px + var(--safe-area-bottom, 0px));
-  background: #0f1016; /* Solid color to prevent seeing the sheet slide behind it */
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: calc(10px * var(--scale-factor)) calc(12px * var(--scale-factor))
+    calc((14px + var(--safe-area-bottom, 0px)) * var(--scale-factor));
+  background: var(--bg-1);
+  border-top: 1px solid var(--border);
   z-index: 1000;
-}
-
-/* Redefine the colors for generic themes in Secure-Lite if not in dark mode */
-html[data-theme='light'] .bottom-tabs {
-  background: #f8f9ff;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .tab-btn {
   position: relative;
   background: transparent;
   border: none;
-  color: var(--muted, #8e8e93);
-  padding: 6px 0;
-  font-size: 10px;
-  font-weight: 500;
+  color: var(--muted-2);
+  padding: calc(6px * var(--scale-factor)) 0;
+  font-size: calc(10px * var(--scale-factor));
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-  opacity: 0.7;
+  transition: all 0.2s ease;
+  opacity: 0.85;
   outline: none !important;
   -webkit-tap-highlight-color: transparent !important;
 }
 
-html[data-theme='light'] .tab-btn {
-  color: #64748b;
-  background: rgba(0, 0, 0, 0.02);
-}
-
 .tab-btn.active {
-  color: #fff;
+  color: var(--accent);
   opacity: 1;
 }
 
 .tab-btn.active::after {
   content: '';
   position: absolute;
-  top: -8px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--accent, #007aff);
-  box-shadow: 0 0 10px var(--accent, #007aff);
-  border-radius: 0 0 4px 4px;
+  width: calc(20px * var(--scale-factor));
+  height: calc(2px * var(--scale-factor));
+  background: var(--accent);
+  box-shadow: 0 0 calc(8px * var(--scale-factor)) var(--accent-30);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 }
 
 .tab-btn .icon-svg {
-  width: 22px;
-  height: 22px;
-  margin-bottom: 2px;
+  width: calc(22px * var(--scale-factor));
+  height: calc(22px * var(--scale-factor));
+  margin-bottom: calc(2px * var(--scale-factor));
   stroke-width: 2;
 }
 
-/* Botón central HOME circular (Refined) */
+/* Botón central HOME circular (Scaled & Minimalist) */
 .center-home {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: calc(54px * var(--scale-factor));
+  height: calc(54px * var(--scale-factor));
   margin: 0 auto;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transform: translateY(-8px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(calc(-12px * var(--scale-factor)));
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   padding: 0;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 .tab-btn.center-home.active {
-  color: #fff;
-  border-color: var(--accent, #007aff);
-  box-shadow: 0 0 15px rgba(0, 122, 255, 0.2);
-  background: rgba(109, 74, 255, 0.1);
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 calc(15px * var(--scale-factor)) var(--accent-20);
 }
 
-.tab-btn.center-home.active::after {
-  display: none; /* No over-dot for center button */
-}
-
-/* Estado con descuento/cupón activo */
-.tab-btn.deal-active {
-  border-color: #f59e0b;
-}
-
-.notif-bell {
-  color: #f59e0b;
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  animation: bell-swing 2s ease-in-out infinite;
-}
-
-@keyframes bell-swing {
-  0%,
-  100% {
-    transform: rotate(0);
-  }
-  10%,
-  30% {
-    transform: rotate(15deg);
-  }
-  20%,
-  40% {
-    transform: rotate(-15deg);
-  }
-  50% {
-    transform: rotate(0);
-  }
-}
-
-/* Símbolo central HOME */
 .center-label {
-  font-size: 8px;
+  font-size: calc(8px * var(--scale-factor));
   font-weight: 800;
-  margin-top: -1px;
+  margin-top: calc(-1px * var(--scale-factor));
 }
-@media (max-height: 700px) {
-  .bottom-tabs {
-    padding: 6px 8px calc(8px + var(--safe-area-bottom, 0px));
-    gap: 4px;
-  }
-  .tab-btn .icon-svg {
-    width: 20px;
-    height: 20px;
-  }
-  .center-home {
-    width: 48px;
-    height: 48px;
-  }
-  .tab-btn {
-    padding: 6px 2px;
-    font-size: 9px;
-  }
-}
+
+/* Ajustes para pantallas pequeñas integrados por el factor de escala */

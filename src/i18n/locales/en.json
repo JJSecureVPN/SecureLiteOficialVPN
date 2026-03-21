@@ -358,6 +358,28 @@
     "protected": "Your connection is protected. Check your account information when needed.",
     "renewSoon": "Your plan expires in {days}. Renew now."
   },
+  "traffic": {
+    "download": "Download",
+    "upload": "Upload",
+    "ping": "Ping",
+    "total": "Total Usage"
+  },
+  "statusCard": {
+    "connectionDetails": "Connection Details",
+    "liveTraffic": "Live Traffic",
+    "server": "Server",
+    "tabRed": "Network",
+    "tabTraffic": "Traffic",
+    "tabStats": "Stats",
+    "localIp": "Local IP",
+    "network": "Network",
+    "config": "Configuration",
+    "app": "App",
+    "users": "Users",
+    "cpu": "CPU",
+    "ram": "RAM",
+    "servers": "Online"
+  },
   "serverCard": {
     "ariaChooseServer": "Choose server",
     "altServer": "Server",

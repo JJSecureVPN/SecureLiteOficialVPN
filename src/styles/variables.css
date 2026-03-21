@@ -24,7 +24,7 @@
   --status-bad: #ef4444;
   --status-bad-90: rgba(239, 68, 68, 0.9);
   --overlay: rgba(17, 24, 39, 0.55);
-  --scale-factor: clamp(0.82, calc(0.6 + 0.1vw), 1.15);
+  --scale-factor: var(--app-scale, 1);
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
   --shadow-md: 0 10px 24px rgba(17, 24, 39, 0.1);
@@ -49,32 +49,38 @@ html[data-theme='dark'] {
 
 @supports (width: clamp(1px, 2px, 3px)) {
   :root {
-    --space-xs: clamp(4px, calc(6px * var(--scale-factor)), 8px);
-    --space-sm: clamp(6px, calc(8px * var(--scale-factor)), 12px);
-    --space-md: clamp(8px, calc(12px * var(--scale-factor)), 16px);
-    --space-lg: clamp(10px, calc(14px * var(--scale-factor)), 20px);
-    --space-xl: clamp(12px, calc(16px * var(--scale-factor)), 24px);
-    --font-xs: clamp(11px, calc(12px * var(--scale-factor)), 14px);
-    --font-sm: clamp(11px, calc(12px * var(--scale-factor)), 14px);
-    --font-base: clamp(12px, calc(14px * var(--scale-factor)), 16px);
-    --font-md: clamp(14px, calc(16px * var(--scale-factor)), 20px);
-    --font-lg: clamp(16px, calc(18px * var(--scale-factor)), 24px);
-    --font-xl: clamp(18px, calc(20px * var(--scale-factor)), 28px);
-    --font-2xl: clamp(20px, calc(24px * var(--scale-factor)), 32px);
-    --radius-sm: clamp(8px, calc(10px * var(--scale-factor)), 14px);
-    --radius-md: clamp(10px, calc(12px * var(--scale-factor)), 16px);
-    --radius-lg: clamp(12px, calc(14px * var(--scale-factor)), 18px);
-    --radius-xl: clamp(16px, calc(20px * var(--scale-factor)), 26px);
-    --btn-height: clamp(32px, calc(36px * var(--scale-factor)), 44px);
-    --input-height: clamp(32px, calc(36px * var(--scale-factor)), 44px);
-    --icon-size: clamp(20px, calc(24px * var(--scale-factor)), 32px);
-    --flag-size: clamp(22px, calc(26px * var(--scale-factor)), 32px);
-    --header-padding: clamp(10px, calc(12px * var(--scale-factor)), 16px);
-    --screen-top: clamp(65px, calc(75px * var(--scale-factor)), 90px);
-    --top-strip-height: clamp(65px, calc(75px * var(--scale-factor)), 90px);
-    --toggle-width: clamp(40px, calc(48px * var(--scale-factor)), 56px);
-    --toggle-height: clamp(28px, calc(33px * var(--scale-factor)), 40px);
-    --thumb-size: clamp(22px, calc(25px * var(--scale-factor)), 32px);
-    --tabs-space: calc(80px + var(--safe-area-bottom, 0px));
+    --space-xs: calc(4px * var(--scale-factor));
+    --space-sm: calc(6px * var(--scale-factor));
+    --space-md: calc(12px * var(--scale-factor));
+    --space-lg: calc(16px * var(--scale-factor));
+    --space-xl: calc(24px * var(--scale-factor));
+
+    --font-xs: calc(11px * var(--scale-factor));
+    --font-sm: calc(13px * var(--scale-factor));
+    --font-base: calc(14px * var(--scale-factor));
+    --font-md: calc(16px * var(--scale-factor));
+    --font-lg: calc(18px * var(--scale-factor));
+    --font-xl: calc(20px * var(--scale-factor));
+    --font-2xl: calc(24px * var(--scale-factor));
+
+    --radius-sm: calc(10px * var(--scale-factor));
+    --radius-md: calc(12px * var(--scale-factor));
+    --radius-lg: calc(16px * var(--scale-factor));
+    --radius-xl: calc(20px * var(--scale-factor));
+
+    --btn-height: calc(42px * var(--scale-factor));
+    --input-height: calc(42px * var(--scale-factor));
+    --icon-size: calc(24px * var(--scale-factor));
+    --flag-size: calc(26px * var(--scale-factor));
+
+    --header-padding: calc(12px * var(--scale-factor));
+    --screen-top: calc(75px * var(--scale-factor));
+    --top-strip-height: calc(75px * var(--scale-factor));
+
+    --toggle-width: calc(48px * var(--scale-factor));
+    --toggle-height: calc(32px * var(--scale-factor));
+    --thumb-size: calc(24px * var(--scale-factor));
+
+    --tabs-space: calc(82px + var(--safe-area-bottom, 0px));
   }
 }
