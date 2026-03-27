@@ -175,7 +175,7 @@ function AppContent() {
   );
 
   const { hasActiveCoupon } = useCoupons();
-  const { isPromoActive } = usePromo();
+  const { isPromoActive, is2x1Active } = usePromo();
 
   return (
     <div
@@ -207,6 +207,7 @@ function AppContent() {
           onUpdate={handleUpdate}
           hasActiveCoupons={hasActiveCoupon}
           promoActive={isPromoActive}
+          is2x1Active={is2x1Active}
           activeSheet={activeSheet}
         />
       )}

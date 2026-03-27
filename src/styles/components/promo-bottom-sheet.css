@@ -110,6 +110,26 @@
   line-height: 1;
 }
 
+.promo-2x1 {
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.15) 0%, rgba(20, 120, 90, 0.05) 100%);
+  border-color: rgba(29, 158, 117, 0.3);
+}
+
+.promo-2x1 .promo-lbl-eyebrow {
+  color: #1d9e75;
+}
+
+.promo-2x1 .promo-timer-box .timer-val {
+  color: #1d9e75;
+}
+
+.promo-lbl-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
 .promo-timer-box {
   background: rgba(0, 0, 0, 0.4); /* Fondo más opaco */
   /* backdrop-filter: blur(4px); */

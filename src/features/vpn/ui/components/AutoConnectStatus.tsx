@@ -16,8 +16,6 @@ export const AutoConnectStatus = memo(function AutoConnectStatus({
 }: AutoConnectStatusProps) {
   const { i, total, current } = progress;
 
-  if (total === 0 || !current) return null;
-
   // Icon logic mirrored from ServerCard.tsx
   const icon = current?.icon?.trim();
   const isImg = useMemo(() => {
@@ -37,6 +35,8 @@ export const AutoConnectStatus = memo(function AutoConnectStatus({
   useEffect(() => {
     setImgError(false);
   }, [icon]);
+
+  if (total === 0 || !current) return null;
 
   const showFallback = !isImg || !icon || imgError;
   const fallbackEmoji = icon && !isImg ? icon : '🌐';

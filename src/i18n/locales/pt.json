@@ -256,7 +256,9 @@
     "title": "Oferta por tempo limitado",
     "timerAria": "Tempo restante",
     "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "OBTER"
+    "cta": "OBTER",
+    "promo2x1Title": "OFERTA 2X1",
+    "promo2x1Subtitle": "Dobro de dispositivos no plano"
   },
   "coupon": {
     "title": "Cupons disponíveis",

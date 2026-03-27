@@ -11,6 +11,7 @@ interface BottomTabsProps {
   onUpdate?: () => void;
   hasActiveCoupons?: boolean;
   promoActive?: boolean;
+  is2x1Active?: boolean;
   activeSheet?: string | null;
 }
 
@@ -23,11 +24,12 @@ export const BottomTabs = memo(function BottomTabs({
   onUpdate,
   hasActiveCoupons: propHasActiveCoupons,
   promoActive,
+  is2x1Active,
   activeSheet,
 }: BottomTabsProps) {
   const { setScreen, screen } = useVpn();
   // Determinar si hay cupones activos (desde props o interno)
-  const isDealActive = propHasActiveCoupons || promoActive;
+  const isDealActive = propHasActiveCoupons || promoActive || is2x1Active;
 
   const handleUpdate = () => {
     if (onUpdate) {

@@ -14,11 +14,6 @@ export const TrafficDetails = memo(function TrafficDetails() {
   const { t } = useTranslation();
   const { downSpeed, upSpeed, totalUsed } = useTrafficStats();
 
-  const isConnected = status === 'CONNECTED';
-  if (!isConnected) return null;
-
-  const pingDisplay = typeof pingMs === 'number' ? `${Math.round(pingMs)} ms` : '—';
-
   // Ping class logic (simplified variant for the traffic card)
   const pingClass = useMemo(() => {
     if (typeof pingMs !== 'number') return '';
@@ -26,6 +21,11 @@ export const TrafficDetails = memo(function TrafficDetails() {
     if (pingMs < 350) return 'txt-amber';
     return 'txt-red';
   }, [pingMs]);
+
+  const isConnected = status === 'CONNECTED';
+  if (!isConnected) return null;
+
+  const pingDisplay = typeof pingMs === 'number' ? `${Math.round(pingMs)} ms` : '—';
 
   return (
     <div className="traffic-details-card">

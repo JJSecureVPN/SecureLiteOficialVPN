@@ -276,7 +276,9 @@
     "endsIn": "Finaliza en",
     "viewPlans": "Ver planes",
     "emptyNovedades": "No hay novedades disponibles en este momento.",
-    "limitedTimeNote": "Oferta por tiempo limitado."
+    "limitedTimeNote": "Oferta por tiempo limitado.",
+    "promo2x1Title": "OFERTA 2X1",
+    "promo2x1Subtitle": "Doble dispositivos en tu plan"
   },
   "coupon": {
     "title": "Cupones disponibles",

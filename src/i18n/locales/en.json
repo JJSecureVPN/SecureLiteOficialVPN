@@ -256,7 +256,9 @@
     "title": "Limited time offer",
     "timerAria": "Remaining time",
     "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "GET"
+    "cta": "GET",
+    "promo2x1Title": "2X1 OFFER",
+    "promo2x1Subtitle": "Double devices in your plan"
   },
   "coupon": {
     "title": "Available coupons",

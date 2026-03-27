@@ -3,6 +3,7 @@ import { BottomSheet } from './BottomSheet';
 import { useTranslation } from '../../i18n/useTranslation';
 import { usePromo } from '../hooks/usePromo';
 import { useCoupons, Coupon } from '../hooks/useCoupons';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import '../../styles/components/promo-bottom-sheet.css';
 
 interface PromoBottomSheetProps {
@@ -15,7 +16,7 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
   onClose,
 }: PromoBottomSheetProps) {
   const { t } = useTranslation();
-  const { isPromoActive, remainingLabel, promo } = usePromo();
+  const { isPromoActive, is2x1Active, remainingLabel, remaining2x1Label, promo } = usePromo();
   const { coupons } = useCoupons() as any;
 
   const activeCoupons = (coupons || []).filter((c: Coupon) => c.activo && !c.oculto);
@@ -25,15 +26,15 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
   const [activeTab, setActiveTab] = useState<'promo' | 'coupons'>('promo');
   const [copied, setCopied] = useState<Record<number, boolean>>({});
 
-  const showTabs = isPromoActive && hasActiveCoupons;
+  const showTabs = (isPromoActive || is2x1Active) && hasActiveCoupons;
 
   // Sync tab when opening or when availability changes
   useEffect(() => {
     if (isOpen) {
-      if (isPromoActive) setActiveTab('promo');
+      if (isPromoActive || is2x1Active) setActiveTab('promo');
       else if (hasActiveCoupons) setActiveTab('coupons');
     }
-  }, [isOpen, isPromoActive, hasActiveCoupons]);
+  }, [isOpen, isPromoActive, is2x1Active, hasActiveCoupons]);
 
   const copyCoupon = async (code: string, id: number) => {
     try {
@@ -46,16 +47,22 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
   };
 
   const openPlanes = () => {
-    window.open('https://shop.jhservices.com.ar/planes', '_blank');
+    const url = 'https://shop.jhservices.com.ar/planes';
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.android.openExternalUrl(url);
+      return;
+    }
+    window.open(url, '_blank');
   };
 
   const badgeLabel =
-    isPromoActive && (!showTabs || activeTab === 'promo')
+    (isPromoActive || is2x1Active) && (!showTabs || activeTab === 'promo')
       ? t('promo.activeBadge')
       : `${t('coupon.activeBadge')} (${activeCoupons.length})`;
 
   const headTitle =
-    isPromoActive && (!showTabs || activeTab === 'promo')
+    (isPromoActive || is2x1Active) && (!showTabs || activeTab === 'promo')
       ? t('promo.headTitle')
       : t('coupon.headTitle');
 
@@ -89,6 +96,7 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
         )}
 
         <div className="promo-body">
+          {/* Percentage Promo */}
           {isPromoActive && (!showTabs || activeTab === 'promo') && (
             <div className="promo-card-featured">
               <div className="promo-card-top">
@@ -107,6 +115,31 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
               <button className="promo-action-btn" onClick={openPlanes}>
                 {t('promo.viewPlans')}
               </button>
+            </div>
+          )}
+
+          {/* 2x1 Promo */}
+          {is2x1Active && (!showTabs || activeTab === 'promo') && (
+            <div className="promo-card-featured promo-2x1">
+              <div className="promo-card-top">
+                <div className="promo-info-main">
+                  <span className="promo-lbl-eyebrow">{t('promo.promo2x1Title')}</span>
+                  <span className="promo-value-main">2X1</span>
+                  <span className="promo-lbl-subtitle">{t('promo.promo2x1Subtitle')}</span>
+                </div>
+                {remaining2x1Label && (
+                  <div className="promo-timer-box">
+                    <span className="timer-lbl">{t('promo.endsIn')}</span>
+                    <div className="timer-divider" />
+                    <span className="timer-val">{remaining2x1Label}</span>
+                  </div>
+                )}
+              </div>
+              {!isPromoActive && (
+                <button className="promo-action-btn" onClick={openPlanes}>
+                  {t('promo.viewPlans')}
+                </button>
+              )}
             </div>
           )}
 
@@ -174,7 +207,7 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
           )}
 
           <p className="promo-footer-note">
-            {isPromoActive && !hasActiveCoupons
+            {(isPromoActive || is2x1Active) && !hasActiveCoupons
               ? t('promo.limitedTimeNote')
               : t('coupon.applyNote')}
           </p>

@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useTranslation } from '@/i18n';
 import { groqSend, GroqMessage } from '../../features/support/api/groq';
 import { GROQ_API_KEY, GROQ_MODEL, SYSTEM_PROMPT } from '../../features/support/constants';
@@ -134,7 +133,6 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
   isOpen,
   onClose,
 }: SupportBottomSheetProps) {
-  const { showToast } = useToastContext();
   const { t } = useTranslation();
 
   const [messages, setMessages] = useState<Message[]>(() => loadHistory());
@@ -185,77 +183,89 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
     }
   }, [isOpen, scrollToBottom]);
 
-  const handleSend = useCallback(() => {
-    const trimmed = input.trim();
-    if (!trimmed || isSending) return;
+  const handleSend = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault();
+      const trimmed = input.trim();
+      if (!trimmed || isSending) return;
 
-    if (!hasApiKey) {
-      showToast(t('support.noApiKey'), null, 'error');
-      return;
-    }
+      // Debug log (can be seen in browser console)
+      console.log('[Support] Sending message:', trimmed);
 
-    const userMessage: Message = {
-      id: createId(),
-      role: 'user',
-      text: trimmed,
-      ts: Date.now(),
-    };
-    const assistantMessage: Message = {
-      id: createId(),
-      role: 'assistant',
-      text: t('support.sending'),
-      ts: Date.now(),
-      status: 'pending',
-    };
-
-    setMessages((prev) => [...prev, userMessage, assistantMessage]);
-    setInput('');
-    setIsSending(true);
-
-    const payload: GroqMessage[] = [
-      { role: 'system', content: SYSTEM_PROMPT },
-      ...messagesRef.current.map((m) => ({ role: m.role, content: m.text })),
-      { role: 'user', content: trimmed },
-    ];
-
-    groqSend({ apiKey: GROQ_API_KEY, model: GROQ_MODEL }, payload, {
-      onSuccess(reply) {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessage.id ? { ...m, text: reply, status: undefined } : m,
-          ),
-        );
-        setIsSending(false);
-      },
-      onError(msg) {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessage.id ? { ...m, text: msg, status: 'error' } : m,
-          ),
-        );
-        setIsSending(false);
-      },
-      onTimeout() {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessage.id
-              ? { ...m, text: t('support.timeout'), status: 'error' }
-              : m,
-          ),
-        );
-        setIsSending(false);
-      },
-    });
-  }, [hasApiKey, input, showToast, t, isSending]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
+      if (!hasApiKey) {
+        console.warn('[Support] Missing API Key');
+        const errorMsg: Message = {
+          id: createId(),
+          role: 'assistant',
+          text: t('support.noApiKey'),
+          ts: Date.now(),
+          status: 'error',
+        };
+        setMessages((prev) => [
+          ...prev,
+          { id: createId(), role: 'user', text: trimmed, ts: Date.now() },
+          errorMsg,
+        ]);
+        setInput('');
+        return;
       }
+
+      const userMessage: Message = {
+        id: createId(),
+        role: 'user',
+        text: trimmed,
+        ts: Date.now(),
+      };
+      const assistantMessage: Message = {
+        id: createId(),
+        role: 'assistant',
+        text: t('support.sending'),
+        ts: Date.now(),
+        status: 'pending',
+      };
+
+      setMessages((prev) => [...prev, userMessage, assistantMessage]);
+      setInput('');
+      setIsSending(true);
+
+      const payload: GroqMessage[] = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...messagesRef.current.map((m) => ({ role: m.role, content: m.text })),
+        { role: 'user', content: trimmed },
+      ];
+
+      groqSend({ apiKey: GROQ_API_KEY, model: GROQ_MODEL }, payload, {
+        onSuccess(reply) {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantMessage.id ? { ...m, text: reply, status: undefined } : m,
+            ),
+          );
+          setIsSending(false);
+        },
+        onError(msg) {
+          console.error('[Support] Error:', msg);
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantMessage.id ? { ...m, text: msg, status: 'error' } : m,
+            ),
+          );
+          setIsSending(false);
+        },
+        onTimeout() {
+          console.warn('[Support] Timeout');
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantMessage.id
+                ? { ...m, text: t('support.timeout'), status: 'error' }
+                : m,
+            ),
+          );
+          setIsSending(false);
+        },
+      });
     },
-    [handleSend],
+    [hasApiKey, input, t, isSending],
   );
 
   const handleClearHistory = useCallback(() => {
@@ -403,7 +413,7 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
         </div>
 
         {/* Footer */}
-        <div className="support-footer">
+        <form className="support-footer" onSubmit={handleSend}>
           <div className="support-input-wrap">
             <input
               ref={inputRef}
@@ -412,20 +422,19 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
               placeholder={t('support.placeholder')}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
               disabled={isSending}
               autoComplete="off"
             />
           </div>
           <button
+            type="submit"
             className="support-send-btn"
-            onClick={handleSend}
             disabled={isSending || !input.trim()}
             aria-label={t('support.send')}
           >
             <SendIcon />
           </button>
-        </div>
+        </form>
       </div>
     </BottomSheet>
   );
