@@ -1,0 +1,226 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100;
+  pointer-events: auto;
+  transition: opacity 0.8s ease;
+  will-change: opacity;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-overlay.closing {
+  opacity: 0;
+  visibility: visible;
+  pointer-events: none !important;
+}
+
+/* ── Modal Containers (shared) ── */
+.modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  max-height: 85vh;
+  z-index: 101;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  transition:
+    transform 0.8s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.8s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  visibility: visible;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+/* ── Vue Transitions ── */
+.modal-enter-from,
+.modal-leave-to {
+  transform: translateY(100%) scale(0.97);
+  opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition:
+    transform 0.8s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.8s ease;
+}
+
+.overlay-enter-from,
+.overlay-leave-to {
+  opacity: 0;
+}
+
+.overlay-enter-active,
+.overlay-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+/* ── Drag Handle (pill) ── */
+.modal-drag-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 8px auto 4px;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.modal-drag-handle:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Gradient Glow Border (replaces static border-top) ── */
+.modal-glow-border {
+  height: 1.5px;
+  margin: -16px -14px 0;
+  border-radius: 22px 22px 0 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-accent), transparent 50%) 25%,
+    color-mix(in srgb, var(--color-accent-2), transparent 40%) 50%,
+    color-mix(in srgb, var(--color-accent), transparent 50%) 75%,
+    transparent 100%
+  );
+  flex-shrink: 0;
+}
+
+/* ── Luminous Separator ── */
+.modal-separator {
+  height: 1px;
+  margin: 10px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-accent), transparent 72%) 40%,
+    color-mix(in srgb, var(--color-accent), transparent 72%) 60%,
+    transparent 100%
+  );
+}
+
+/* ── Shared modal header and close button ── */
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 14px 0;
+  gap: 14px;
+}
+
+.divider {
+  height: 0.5px;
+  background: var(--color-divider);
+  margin: 18px 18px;
+}
+
+.modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* ── Close button ── */
+.close-btn,
+.close-modal-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  color: color-mix(in srgb, var(--color-text), transparent 62%);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
+}
+
+.close-btn:hover,
+.close-modal-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: color-mix(in srgb, var(--color-text), transparent 40%);
+}
+
+/* ── Glowing Card ── */
+.glow-card {
+  position: relative;
+  border: 1px solid var(--color-accent-soft);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glow-card:active {
+  border-color: rgba(139, 110, 255, 0.4);
+  box-shadow: 0 0 16px rgba(139, 110, 255, 0.12);
+}
+
+/* ── Header Icon Glow ── */
+.modal-header-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-accent), transparent 88%);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent), transparent 82%);
+  color: color-mix(in srgb, var(--color-accent), white 18%);
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.modal-header-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── State Pulse ── */
+@keyframes state-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(40, 209, 124, 0.35); }
+  70% { box-shadow: 0 0 0 8px rgba(40, 209, 124, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(40, 209, 124, 0); }
+}
+
+
+
+
+
+
+
+
+

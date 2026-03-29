@@ -1,0 +1,62 @@
+:root {
+  --bg: #09090a;
+  --card: #15161a;
+  --card-2: #24262d;
+  --text: #f8f7ff;
+  --muted: #9ca3af;
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --blue: #6d4aff;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --radius: 22px;
+  --page-pad: 16px;
+  --content-max: 420px;
+  --connect-size: clamp(178px, 31vmin, 235px);
+  --statusbar-offset: 0px;
+  --navigation-offset: 0px;
+
+  /* Safe-area / system insets (Android / iOS) */
+  --safe-area-top: max(var(--statusbar-offset), env(safe-area-inset-top));
+  --safe-area-right: max(0px, env(safe-area-inset-right));
+  --safe-area-bottom: max(var(--navigation-offset), env(safe-area-inset-bottom));
+  --safe-area-left: max(0px, env(safe-area-inset-left));
+
+  /* ── Semantic color tokens (Phase 2) ── */
+  --color-bg: var(--bg);
+  --color-surface-1: rgba(24, 24, 27, 0.84);
+  --color-surface-2: rgba(39, 39, 42, 0.84);
+  --color-surface-solid: var(--card);
+  --color-elevated: rgba(24, 24, 27, 0.88);
+
+  --color-text: #e8ecff;
+  --color-text-strong: var(--text);
+  --color-text-muted: var(--muted);
+  --color-text-soft: rgba(216, 232, 255, 0.75);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(216, 232, 255, 0.25);
+  --color-divider: rgba(255, 255, 255, 0.07);
+
+  --color-accent: #8b6eff;
+  --color-accent-2: #6da9ff;
+  --color-accent-soft: rgba(139, 110, 255, 0.18);
+
+  --color-success: var(--green);
+  --color-warning: var(--yellow);
+  --color-danger: #ff5e7d;
+
+  /* ── Motion + radius tokens ── */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: var(--radius);
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.32, 0.72, 0, 1);
+  --motion-fast: 180ms;
+  --motion-base: 320ms;
+  --motion-slow: 520ms;
+}

@@ -22,8 +22,8 @@ import { TermsScreen } from '../features/terms';
 // Menu Feature Screens (features/menu/ui/screens/)
 import { MenuScreen } from '../features/menu';
 
-// Support Feature - Migrated to BottomSheet
-// import { SupportScreen } from '../features/support';
+// Support Feature
+import { SupportScreen } from '../features/support';
 
 // Shared Transversal Code (imports directos)
 import { ToastProvider, useToastContext } from '../shared/context/ToastContext';
@@ -36,7 +36,6 @@ import {
   LogsBottomSheet,
   AccountBottomSheet,
   ImportBottomSheet,
-  SupportBottomSheet,
 } from '../shared/components';
 import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
@@ -79,10 +78,12 @@ const SCREEN_COMPONENTS: Record<
   terms: TermsScreen,
   // Menu Feature (features/menu/ui/screens/)
   menu: MenuScreen,
+  // Support Feature (features/support/ui/screens/)
+  support: SupportScreen,
 };
 
 function AppContent() {
-  const { screen } = useVpn();
+  const { screen, setScreen } = useVpn();
   const { navigationBarHeight, statusBarHeight } = useSafeArea();
   const { t } = useTranslation();
   const { toast, showToast } = useToastContext();
@@ -178,30 +179,21 @@ function AppContent() {
   const { isPromoActive, is2x1Active } = usePromo();
 
   return (
-    <div
-      className={`phone ${stateClass} ${screenClass} ${activeSheet === 'support' ? 'hide-bg-for-support' : ''}`}
-      id="app"
-      style={phoneStyle}
-    >
+    <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
       <div className="top-strip" />
 
-      {screen !== 'terms' && (
-        <AppHeader
-          onMenuClick={() => toggleSheet('extras')}
-          onShowSupport={() => toggleSheet('support')}
-        />
-      )}
+      {screen !== 'terms' && <AppHeader onMenuClick={() => toggleSheet('extras')} />}
 
       <ScreenComponent
         onShowAccount={() => toggleSheet('account')}
-        onShowSupport={() => toggleSheet('support')}
+        onShowSupport={() => setScreen('support')}
       />
 
       {screen !== 'terms' && (
         <BottomTabs
           onShowLogs={() => toggleSheet('logs')}
           onShowPromo={() => toggleSheet('promo')}
-          onShowSupport={() => toggleSheet('support')}
+          onShowSupport={() => (screen === 'support' ? setScreen('home') : setScreen('support'))}
           onShowExtras={() => toggleSheet('extras')}
           onShowAccount={() => toggleSheet('account')}
           onUpdate={handleUpdate}
@@ -226,9 +218,11 @@ function AppContent() {
         isOpen={activeSheet === 'extras'}
         onClose={() => setActiveSheet(null)}
         onShowImport={() => setActiveSheet('import')}
-        onShowSupport={() => setActiveSheet('support')}
+        onShowSupport={() => {
+          setActiveSheet(null);
+          setScreen('support');
+        }}
       />
-      <SupportBottomSheet isOpen={activeSheet === 'support'} onClose={() => setActiveSheet(null)} />
     </div>
   );
 }

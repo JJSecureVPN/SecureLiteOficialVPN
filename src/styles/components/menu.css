@@ -1,87 +1,102 @@
 /* ===========================================
-   Menu - Lista de menú
+   Menu - Lista de menú totalmente minimalista (Sin contenedores)
    =========================================== */
 
 .menu-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: var(--space-sm);
-  /* Contenedor transparente: cada fila actúa como tarjeta */
+  margin-top: var(--space-md);
   background: transparent;
   border: none;
   padding: 0;
 }
+
 .menu-row {
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-1);
+  border: none;
+  background: transparent;
   color: var(--text);
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: 8px var(--space-md);
+  gap: var(--space-md);
+  padding: 14px 4px; /* Más aire vertical */
   text-align: left;
   cursor: pointer;
   transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.12s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  -webkit-tap-highlight-color: transparent; /* eliminar highlight móvil/Android */
-  -webkit-appearance: none;
+    opacity 0.2s ease,
+    transform 0.1s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
   appearance: none;
   user-select: none;
-  outline: none; /* prevenir outline cuadrado del UA */
+  outline: none;
 }
 
-/* Remueve el inner focus border en Firefox */
-.menu-row::-moz-focus-inner {
-  border: 0;
-  padding: 0;
+/* 📱 Responsive MenuRow */
+@media (max-width: 330px) {
+  .menu-row {
+    padding: 8px 4px; /* Reduced from 10px */
+    gap: 10px; /* Reduced from 12px */
+  }
+  .menu-row__icon {
+    width: 24px; /* Reduced from 28px */
+    height: 24px;
+    font-size: 13px; /* Reduced from 15px */
+  }
+  .menu-row__title {
+    font-size: 13px; /* Reduced from 13.5px */
+  }
+  .menu-row__subtitle {
+    font-size: 10.5px; /* Reduced from 11px */
+  }
+}
+
+@media (min-width: 450px) {
+  .menu-row {
+    padding: 18px 6px;
+    gap: 20px;
+  }
+  .menu-row__icon {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+  .menu-row__title {
+    font-size: 16px;
+  }
+  .menu-row__subtitle {
+    font-size: 13px;
+  }
+}
+
+/* Divisor sutil entre filas para dar estructura sin encerrar */
+.menu-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 48px; /* Alineado con el inicio del texto */
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
 }
 
 .menu-row:active {
-  /* estado activo consistente (evita pintar el fondo azul del UA) */
-  background: var(--accent-15);
-  transform: translateY(0) scale(0.995);
-  box-shadow: none;
-}
-
-.menu-row:focus-visible {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow:
-    0 0 0 3px var(--focus-accent-15),
-    var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.menu-row:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--surface-1);
+  opacity: 0.7;
+  transform: scale(0.99);
 }
 
 .menu-row--pressed {
-  background: var(--accent-15);
-  transform: translateY(0) scale(0.995);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .menu-row__icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-sm);
-  color: var(--text-strong);
+  font-size: 18px;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -89,20 +104,24 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .menu-row__title {
-  font-weight: 500;
-  font-size: var(--font-base);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-strong);
+  letter-spacing: -0.01em;
 }
 
 .menu-row__subtitle {
-  font-size: var(--font-sm);
+  font-size: 12px;
   color: var(--muted);
+  opacity: 0.7;
 }
 
 .menu-row__chevron {
   color: var(--muted);
-  opacity: 0.7;
+  opacity: 0.3;
+  font-size: 11px;
 }

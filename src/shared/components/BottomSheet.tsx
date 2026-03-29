@@ -1,4 +1,5 @@
-import { memo, useEffect, type ReactNode, useState, useCallback } from 'react';
+import { memo, useEffect, type ReactNode, useState, useCallback, useRef } from 'react';
+import { ScrollIndicator } from '@/shared/ui/ScrollIndicator';
 import '../../styles/components/bottom-sheet.css';
 
 // Hook corregido: solo expone la altura visible, NO mueve el overlay
@@ -53,6 +54,7 @@ export const BottomSheet = memo(function BottomSheet({
 }: BottomSheetProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   // Solo activar el hook cuando el sheet está montado
   const vvHeight = useVisualViewportHeight(shouldRender);
@@ -63,7 +65,6 @@ export const BottomSheet = memo(function BottomSheet({
 
     if (isOpen) {
       setShouldRender(true);
-      // Doble raf garantiza que se procese el render antes de aplicar la clase de apertura
       rafId = requestAnimationFrame(() => {
         rafId = requestAnimationFrame(() => {
           setIsAnimating(true);
@@ -134,7 +135,11 @@ export const BottomSheet = memo(function BottomSheet({
           </div>
         )}
 
-        <div className="bottom-sheet-body">{children}</div>
+        <div className="bottom-sheet-body" ref={bodyRef}>
+          {children}
+        </div>
+
+        <ScrollIndicator targetRef={bodyRef} dependencies={[children, isAnimating]} />
       </div>
     </div>
   );

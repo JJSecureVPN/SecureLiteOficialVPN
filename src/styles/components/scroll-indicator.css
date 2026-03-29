@@ -1,0 +1,52 @@
+.scroll-indicator {
+  position: absolute;
+  /* Posición fija por defecto sobre las pestañas flotantes */
+  bottom: calc(var(--tabs-space) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38px;
+  height: 38px;
+  background: rgba(109, 74, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.4);
+  animation: pulse-down 2s infinite ease-in-out;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s;
+  pointer-events: auto;
+}
+
+/* Modifier opcional para cuando NO hay pestañas (no usado actualmente) */
+.scroll-indicator--no-tabs {
+  bottom: 12px;
+}
+
+.scroll-indicator.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(10px);
+  pointer-events: none;
+}
+
+@keyframes pulse-down {
+  0% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 4px 12px rgba(109, 74, 255, 0.4);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 4px 20px rgba(109, 74, 255, 0.6);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 4px 12px rgba(109, 74, 255, 0.4);
+  }
+}

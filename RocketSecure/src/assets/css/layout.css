@@ -1,0 +1,129 @@
+.content {
+  min-height: max-content;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--content-max));
+  margin: 0 auto;
+  padding: 40px var(--page-pad) calc(30px + var(--safe-area-bottom));
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.shield {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+}
+
+.chip {
+  background: rgba(109, 74, 255, 0.16);
+  color: #cfe3ff;
+  border: 1px solid rgba(109, 74, 255, 0.36);
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bottom-tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr 1fr 1fr;
+  gap: 6px;
+  padding: 8px 10px calc(10px + var(--safe-area-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px 18px 0 0;
+  background: rgba(9, 15, 32, 0.98);
+  z-index: 12;
+}
+
+.tab-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.01);
+  color: #93a4cf;
+  padding: 7px 4px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 220ms ease;
+}
+
+.tab-btn .icon-svg {
+  width: 18px;
+  height: 18px;
+  margin: 0 auto 4px;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tab-btn.center-home {
+  border-radius: 14px;
+  padding-top: 9px;
+  background: linear-gradient(
+    165deg,
+    rgba(91, 63, 214, 0.2),
+    rgba(55, 36, 137, 0.12)
+  );
+  transform: translateY(0);
+}
+
+.tab-btn.active {
+  color: #e9f3ff;
+  background: linear-gradient(
+    165deg,
+    rgba(91, 63, 214, 0.34),
+    rgba(55, 36, 137, 0.24)
+  );
+  border-color: rgba(139, 110, 255, 0.46);
+  box-shadow: 0 6px 16px rgba(55, 36, 137, 0.26);
+  transform: translateY(0);
+}
+
+@media (min-width: 700px) {
+  body {
+    background: radial-gradient(
+      1200px 600px at 50% -20%,
+      #27272a 0%,
+      var(--bg) 55%
+    );
+  }
+}
+
+@media (max-height: 650px) {
+  .content {
+    padding-top: 20px;
+    padding-bottom: calc(15px + var(--navigation-offset));
+  }
+  .header {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .logo {
+    font-size: 17px;
+  }
+}

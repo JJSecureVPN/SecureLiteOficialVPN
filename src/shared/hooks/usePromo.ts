@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 export type PromoConfig = {
   activa: boolean;
@@ -13,20 +13,27 @@ export type PromoConfig = {
 
 const PROMO_STATUS_URL = 'https://shop.jhservices.com.ar/api/config/promo-status';
 
-export function usePromo(pollInterval = 60_000) {
+export function usePromo(pollInterval = 30_000) {
   const [promo, setPromo] = useState<PromoConfig | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [now, setNow] = useState(Date.now());
 
-  const loadPromo = async () => {
+  const loadPromo = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(PROMO_STATUS_URL, {
+      // Usar cache-buster para evitar respuestas cacheadas por el navegador/CDN
+      const url = `${PROMO_STATUS_URL}?t=${Date.now()}`;
+      const response = await fetch(url, {
         method: 'GET',
-        headers: { Accept: 'application/json' },
+        headers: {
+          Accept: 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
         cache: 'no-store',
       });
 
@@ -59,20 +66,36 @@ export function usePromo(pollInterval = 60_000) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadPromo();
+
+    // Polling regular
     const pollId = window.setInterval(loadPromo, pollInterval);
+
+    // Tick de reloj para el timer visual
     const tickId = window.setInterval(() => {
       setNow(Date.now());
     }, 1000);
 
+    // IMPORTANTE: Refrescar de inmediato cuando el usuario vuelve a entrar a la app
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadPromo();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', loadPromo);
+
     return () => {
       window.clearInterval(pollId);
       window.clearInterval(tickId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', loadPromo);
     };
-  }, [pollInterval]);
+  }, [pollInterval, loadPromo]);
 
   const remainingMs = useMemo(() => {
     if (!promo?.activa || !promo.activada_en || !promo.duracion_horas) {

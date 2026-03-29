@@ -1,18 +1,16 @@
 import { memo, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { SupportButton } from './AppHeader/SupportButton';
 import { SubscribeButton } from './AppHeader/SubscribeButton';
 import { LanguageButton } from './AppHeader/LanguageButton';
 import { BackButton } from './AppHeader/BackButton';
 
 interface AppHeaderProps {
   onMenuClick: () => void;
-  onShowSupport?: () => void;
 }
 
 /** Barra superior de navegación de la app */
-export const AppHeader = memo(function AppHeader({ onMenuClick, onShowSupport }: AppHeaderProps) {
+export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps) {
   const { screen, setScreen, selectedCategory, setSelectedCategory } = useVpn();
 
   const isSubScreen = screen !== 'home';
@@ -48,8 +46,6 @@ export const AppHeader = memo(function AppHeader({ onMenuClick, onShowSupport }:
           isCategoryDetail={isCategoryDetail}
           onClick={handleClick}
         />
-
-        <SupportButton onClick={onShowSupport || (() => {})} />
 
         <SubscribeButton onClick={handleSubscribe} />
 

@@ -15,17 +15,9 @@
   background-image: linear-gradient(180deg, var(--bg-2), var(--bg-1));
 }
 
-/* Overlay inferior: aumenta el “fade a negro” para cubrir bien la barra de navegación (Android) */
+/* Overlay inferior removido para evitar cortes visuales */
 .phone::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: calc(220px + var(--nav-safe, 0px));
-  pointer-events: none;
-  z-index: 0;
-  background: transparent;
+  display: none;
 }
 
 /* ===========================================
@@ -99,8 +91,8 @@ header.topbar {
 .dots {
   display: grid;
   grid-template-columns: repeat(2, clamp(6px, calc(8px * var(--scale-factor)), 10px));
-  grid-auto-rows: clamp(6px, calc(8px * var(--scale-factor)), 10px);
-  gap: clamp(4px, calc(5px * var(--scale-factor)), 7px);
+  grid-auto-rows: clamp(5px, calc(7px * var(--scale-factor)), 9px);
+  gap: clamp(3px, calc(4px * var(--scale-factor)), 6px);
   cursor: pointer;
 }
 
@@ -196,9 +188,9 @@ header.topbar {
 
 .screen {
   position: absolute;
-  /* Global: Respetar espacio de BottomTabs + Safe Area */
-  inset: var(--screen-top) 0 var(--tabs-space);
-  padding: var(--space-xl) var(--space-lg) var(--space-xl);
+  /* Global: Inmersivo — Pantalla completa hasta el fondo del teléfono */
+  inset: var(--screen-top) 0 0;
+  padding: var(--space-xl) var(--space-lg) var(--tabs-space);
   overflow: auto;
   z-index: 1;
   display: flex;
@@ -272,11 +264,16 @@ header.topbar {
   padding-bottom: var(--space-md);
 }
 
+.servers-screen .section-header--detail {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
 .servers-screen .servers-content {
   flex: 1;
   overflow-y: auto !important;
-  /* El espacio inferior ya lo maneja el inset de .screen */
-  padding-bottom: var(--space-xl);
+  /* Inmersivo: el contenido fluye bajo las pestañas, pero el último item libra la flecha */
+  padding-bottom: calc(var(--tabs-space) + var(--space-xl));
   scrollbar-width: none;
 }
 
@@ -295,13 +292,13 @@ header.topbar {
   overflow: hidden;
 }
 
-@media (max-height: 600px) {
+@media (max-height: 650px) {
   .home-screen {
-    overflow-y: auto;
+    overflow: hidden; /* Mantener no-scroll como solicitaste */
   }
   .home-main {
-    height: auto !important;
-    min-height: 100%;
+    height: 100%;
+    padding: 8px 16px;
   }
 }
 
@@ -318,17 +315,17 @@ header.topbar {
 }
 
 .home-spacer-top {
-  flex: 0.4;
+  flex: 0.25;
   width: 100%;
 }
 
 .home-spacer-mid {
-  flex: 0.4;
+  flex: 0.25;
   width: 100%;
 }
 
 .home-spacer-bottom {
-  flex: 3;
+  flex: 0.75;
   width: 100%;
 }
 
@@ -343,12 +340,12 @@ header.topbar {
 }
 
 .server-card-wrapper {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: calc(18px * var(--scale-factor));
-  max-height: 55%; /* Invisible line constraint */
+  gap: calc(14px * var(--scale-factor));
+  max-height: none; /* Eliminamos el límite de 55% para ocupar el espacio libre */
 }

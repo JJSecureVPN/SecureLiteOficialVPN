@@ -14,7 +14,7 @@ import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useToastContext } from '@/shared/context/ToastContext';
 import { useServerStats } from '@/shared/hooks/useServerStats';
-import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
 import { useTranslation } from '@/i18n';
 import { appLogger } from '@/features/logs';
@@ -22,6 +22,7 @@ import { useAsyncError } from '@/core/hooks';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { useDTunnelEvent } from '@/lib/dtunnel-sdk-react';
 import { ErrorDisplay } from '@/core/components';
+import { ScrollIndicator } from '@/shared/ui/ScrollIndicator';
 import {
   useServersFilter,
   useServersExpand,
@@ -51,8 +52,8 @@ export function ServersScreen() {
   // UI State
   const { t } = useTranslation();
   const { showToast } = useToastContext();
-  // Reducir un poco el espacio superior en la pantalla de Servidores
-  const sectionStyle = useSectionStyle(8, 24);
+  const { statusBarHeight } = useSafeArea();
+  const sectionStyle = { paddingTop: `calc(${statusBarHeight}px + 8px)`, paddingBottom: 0 };
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Error Handling
@@ -245,6 +246,11 @@ export function ServersScreen() {
         subcategoryFilter={subcategoryFilter}
         onSubcategoryFilter={setSubcategoryFilter}
         totalOnline={totalOnline}
+        searchTerm={searchTerm}
+        categorias={categorias}
+        onSearchChange={setSearchTerm}
+        onClearSearch={() => setSearchTerm('')}
+        onOpenConfigurator={handleOpenConfigurator}
       />
       <ServersContent
         contentRef={contentRef}
@@ -260,9 +266,18 @@ export function ServersScreen() {
         onCategoryClick={setSelectedCategory}
         onServerClick={handleServerClick}
         onToggleExpand={toggleExpand}
-        onSearchChange={setSearchTerm}
         onClearSearch={() => setSearchTerm('')}
         onOpenConfigurator={handleOpenConfigurator}
+      />
+      <ScrollIndicator
+        targetRef={contentRef}
+        dependencies={[
+          selectedCategory,
+          filteredCategories,
+          visibleGroups,
+          expandedCategories,
+          searchTerm,
+        ]}
       />
     </section>
   );

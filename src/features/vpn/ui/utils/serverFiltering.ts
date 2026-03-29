@@ -14,19 +14,31 @@ import type { Category, ServerConfig } from '@/core/types';
 export function filterAndSortCategories(categories: Category[], searchTerm: string): Category[] {
   const query = searchTerm.trim().toLowerCase();
 
-  return [...categories]
-    .filter((cat) => (cat.items?.length || 0) > 0)
-    .filter((cat) => !query || cat.name.toLowerCase().includes(query))
-    .sort((a, b) => {
-      const sorterDiff =
-        (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
-      if (sorterDiff !== 0) return sorterDiff;
+  const processCategories = query
+    ? categories
+        .map((cat) => {
+          const catMatches = cat.name.toLowerCase().includes(query);
+          const matchingItems = cat.items?.filter(
+            (srv) =>
+              catMatches ||
+              srv.name.toLowerCase().includes(query) ||
+              (srv.description && srv.description.toLowerCase().includes(query)),
+          );
+          return { ...cat, items: matchingItems || [] };
+        })
+        .filter((cat) => cat.items.length > 0)
+    : categories.filter((cat) => (cat.items?.length || 0) > 0);
 
-      const countDiff = (b.items?.length || 0) - (a.items?.length || 0);
-      if (countDiff !== 0) return countDiff;
+  return [...processCategories].sort((a, b) => {
+    const sorterDiff =
+      (a.sorter ?? Number.MAX_SAFE_INTEGER) - (b.sorter ?? Number.MAX_SAFE_INTEGER);
+    if (sorterDiff !== 0) return sorterDiff;
 
-      return a.name.localeCompare(b.name);
-    });
+    const countDiff = (b.items?.length || 0) - (a.items?.length || 0);
+    if (countDiff !== 0) return countDiff;
+
+    return a.name.localeCompare(b.name);
+  });
 }
 
 /**

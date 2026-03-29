@@ -71,7 +71,7 @@
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
   border: 1px solid var(--border);
-  height: var(--input-height);
+  height: var(--srv-search-h, var(--input-height));
 }
 
 .search-field input {

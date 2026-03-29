@@ -36,15 +36,16 @@ export const LogsBottomSheet = memo(function LogsBottomSheet({
     }
   }, [logs, isOpen, scrollToBottom]);
 
-  // Initial scroll when opening
+  // Initial pull when opening
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => {
+      refresh();
+      // Esperar al siguiente frame para asegurar que el DOM tiene los logs nuevos
+      requestAnimationFrame(() => {
         scrollToBottom('auto');
-      }, 150); // Delay to ensure DOM is ready and animated
-      return () => clearTimeout(timer);
+      });
     }
-  }, [isOpen, scrollToBottom]);
+  }, [isOpen, refresh, scrollToBottom]);
 
   // Refresh logs when opening
   useEffect(() => {
@@ -108,7 +109,7 @@ export const LogsBottomSheet = memo(function LogsBottomSheet({
       title={t('buttons.logs')}
       subtitle={t('logs.subtitle')}
       className="logs-sheet-container"
-      height="auto"
+      height="70%"
       headerActions={headerActions}
       icon={
         <div className="logs-header-icon-box">

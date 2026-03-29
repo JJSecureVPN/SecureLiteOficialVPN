@@ -17,37 +17,35 @@
 }
 
 .bottom-sheet-overlay.open {
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   visibility: visible;
   transition:
     background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     visibility 0s step-start;
 }
 
 .bottom-sheet-content {
   width: 100%;
   max-width: 550px;
-  margin: 0 auto;
-  margin-bottom: var(--tabs-space, 82px);
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--surface-1);
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  margin: 0 auto; /* Centrado en pantallas grandes */
+  padding-bottom: var(--tabs-space);
+  background: linear-gradient(to bottom, rgba(20, 20, 25, 0.95) 0%, rgba(10, 10, 12, 0.98) 100%);
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   transform: translateY(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  /* box-shadow removed to avoid "another container" look */
-  /* Reset safe areas since we are already above the tabs */
-  --nav-safe: 0px !important;
-  --safe-area-bottom: 0px !important;
-  backface-visibility: hidden; /* Prevent flickering */
+  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-  /* overflow: visible; To let the glow and handle shine - This was removed as per instruction's `overflow: hidden` */
-  border-top: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
   will-change: transform;
 }
 
@@ -56,8 +54,8 @@
 }
 
 body.keyboard-open .bottom-sheet-content {
-  margin-bottom: 0;
-  transition: margin-bottom 0.15s ease-out; /* Smooth transition when tabs hide */
+  padding-bottom: 0 !important;
+  transition: none !important; /* Evita que el contenido "baile" al abrir teclado */
 }
 
 .bottom-sheet-glow-border {
@@ -129,14 +127,16 @@ body.keyboard-open .bottom-sheet-content {
 .bottom-sheet-body {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
-  padding: 16px 16px calc(80px + var(--safe-area-bottom, 0px)); /* Añadido 16px arriba */
+  padding: 20px 20px 32px;
   -webkit-overflow-scrolling: touch;
 }
 
 /* Specific styling for Extras inside BottomSheet */
 .extras-bottom-sheet .menu-list {
-  padding-bottom: env(safe-area-inset-bottom, 20px);
+  padding-bottom: 0;
 }
 
 .extras-bottom-sheet .premium-card {

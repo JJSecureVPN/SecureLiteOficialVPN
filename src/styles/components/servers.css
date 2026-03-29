@@ -2,10 +2,72 @@
    Servers - Lista y tarjetas de servidores
    =========================================== */
 
+/* Responsive Variables for Servers Screen */
+:root {
+  --srv-title-size: 20px;
+  --srv-online-size: 11px;
+  --srv-subtitle-p: 0 16px;
+  --srv-search-h: 46px;
+  --srv-config-size: 46px;
+}
+
+@media (max-width: 330px) {
+  :root {
+    --srv-title-size: 16px;
+    --srv-online-size: 10px;
+    --srv-subtitle-p: 0 8px;
+    --srv-search-h: 40px;
+    --srv-config-size: 40px;
+  }
+}
+
+@media (min-width: 450px) {
+  :root {
+    --srv-title-size: 22px;
+    --srv-online-size: 12.5px;
+    --srv-search-h: 50px;
+    --srv-config-size: 50px;
+  }
+}
+
+/* Overrides for universal elements inside Servers screen */
+.servers-screen .panel-title {
+  font-size: var(--srv-title-size);
+  margin-bottom: var(--space-xs);
+}
+
+.servers-screen .section-subtitle {
+  font-size: var(--srv-online-size);
+  padding: var(--srv-subtitle-p);
+  max-width: 90%;
+  margin: 0 auto;
+}
+
 .servers-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  padding-top: 16px;
+  padding-bottom: 20px;
+  /* Efecto de desvanecimiento superior e inferior para flujo inmersivo bajo barras */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 16px,
+    black calc(100% - 150px),
+    transparent calc(100% - 50px)
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 16px,
+    black calc(100% - 150px),
+    transparent calc(100% - 50px)
+  );
+}
+
+.category-toolbar-wrapper {
+  padding: 0 0 16px 0;
 }
 
 /* Total online line beneath the main "Servers" title */
@@ -14,7 +76,7 @@
   gap: 0.5rem;
   align-items: baseline;
   justify-content: center;
-  font-size: var(--font-sm);
+  font-size: var(--srv-online-size);
   color: var(--muted);
   font-weight: 700;
   text-transform: uppercase;
@@ -107,6 +169,16 @@
 
 .search-field {
   flex: 1;
+  position: relative;
+}
+
+/* Ocultar la 'X' nativa del buscador, ya tenemos un botón propio */
+.search-field input[type='search']::-webkit-search-cancel-button,
+.search-field input[type='search']::-webkit-search-decoration,
+.search-field input[type='search']::-webkit-search-results-button,
+.search-field input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
 }
 
 .config-btn {
@@ -115,8 +187,8 @@
   border: 1px solid var(--border);
   color: var(--muted);
   border-radius: var(--radius-md);
-  width: var(--input-height);
-  height: var(--input-height);
+  width: var(--srv-config-size);
+  height: var(--srv-config-size);
   display: flex;
   align-items: center;
   justify-content: center;

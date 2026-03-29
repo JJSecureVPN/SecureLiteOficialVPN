@@ -1,0 +1,66 @@
+/* ===========================================
+   ExtrasBottomSheet - Responsive Overrides
+   =========================================== */
+
+.extras-bottom-sheet {
+  --ext-header-p: var(--space-lg, 16px) var(--space-xl, 24px);
+  --ext-title-size: 17px;
+  --ext-subtitle-size: 11px;
+}
+
+/* 📱 Extremely Small Screens (e.g. 280-320px) */
+@media (max-width: 330px) {
+  .extras-bottom-sheet {
+    --ext-header-p: 12px 14px;
+    --ext-icon-size: 28px; /* Added for consistency */
+    --ext-title-size: 14px; /* Lowered from 15px */
+    --ext-subtitle-size: 10px;
+  }
+}
+
+/* 🖥️ High Resolution Screens / Tablets */
+@media (min-width: 450px) {
+  .extras-bottom-sheet {
+    --ext-header-p: 20px 24px;
+    --ext-title-size: 18px;
+    --ext-subtitle-size: 13px;
+  }
+}
+
+/* Header overrides specifically for Extras */
+.extras-bottom-sheet .bottom-sheet-header {
+  padding: var(--ext-header-p);
+}
+
+.extras-bottom-sheet .bottom-sheet-title {
+  font-size: var(--ext-title-size);
+}
+
+.extras-bottom-sheet .bottom-sheet-subtitle {
+  font-size: var(--ext-subtitle-size);
+}
+
+/* Icon in Extras header is usually a font-awesome icon */
+.extras-bottom-sheet .bottom-sheet-icon-wrapper {
+  width: var(--ext-icon-size, 32px);
+  height: var(--ext-icon-size, 32px);
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 330px) {
+  .extras-bottom-sheet .bottom-sheet-icon-wrapper {
+    width: var(--ext-icon-size);
+    height: var(--ext-icon-size);
+    font-size: 14px;
+    padding: 0;
+  }
+}
+
+@media (min-width: 450px) {
+  .extras-bottom-sheet .bottom-sheet-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+}

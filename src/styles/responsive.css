@@ -17,7 +17,7 @@
 
 @media (max-width: 450px) {
   .phone {
-    height: 100vh;
+    height: 100dvh;
   }
   .field.full {
     grid-column: auto;

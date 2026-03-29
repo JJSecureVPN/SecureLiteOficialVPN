@@ -11,12 +11,17 @@ import { resolveSubcategory } from '@/features/vpn/ui/utils/categoryParsing';
 import { ServerStats, type ServerLiveStats } from './ServerStats';
 import type { Category } from '@/core/types';
 
+import { ServerListItem } from './ServerListItem';
+
 interface ServerCategoryProps {
   category: Category;
   hasSelectedServer: boolean;
   autoMode: boolean;
   liveStats: ServerLiveStats | null;
   isExpanded: boolean;
+  searchTerm?: string;
+  currentConfig?: import('@/core/types').ServerConfig | null;
+  onServerClick?: (srv: import('@/core/types').ServerConfig, cat: Category) => void;
   onCategoryClick: (cat: Category) => void;
   onToggleStats: (categoryName: string) => void;
 }
@@ -28,6 +33,9 @@ export const ServerCategory = memo(
     autoMode: _autoMode,
     liveStats,
     isExpanded,
+    searchTerm,
+    currentConfig,
+    onServerClick,
     onCategoryClick,
     onToggleStats,
   }: ServerCategoryProps) {
@@ -112,6 +120,32 @@ export const ServerCategory = memo(
         {isExpanded && (
           <div className="category-card__expanded">
             <ServerStats stats={liveStats} />
+
+            {/* Si hay búsqueda, mostrar los servidores coincidentes directamente aquí */}
+            {!!searchTerm && category.items && category.items.length > 0 && onServerClick && (
+              <div
+                className="search-results-list"
+                style={{
+                  marginTop: 'calc(16px * var(--scale-factor))',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 'calc(8px * var(--scale-factor))',
+                  borderTop: '1px solid var(--border)',
+                  paddingTop: 'calc(16px * var(--scale-factor))',
+                }}
+              >
+                {category.items.map((srv) => (
+                  <ServerListItem
+                    key={srv.id}
+                    server={srv}
+                    isActive={currentConfig?.id === srv.id}
+                    category={category}
+                    autoMode={_autoMode}
+                    onSelectServer={onServerClick}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </Card>

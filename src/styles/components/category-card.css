@@ -3,12 +3,50 @@
    Optimizado para móvil con interacciones táctiles
    =========================================== */
 
+/* Responsive Variables for Category Card */
+.category-card {
+  --cat-p: 16px;
+  --cat-title: 17px;
+  --cat-badge-p: 6px 10px;
+  --cat-badge-font: 13px;
+  --cat-pill-p: 4px 10px;
+  --cat-pill-font: 12px;
+  --cat-stats-toggle-p: 10px 12px;
+  --cat-stats-toggle-font: 13px;
+  --cat-metric-label: 13px;
+  --cat-metric-value: 14px;
+}
+
+@media (max-width: 330px) {
+  .category-card {
+    --cat-p: 12px;
+    --cat-title: 14px;
+    --cat-badge-p: 4px 8px;
+    --cat-badge-font: 11px;
+    --cat-pill-p: 3px 8px;
+    --cat-pill-font: 10.5px;
+    --cat-stats-toggle-p: 8px 10px;
+    --cat-stats-toggle-font: 11.5px;
+    --cat-metric-label: 11px;
+    --cat-metric-value: 12px;
+  }
+}
+
+@media (min-width: 450px) {
+  .category-card {
+    --cat-p: 20px;
+    --cat-title: 18px;
+    --cat-badge-font: 14px;
+    --cat-pill-font: 13px;
+  }
+}
+
 .category-card {
   position: relative;
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: var(--cat-p);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-tap-highlight-color: transparent;
@@ -73,7 +111,7 @@
 
 .category-card__title {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--cat-title);
   font-weight: 600;
   color: var(--text-strong);
   overflow: hidden;
@@ -102,11 +140,11 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: var(--cat-badge-p);
   border-radius: 12px;
   background: var(--surface-2);
   color: var(--text);
-  font-size: 13px;
+  font-size: var(--cat-badge-font);
   font-weight: 600;
   flex-shrink: 0;
   border: 1px solid var(--border);
@@ -130,11 +168,11 @@
 .category-pill {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: var(--cat-pill-p);
   border-radius: 8px;
   background: var(--bg-2);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--cat-pill-font);
   font-weight: 500;
   border: 1px solid transparent;
   transition: all 0.2s ease;
@@ -155,12 +193,12 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 12px;
+  padding: var(--cat-stats-toggle-p);
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--bg-1);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--cat-stats-toggle-font);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -229,7 +267,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--cat-metric-label);
   font-weight: 600;
   color: var(--text);
 }
@@ -242,7 +280,7 @@
 }
 
 .stat-metric__value {
-  font-size: 14px;
+  font-size: var(--cat-metric-value);
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

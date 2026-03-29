@@ -4,24 +4,20 @@
 
 .bottom-tabs {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
+  left: calc(16px * var(--scale-factor));
+  right: calc(16px * var(--scale-factor));
+  bottom: calc((20px + var(--safe-area-bottom, 0px)) * var(--scale-factor));
+  width: auto;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  padding: calc(8px * var(--scale-factor)) 0
-    calc((8px + var(--safe-area-bottom, 0px)) * var(--scale-factor));
-  /* Fondo negro semitransparente con un toque de púrpura */
-  /* background: rgba(8, 8, 10, 0.85); */
-  background: var(--bg-dark); /* Fondo sólido */
-  /* backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%); */
-  border-top: 1px solid rgba(109, 74, 255, 0.15);
-  background: var(--bg-dark);
+  padding: calc(10px * var(--scale-factor)) 0;
+  background: rgba(13, 13, 18, 0.95); /* Menos transparente */
+  border-radius: calc(24px * var(--scale-factor));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
   z-index: 1000;
-  border-top: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.keyboard-open .bottom-tabs {
@@ -32,8 +28,8 @@ body.keyboard-open .bottom-tabs {
   position: relative;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.45); /* Blanco apagado para contraste serio */
-  padding: calc(10px * var(--scale-factor)) 0;
+  color: rgba(255, 255, 255, 0.4);
+  padding: calc(6px * var(--scale-factor)) 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -43,37 +39,38 @@ body.keyboard-open .bottom-tabs {
   opacity: 1;
   outline: none !important;
   -webkit-tap-highlight-color: transparent !important;
+  gap: calc(4px * var(--scale-factor));
 }
 
 .tab-btn.active {
-  color: var(--accent); /* Púrpura brillante */
-  text-shadow: 0 0 10px rgba(109, 74, 255, 0.3);
+  color: var(--accent);
 }
 
-/* Indicador sutil debajo del icono con brillo púrpura */
-.tab-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: calc(4px * var(--scale-factor));
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(4px * var(--scale-factor));
-  height: calc(4px * var(--scale-factor));
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 calc(10px * var(--scale-factor)) var(--accent);
+.tab-label {
+  font-size: calc(10px * var(--scale-factor));
+  font-weight: 600;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.tab-btn.active .tab-label {
+  opacity: 1;
 }
 
 .tab-btn .icon-svg {
-  width: calc(24px * var(--scale-factor));
-  height: calc(24px * var(--scale-factor));
-  stroke-width: 1.6;
+  width: calc(22px * var(--scale-factor));
+  height: calc(22px * var(--scale-factor));
+  stroke-width: 1.8;
   transition: all 0.3s ease;
 }
 
 .tab-btn.active .icon-svg {
-  transform: translateY(calc(-3px * var(--scale-factor)));
-  filter: drop-shadow(0 0 4px rgba(109, 74, 255, 0.4));
+  transform: translateY(calc(-2px * var(--scale-factor)));
+}
+
+/* Indicador removido para look flotante limpio, o movido a arriba */
+.tab-btn.active::after {
+  content: none;
 }
 
 .center-tab-wrapper {
@@ -81,28 +78,25 @@ body.keyboard-open .bottom-tabs {
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 1001; /* Por encima del resto de tabs */
-}
-
-/* Ocultar etiquetas para minimalismo extremo */
-.center-label,
-.tab-btn span:not(.notif-bell) {
-  display: none !important;
+  z-index: 1001;
 }
 
 /* Notificación de promo ALERTANTE (Floating & Pulsing) */
 .tab-btn.center-home.deal-active {
   transform: translateY(calc(-14px * var(--scale-factor)));
-  background: linear-gradient(135deg, #ff9800, #f57c00); /* Naranja/Oro vibrante */
-  width: calc(52px * var(--scale-factor));
-  height: calc(52px * var(--scale-factor));
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  width: calc(54px * var(--scale-factor));
+  height: calc(54px * var(--scale-factor));
   border-radius: 50%;
   color: #fff;
   opacity: 1;
-  box-shadow: 0 calc(6px * var(--scale-factor)) calc(20px * var(--scale-factor))
-    rgba(245, 124, 0, 0.45);
+  box-shadow: none;
   animation: pulse-alert 2s infinite ease-in-out;
-  border: 4px solid rgba(8, 8, 10, 0.85); /* Borde para que respire sobre la barra */
+  border: 4px solid rgba(13, 13, 18, 1);
+}
+
+.tab-btn.center-home.deal-active .tab-label {
+  display: none; /* Hide label if we have the big action button */
 }
 
 .tab-btn.center-home.deal-active .notif-bell {
@@ -119,7 +113,7 @@ body.keyboard-open .bottom-tabs {
       rgba(245, 124, 0, 0.4);
   }
   50% {
-    transform: translateY(calc(-18px * var(--scale-factor))) scale(1.08); /* Sube un poco más al pulsar */
+    transform: translateY(calc(-18px * var(--scale-factor))) scale(1.08);
     box-shadow: 0 calc(10px * var(--scale-factor)) calc(25px * var(--scale-factor))
       rgba(245, 124, 0, 0.6);
   }
@@ -137,5 +131,4 @@ body.keyboard-open .bottom-tabs {
   width: calc(24px * var(--scale-factor));
   height: calc(24px * var(--scale-factor));
   color: var(--status-warn);
-  filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.3));
 }

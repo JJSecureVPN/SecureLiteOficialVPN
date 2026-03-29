@@ -11,7 +11,7 @@ export const LS_KEYS = {
   language: 'vpn_language',
 } as const;
 
-export const SCREENS = ['home', 'servers', 'menu', 'terms'] as const;
+export const SCREENS = ['home', 'servers', 'menu', 'terms', 'support'] as const;
 
 /** Duración del toast en milisegundos */
 export const TOAST_DURATION_MS = 2500;

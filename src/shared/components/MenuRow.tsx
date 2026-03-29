@@ -1,5 +1,4 @@
 import React, { memo, useCallback } from 'react';
-import { Card } from '@/shared/ui';
 
 interface MenuRowProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'title'> {
   id: string;
@@ -11,9 +10,8 @@ interface MenuRowProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 /**
- * MenuRow — fila reutilizable para el menú principal
- * - Usa `Card as="button"` internamente para mantener apariencia de tarjeta
- * - Maneja accesibilidad (Enter/Space) y estados pressed/disabled
+ * MenuRow — Fila minimalista para el menú de extras.
+ * - Rediseñada para ser plana y refinada, sin bordes individuales.
  */
 export const MenuRow = memo(function MenuRow({
   id,
@@ -44,8 +42,7 @@ export const MenuRow = memo(function MenuRow({
   const cx = ['menu-row', pressed ? 'menu-row--pressed' : '', className].filter(Boolean).join(' ');
 
   return (
-    <Card
-      as="button"
+    <button
       type="button"
       id={id}
       className={cx}
@@ -69,6 +66,6 @@ export const MenuRow = memo(function MenuRow({
       </div>
 
       <i className="fa fa-chevron-right menu-row__chevron" aria-hidden="true" />
-    </Card>
+    </button>
   );
 });

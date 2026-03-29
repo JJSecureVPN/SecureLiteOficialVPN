@@ -14,6 +14,7 @@ import {
 import type { HotspotState } from '@/shared/lib/nativeActions';
 import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
 import { BottomSheet } from './BottomSheet';
+import '../../styles/components/extras-bottom-sheet.css';
 
 interface MenuItem {
   id: string;
@@ -161,6 +162,7 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       title={t('menu.title')}
       subtitle="Gestión de herramientas y red"
       icon={<i className="fa fa-bars-staggered" />}
+      height="82vh"
       className="extras-bottom-sheet"
     >
       <PremiumCard />

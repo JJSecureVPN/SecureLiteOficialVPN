@@ -1,9 +1,9 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n';
-import { groqSend, GroqMessage } from '../../features/support/api/groq';
-import { GROQ_API_KEY, GROQ_MODEL, SYSTEM_PROMPT } from '../../features/support/constants';
-import { BottomSheet } from './BottomSheet';
-import '../../styles/components/support-bottom-sheet.css';
+import { groqSend, GroqMessage } from '../../api/groq';
+import { GROQ_API_KEY, GROQ_MODEL, SYSTEM_PROMPT } from '../../constants';
+import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import '@/styles/screens/support-screen.css';
 
 type MessageRole = 'user' | 'assistant';
 
@@ -98,9 +98,8 @@ function formatDateLabel(ts: number): string {
 // ── Icons ────────────────────────────────────────────────────────────────────
 
 const BotIcon = () => (
-  <svg viewBox="0 0 16 16" fill="none" width="13" height="13">
-    <circle cx="8" cy="8" r="5.5" stroke="#a58eff" strokeWidth="1.3" />
-    <path d="M6 8h4M8 6v4" stroke="#a58eff" strokeWidth="1.3" strokeLinecap="round" />
+  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+    <path d="M12,2a8,8,0,0,0-8,8v1.9A2.92,2.92,0,0,0,3,14a2.88,2.88,0,0,0,1.94,2.61C6.24,19.72,8.85,22,12,22h3V20H12c-2.26,0-4.31-1.7-5.34-4.39l-.21-.55L5.86,15A1,1,0,0,1,5,14a1,1,0,0,1,.5-.86l.5-.29V11a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1v5H13.91a1.5,1.5,0,1,0-1.52,2H20a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2V10A8,8,0,0,0,12,2Z" />
   </svg>
 );
 
@@ -124,16 +123,9 @@ const TrashIcon = () => (
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-interface SupportBottomSheetProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const SupportBottomSheet = memo(function SupportBottomSheet({
-  isOpen,
-  onClose,
-}: SupportBottomSheetProps) {
+export const SupportScreen = memo(function SupportScreen() {
   const { t } = useTranslation();
+  const sectionStyle = useSectionStyle(8, 24);
 
   const [messages, setMessages] = useState<Message[]>(() => loadHistory());
   const [input, setInput] = useState('');
@@ -146,15 +138,17 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
 
   const hasApiKey = Boolean(GROQ_API_KEY);
 
-  const scrollToBottom = useCallback(() => {
-    // Doble rAF: espera que el layout recalcule después del resize del viewport
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (scrollRef.current) {
-          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
+  const scrollToBottom = useCallback((instant = true) => {
+    if (!scrollRef.current) return;
+
+    if (instant) {
+      scrollRef.current.scrollTop = 0; // En column-reverse, 0 es el fondo
+    } else {
+      scrollRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
       });
-    });
+    }
   }, []);
 
   // Init welcome message
@@ -168,20 +162,10 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
     }
   }, [messages, t]);
 
-  // Scroll on new messages or open
+  // Scroll on new messages
   useEffect(() => {
-    if (isOpen) scrollToBottom();
-  }, [messages, isOpen, scrollToBottom]);
-
-  // Focus input when sheet opens
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-        scrollToBottom();
-      }, 350);
-    }
-  }, [isOpen, scrollToBottom]);
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
   const handleSend = useCallback(
     (e?: React.FormEvent) => {
@@ -189,22 +173,17 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
       const trimmed = input.trim();
       if (!trimmed || isSending) return;
 
-      // Debug log (can be seen in browser console)
-      console.log('[Support] Sending message:', trimmed);
-
       if (!hasApiKey) {
-        console.warn('[Support] Missing API Key');
-        const errorMsg: Message = {
-          id: createId(),
-          role: 'assistant',
-          text: t('support.noApiKey'),
-          ts: Date.now(),
-          status: 'error',
-        };
         setMessages((prev) => [
           ...prev,
           { id: createId(), role: 'user', text: trimmed, ts: Date.now() },
-          errorMsg,
+          {
+            id: createId(),
+            role: 'assistant',
+            text: t('support.noApiKey'),
+            ts: Date.now(),
+            status: 'error',
+          },
         ]);
         setInput('');
         return;
@@ -244,7 +223,6 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
           setIsSending(false);
         },
         onError(msg) {
-          console.error('[Support] Error:', msg);
           setMessages((prev) =>
             prev.map((m) =>
               m.id === assistantMessage.id ? { ...m, text: msg, status: 'error' } : m,
@@ -253,7 +231,6 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
           setIsSending(false);
         },
         onTimeout() {
-          console.warn('[Support] Timeout');
           setMessages((prev) =>
             prev.map((m) =>
               m.id === assistantMessage.id
@@ -275,7 +252,6 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
     ]);
   }, [t]);
 
-  // Group messages by date for date labels
   const groupedMessages = useMemo(() => {
     return messages.reduce<{ dateLabel: string; msgs: Message[] }[]>((acc, msg) => {
       const label = formatDateLabel(msg.ts);
@@ -289,132 +265,119 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
     }, []);
   }, [messages]);
 
-  const headerIcon = useMemo(
-    () => (
-      <div className="support-header-avatar">
-        <BotIcon />
-        <span className="support-status-ring" />
-      </div>
-    ),
-    [],
-  );
-
-  const headerActions = useMemo(
-    () => (
-      <button
-        className="support-clear-btn"
-        onClick={handleClearHistory}
-        title={t('support.clearHistory')}
-      >
-        <TrashIcon />
-      </button>
-    ),
-    [handleClearHistory, t],
-  );
-
   return (
-    <BottomSheet
-      isOpen={isOpen}
-      onClose={onClose}
-      title={t('support.title')}
-      subtitle={t('support.subtitle')}
-      className="support-bottom-sheet"
-      height="85vh"
-      headerActions={headerActions}
-      icon={headerIcon}
-    >
+    <section className="screen support-screen" style={sectionStyle}>
       <div className="support-container">
-        {/* Messages */}
-        <div className="support-messages" ref={scrollRef}>
-          {groupedMessages.map(({ dateLabel, msgs }) => (
-            <div key={dateLabel}>
-              <div className="support-date-label">{dateLabel}</div>
-              {msgs.map((message) => {
-                const isBot = message.role === 'assistant';
-                const isPending = message.status === 'pending';
-                const isError = message.status === 'error';
+        <div className="support-screen-header">
+          <div className="support-screen-header-left">
+            <div className="support-header-avatar">
+              <BotIcon />
+              <span className="support-status-ring" />
+            </div>
+            <div>
+              <h1 className="support-screen-title">{t('support.title')}</h1>
+              <p className="support-screen-subtitle">{t('support.subtitle')}</p>
+            </div>
+          </div>
+          <button
+            className="support-clear-btn"
+            onClick={handleClearHistory}
+            title={t('support.clearHistory')}
+          >
+            <TrashIcon />
+          </button>
+        </div>
 
-                if (isBot) {
-                  const { cleanText, links } = extractLinks(message.text);
-                  return (
-                    <div key={message.id} className="support-msg-row support-msg-row--bot">
-                      <div className="support-bot-dot">
-                        <BotIcon />
+        <div className="support-messages" ref={scrollRef}>
+          {groupedMessages
+            .slice()
+            .reverse() // Última fecha primero (se ve abajo)
+            .map(({ dateLabel, msgs }) => (
+              <div key={dateLabel}>
+                <div className="support-date-label">{dateLabel}</div>
+                {msgs.map((message) => {
+                  const isBot = message.role === 'assistant';
+                  const isPending = message.status === 'pending';
+                  const isError = message.status === 'error';
+
+                  if (isBot) {
+                    const { cleanText, links } = extractLinks(message.text);
+                    return (
+                      <div key={message.id} className="support-msg-row support-msg-row--bot">
+                        <div className="support-bot-dot">
+                          <BotIcon />
+                        </div>
+                        <div
+                          className={[
+                            'support-bubble',
+                            'support-bubble--bot',
+                            isPending && 'support-bubble--pending',
+                            isError && 'support-bubble--error',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                        >
+                          {isPending ? (
+                            <>
+                              <span className="support-typing-dot" />
+                              <span className="support-typing-dot" />
+                              <span className="support-typing-dot" />
+                            </>
+                          ) : (
+                            <>
+                              {cleanText && (
+                                <span
+                                  dangerouslySetInnerHTML={{ __html: renderMarkdown(cleanText) }}
+                                />
+                              )}
+                              {links.length > 0 && (
+                                <div className="support-link-actions">
+                                  {links.map((link) => (
+                                    <a
+                                      key={link.url}
+                                      className="support-link-btn"
+                                      href={link.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {link.label}
+                                    </a>
+                                  ))}
+                                </div>
+                              )}
+                              <span className="support-bubble-time">{formatTime(message.ts)}</span>
+                            </>
+                          )}
+                        </div>
                       </div>
+                    );
+                  }
+
+                  return (
+                    <div key={message.id} className="support-msg-row support-msg-row--user">
                       <div
                         className={[
                           'support-bubble',
-                          'support-bubble--bot',
-                          isPending && 'support-bubble--pending',
+                          'support-bubble--user',
                           isError && 'support-bubble--error',
                         ]
                           .filter(Boolean)
                           .join(' ')}
                       >
-                        {isPending ? (
-                          <>
-                            <span className="support-typing-dot" />
-                            <span className="support-typing-dot" />
-                            <span className="support-typing-dot" />
-                          </>
-                        ) : (
-                          <>
-                            {cleanText && (
-                              <span
-                                dangerouslySetInnerHTML={{ __html: renderMarkdown(cleanText) }}
-                              />
-                            )}
-                            {links.length > 0 && (
-                              <div className="support-link-actions">
-                                {links.map((link) => (
-                                  <a
-                                    key={link.url}
-                                    className="support-link-btn"
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {link.label}
-                                  </a>
-                                ))}
-                              </div>
-                            )}
-                            <span className="support-bubble-time">{formatTime(message.ts)}</span>
-                          </>
-                        )}
+                        {message.text}
+                        <span className="support-bubble-time support-bubble-time--user">
+                          {formatTime(message.ts)}
+                        </span>
                       </div>
                     </div>
                   );
-                }
-
-                return (
-                  <div key={message.id} className="support-msg-row support-msg-row--user">
-                    <div
-                      className={[
-                        'support-bubble',
-                        'support-bubble--user',
-                        isError && 'support-bubble--error',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                    >
-                      {message.text}
-                      <span className="support-bubble-time support-bubble-time--user">
-                        {formatTime(message.ts)}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-
-          {/* TypingBubble was redundant with isPending message */}
+                })}
+              </div>
+            ))}
         </div>
 
-        {/* Footer */}
         <form className="support-footer" onSubmit={handleSend}>
-          <div className="support-input-wrap">
+          <div className="support-input-wrap" onClick={() => inputRef.current?.focus()}>
             <input
               ref={inputRef}
               className="support-input"
@@ -422,7 +385,7 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
               placeholder={t('support.placeholder')}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              disabled={isSending}
+              disabled={false}
               autoComplete="off"
             />
           </div>
@@ -436,6 +399,6 @@ export const SupportBottomSheet = memo(function SupportBottomSheet({
           </button>
         </form>
       </div>
-    </BottomSheet>
+    </section>
   );
 });

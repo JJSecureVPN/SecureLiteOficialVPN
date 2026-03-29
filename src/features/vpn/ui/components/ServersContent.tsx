@@ -24,7 +24,6 @@ interface ServersContentProps {
   onCategoryClick: (cat: Category) => void;
   onServerClick: (srv: ServerConfig, cat: Category) => void;
   onToggleExpand: (catName: string) => void;
-  onSearchChange: (term: string) => void;
   onClearSearch: () => void;
   onOpenConfigurator: () => void;
 }
@@ -43,7 +42,6 @@ export const ServersContent = memo(function ServersContent({
   onCategoryClick,
   onServerClick,
   onToggleExpand,
-  onSearchChange,
   onClearSearch,
   onOpenConfigurator,
 }: ServersContentProps) {
@@ -51,42 +49,6 @@ export const ServersContent = memo(function ServersContent({
 
   return (
     <div className="servers-content" ref={contentRef}>
-      {!selectedCategory && (
-        <div className="category-toolbar">
-          <div className="search-field">
-            <i className="fas fa-search" aria-hidden="true" />
-            <input
-              type="search"
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder={t('servers.searchPlaceholder')}
-              data-nav
-            />
-            {searchTerm && (
-              <button
-                type="button"
-                className="clear-btn"
-                onClick={onClearSearch}
-                aria-label={t('servers.clearSearchAria')}
-              >
-                <i className="fas fa-times" aria-hidden="true" />
-              </button>
-            )}
-          </div>
-          {categorias.length > 0 && (
-            <button
-              type="button"
-              className="config-btn"
-              data-nav
-              onClick={onOpenConfigurator}
-              title={t('servers.openConfiguratorTitle')}
-            >
-              <i className="fas fa-cog" aria-hidden="true" />
-            </button>
-          )}
-        </div>
-      )}
-
       {!selectedCategory ? (
         categorias.length === 0 ? (
           <div className="empty-result">
@@ -134,7 +96,10 @@ export const ServersContent = memo(function ServersContent({
                     hasSelectedServer={!!hasSelectedServer}
                     autoMode={autoMode}
                     liveStats={live}
-                    isExpanded={expandedCategories.has(cat.name)}
+                    isExpanded={!!searchTerm || expandedCategories.has(cat.name)}
+                    searchTerm={searchTerm}
+                    currentConfig={currentConfig}
+                    onServerClick={onServerClick}
                     onCategoryClick={onCategoryClick}
                     onToggleStats={onToggleExpand}
                   />

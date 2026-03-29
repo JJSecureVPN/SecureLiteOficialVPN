@@ -1,3 +1,30 @@
+/* Responsive Variables for Server Item */
+.server-item {
+  --item-p: 14px;
+  --item-title: 15px;
+  --item-inner-p: 8px;
+  --item-badge-p: 4px 8px;
+  --item-badge-font: 11px;
+}
+
+@media (max-width: 330px) {
+  .server-item {
+    --item-p: 10px;
+    --item-title: 13.5px;
+    --item-inner-p: 6px;
+    --item-badge-p: 3px 6px;
+    --item-badge-font: 10px;
+  }
+}
+
+@media (min-width: 450px) {
+  .server-item {
+    --item-p: 18px;
+    --item-title: 16px;
+    --item-badge-font: 12px;
+  }
+}
+
 /* ===========================================
    Server Item - Diseño minimalista y fluido
    Optimizado para móvil con interacciones táctiles
@@ -9,7 +36,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--surface-1);
-  padding: 14px;
+  padding: var(--item-p);
   width: 100%;
   text-align: left;
   color: var(--text);
@@ -74,7 +101,7 @@
 
 .server-item__title {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--item-title);
   font-weight: 600;
   color: var(--text-strong);
   overflow: hidden;
@@ -127,7 +154,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 8px;
+  padding-top: var(--item-inner-p);
   border-top: 1px solid var(--border);
 }
 
@@ -143,9 +170,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 8px;
+  padding: var(--item-badge-p);
   border-radius: 6px;
-  font-size: 11px;
+  font-size: var(--item-badge-font);
   font-weight: 600;
   white-space: nowrap;
 }
