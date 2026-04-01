@@ -4,6 +4,7 @@
  */
 
 import { useTranslation } from '@/i18n';
+import './ServerStats.css';
 
 export interface ServerLiveStats {
   connectedUsers?: number;

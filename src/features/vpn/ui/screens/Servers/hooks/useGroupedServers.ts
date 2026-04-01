@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ServerConfig, Category } from '@/core/types';
-import { resolveSubcategory, orderSubcategories } from '@/features/vpn/ui/utils/categoryParsing';
+import { resolveSubcategory, orderSubcategories } from '../utils/categoryParsing';
 
 export type ServerGroup = { label: string; servers: ServerConfig[] };
 

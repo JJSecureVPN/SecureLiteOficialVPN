@@ -107,7 +107,7 @@ export function HomeScreen() {
   const handleSelectServer = useCallback(
     (srv: ServerConfig, _cat: Category) => {
       setConfig(srv);
-      showToast(`${t('status.serverSelected')}: ${srv.name}`);
+      showToast(`${t('connection.serverSelected')}: ${srv.name}`);
     },
     [setConfig, showToast, t],
   );

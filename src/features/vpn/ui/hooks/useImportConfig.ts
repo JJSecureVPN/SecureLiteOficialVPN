@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react';
 import type { ServerConfig, Category } from '@/core/types';
 import { parseConfigJson, type ParsedConfig } from '../utils/configParsing';
-import { searchServers } from '../utils/serverSearch';
+import { searchServers } from '../screens/Servers/utils/serverSearch';
 
 export type ImportStep = 'input' | 'select' | 'confirm' | 'designer';
 

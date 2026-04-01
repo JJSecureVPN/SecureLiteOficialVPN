@@ -24,9 +24,6 @@ export const PremiumCard = memo(function PremiumCard() {
 
   return (
     <div className="pc">
-      {/* Shimmer accent line */}
-      <span className="pc__shine" aria-hidden="true" />
-
       <div className="pc__left">
         <span className="pc__badge">
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

@@ -42,7 +42,6 @@ import '../styles/components/cards.css';
 import '../styles/components/forms.css';
 import '../styles/components/menu.css';
 import '../styles/components/chips.css';
-import '../styles/components/servers.css';
 import '../styles/components/toast.css';
 import '../styles/components/premium.css';
 import '../styles/components/language-selector.css';

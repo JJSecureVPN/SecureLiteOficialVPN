@@ -10,7 +10,7 @@ import {
   ImportConfirmStep,
 } from '@/features/vpn/ui/components';
 import { ImportDesignerScreen } from '../../features/vpn/ui/screens/ImportDesignerScreen';
-import { getServerCategory } from '@/features/vpn/ui/utils';
+import { getServerCategory } from '@/features/vpn/ui/screens/Servers/utils/serverSearch';
 import { BottomSheet } from './BottomSheet';
 import '../../styles/components/import-screen.css';
 import '../../styles/components/import-designer-screen.css';

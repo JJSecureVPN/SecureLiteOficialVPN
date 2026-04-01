@@ -1,5 +1,5 @@
 :root {
-  --carousel-card-w: 280px;
+  --carousel-card-w: 240px; /* Reducido para móviles en horizontal */
   --carousel-gap: var(--space-md);
   --carousel-padding: 24px;
 }
@@ -17,9 +17,9 @@
   padding: var(--space-md) 0;
 }
 
-@media (orientation: landscape) and (min-width: 900px) {
+@media (orientation: landscape) and (min-width: 480px) {
   :root {
-    --carousel-card-w: 320px;
+    --carousel-card-w: 280px;
   }
   .home-carousel-container {
     display: block;
@@ -83,32 +83,30 @@
   background: linear-gradient(90deg, var(--border), transparent);
 }
 
-/* Contenedor del scroll horizontal */
+/* Contenedor del scroll horizontal - EJE FIJO UNIVERSAL (DRAGGABLE) */
 .carousel-track-container {
   width: 100%;
-  overflow-x: auto;
-  overflow-y: visible; /* Permitir que el escalado y sombras respiren */
-  padding: 24px 0 32px; /* Aumento agresivo del padding vertical */
-  margin-top: -24px; /* Compensar el padding para no desplazar el título */
-  margin-bottom: -16px;
-  /* Ocultar barra de scroll pero permitir scroll */
-  scrollbar-width: none;
-  -ms-overflow-style: none; /* IE 10+ */
-  -webkit-overflow-scrolling: touch;
+  position: relative;
+  overflow: hidden; /* Volver a ocultar para control total via JS */
+  padding: 32px 0 40px;
+  margin-top: -32px;
+  margin-bottom: -20px;
+  outline: none;
 
-  /* Gradiente de difuminado a los costados */
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 60px,
-    black calc(100% - 60px),
-    transparent 100%
-  );
+  /* Desactivar gestos nativos para manejar el arrastre con Pointer Events */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  /* Gradiente de difuminado a los costados muy agresivo */
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 60px,
-    black calc(100% - 60px),
+    black 10%,
+    black 90%,
     transparent 100%
   );
 }
@@ -119,35 +117,67 @@
 
 .carousel-track {
   display: flex;
+  position: relative;
   gap: var(--carousel-gap);
-  padding: 0 40px;
   width: max-content;
-  min-width: 100%;
-  justify-content: center; /* Centrar items */
+  margin: 0 !important;
+  padding: 0 !important;
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
+}
+
+/* Desactivar transición durante el arrastre para respuesta instantánea */
+.carousel-track-container.is-dragging .carousel-track {
+  transition: none;
 }
 
 /* Ajustes para los items dentro del carrusel */
 .carousel-item-wrapper {
   flex-shrink: 0;
   display: flex;
+  cursor: pointer;
+  transition:
+    transform 0.6s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.4s ease,
+    filter 0.4s ease;
+}
+
+/* El item activo en el eje */
+.carousel-item-wrapper.is-active-axis {
+  transform: scale(1.1);
+  opacity: 1;
+  filter: none;
+  z-index: 10;
+}
+
+.carousel-item-wrapper:not(.is-active-axis) {
+  opacity: 0.25; /* Un poco más tenue para compensar la falta de desenfoque */
+  transform: scale(0.85);
+  filter: grayscale(0.5); /* Solo escala de grises suave, sin blur */
 }
 
 .carousel-track .server-item {
   width: var(--carousel-card-w);
   flex-shrink: 0;
   margin: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none; /* Desactivar interacción individual para usar el eje central */
 }
 
-/* Efecto hover/focus premium */
-.carousel-track .server-item:hover,
-.carousel-track .server-item:focus-within {
-  transform: translateY(-8px) scale(1.05); /* Escalado más pronunciado en TV */
-  border-color: var(--accent-40);
-  box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.3),
-    0 0 0 1px var(--accent-20);
-  z-index: 10;
+/* Eliminar efectos anteriores que chocan con el nuevo modo de eje fijo */
+.carousel-track-container.fixed-axis-mode .server-item,
+.carousel-track-container.fixed-axis-mode .server-item.selected,
+.carousel-track-container.fixed-axis-mode .server-item:hover,
+.carousel-track-container.fixed-axis-mode .server-item:focus-within {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--border) !important; /* Mantener borde sutil original */
+  background: var(--surface-1) !important;
+}
+
+.carousel-track-container.fixed-axis-mode .is-active-axis .server-item {
+  background: var(--surface-2) !important;
+  border-color: var(--accent) !important; /* Volver a destacar el borde central */
+  box-shadow: 0 0 20px rgba(109, 74, 255, 0.2) !important;
 }
 
 /* Animación de entrada por fila */

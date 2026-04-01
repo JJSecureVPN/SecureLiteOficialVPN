@@ -1,9 +1,10 @@
 /**
- * ServersHeader Component
- * Header section with title, subtitle, and subcategory filters
+ * ServersHeader — Refined minimal edition
+ * Tipografía: DM Sans + DM Serif Display
  */
 
 import { memo } from 'react';
+import './ServersHeader.css';
 import { useTranslation } from '@/i18n';
 import type { Category } from '@/core/types';
 
@@ -36,20 +37,20 @@ export const ServersHeader = memo(function ServersHeader({
 }: ServersHeaderProps) {
   const { t } = useTranslation();
 
+  /* ── Category detail view ── */
   if (selectedCategory) {
     return (
       <div className="section-header section-header--detail">
         <div className="section-title-group">
-          <span className="section-eyebrow">{t('servers.selectedEyebrow')}</span>
-          <div className="section-title-line">
-            <div className="divider-title" aria-label={`Categoría ${selectedCategory.name}`}>
-              <span className="divider-line" aria-hidden="true" />
-              <div className="panel-title panel-title--divider">{selectedCategory.name}</div>
-              <span className="divider-line" aria-hidden="true" />
-            </div>
+          <p className="section-eyebrow">{t('servers.selectedEyebrow')}</p>
+          <div className="divider-title" aria-label={`Categoría ${selectedCategory.name}`}>
+            <span className="divider-line" aria-hidden="true" />
+            <h2 className="panel-title panel-title--divider">{selectedCategory.name}</h2>
+            <span className="divider-line" aria-hidden="true" />
           </div>
-          <small className="section-subtitle">{t('servers.selectedSubtitle')}</small>
+          <p className="section-subtitle">{t('servers.selectedSubtitle')}</p>
         </div>
+
         {groupedServers.length > 0 && (
           <div className="subcategory-chips subcategory-chips--header" role="tablist">
             {[ALL_SUBCATEGORIES, ...groupedServers.map(({ label }) => label)].map((label) => (
@@ -66,8 +67,8 @@ export const ServersHeader = memo(function ServersHeader({
                   : t(`servers.subcategoriesList.${label}`)}
                 <span className="chip-count">
                   {label === ALL_SUBCATEGORIES
-                    ? selectedCategory.items?.length || 0
-                    : groupedServers.find((group) => group.label === label)?.servers.length || 0}
+                    ? (selectedCategory.items?.length ?? 0)
+                    : (groupedServers.find((g) => g.label === label)?.servers.length ?? 0)}
                 </span>
               </button>
             ))}
@@ -77,31 +78,39 @@ export const ServersHeader = memo(function ServersHeader({
     );
   }
 
+  /* ── Default view ── */
   return (
     <>
       <div className="section-header">
-        <div className="panel-title">{t('servers.title')}</div>
-
-        {/* Reservamos el espacio para evitar saltos de layout */}
-        <div
-          className={`servers-total ${!totalOnline && totalOnline !== 0 ? 'is-loading' : ''}`}
-          aria-hidden
-        >
-          <span className="servers-total__dot servers-total__dot--left" aria-hidden />
-          <span className="servers-total__label">{t('servers.totalOnline')}</span>
-          <span className="servers-total__count">
-            {totalOnline !== null && totalOnline !== undefined
-              ? totalOnline.toLocaleString()
-              : '---'}
-          </span>
-          <span className="servers-total__dot servers-total__dot--right" aria-hidden />
+        {/* Eyebrow */}
+        <div className="section-eyebrow-row" aria-hidden>
+          <span className="section-eyebrow-tick" />
+          <span className="section-eyebrow">{t('servers.eyebrow', 'Servidores')}</span>
+          <span className="section-eyebrow-tick" />
         </div>
 
-        <p className="section-subtitle" style={{ marginBottom: '16px' }}>
+        {/* Title */}
+        <h1 className="panel-title" dangerouslySetInnerHTML={{ __html: t('servers.title') }} />
+
+        {/* Online badge */}
+        <div
+          className={`servers-total ${!totalOnline && totalOnline !== 0 ? 'is-loading' : ''}`}
+          aria-label={`${t('servers.totalOnline')} ${totalOnline?.toLocaleString() ?? ''}`}
+        >
+          <span className="servers-total__dot" aria-hidden />
+          <span className="servers-total__label">{t('servers.totalOnline')}</span>
+          <span className="servers-total__count">
+            {totalOnline != null ? totalOnline.toLocaleString() : '—'}
+          </span>
+        </div>
+
+        {/* Subtitle */}
+        <p className="section-subtitle" style={{ marginBottom: '20px' }}>
           {t('servers.subtitle')}
         </p>
       </div>
 
+      {/* Toolbar */}
       <div className="category-toolbar-wrapper">
         <div className="category-toolbar">
           <div className="search-field">
@@ -124,6 +133,7 @@ export const ServersHeader = memo(function ServersHeader({
               </button>
             )}
           </div>
+
           {categorias.length > 0 && (
             <button
               type="button"

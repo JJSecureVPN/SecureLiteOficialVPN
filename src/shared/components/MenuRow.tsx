@@ -61,8 +61,8 @@ export const MenuRow = memo(function MenuRow({
       </div>
 
       <div className="menu-row__body">
-        <span className="menu-row__title">{title}</span>
-        {subtitle ? <span className="menu-row__subtitle">{subtitle}</span> : null}
+        <h5 className="menu-row__title">{title}</h5>
+        {subtitle ? <p className="menu-row__subtitle">{subtitle}</p> : null}
       </div>
 
       <i className="fa fa-chevron-right menu-row__chevron" aria-hidden="true" />

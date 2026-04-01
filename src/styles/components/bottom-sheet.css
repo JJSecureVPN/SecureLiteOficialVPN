@@ -18,12 +18,10 @@
 
 .bottom-sheet-overlay.open {
   background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   visibility: visible;
   transition:
     background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     visibility 0s step-start;
 }
 
@@ -35,8 +33,6 @@
   background: linear-gradient(to bottom, rgba(20, 20, 25, 0.95) 0%, rgba(10, 10, 12, 0.98) 100%);
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   transform: translateY(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;

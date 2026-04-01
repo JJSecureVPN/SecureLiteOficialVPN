@@ -1,12 +1,9 @@
 /**
- * ServersScreen - Refactored
- * Main VPN servers selection screen with category browsing and server selection
- *
- * Architecture:
- * - Uses custom hooks (useServersFilter, useServersExpand, useServersKeyboard) for logic
- * - Delegates component rendering to ServersHeader, ServersContent
- * - Manages VPN state and callbacks
- * - ~200 lines (refactored from 830)
+ * Servers - Main VPN servers selection screen
+ * Refactored for better organization:
+ * - Components split into Header, CategoryGrid, and ServerList
+ * - Styles colocated with components
+ * - Logic extracted to local hooks
  */
 
 import { useCallback, useRef, useEffect } from 'react';
@@ -23,14 +20,17 @@ import { ErrorCategory } from '@/core/utils/ErrorHandler';
 import { useDTunnelEvent } from '@/lib/dtunnel-sdk-react';
 import { ErrorDisplay } from '@/core/components';
 import { ScrollIndicator } from '@/shared/ui/ScrollIndicator';
-import {
-  useServersFilter,
-  useServersExpand,
-  useServersKeyboard,
-  useGroupedServers,
-} from '@/features/vpn/ui/hooks';
-import { ServersHeader, ServersContent } from '@/features/vpn/ui/components';
+
+// Componentes locales
+import { ServersHeader } from './components/ServersHeader';
+import { CategoryGrid } from './components/CategoryGrid';
+import { ServerList } from './components/ServerList';
+
+// Hooks locales
+import { useServersFilter, useServersExpand, useServersKeyboard, useGroupedServers } from './hooks';
+
 import type { Category, ServerConfig } from '@/core/types';
+import './Servers.css';
 
 export function ServersScreen() {
   // VPN State
@@ -63,6 +63,7 @@ export function ServersScreen() {
   const { serversByName, data: serverStats } = useServerStats({ pollMs: 3_000, enabled: true });
   const totalOnline = serverStats?.totalUsers ?? null;
   const { expandedCategories, toggleExpand } = useServersExpand();
+
   const {
     searchTerm,
     setSearchTerm,
@@ -208,7 +209,6 @@ export function ServersScreen() {
       error.clearError();
       appLogger.add('info', '🔧 Abriendo diálogo de configuración nativa de DTunnel');
       getSdk()?.config.openConfigDialog();
-      // Los cambios de config se capturan automáticamente via useDTunnelEvent('newDefaultConfig')
     } catch (err) {
       error.setError(err, ErrorCategory.Internal);
       appLogger.add(
@@ -252,23 +252,34 @@ export function ServersScreen() {
         onClearSearch={() => setSearchTerm('')}
         onOpenConfigurator={handleOpenConfigurator}
       />
-      <ServersContent
-        contentRef={contentRef}
-        selectedCategory={selectedCategory}
-        filteredCategories={filteredCategories}
-        visibleGroups={visibleGroups}
-        expandedCategories={expandedCategories}
-        currentConfig={currentConfig}
-        autoMode={autoMode}
-        searchTerm={searchTerm}
-        categorias={categorias}
-        serversByName={serversByName}
-        onCategoryClick={setSelectedCategory}
-        onServerClick={handleServerClick}
-        onToggleExpand={toggleExpand}
-        onClearSearch={() => setSearchTerm('')}
-        onOpenConfigurator={handleOpenConfigurator}
-      />
+
+      <div className="servers-content" ref={contentRef}>
+        {!selectedCategory ? (
+          <CategoryGrid
+            categorias={categorias}
+            filteredCategories={filteredCategories}
+            searchTerm={searchTerm}
+            currentConfig={currentConfig}
+            autoMode={autoMode}
+            expandedCategories={expandedCategories}
+            serversByName={serversByName}
+            onCategoryClick={setSelectedCategory}
+            onServerClick={handleServerClick}
+            onToggleExpand={toggleExpand}
+            onClearSearch={() => setSearchTerm('')}
+            onOpenConfigurator={handleOpenConfigurator}
+          />
+        ) : (
+          <ServerList
+            selectedCategory={selectedCategory}
+            visibleGroups={visibleGroups}
+            currentConfig={currentConfig}
+            autoMode={autoMode}
+            onServerClick={handleServerClick}
+          />
+        )}
+      </div>
+
       <ScrollIndicator
         targetRef={contentRef}
         dependencies={[

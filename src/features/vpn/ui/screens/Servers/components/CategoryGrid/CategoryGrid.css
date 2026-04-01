@@ -1,0 +1,37 @@
+/* ===========================================
+   Category Grid Styles
+   =========================================== */
+
+.category-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.empty-result {
+  text-align: center;
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+  background: var(--glass-60);
+}
+
+.empty-result i {
+  font-size: var(--font-lg);
+  margin-bottom: var(--space-sm);
+  display: block;
+  color: var(--muted);
+}
+
+.empty-result-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.empty-result-btn {
+  margin-top: var(--space-lg) !important;
+}

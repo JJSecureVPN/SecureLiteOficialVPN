@@ -1,17 +1,16 @@
 /**
- * ServerCategory Component (Enhanced Version)
- * Category card in the servers list with improved visual design
+ * ServerCategory — Refined minimal edition
+ * Tipografía: DM Serif Display (título) + DM Sans weight 300
  */
 
 import { useCallback, useMemo, memo } from 'react';
-import '../../../../styles/components/category-card.css';
-import { Card, Badge, Pill } from '@/shared/ui';
+import './ServerCategory.css';
+import { Card } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
-import { resolveSubcategory } from '@/features/vpn/ui/utils/categoryParsing';
-import { ServerStats, type ServerLiveStats } from './ServerStats';
+import { resolveSubcategory } from '../../utils/categoryParsing';
+import { ServerStats, type ServerLiveStats } from '../ServerStats';
 import type { Category } from '@/core/types';
-
-import { ServerListItem } from './ServerListItem';
+import { ServerListItem } from '../ServerListItem';
 
 interface ServerCategoryProps {
   category: Category;
@@ -61,6 +60,9 @@ export const ServerCategory = memo(
       );
     }, [category.items]);
 
+    const serverCount = category.items?.length ?? 0;
+    const connectedUsers = liveStats?.connectedUsers ?? 0;
+
     return (
       <Card
         className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
@@ -74,66 +76,69 @@ export const ServerCategory = memo(
             handleMainClick();
           }
         }}
-        aria-label={`${category.name} - ${category.items?.length || 0} servidores`}
+        aria-label={`${category.name} — ${serverCount} servidores`}
       >
         <div className="category-card__content">
-          {/* Header: Título y badge de usuarios */}
+          {/* Header */}
           <div className="category-card__header">
             <div className="category-card__title-group">
               <h3 className="category-card__title">{category.name}</h3>
-              <span className="category-card__count">{category.items?.length || 0}</span>
+              <span className="category-card__count">
+                {serverCount} {t('servers.serversUnit', 'servidores')}
+              </span>
             </div>
 
-            <Badge variant="category" iconClass="fas fa-users">
-              {liveStats?.connectedUsers ?? 0}
-            </Badge>
+            {/* Online users pill */}
+            <div
+              className="category-card__badge"
+              aria-label={`${connectedUsers} usuarios conectados`}
+            >
+              <span className="category-card__badge-dot" aria-hidden />
+              <span className="category-card__badge-num">{connectedUsers.toLocaleString()}</span>
+            </div>
           </div>
 
-          {/* Subcategorías - Solo mostrar si existen */}
+          {/* Subcategory pills */}
           {subcategories.length > 0 && (
             <div className="category-card__pills">
               {subcategories.slice(0, 3).map((label) => (
-                <Pill key={label}>{t(`servers.subcategoriesList.${label}`)}</Pill>
+                <span key={label} className="category-pill">
+                  {t(`servers.subcategoriesList.${label}`)}
+                </span>
               ))}
               {subcategories.length > 3 && (
-                <Pill className="category-pill--more" more>
+                <span className="category-pill category-pill--more">
                   +{subcategories.length - 3}
-                </Pill>
+                </span>
               )}
             </div>
           )}
 
-          {/* Footer: botón de estadísticas */}
-          <button
-            type="button"
-            className={`category-card__stats-toggle ${isExpanded ? 'expanded' : ''}`}
-            onClick={handleStatsClick}
-            tabIndex={-1}
-            aria-label={isExpanded ? t('servers.hideStats') : t('servers.showStats')}
-            aria-expanded={isExpanded}
-          >
-            <span>{t('servers.statsShort')}</span>
-            <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'}`} aria-hidden="true" />
-          </button>
+          {/* Footer: stats toggle */}
+          <div className="category-card__footer">
+            <button
+              type="button"
+              className={`category-card__stats-toggle ${isExpanded ? 'expanded' : ''}`}
+              onClick={handleStatsClick}
+              tabIndex={-1}
+              aria-label={isExpanded ? t('servers.hideStats') : t('servers.showStats')}
+              aria-expanded={isExpanded}
+            >
+              <span>{t('servers.statsShort')}</span>
+              <i className="fas fa-chevron-down" aria-hidden="true" />
+            </button>
+          </div>
         </div>
 
+        {/* Expanded section */}
         {isExpanded && (
           <div className="category-card__expanded">
+            {/* Stats grid */}
             <ServerStats stats={liveStats} />
 
-            {/* Si hay búsqueda, mostrar los servidores coincidentes directamente aquí */}
+            {/* Search results */}
             {!!searchTerm && category.items && category.items.length > 0 && onServerClick && (
-              <div
-                className="search-results-list"
-                style={{
-                  marginTop: 'calc(16px * var(--scale-factor))',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 'calc(8px * var(--scale-factor))',
-                  borderTop: '1px solid var(--border)',
-                  paddingTop: 'calc(16px * var(--scale-factor))',
-                }}
-              >
+              <div className="search-results-list">
                 {category.items.map((srv) => (
                   <ServerListItem
                     key={srv.id}
@@ -151,16 +156,12 @@ export const ServerCategory = memo(
       </Card>
     );
   },
-  // Custom comparator: only re-render if key data changes
-  (prevProps, nextProps) => {
-    return (
-      prevProps.category.name === nextProps.category.name &&
-      prevProps.category.items?.length === nextProps.category.items?.length &&
-      prevProps.hasSelectedServer === nextProps.hasSelectedServer &&
-      prevProps.isExpanded === nextProps.isExpanded &&
-      prevProps.liveStats?.connectedUsers === nextProps.liveStats?.connectedUsers &&
-      prevProps.onCategoryClick === nextProps.onCategoryClick &&
-      prevProps.onToggleStats === nextProps.onToggleStats
-    );
-  },
+  (prev, next) =>
+    prev.category.name === next.category.name &&
+    prev.category.items?.length === next.category.items?.length &&
+    prev.hasSelectedServer === next.hasSelectedServer &&
+    prev.isExpanded === next.isExpanded &&
+    prev.liveStats?.connectedUsers === next.liveStats?.connectedUsers &&
+    prev.onCategoryClick === next.onCategoryClick &&
+    prev.onToggleStats === next.onToggleStats,
 );

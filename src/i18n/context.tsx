@@ -52,11 +52,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: string): string => {
+    (key: string, fallback?: string): string => {
       const translation = getNestedValue(translations[language], key);
-      // Fallback a español si no encuentra la traducción
-      if (translation === key && language !== 'es') {
-        return getNestedValue(translations.es, key);
+      // Si no encuentra la traducción, usar fallback (si existe)
+      if (translation === key) {
+        if (fallback) return fallback;
+
+        // Si no hay fallback, intentar español
+        if (language !== 'es') {
+          const esVal = getNestedValue(translations.es, key);
+          if (esVal !== key) return esVal;
+        }
       }
       return translation;
     },
@@ -73,23 +79,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
   if (!ctx) {
-    // Fallback when no provider is present (tests or isolated renders)
-    // Returns a minimal implementation that reads from the default (Spanish) locales.
-    const fallbackT = (key: string) => {
-      try {
-        // require at runtime to avoid circular imports at module-eval time
-
-        const es = require('./locales/es.json');
-        return getNestedValue(es, key) ?? key;
-      } catch {
-        return key;
-      }
-    };
-
     return {
       language: 'es' as const,
       setLanguage: () => {},
-      t: fallbackT,
+      t: (key: string, fallback?: string) => {
+        try {
+          const es = require('./locales/es.json');
+          const val = getNestedValue(es, key);
+          return val !== key ? val : (fallback ?? key);
+        } catch {
+          return fallback ?? key;
+        }
+      },
     } as LanguageContextType;
   }
 

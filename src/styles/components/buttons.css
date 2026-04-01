@@ -99,6 +99,14 @@ header.topbar .btn.hotzone:focus-visible,
   display: inline-block;
   outline: none;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.toggle:focus-within {
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
 }
 
 .toggle input {

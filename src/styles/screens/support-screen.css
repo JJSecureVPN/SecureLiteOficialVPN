@@ -13,7 +13,7 @@
   flex-direction: column;
   padding-left: 0 !important;
   padding-right: 0 !important;
-  padding-bottom: calc(var(--tabs-space) + 24px) !important;
+  padding-bottom: 24px; /* No tabs here, so reduce padding */
 }
 
 /* 📱 Extremely Small Screens (e.g. 280-320px) */

@@ -4,7 +4,7 @@
  */
 
 import { useTranslation } from '@/i18n';
-import { getServerCategory } from '@/features/vpn/ui/utils';
+import { getServerCategory } from '@/features/vpn/ui/screens/Servers/utils/serverSearch';
 import type { ServerConfig, Category } from '@/core/types';
 import { Card, Badge } from '@/shared/ui';
 

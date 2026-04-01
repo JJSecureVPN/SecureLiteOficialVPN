@@ -189,11 +189,13 @@ function AppContent() {
         onShowSupport={() => setScreen('support')}
       />
 
-      {screen !== 'terms' && (
+      {screen !== 'terms' && screen !== 'support' && (
         <BottomTabs
           onShowLogs={() => toggleSheet('logs')}
           onShowPromo={() => toggleSheet('promo')}
-          onShowSupport={() => (screen === 'support' ? setScreen('home') : setScreen('support'))}
+          onShowSupport={() =>
+            (screen as any) === 'support' ? setScreen('home') : setScreen('support')
+          }
           onShowExtras={() => toggleSheet('extras')}
           onShowAccount={() => toggleSheet('account')}
           onUpdate={handleUpdate}

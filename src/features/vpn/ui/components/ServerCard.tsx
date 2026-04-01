@@ -3,7 +3,7 @@ import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
 import { extractDomain, removeDomainFromDescription, formatProtocol } from '@/core/utils';
 import { Card, Badge } from '@/shared/ui';
-import '@/styles/components/server-item.css';
+import './ServerCard.css';
 
 interface ServerCardProps {
   config: ServerConfig | null;

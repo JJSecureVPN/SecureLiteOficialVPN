@@ -4,7 +4,7 @@
  */
 
 import type { ServerConfig, Category } from '@/core/types';
-import type { ParsedConfig } from './configParsing';
+import type { ParsedConfig } from '@/features/vpn/ui/utils/configParsing';
 
 /**
  * Normalize string for comparison

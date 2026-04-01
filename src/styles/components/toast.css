@@ -1,50 +1,94 @@
 /* ===========================================
-   Toast - Notificaciones
+   Toast - Floating Top Pill (Editorial Style)
+   Posición: Bajo el Header (Dynamic Island vibe)
    =========================================== */
 
 .toast-wrap {
   position: fixed;
-  /* sit above BottomTabs / safe area with very generous margin */
-  bottom: calc(var(--tabs-space, 16px) + 50px);
+  /* Top position calculated to clear Header + status bar */
+  top: calc(var(--safe-area-top, 0px) + 82px);
   left: 50%;
   transform: translateX(-50%);
-  max-width: clamp(520px, calc(54vw * var(--scale-factor)), 760px);
-  width: min(92%, 760px);
-  z-index: 3000;
+  width: auto;
+  max-width: 90vw;
+  z-index: 5000;
+  pointer-events: none;
 }
 
 .toast {
-  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
-  color: var(--text);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 30, 35, 0.85); /* Dark glass by default */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 20px; /* Adjusted from 100px to look better on multi-line */
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
   text-align: center;
-  font-size: var(--font-base);
+  width: max-content;
+  max-width: 300px;
+
+  /* Initial state for animation */
   opacity: 0;
-  transform: translateY(8px);
-  margin: 0;
-  transition:
-    opacity 0.3s,
-    transform 0.3s;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toast.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* Warning — amarillo ámbar */
+.toast__icon {
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* Success — Púrpura suave editorial */
+.toast--success.show {
+  background: rgba(168, 85, 247, 0.15); /* Accent-15 glass */
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #fff;
+}
+.toast--success .toast__icon {
+  color: #a855f7;
+}
+
+/* Warning — Ámbar refinado */
 .toast--warning.show {
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
-  border-color: var(--status-warn-35);
-  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fff;
+}
+.toast--warning .toast__icon {
+  color: #f59e0b;
 }
 
-/* Error — rojo */
+/* Error — Rojo editorial */
 .toast--error.show {
-  background: linear-gradient(180deg, rgba(239, 68, 68, 0.22), rgba(239, 68, 68, 0.1));
-  border-color: var(--status-bad-35);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fff;
+}
+.toast--error .toast__icon {
+  color: #ef4444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 320px) {
+  .toast-wrap {
+    top: calc(var(--safe-area-top, 0px) + 75px);
+  }
+  .toast {
+    padding: 8px 14px;
+    font-size: 12px;
+    max-width: 280px;
+  }
 }

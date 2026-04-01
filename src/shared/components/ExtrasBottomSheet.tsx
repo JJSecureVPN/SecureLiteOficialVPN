@@ -8,7 +8,6 @@ import {
   ignoreBatteryOptimizations,
   openApnSettings,
   openNetworkSettings,
-  startSpeedtest,
   toggleHotspot as toggleHotspotAction,
 } from '@/shared/lib/nativeActions';
 import type { HotspotState } from '@/shared/lib/nativeActions';
@@ -112,13 +111,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       action: hotspotStatus === 'UNKNOWN' ? undefined : handleToggleHotspot,
     },
     {
-      id: 'speedtest',
-      title: t('menu.itemsSpeedtestTitle'),
-      subtitle: t('menu.itemsSpeedtestSubtitle'),
-      icon: 'fa-gauge-high',
-      action: () => startSpeedtest(showToast, t('common.notAvailableDevice')),
-    },
-    {
       id: 'support',
       title: t('menu.itemsSupportTitle'),
       subtitle: t('menu.itemsSupportSubtitle'),
@@ -163,7 +155,7 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       subtitle="Gestión de herramientas y red"
       icon={<i className="fa fa-bars-staggered" />}
       height="82vh"
-      className="extras-bottom-sheet"
+      className="extras-bs"
     >
       <PremiumCard />
 
@@ -172,48 +164,35 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
           onClose={() => setShowCleanConfirm(false)}
           title={t('menu.cleanConfirmTitle')}
           subtitle={t('menu.cleanConfirmBody')}
-          icon={
-            <i className="fa fa-triangle-exclamation" style={{ color: '#fff', fontSize: '18px' }} />
-          }
+          icon={<i className="fa fa-broom" />}
           size="sm"
-          className="clean-confirm-modal"
+          className="modal-clean-confirm"
           hideClose
         >
-          <div className="button-group" style={{ marginTop: 0 }}>
+          <div className="modal-actions">
             <button
-              className="btn"
-              style={{
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border)',
-                color: 'var(--text)',
-              }}
+              className="btn btn--secondary"
               onClick={() => setShowCleanConfirm(false)}
               type="button"
             >
               {t('common.cancel')}
             </button>
             <button
-              className="btn"
-              style={{
-                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                color: '#fff',
-                border: 'none',
-                boxShadow: '0 2px 8px rgba(239,68,68,0.35)',
-              }}
+              className="btn btn--danger"
               onClick={() => {
                 setShowCleanConfirm(false);
                 cleanApp(showToast, t('menu.cleanupDone'), t('common.notAvailableDevice'));
               }}
               type="button"
             >
-              <i className="fa fa-broom" style={{ fontSize: '13px' }} />
+              <i className="fa fa-broom" aria-hidden="true" />
               {t('menu.itemsCleanTitle')}
             </button>
           </div>
         </GlobalModal>
       )}
 
-      <div className="menu-list">
+      <div className="extras-list">
         {menuItems.map((item) => {
           const disabled = typeof item.action !== 'function';
           return (
