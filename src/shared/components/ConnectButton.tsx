@@ -1,6 +1,5 @@
 import { Button, Toggle } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
-import '../../styles/components/connect-button.css';
 
 export interface ConnectButtonProps {
   /**

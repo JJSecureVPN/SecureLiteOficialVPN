@@ -18,26 +18,29 @@
 .toast {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: var(--space-sm);
   background: rgba(30, 30, 35, 0.85); /* Dark glass by default */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   color: #fff;
-  padding: 12px 20px;
-  border-radius: 20px; /* Adjusted from 100px to look better on multi-line */
-  font-family: 'DM Sans', sans-serif;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-family: var(--font-sans);
   font-size: 13px;
-  font-weight: 400;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 1.2;
   text-align: center;
-  width: max-content;
-  max-width: 300px;
+  width: auto;
+  min-width: 140px;
+  max-width: min(85vw, 450px);
+  margin: 0 auto;
 
   /* Initial state for animation */
   opacity: 0;
-  transform: translateY(-20px) scale(0.95);
+  transform: translateY(-15px) scale(0.96);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -49,6 +52,7 @@
 .toast__icon {
   font-size: 14px;
   color: var(--accent);
+  flex-shrink: 0;
 }
 
 /* Success — Púrpura suave editorial */
@@ -81,14 +85,38 @@
   color: #ef4444;
 }
 
-/* Responsive adjustments */
-@media (max-width: 320px) {
+/* --- MEDIA QUERIES PARA ADAPTACIÓN TOTAL --- */
+
+/* Android Small (p. ej. pantallas de 18:9 compactas) */
+@media (max-width: 360px) {
   .toast-wrap {
-    top: calc(var(--safe-area-top, 0px) + 75px);
+    top: calc(var(--safe-area-top, 0px) + 70px);
   }
   .toast {
     padding: 8px 14px;
     font-size: 12px;
-    max-width: 280px;
+    max-width: 80vw;
+  }
+}
+
+/* Android Large / Tablets */
+@media (min-width: 600px) {
+  .toast-wrap {
+    top: calc(var(--safe-area-top, 0px) + 90px);
+  }
+  .toast {
+    padding: 12px 24px;
+    font-size: 14px;
+    max-width: 500px;
+  }
+  .toast__icon {
+    font-size: 16px;
+  }
+}
+
+/* Orientación Horizontal en Android */
+@media (orientation: landscape) {
+  .toast-wrap {
+    top: 20px;
   }
 }

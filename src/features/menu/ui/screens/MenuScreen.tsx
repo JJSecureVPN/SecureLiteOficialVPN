@@ -10,7 +10,6 @@ import {
   ignoreBatteryOptimizations,
   openApnSettings,
   openNetworkSettings,
-  startSpeedtest,
   toggleHotspot as toggleHotspotAction,
 } from '@/shared/lib/nativeActions';
 import type { HotspotState } from '@/shared/lib/nativeActions';
@@ -102,13 +101,6 @@ export const MenuScreen = memo(function MenuScreen({
             : t('menu.itemsHotspotSubtitleUnknown'),
       icon: 'fa-wifi',
       action: hotspotStatus === 'UNKNOWN' ? undefined : handleToggleHotspot,
-    },
-    {
-      id: 'speedtest',
-      title: t('menu.itemsSpeedtestTitle'),
-      subtitle: t('menu.itemsSpeedtestSubtitle'),
-      icon: 'fa-gauge-high',
-      action: () => startSpeedtest(showToast, t('common.notAvailableDevice')),
     },
     {
       id: 'support',

@@ -87,20 +87,17 @@
 .carousel-track-container {
   width: 100%;
   position: relative;
-  overflow: hidden; /* Volver a ocultar para control total via JS */
+  overflow: hidden;
   padding: 32px 0 40px;
   margin-top: -32px;
   margin-bottom: -20px;
   outline: none;
-
-  /* Desactivar gestos nativos para manejar el arrastre con Pointer Events */
+  transition: box-shadow 0.3s ease;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   padding-left: 0 !important;
   padding-right: 0 !important;
-
-  /* Gradiente de difuminado a los costados muy agresivo */
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(
     to right,
@@ -109,6 +106,11 @@
     black 90%,
     transparent 100%
   );
+}
+
+.carousel-track-container:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus-accent-20);
+  border-radius: var(--radius-lg);
 }
 
 .carousel-track-container::-webkit-scrollbar {

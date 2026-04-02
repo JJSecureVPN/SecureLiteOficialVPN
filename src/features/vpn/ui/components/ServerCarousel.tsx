@@ -47,29 +47,17 @@ export const ServerCarousel = memo(
     const [dragOffset, setDragOffset] = useState(0);
 
     // Valores constantes del diseño (deben coincidir con el CSS)
+    // Valores constantes del diseño (directamente de CSS)
     const getItemWidth = useCallback(() => {
-      // Valor por defecto según ancho de ventana (fallbacks robustos)
-      let defaultW = 280;
-      if (window.innerWidth < 480) defaultW = 240;
-      else if (window.innerWidth >= 1600) defaultW = 380;
-      else if (window.innerWidth >= 2500) defaultW = 520;
+      if (typeof window === 'undefined') return { width: 280, gap: 16 };
 
-      let defaultGap = 16;
-
-      if (typeof window === 'undefined') return { width: defaultW, gap: defaultGap };
-
-      // Intentar obtener el ancho real del CSS variable (más preciso si está cargado)
-      const root = document.documentElement;
-      const styles = getComputedStyle(root);
-      const wStr = styles.getPropertyValue('--carousel-card-w').trim();
-      const gapStr = styles.getPropertyValue('--carousel-gap').trim();
-
-      const parsedW = parseFloat(wStr);
-      const parsedGap = parseFloat(gapStr);
+      const styles = getComputedStyle(document.documentElement);
+      const parsedW = parseFloat(styles.getPropertyValue('--carousel-card-w'));
+      const parsedGap = parseFloat(styles.getPropertyValue('--carousel-gap'));
 
       return {
-        width: !isNaN(parsedW) && parsedW > 0 ? parsedW : defaultW,
-        gap: !isNaN(parsedGap) ? parsedGap : defaultGap,
+        width: !isNaN(parsedW) && parsedW > 0 ? parsedW : 280,
+        gap: !isNaN(parsedGap) ? parsedGap : 16,
       };
     }, []);
 
@@ -116,39 +104,41 @@ export const ServerCarousel = memo(
       [allServers, activeIndex, onSelectServer, isDragging],
     );
 
-    // --- NUEVOS CONTROLADORES PARA TOUCH DIRECTO (MÁXIMA COMPATIBILIDAD MÓVIL) ---
+    // --- CONTROLADORES UNIFICADOS (POINTER EVENTS) ---
     const isDraggingRef = useRef(false);
-    const startTouchXRef = useRef(0);
-    const currentTouchXRef = useRef(0);
+    const startXRef = useRef(0);
+    const currentXRef = useRef(0);
     const accumulatedOffsetRef = useRef(0);
 
     useEffect(() => {
       const container = scrollContainerRef.current;
       if (!container) return;
 
-      const onStart = (clientX: number) => {
+      const onPointerDown = (e: PointerEvent) => {
+        // Solo botón izquierdo del ratón o cualquier toque táctil
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+
         isDraggingRef.current = true;
         setIsDragging(true);
-        startTouchXRef.current = clientX;
-        currentTouchXRef.current = clientX;
+        startXRef.current = e.clientX;
+        currentXRef.current = e.clientX;
         accumulatedOffsetRef.current = 0;
         setDragOffset(0);
+
+        // Capturar el puntero para que los eventos sigan llegando incluso fuera del contenedor
+        container.setPointerCapture(e.pointerId);
       };
 
-      const onMove = (clientX: number, e: Event) => {
+      const onPointerMove = (e: PointerEvent) => {
         if (!isDraggingRef.current) return;
 
-        const diff = clientX - currentTouchXRef.current;
-
-        // Prevenir scroll si estamos en móvil
-        if (e.cancelable) e.preventDefault();
-
+        const diff = e.clientX - currentXRef.current;
         accumulatedOffsetRef.current += diff;
         setDragOffset(accumulatedOffsetRef.current);
-        currentTouchXRef.current = clientX;
+        currentXRef.current = e.clientX;
       };
 
-      const onEnd = () => {
+      const onPointerUp = (e: PointerEvent) => {
         if (!isDraggingRef.current) return;
         isDraggingRef.current = false;
         setIsDragging(false);
@@ -166,35 +156,21 @@ export const ServerCarousel = memo(
 
         setDragOffset(0);
         accumulatedOffsetRef.current = 0;
+        container.releasePointerCapture(e.pointerId);
       };
 
-      // Handlers para Touch
-      const onTouchStart = (e: TouchEvent) => onStart(e.touches[0].clientX);
-      const onTouchMove = (e: TouchEvent) => onMove(e.touches[0].clientX, e);
-      // Handlers para Mouse
-      const onMouseDown = (e: MouseEvent) => onStart(e.clientX);
-      const onMouseMove = (e: MouseEvent) => onMove(e.clientX, e);
-      const onMouseUp = () => onEnd();
-
-      container.addEventListener('touchstart', onTouchStart, { passive: true });
-      container.addEventListener('touchmove', onTouchMove, { passive: false });
-      container.addEventListener('touchend', onEnd, { passive: true });
-      container.addEventListener('touchcancel', onEnd, { passive: true });
-
-      window.addEventListener('mousedown', onMouseDown);
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
+      container.addEventListener('pointerdown', onPointerDown);
+      container.addEventListener('pointermove', onPointerMove);
+      container.addEventListener('pointerup', onPointerUp);
+      container.addEventListener('pointercancel', onPointerUp);
 
       return () => {
-        container.removeEventListener('touchstart', onTouchStart);
-        container.removeEventListener('touchmove', onTouchMove);
-        container.removeEventListener('touchend', onEnd);
-        container.removeEventListener('touchcancel', onEnd);
-        window.removeEventListener('mousedown', onMouseDown);
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
+        container.removeEventListener('pointerdown', onPointerDown);
+        container.removeEventListener('pointermove', onPointerMove);
+        container.removeEventListener('pointerup', onPointerUp);
+        container.removeEventListener('pointercancel', onPointerUp);
       };
-    }, [allServers, activeIndex, onSelectServer]);
+    }, [allServers.length]);
 
     // Diseño del Track con transformaciones controladas por JS
     const getTrackTransform = () => {

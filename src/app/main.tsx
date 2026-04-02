@@ -37,14 +37,11 @@ import '../styles/variables.css';
 import '../styles/animations.css';
 import '../styles/base.css';
 import '../styles/layout.css';
-import '../styles/components/buttons.css';
+import '../styles/ui-elements.css';
 import '../styles/components/cards.css';
-import '../styles/components/forms.css';
 import '../styles/components/menu.css';
-import '../styles/components/chips.css';
 import '../styles/components/toast.css';
 import '../styles/components/premium.css';
-import '../styles/components/language-selector.css';
 
 import '../styles/components/error-boundary.css';
 import '../styles/components/modal.css';

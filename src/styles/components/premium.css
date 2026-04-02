@@ -3,8 +3,6 @@
    Tipografía: DM Serif Display + DM Sans
    =========================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400&family=DM+Serif+Display:ital@0;1&display=swap');
-
 .pc {
   position: relative;
   background: var(--accent-10);
@@ -32,7 +30,7 @@
   gap: 6px;
   background: var(--accent);
   color: #fff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 400;
   padding: 4px 10px;
@@ -48,7 +46,7 @@
 }
 
 .pc__cta {
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--font-serif);
   font-size: 19px;
   font-weight: 400;
   color: var(--text);
@@ -68,7 +66,7 @@
 .pc__btn {
   padding: 12px 10px;
   border-radius: 12px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 400;
   cursor: pointer;

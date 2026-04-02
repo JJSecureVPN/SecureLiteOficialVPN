@@ -29,6 +29,8 @@
   --bg-dark: #08080a;
   --scale-factor: var(--app-scale, 1);
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+  --font-display: 'Inter', sans-serif;
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
   --shadow-md: 0 10px 24px rgba(17, 24, 39, 0.1);
   --cardBg1: rgba(255, 255, 255, 0.08);

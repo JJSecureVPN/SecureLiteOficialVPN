@@ -38,16 +38,6 @@ export function ignoreBatteryOptimizations(
   }
 }
 
-export function startSpeedtest(showToast: (msg: string) => void, msgUnavailable: string): void {
-  const sdk = ensureSdk();
-  if (sdk) {
-    sdk.app.startWebViewActivity('https://www.speedtest.net/');
-  } else {
-    showToast(msgUnavailable);
-    window.open('https://fast.com', '_blank');
-  }
-}
-
 export function cleanApp(
   showToast: (msg: string) => void,
   msgDone: string,

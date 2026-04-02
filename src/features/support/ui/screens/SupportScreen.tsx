@@ -3,6 +3,7 @@ import { useTranslation } from '@/i18n';
 import { groqSend, GroqMessage } from '../../api/groq';
 import { GROQ_API_KEY, GROQ_MODEL, SYSTEM_PROMPT } from '../../constants';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
+import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import '@/styles/screens/support-screen.css';
 
 type MessageRole = 'user' | 'assistant';
@@ -245,6 +246,15 @@ export const SupportScreen = memo(function SupportScreen() {
     [hasApiKey, input, t, isSending],
   );
 
+  const handleOpenLink = useCallback((url: string) => {
+    const sdk = getSdk();
+    if (sdk) {
+      sdk.android.openExternalUrl(url);
+      return;
+    }
+    window.open(url, '_blank');
+  }, []);
+
   const handleClearHistory = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
     setMessages([
@@ -333,15 +343,14 @@ export const SupportScreen = memo(function SupportScreen() {
                               {links.length > 0 && (
                                 <div className="support-link-actions">
                                   {links.map((link) => (
-                                    <a
+                                    <button
                                       key={link.url}
+                                      type="button"
                                       className="support-link-btn"
-                                      href={link.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
+                                      onClick={() => handleOpenLink(link.url)}
                                     >
                                       {link.label}
-                                    </a>
+                                    </button>
                                   ))}
                                 </div>
                               )}

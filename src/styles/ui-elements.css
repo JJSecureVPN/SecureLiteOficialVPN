@@ -1,0 +1,202 @@
+/* ===========================================
+   UI Elements - Componentes Comunes (RESTAURADO)
+   Contiene: Buttons, Toggles, Chips, Forms, Language
+   =========================================== */
+
+/* ── SECCIÓN: BOTONES & TOGGLES (de buttons.css) ── */
+.btn {
+  appearance: none;
+  font-weight: 700;
+  font-size: var(--font-base);
+  color: var(--text);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  padding: var(--space-md) var(--space-lg);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
+}
+
+.btn.primary {
+  border-color: var(--accent-40);
+  box-shadow: var(--shadow-accent);
+  width: 100%;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: 1px solid var(--accent-40);
+  color: var(--on-accent);
+  transition:
+    transform 0.1s ease,
+    filter 0.1s ease;
+}
+
+.btn.primary:active {
+  transform: scale(0.96);
+  filter: brightness(0.88);
+}
+
+.btn.primary:focus-visible,
+.btn.primary.danger:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.95),
+    0 0 0 6px rgba(0, 0, 0, 0.12);
+  border-color: var(--on-accent);
+}
+
+.btn.primary.danger {
+  background: linear-gradient(180deg, #ff5f5f, var(--status-bad));
+  border-color: #ff3b3b;
+  color: var(--on-accent);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.btn.primary:focus,
+.btn.primary:focus-visible,
+.btn.primary.danger:focus,
+.btn.primary.danger:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.95),
+    0 0 0 6px rgba(109, 74, 255, 0.35) !important;
+  border-color: var(--on-accent) !important;
+  transform: scale(0.98);
+}
+
+.toggle {
+  position: relative;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  border-radius: 999px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.toggle:focus-within {
+  box-shadow: 0 0 0 3px var(--focus-accent-15);
+  border-color: var(--focus-accent-40);
+}
+
+.toggle input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: var(--thumb-size);
+  height: calc(var(--thumb-size) + 2px);
+  border-radius: 50%;
+  background: var(--surface-1);
+  transition: left 0.2s ease;
+}
+
+.toggle input:checked + .thumb {
+  left: calc(var(--toggle-width) - var(--thumb-size) - 4px);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-20);
+}
+
+/* ── SECCIÓN: FORMS (de forms.css) ── */
+.fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: var(--input-height);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.field input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font: 600 var(--font-base) var(--font-sans);
+  outline: none;
+}
+
+.field:focus-within {
+  border-color: var(--focus-accent-60);
+  box-shadow: 0 0 0 2px var(--focus-accent-20);
+}
+
+/* ── SECCIÓN: CHIPS & BADGES (de chips.css) ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
+  border: 1px solid var(--border);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+/* ── SECCIÓN: LANGUAGE SELECTOR ── */
+.language-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 18px;
+}
+
+/* ── SECCIÓN: CONNECT BUTTON (de connect-button.css) ── */
+.connect-button {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-sm);
+  width: 100%;
+}
+.connect-button .btn.primary {
+  flex: 1;
+  box-shadow: none;
+}
+.connect-button .auto-switch-label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  align-self: center;
+  margin-right: 4px;
+}
