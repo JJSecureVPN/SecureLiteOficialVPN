@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
 import { TrafficDetails, ConnectButton, StatusLogo } from '@/shared/components';
@@ -9,6 +8,7 @@ import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 import { ServerCarousel } from '../components/ServerCarousel';
 import { AutoConnectStatus } from '../components/AutoConnectStatus';
+import { useCategorySaturation } from '@/features/vpn/domain/hooks/useCategorySaturation';
 import type { ServerConfig, Category } from '@/core/types';
 
 export function HomeScreen() {
@@ -28,10 +28,13 @@ export function HomeScreen() {
     categorias,
     setConfig,
   } = useVpn();
-  const { showToast } = useToastContext();
   const sectionStyle = useSectionStyle();
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
+
+  const { isSaturated } = useCategorySaturation(categorias);
+  const currentCategory = categorias.find((c) => c.items?.some((s) => s.id === config?.id));
+  const isFull = !!currentCategory && isSaturated(currentCategory.name);
 
   // Determinar qué campos mostrar
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
@@ -50,38 +53,38 @@ export function HomeScreen() {
       }
       if (isConnecting) {
         cancelConnecting();
-        showToast(t('connection.cancel'));
         return;
       }
       if (!config) {
-        showToast(t('connection.selectServer'), null, 'warning');
         return;
       }
       if (!hasEmbeddedAuth) {
         if (isV2Ray && !creds.uuid.trim()) {
-          showToast(t('connection.enterUuid'), null, 'warning');
           return;
         }
         if (!isV2Ray && (!creds.user.trim() || !creds.pass.trim())) {
-          showToast(t('connection.enterCredentials'), null, 'warning');
           return;
         }
       }
+      if (isFull && !autoMode) {
+        return;
+      }
+
       if (autoMode) {
         try {
           startAutoConnect();
         } catch {
-          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement, 'error');
+          // ignore
         }
       } else {
         try {
           connect();
         } catch {
-          showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
+          // ignore
         }
       }
     } catch {
-      showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
+      // ignore
     }
   }, [
     isConnected,
@@ -91,9 +94,9 @@ export function HomeScreen() {
     isV2Ray,
     creds,
     autoMode,
+    isFull,
     disconnect,
     cancelConnecting,
-    showToast,
     startAutoConnect,
     connect,
     t,
@@ -107,9 +110,8 @@ export function HomeScreen() {
   const handleSelectServer = useCallback(
     (srv: ServerConfig, _cat: Category) => {
       setConfig(srv);
-      showToast(`${t('connection.serverSelected')}: ${srv.name}`);
     },
-    [setConfig, showToast, t],
+    [setConfig, t],
   );
 
   const connectButtonState = isConnected
@@ -178,10 +180,11 @@ export function HomeScreen() {
             <TrafficDetails />
 
             <ConnectButton
-              state={connectButtonState}
+              state={isFull && isDisconnected ? 'full' : connectButtonState}
               onClick={handleConnect}
               autoMode={autoMode}
               onAutoModeChange={setAutoMode}
+              disabled={isFull && isDisconnected && !autoMode}
             />
           </div>
         </div>

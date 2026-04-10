@@ -22,11 +22,13 @@ import { TermsScreen } from '../features/terms';
 // Menu Feature Screens (features/menu/ui/screens/)
 import { MenuScreen } from '../features/menu';
 
+// Referrals Feature
+import { ReferralsScreen } from '../features/referrals/ui/screens/ReferralsScreen';
+
 // Support Feature
 import { SupportScreen } from '../features/support';
 
 // Shared Transversal Code (imports directos)
-import { ToastProvider, useToastContext } from '../shared/context/ToastContext';
 import { ErrorBoundary } from '../shared/components/ErrorBoundary';
 import {
   AppHeader,
@@ -36,14 +38,14 @@ import {
   LogsBottomSheet,
   AccountBottomSheet,
   ImportBottomSheet,
+  HotspotBottomSheet,
+  RepairAccountBottomSheet,
+  CommunityBottomSheet,
 } from '../shared/components';
-import { Toast } from '../shared/ui/Toast';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
-import { useNativeToasts } from '../shared/hooks/useNativeToasts';
 import { useCoupons } from '../shared/hooks/useCoupons';
 import { usePromo } from '../shared/hooks/usePromo';
 import { useResponsiveScale } from '../shared/hooks/useResponsiveScale';
-import { useTranslation } from '../i18n';
 import { LanguageProvider } from '../i18n/context';
 
 // Core Types
@@ -78,6 +80,8 @@ const SCREEN_COMPONENTS: Record<
   terms: TermsScreen,
   // Menu Feature (features/menu/ui/screens/)
   menu: MenuScreen,
+  // Referrals Feature
+  referrals: ReferralsScreen,
   // Support Feature (features/support/ui/screens/)
   support: SupportScreen,
 };
@@ -85,13 +89,8 @@ const SCREEN_COMPONENTS: Record<
 function AppContent() {
   const { screen, setScreen } = useVpn();
   const { navigationBarHeight, statusBarHeight } = useSafeArea();
-  const { t } = useTranslation();
-  const { toast, showToast } = useToastContext();
   const { isConnected, isConnecting, isError } = useConnectionStatus();
   const { user } = useVpn();
-
-  // Escucha toasts y notificaciones del SDK nativo de DTunnel
-  useNativeToasts();
 
   // Activa el escalado responsivo dinámico
   useResponsiveScale();
@@ -125,14 +124,11 @@ function AppContent() {
       const sdk = getSdk();
       if (sdk) {
         sdk.main.startAppUpdate();
-        showToast(t('connection.searchingUpdate'));
-      } else {
-        showToast(t('connection.updateNotAvailable'));
       }
     } catch {
-      showToast(t('error.updateCheckFailed'), null, 'error');
+      // ignore
     }
-  }, [showToast, t]);
+  }, []);
 
   const toggleSheet = useCallback((sheet: ActiveSheet) => {
     setActiveSheet((prev) => (prev === sheet ? null : sheet));
@@ -179,7 +175,11 @@ function AppContent() {
   const { isPromoActive, is2x1Active } = usePromo();
 
   return (
-    <div className={`phone ${stateClass} ${screenClass}`} id="app" style={phoneStyle}>
+    <div
+      className={`phone ${stateClass} ${screenClass} ${activeSheet ? 'has-open-sheet' : ''}`}
+      id="app"
+      style={phoneStyle}
+    >
       <div className="top-strip" />
 
       {screen !== 'terms' && <AppHeader onMenuClick={() => toggleSheet('extras')} />}
@@ -206,8 +206,6 @@ function AppContent() {
         />
       )}
 
-      <Toast message={toast.message} visible={toast.visible} variant={toast.variant} />
-
       <PromoBottomSheet isOpen={activeSheet === 'promo'} onClose={() => setActiveSheet(null)} />
 
       <LogsBottomSheet isOpen={activeSheet === 'logs'} onClose={() => setActiveSheet(null)} />
@@ -215,11 +213,23 @@ function AppContent() {
       <AccountBottomSheet isOpen={activeSheet === 'account'} onClose={() => setActiveSheet(null)} />
 
       <ImportBottomSheet isOpen={activeSheet === 'import'} onClose={() => setActiveSheet(null)} />
+      <HotspotBottomSheet isOpen={activeSheet === 'hotspot'} onClose={() => setActiveSheet(null)} />
+      <RepairAccountBottomSheet
+        isOpen={activeSheet === 'repair'}
+        onClose={() => setActiveSheet(null)}
+      />
+      <CommunityBottomSheet
+        isOpen={activeSheet === 'community'}
+        onClose={() => setActiveSheet(null)}
+      />
 
       <ExtrasBottomSheet
         isOpen={activeSheet === 'extras'}
         onClose={() => setActiveSheet(null)}
         onShowImport={() => setActiveSheet('import')}
+        onShowHotspot={() => setActiveSheet('hotspot')}
+        onShowRepair={() => setActiveSheet('repair')}
+        onShowCommunity={() => setActiveSheet('community')}
         onShowSupport={() => {
           setActiveSheet(null);
           setScreen('support');
@@ -234,9 +244,7 @@ export default function App() {
     <LanguageProvider>
       <ErrorBoundary>
         <VpnProvider>
-          <ToastProvider>
-            <AppContent />
-          </ToastProvider>
+          <AppContent />
         </VpnProvider>
       </ErrorBoundary>
     </LanguageProvider>

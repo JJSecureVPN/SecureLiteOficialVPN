@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { SubscribeButton } from './AppHeader/SubscribeButton';
+import { ReferralsButton } from './AppHeader/ReferralsButton';
 import { LanguageButton } from './AppHeader/LanguageButton';
 import { BackButton } from './AppHeader/BackButton';
 
@@ -46,6 +47,8 @@ export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps
           isCategoryDetail={isCategoryDetail}
           onClick={handleClick}
         />
+
+        <ReferralsButton onClick={() => setScreen('referrals')} />
 
         <SubscribeButton onClick={handleSubscribe} />
 

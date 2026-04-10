@@ -8,7 +8,6 @@
 import { memo, useState, useCallback, useMemo } from 'react';
 import type { ServerConfig, Category } from '@/core/types';
 import { useTranslation } from '@/i18n';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import '../../../../styles/components/import-designer-screen.css';
 
@@ -31,7 +30,6 @@ export const ImportDesignerScreen = memo(function ImportDesignerScreen({
   onCancel,
 }: ImportDesignerScreenProps) {
   const { t } = useTranslation();
-  const { showToast } = useToastContext();
   const { navigationBarHeight } = useSafeArea();
 
   // Designer state
@@ -83,38 +81,24 @@ export const ImportDesignerScreen = memo(function ImportDesignerScreen({
   const handleRandomizeCredentials = useCallback(() => {
     setUsername(`user_${randomString(6)}`);
     setPassword(`Pass${randomString(8)}!`);
-    showToast(
-      t('import.credentialsGenerated') || 'Credenciales generadas',
-      document.activeElement as HTMLElement,
-    );
-  }, [showToast, t]);
+  }, []);
 
   const handleUseJson = useCallback(() => {
     if (!canProceed) {
-      showToast(
-        t('import.completeAllFields') || 'Completa todos los campos',
-        document.activeElement as HTMLElement,
-      );
       return;
     }
     const json = JSON.stringify(generatedJson, null, 2);
     onJsonGenerated(json);
-    showToast(t('import.jsonApplied') || 'JSON aplicado', document.activeElement as HTMLElement);
-  }, [generatedJson, onJsonGenerated, showToast, t, canProceed]);
+  }, [generatedJson, onJsonGenerated, canProceed]);
 
   const handleCopyJson = useCallback(async () => {
     try {
       const json = JSON.stringify(generatedJson, null, 2);
       await navigator.clipboard.writeText(json);
-      showToast(t('import.copiedJson') || 'JSON copiado', document.activeElement as HTMLElement);
     } catch {
-      showToast(
-        t('error.copyFailed') || 'Error al copiar',
-        document.activeElement as HTMLElement,
-        'error',
-      );
+      // ignore
     }
-  }, [generatedJson, showToast, t]);
+  }, [generatedJson]);
 
   const handleBack = useCallback(() => {
     if (step === 0) {

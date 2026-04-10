@@ -26,14 +26,21 @@ export const Input = memo(function Input({
 
   return (
     <div className={`field ${className}`}>
-      {icon && <i className={`fa fa-${icon}`} />}
+      {icon && <i className={`fa-solid fa-${icon}`} aria-hidden="true" />}
       <input type={inputType} onChange={(e) => onChange?.(e.target.value)} {...props} />
       {toggleVisibility && (
         <i
-          className={`fa fa-eye${showPassword ? '-slash' : ''} eye-icon`}
+          className={`fa-solid fa-eye${showPassword ? '-slash' : ''} eye-icon`}
           onClick={() => setShowPassword(!showPassword)}
           role="button"
+          tabIndex={0}
           aria-label={showPassword ? t('common.visibilityHide') : t('common.visibilityShow')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowPassword(!showPassword);
+            }
+          }}
         />
       )}
     </div>

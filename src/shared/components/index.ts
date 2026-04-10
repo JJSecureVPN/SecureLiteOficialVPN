@@ -15,3 +15,6 @@ export { LogsBottomSheet } from './LogsBottomSheet';
 export { AccountBottomSheet } from './AccountBottomSheet';
 export { PromoBottomSheet } from './PromoBottomSheet';
 export { ImportBottomSheet } from './ImportBottomSheet';
+export { HotspotBottomSheet } from './HotspotBottomSheet';
+export { RepairAccountBottomSheet } from './RepairAccountBottomSheet';
+export { CommunityBottomSheet } from './CommunityBottomSheet';

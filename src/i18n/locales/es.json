@@ -44,7 +44,33 @@
     "cleanConfirmTitle": "¿Limpiar la aplicación?",
     "cleanConfirmBody": "Se borrarán la caché, los ajustes almacenados y los datos temporales.",
     "itemsImportTitle": "Importar",
-    "itemsImportSubtitle": "Importar JSON de configuración"
+    "itemsImportSubtitle": "Importar JSON de configuración",
+    "repairTitle": "Reparar Cuenta",
+    "repairSubtitle": "Sincronización forzada con Servex",
+    "repairEyebrow": "cuenta",
+    "repairPillSuccess": "reparado",
+    "repairPillError": "error",
+    "repairPillLoading": "reparando",
+    "repairPillConnected": "conectado",
+    "repairPillDisconnected": "desconectado",
+    "repairUserInputLabel": "Usuario a reparar",
+    "repairNoUserError": "Por favor, ingresá un usuario.",
+    "repairSuccess": "Cuenta sincronizada correctamente. Intenta conectar ahora.",
+    "repairError": "Error al sincronizar la cuenta.",
+    "repairWarnDisconnect": "Se desconectará al reparar",
+    "repairInfo": "Sincronización forzada con Servex",
+    "repairAgain": "Intentar de nuevo",
+    "repairButton": "Reparar cuenta",
+    "repairUnexpectedError": "Ocurrió un error inesperado al conectar con el servidor.",
+    "communityTitle": "Nuestra Comunidad",
+    "communitySubtitle": "Únete a nuestros canales y grupos oficiales",
+    "communityWhatsappTitle": "Comunidad Whatsapp",
+    "communityWhatsappSubtitle": "Grupo de ayuda y anuncios",
+    "communityWhatsappChannelTitle": "Canal Whatsapp",
+    "communityWhatsappChannelSubtitle": "Notificaciones rápidas",
+    "communityTelegramTitle": "Canal Telegram",
+    "communityTelegramSubtitle": "Anuncios y actualizaciones",
+    "communityOpened": "Abriendo enlace..."
   },
   "errorBoundary": {
     "title": "Algo salió mal",
@@ -70,6 +96,7 @@
     "disconnect": "DESCONECTAR",
     "stop": "PARAR",
     "retry": "REINTENTAR",
+    "saturated": "LLENO",
     "update": "Actualizar",
     "logs": "Registros",
     "viewDetails": "Ver detalles",
@@ -93,7 +120,8 @@
     "connectionFailed": "Error al conectar",
     "updateCheckFailed": "Error al buscar actualización",
     "configApplyFailed": "Error al aplicar configuración",
-    "copyFailed": "No fue posible copiar"
+    "copyFailed": "No fue posible copiar",
+    "categoryFull": "Esta categoría ha alcanzado el límite de usuarios"
   },
   "servers": {
     "title": "NUESTROS SERVIDORES",
@@ -138,7 +166,9 @@
     "online": "EN LÍNEA",
     "showStats": "Mostrar estadísticas",
     "hideStats": "Ocultar estadísticas",
-    "statsShort": "ESTADÍSTICAS EN VIVO"
+    "statsShort": "ESTADÍSTICAS EN VIVO",
+    "full": "LLENO",
+    "saturated": "Categoría saturada"
   },
   "import": {
     "title": "Importar configuración",
@@ -262,11 +292,6 @@
       "openButton": "Abrir en navegador",
       "copyButton": "Copiar enlace"
     },
-    "toast": {
-      "opening": "Abriendo en el navegador predeterminado...",
-      "tryOpen": "Intentando abrir...",
-      "copied": "Enlace copiado al portapapeles"
-    },
     "activeBadge": "Oferta activa",
     "headTitle": "Aprovechá el descuento antes de que termine",
     "tabLabel": "Oferta",
@@ -295,8 +320,6 @@
     "tabLabel": "Cupones",
     "availableList": "Cupones disponibles",
     "tag": "CUPÓN",
-    "copiedHint": "Código copiado al portapapeles",
-    "copyHint": "Tocar para copiar el código",
     "applyNote": "Los cupones se aplican al finalizar la compra.",
     "discount": "Descuento",
     "remaining": "Usos restantes"
@@ -309,9 +332,6 @@
     "close": "Cerrar",
     "empty": "No hay registros disponibles",
     "generateHint": "Realiza una conexión para generar nuevos eventos.",
-    "copiedToast": "Logs copiados",
-    "copyFailedToast": "No fue posible copiar los registros",
-    "clearedToast": "Logs limpiados",
     "noLogs": "No hay registros disponibles"
   },
   "account": {

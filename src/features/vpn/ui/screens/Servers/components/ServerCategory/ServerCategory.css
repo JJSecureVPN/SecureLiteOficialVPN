@@ -139,7 +139,41 @@
   margin-top: 4px;
   padding-top: 12px;
 }
+/* Saturated / Full states */
+.category-card--full {
+  opacity: 0.75;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+  border-color: rgba(255, 59, 48, 0.2);
+}
 
+.category-card--full:active {
+  transform: none;
+}
+
+.category-card__badge--full {
+  background: rgba(255, 59, 48, 0.1) !important;
+  color: #ff3b30 !important;
+  border-color: rgba(255, 59, 48, 0.3) !important;
+  animation: pulse-red 2s infinite;
+}
+
+.category-card__badge--full .category-card__badge-dot {
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 59, 48, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+  }
+}
 /* ── Stats toggle button ── */
 .category-card__stats-toggle {
   display: inline-flex;

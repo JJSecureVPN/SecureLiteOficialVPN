@@ -1,7 +1,6 @@
 import { memo, useEffect, useCallback, useMemo, useRef } from 'react';
 import { BottomSheet } from './BottomSheet';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useTranslation } from '@/i18n';
 import { useLogs } from '@/features/logs';
 import '../../styles/components/logs-bottom-sheet.css';
@@ -15,7 +14,6 @@ export const LogsBottomSheet = memo(function LogsBottomSheet({
   isOpen,
   onClose,
 }: LogsBottomSheetProps) {
-  const { showToast } = useToastContext();
   const { t } = useTranslation();
   const { logs, refresh } = useLogs();
   const listRef = useRef<HTMLDivElement>(null);
@@ -76,20 +74,18 @@ export const LogsBottomSheet = memo(function LogsBottomSheet({
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(logs);
-      showToast(t('logs.copiedToast'));
     } catch {
-      showToast(t('logs.copyFailedToast'));
+      // ignore
     }
-  }, [logs, showToast, t]);
+  }, [logs]);
 
   const handleClear = useCallback(() => {
     const sdk = getSdk();
     if (sdk) {
       sdk.main.clearLogs();
-      showToast(t('logs.clearedToast'));
       refresh();
     }
-  }, [showToast, refresh, t]);
+  }, [refresh]);
 
   const headerActions = (
     <div className="logs-sheet-actions">

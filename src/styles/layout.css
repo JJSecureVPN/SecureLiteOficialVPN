@@ -174,12 +174,12 @@ header.topbar {
 /* Ensure cart and theme icons share the same subtle color */
 .subscribe-btn,
 .theme-btn {
-  color: var(--text-strong-35);
+  color: #ffffff;
 }
 
 .subscribe-btn i,
 .theme-btn i {
-  color: var(--text-strong-35);
+  color: #ffffff;
 }
 
 /* ===========================================

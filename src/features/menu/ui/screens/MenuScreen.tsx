@@ -1,6 +1,5 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
 import { useTranslation } from '@/i18n';
@@ -30,7 +29,6 @@ export const MenuScreen = memo(function MenuScreen({
 }) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
-  const { showToast } = useToastContext();
   const [hotspotStatus, setHotspotStatus] = useState<HotspotState>('UNKNOWN');
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [showCleanConfirm, setShowCleanConfirm] = useState(false);
@@ -46,7 +44,7 @@ export const MenuScreen = memo(function MenuScreen({
   }, [refreshHotspotStatus]);
 
   const handleToggleHotspot = useCallback(() => {
-    const next = toggleHotspotAction(hotspotStatus, showToast, {
+    const next = toggleHotspotAction(hotspotStatus, {
       started: t('menu.hotspotStarted'),
       stopped: t('menu.hotspotStopped'),
       unavailable: t('common.notAvailableDevice'),
@@ -55,7 +53,7 @@ export const MenuScreen = memo(function MenuScreen({
     if (next !== 'UNKNOWN') {
       setTimeout(refreshHotspotStatus, 400);
     }
-  }, [hotspotStatus, showToast, refreshHotspotStatus, t]);
+  }, [hotspotStatus, refreshHotspotStatus, t]);
 
   const handlePressStart = useCallback((id: string) => {
     setPressedItem(id);
@@ -78,14 +76,14 @@ export const MenuScreen = memo(function MenuScreen({
       title: t('menu.itemsApnTitle'),
       subtitle: t('menu.itemsApnSubtitle'),
       icon: 'fa-signal',
-      action: () => openApnSettings(showToast, t('common.notAvailableDevice')),
+      action: () => openApnSettings(t('common.notAvailableDevice')),
     },
     {
       id: 'battery',
       title: t('menu.itemsBatteryTitle'),
       subtitle: t('menu.itemsBatterySubtitle'),
       icon: 'fa-bolt',
-      action: () => ignoreBatteryOptimizations(showToast, t('common.notAvailableDevice')),
+      action: () => ignoreBatteryOptimizations(t('common.notAvailableDevice')),
     },
     {
       id: 'hotspot',
@@ -171,7 +169,7 @@ export const MenuScreen = memo(function MenuScreen({
               }}
               onClick={() => {
                 setShowCleanConfirm(false);
-                cleanApp(showToast, t('menu.cleanupDone'), t('common.notAvailableDevice'));
+                cleanApp(t('menu.cleanupDone'), t('common.notAvailableDevice'));
               }}
               type="button"
             >

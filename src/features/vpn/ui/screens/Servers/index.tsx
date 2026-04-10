@@ -9,7 +9,6 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useServerStats } from '@/shared/hooks/useServerStats';
 import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
@@ -51,7 +50,6 @@ export function ServersScreen() {
 
   // UI State
   const { t } = useTranslation();
-  const { showToast } = useToastContext();
   const { statusBarHeight } = useSafeArea();
   const sectionStyle = { paddingTop: `calc(${statusBarHeight}px + 8px)`, paddingBottom: 0 };
   const contentRef = useRef<HTMLDivElement>(null);
@@ -128,18 +126,13 @@ export function ServersScreen() {
       if (autoMode) {
         try {
           startAutoConnect(cat);
-          showToast(
-            `${t('auto.testing')} ${cat.name || t('auto.categoryFallback')}`,
-            document.activeElement as HTMLElement,
-          );
         } catch (err) {
           error.setError(err, ErrorCategory.Internal);
-          showToast(t('error.autoConnectFailed'), document.activeElement as HTMLElement, 'error');
         }
         return;
       }
 
-      const performStart = (message: string) => {
+      const performStart = () => {
         setConfig(srv);
         setScreen('home');
 
@@ -150,7 +143,6 @@ export function ServersScreen() {
           if (active?.closest && active.closest('.category-card')) active.blur();
         } catch {}
 
-        showToast(message, document.activeElement as HTMLElement);
         window.setTimeout(() => getSdk()?.main.startVpn(), 150);
       };
 
@@ -166,31 +158,30 @@ export function ServersScreen() {
         if (status === 'CONNECTING') {
           pushCreds();
           cancelConnecting();
-          performStart(`${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`);
+          performStart();
           return;
         }
 
         if (status === 'CONNECTED') {
           pushCreds();
           disconnect();
-          performStart(`${t('status.connectingTo')} ${srv.name || t('servers.inUse')}`);
+          performStart();
           return;
         }
 
-        performStart(t('connection.serverSelected'));
+        performStart();
       } catch (err) {
         error.setError(err, ErrorCategory.Internal);
         appLogger.add(
           'error',
           `Server selection error: ${err instanceof Error ? err.message : String(err)}`,
         );
-        showToast(t('error.connectionFailed'), document.activeElement as HTMLElement, 'error');
+        error.setError(err, ErrorCategory.Internal);
       }
     },
     [
       autoMode,
       startAutoConnect,
-      showToast,
       status,
       creds.user,
       creds.pass,

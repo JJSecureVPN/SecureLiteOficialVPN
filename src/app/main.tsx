@@ -40,7 +40,6 @@ import '../styles/layout.css';
 import '../styles/ui-elements.css';
 import '../styles/components/cards.css';
 import '../styles/components/menu.css';
-import '../styles/components/toast.css';
 import '../styles/components/premium.css';
 
 import '../styles/components/error-boundary.css';

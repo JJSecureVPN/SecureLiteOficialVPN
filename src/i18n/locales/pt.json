@@ -44,7 +44,33 @@
     "cleanConfirmTitle": "Limpar o aplicativo?",
     "cleanConfirmBody": "Cache, ajustes armazenados e dados temporarios serão apagados.",
     "itemsImportTitle": "Importar",
-    "itemsImportSubtitle": "Importar JSON de configuração"
+    "itemsImportSubtitle": "Importar JSON de configuração",
+    "repairTitle": "Reparar Conta",
+    "repairSubtitle": "Sincronização forzada com Servex",
+    "repairEyebrow": "conta",
+    "repairPillSuccess": "reparado",
+    "repairPillError": "erro",
+    "repairPillLoading": "reparando",
+    "repairPillConnected": "conectado",
+    "repairPillDisconnected": "desconectado",
+    "repairUserInputLabel": "Usuário a reparar",
+    "repairNoUserError": "Por favor, insira um usuário.",
+    "repairSuccess": "Conta sincronizada corretamente. Tente conectar agora.",
+    "repairError": "Erro ao sincronizar a conta.",
+    "repairWarnDisconnect": "Desconectará ao reparar",
+    "repairInfo": "Sincronização forçada com Servex",
+    "repairAgain": "Tentar novamente",
+    "repairButton": "Reparar conta",
+    "repairUnexpectedError": "Ocorreu um erro inesperado ao conectar com o servidor.",
+    "communityTitle": "Nossa Comunidade",
+    "communitySubtitle": "Junte-se aos nossos canais e grupos oficiais",
+    "communityWhatsappTitle": "Comunidade Whatsapp",
+    "communityWhatsappSubtitle": "Grupo de ajuda e anúncios",
+    "communityWhatsappChannelTitle": "Canal Whatsapp",
+    "communityWhatsappChannelSubtitle": "Notificações rápidas",
+    "communityTelegramTitle": "Canal Telegram",
+    "communityTelegramSubtitle": "Anúncios e atualizações",
+    "communityOpened": "Abrindo link..."
   },
   "errorBoundary": {
     "title": "Algo deu errado",
@@ -70,6 +96,7 @@
     "disconnect": "DESCONECTAR",
     "stop": "PARAR",
     "retry": "TENTAR NOVAMENTE",
+    "saturated": "LOTADO",
     "update": "Atualizar",
     "logs": "Registros",
     "viewDetails": "Ver detalhes",
@@ -93,7 +120,8 @@
     "connectionFailed": "Erro ao conectar",
     "updateCheckFailed": "Erro ao verificar atualização",
     "configApplyFailed": "Erro ao aplicar configuração",
-    "copyFailed": "Não foi possível copiar"
+    "copyFailed": "Não foi possível copiar",
+    "categoryFull": "Esta categoria atingiu o limite de usuários"
   },
   "servers": {
     "title": "Nossos Servidores",
@@ -138,7 +166,9 @@
     "online": "ONLINE",
     "showStats": "Mostrar estatísticas",
     "hideStats": "Ocultar estatísticas",
-    "statsShort": "ESTATÍSTICAS AO VIVO"
+    "statsShort": "ESTATÍSTICAS AO VIVO",
+    "full": "LOTADO",
+    "saturated": "Categoria lotada"
   },
   "import": {
     "title": "Importar configuração",
@@ -279,9 +309,6 @@
     "close": "Fechar",
     "empty": "Nenhum registro disponível",
     "generateHint": "Realize uma conexão para gerar novos eventos.",
-    "copiedToast": "Logs copiados",
-    "copyFailedToast": "Não foi possível copiar os logs",
-    "clearedToast": "Logs limpos",
     "noLogs": "Nenhum registro disponível"
   },
   "account": {

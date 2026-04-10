@@ -147,6 +147,29 @@
   color: var(--text);
   font: 600 var(--font-base) var(--font-sans);
   outline: none;
+  min-width: 0;
+}
+
+.field .eye-icon {
+  margin-left: auto;
+  cursor: pointer;
+  color: var(--muted);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition:
+    color 0.2s ease,
+    transform 0.1s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.field .eye-icon:active {
+  transform: scale(0.9);
+  color: var(--text-strong);
 }
 
 .field:focus-within {

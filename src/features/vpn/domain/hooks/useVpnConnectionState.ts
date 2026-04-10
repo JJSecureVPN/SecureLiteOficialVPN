@@ -13,6 +13,7 @@ import { useVpnEvents } from './useVpnEvents';
 import { useAutoConnect } from './useAutoConnect';
 import { useRetryLoads } from './useRetryLoads';
 import { appLogger } from '@/features/logs';
+import { useCategorySaturation } from './useCategorySaturation';
 
 interface UseVpnConnectionArgs {
   creds: Credentials;
@@ -80,12 +81,34 @@ export function useVpnConnectionState({
     loadCategorias,
   });
 
+  const { isSaturated } = useCategorySaturation(categorias);
+
+  // Watchdog: Desconexión automática si la categoría se satura estando conectado
+  useEffect(() => {
+    if (status !== 'CONNECTED' || !config) return;
+
+    const currentCat = categorias.find((c) => c.items?.some((s) => s.id === config.id));
+    if (currentCat && isSaturated(currentCat.name)) {
+      appLogger.add('warn', `Watchdog: Desconectando por saturación en ${currentCat.name}`);
+      getSdk()?.main.stopVpn();
+      setStatus('DISCONNECTED');
+      // Podríamos disparar un evento global o notificación aquí
+    }
+  }, [status, config, categorias, isSaturated]);
+
   // Conexión manual
   const connect = useCallback(() => {
     if (!config) {
       appLogger.add('warn', 'connect: no hay config seleccionada');
       return;
     }
+
+    const currentCat = categorias.find((c) => c.items?.some((s) => s.id === config.id));
+    if (currentCat && isSaturated(currentCat.name)) {
+      appLogger.add('warn', `connect: La categoría ${currentCat.name} está llena.`);
+      return;
+    }
+
     pushCreds();
     persistCreds();
     const sdk = getSdk();
@@ -94,7 +117,7 @@ export function useVpnConnectionState({
       sdk.main.startVpn();
     }
     setStatus('CONNECTING');
-  }, [config, persistCreds, pushCreds]);
+  }, [config, categorias, isSaturated, persistCreds, pushCreds]);
 
   const stopVpn = useCallback(() => {
     cancelAuto();

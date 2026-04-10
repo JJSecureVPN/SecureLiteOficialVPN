@@ -3,6 +3,7 @@ import type { AutoState, Category, ScreenType, ServerConfig, VpnStatus } from '@
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/core/constants';
 import { getSdk } from '../../api/dtunnelSdk';
 import { appLogger } from '@/features/logs';
+import { useCategorySaturation } from './useCategorySaturation';
 
 interface UseAutoConnectArgs {
   status: VpnStatus;
@@ -26,6 +27,7 @@ export function useAutoConnect({
   persistCreds,
   pushCreds,
 }: UseAutoConnectArgs) {
+  const { isSaturated } = useCategorySaturation(categorias);
   const autoRef = useRef<AutoState>({ on: false, tmo: null, ver: null, list: [], i: 0 });
   const [progress, setProgress] = useState({
     i: 0,
@@ -116,18 +118,31 @@ export function useAutoConnect({
       clearAutoTimers();
 
       let list: ServerConfig[] = [];
-      if (cat?.items?.length) {
-        list = cat.items.slice();
+      if (cat) {
+        // Si se especificó una categoría y está saturada, no iniciar
+        if (isSaturated(cat.name)) {
+          appLogger.add('warn', `Auto-conexión abortada: La categoría ${cat.name} está saturada.`);
+          return;
+        }
+        list = (cat.items || []).slice();
       } else {
-        categorias.forEach((c) => c.items && list.push(...c.items));
+        // Filtrar categorías saturadas de la rotación global
+        categorias.forEach((c) => {
+          if (!isSaturated(c.name) && c.items) {
+            list.push(...c.items);
+          }
+        });
       }
 
       if (!list.length) {
-        appLogger.add('error', 'Auto-conexión: No hay servidores disponibles para auto-conectar.');
+        appLogger.add(
+          'error',
+          'Auto-conexión: No hay servidores disponibles (todos saturados o vacíos).',
+        );
         return;
       }
 
-      appLogger.add('info', `Auto-conexión iniciada. Total servidores: ${list.length}`);
+      appLogger.add('info', `Auto-conexión iniciada. Total servidores disponibles: ${list.length}`);
 
       autoRef.current.on = true;
       autoRef.current.list = list;
@@ -137,7 +152,17 @@ export function useAutoConnect({
       setScreen('home');
       nextAuto();
     },
-    [categorias, clearAutoTimers, nextAuto, persistCreds, pushCreds, setScreen, setStatus, status],
+    [
+      categorias,
+      clearAutoTimers,
+      isSaturated,
+      nextAuto,
+      persistCreds,
+      pushCreds,
+      setScreen,
+      setStatus,
+      status,
+    ],
   );
 
   const cancelAuto = useCallback(() => {

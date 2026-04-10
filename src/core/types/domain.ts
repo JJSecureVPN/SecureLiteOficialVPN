@@ -23,6 +23,7 @@ export interface Category {
   name: string;
   items: ServerConfig[];
   sorter?: number;
+  maxUsers?: number;
 }
 
 export interface UserInfo {
@@ -65,7 +66,16 @@ export type VpnStatus =
 
 export type ScreenType = (typeof SCREENS)[number];
 
-export type ActiveSheet = 'promo' | 'logs' | 'account' | 'import' | 'extras' | null;
+export type ActiveSheet =
+  | 'promo'
+  | 'logs'
+  | 'account'
+  | 'import'
+  | 'extras'
+  | 'hotspot'
+  | 'repair'
+  | 'community'
+  | null;
 
 export interface ServerRealtimeStat {
   serverId: number;

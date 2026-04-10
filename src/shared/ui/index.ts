@@ -7,5 +7,4 @@ export { Card } from './Card';
 export { Pill } from './Pill';
 export { Badge } from './Badge';
 export { QuickButton } from './QuickButton';
-export { Toast } from './Toast';
 export { Toggle } from './Toggle';

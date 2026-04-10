@@ -38,6 +38,7 @@ interface BottomSheetProps {
   className?: string;
   headerActions?: ReactNode;
   style?: React.CSSProperties;
+  hideDefaultHeader?: boolean;
 }
 
 export const BottomSheet = memo(function BottomSheet({
@@ -51,6 +52,7 @@ export const BottomSheet = memo(function BottomSheet({
   className = '',
   headerActions,
   style,
+  hideDefaultHeader = false,
 }: BottomSheetProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -122,7 +124,7 @@ export const BottomSheet = memo(function BottomSheet({
         <div className="bottom-sheet-glow-border" />
         <div className="bottom-sheet-drag-handle" />
 
-        {(title || subtitle || icon) && (
+        {!hideDefaultHeader && (title || subtitle || icon) && (
           <div className="bottom-sheet-header">
             <div className="bottom-sheet-header-content">
               {icon && <div className="bottom-sheet-icon-wrapper">{icon}</div>}

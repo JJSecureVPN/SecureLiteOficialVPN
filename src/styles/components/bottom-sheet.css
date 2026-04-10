@@ -139,3 +139,24 @@ body.keyboard-open .bottom-sheet-content {
   margin: 16px 8px;
   border-radius: 16px;
 }
+/* Background diffusion effect when sheet is open (iOS-style stack) */
+.phone .app-header,
+.phone .home-main,
+.phone .servers-screen,
+.phone .support-screen,
+.phone .menu-screen {
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: filter, transform, opacity;
+}
+
+.phone.has-open-sheet .app-header,
+.phone.has-open-sheet .home-main,
+.phone.has-open-sheet .servers-screen,
+.phone.has-open-sheet .support-screen,
+.phone.has-open-sheet .menu-screen {
+  filter: blur(5px) saturate(0.8);
+  transform: scale(0.97);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}

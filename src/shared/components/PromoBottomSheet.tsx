@@ -147,57 +147,72 @@ export const PromoBottomSheet = memo(function PromoBottomSheet({
             <div className="coupons-section">
               <span className="section-label-tiny">{t('coupon.availableList')}</span>
               <div className="coupons-scroll-list">
-                {activeCoupons.map((coupon: Coupon) => (
-                  <button
-                    key={coupon.id}
-                    className={`coupon-item-card ${copied[coupon.id] ? 'is-copied' : ''}`}
-                    onClick={() => copyCoupon(coupon.codigo, coupon.id)}
-                  >
-                    <div className="coupon-item-header">
-                      <span className="coupon-type-tag">{t('coupon.tag')}</span>
-                      <span
-                        className={`copy-success-indicator ${copied[coupon.id] ? 'visible' : ''}`}
-                      >
-                        <span className="success-dot" /> {t('coupon.copied')}
-                      </span>
-                    </div>
-                    <div className="coupon-item-code">{coupon.codigo}</div>
-                    <div className="coupon-item-meta">
-                      <div className="meta-col">
-                        <span className="meta-label">{t('coupon.discount')}</span>
-                        <span className="meta-value accent">
-                          {coupon.tipo === 'porcentaje' ? `${coupon.valor}%` : `$${coupon.valor}`}
-                        </span>
+                {activeCoupons.map((coupon: Coupon) => {
+                  const isDiscountPercent = coupon.tipo === 'porcentaje';
+                  const discountValue = isDiscountPercent ? `${coupon.valor}%` : `$${coupon.valor}`;
+                  const isUnlimited = !coupon.limite_uso || coupon.limite_uso === 0;
+                  const remainingStr = isUnlimited
+                    ? '∞'
+                    : Math.max(0, coupon.limite_uso - (coupon.usos_actuales || 0)).toString();
+                  return (
+                    <button
+                      key={coupon.id}
+                      className={`premium-coupon-card ${copied[coupon.id] ? 'is-copied' : ''}`}
+                      onClick={() => copyCoupon(coupon.codigo, coupon.id)}
+                    >
+                      <div className="premium-coupon-content">
+                        <div className="premium-coupon-left">
+                          <span className="premium-discount-val">{discountValue}</span>
+                          <span className="premium-discount-lbl">
+                            {isDiscountPercent ? 'OFF' : t('coupon.discount')}
+                          </span>
+                        </div>
+
+                        <div className="premium-coupon-divider"></div>
+
+                        <div className="premium-coupon-right">
+                          <div className="premium-coupon-header">
+                            <span className="premium-coupon-tag">{t('coupon.tag')}</span>
+                            <span
+                              className={`premium-copy-success ${copied[coupon.id] ? 'visible' : ''}`}
+                            >
+                              <span className="success-dot" /> {t('coupon.copied')}
+                            </span>
+                          </div>
+                          <div className="premium-coupon-body">
+                            <div className="premium-coupon-code">{coupon.codigo}</div>
+                            <div className="premium-coupon-meta">
+                              <span className="meta-lbl">{t('coupon.remaining')}</span>
+                              <span className="highlight-uses">{remainingStr}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="meta-col">
-                        <span className="meta-label">{t('coupon.remaining')}</span>
-                        <span className="meta-value">
-                          {Math.max(0, coupon.limite_uso - coupon.usos_actuales)}
-                        </span>
+
+                      <div className="premium-coupon-footer">
+                        <svg
+                          className="footer-icon"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          {copied[coupon.id] ? (
+                            <polyline points="20 6 9 17 4 12" />
+                          ) : (
+                            <>
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </>
+                          )}
+                        </svg>
+                        {copied[coupon.id] ? t('coupon.copiedHint') : t('coupon.copyHint')}
                       </div>
-                    </div>
-                    <div className="coupon-item-footer">
-                      <svg className="footer-icon" viewBox="0 0 16 16">
-                        {copied[coupon.id] ? (
-                          <polyline
-                            points="3 8 6.5 11.5 13 5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                        ) : (
-                          <path
-                            d="M2 2h12v12H2z M5 8h6 M8 5v6"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                        )}
-                      </svg>
-                      {copied[coupon.id] ? t('coupon.copiedHint') : t('coupon.copyHint')}
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

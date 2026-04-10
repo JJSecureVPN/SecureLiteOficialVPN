@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../../i18n/context';
 import type { Language } from '../../../i18n/types';
+import '../../../styles/components/language-selector.css';
 
 interface Props {
   onLanguageChange?: (lang: Language) => void;
@@ -11,6 +12,7 @@ const LANG_LABELS: Record<Language, string> = {
   en: '🇺🇸',
   pt: '🇧🇷',
 };
+
 export function LanguageButton({ onLanguageChange }: Props) {
   const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +41,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
   };
 
   return (
-    <div className="language-selector" ref={dropdownRef}>
+    <div className={`language-selector ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
       <button
         type="button"
         className="icon-btn hotzone language-btn"
@@ -49,7 +51,8 @@ export function LanguageButton({ onLanguageChange }: Props) {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        {LANG_LABELS[language]}
+        <span className="current-flag">{LANG_LABELS[language]}</span>
+        <i className="fa fa-chevron-down" />
       </button>
 
       {isOpen && (
@@ -61,7 +64,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
             role="option"
             aria-selected={language === 'es'}
           >
-            🇦🇷 {t('language.spanish')}
+            <span className="flag">🇦🇷</span> {t('language.spanish')}
           </button>
           <button
             type="button"
@@ -70,7 +73,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
             role="option"
             aria-selected={language === 'en'}
           >
-            🇺🇸 {t('language.english')}
+            <span className="flag">🇺🇸</span> {t('language.english')}
           </button>
           <button
             type="button"
@@ -79,7 +82,7 @@ export function LanguageButton({ onLanguageChange }: Props) {
             role="option"
             aria-selected={language === 'pt'}
           >
-            🇧🇷 {t('language.portuguese')}
+            <span className="flag">🇧🇷</span> {t('language.portuguese')}
           </button>
         </div>
       )}

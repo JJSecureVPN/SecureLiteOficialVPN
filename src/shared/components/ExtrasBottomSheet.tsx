@@ -1,16 +1,12 @@
-import { memo, useEffect, useState, useCallback } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { useVpn } from '@/features/vpn';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useTranslation } from '@/i18n';
 import {
   cleanApp,
-  getHotspotStatus,
   ignoreBatteryOptimizations,
   openApnSettings,
   openNetworkSettings,
-  toggleHotspot as toggleHotspotAction,
 } from '@/shared/lib/nativeActions';
-import type { HotspotState } from '@/shared/lib/nativeActions';
 import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
 import { BottomSheet } from './BottomSheet';
 import '../../styles/components/extras-bottom-sheet.css';
@@ -28,6 +24,9 @@ interface ExtrasBottomSheetProps {
   onClose: () => void;
   onShowImport?: () => void;
   onShowSupport?: () => void;
+  onShowHotspot?: () => void;
+  onShowRepair?: () => void;
+  onShowCommunity?: () => void;
 }
 
 export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
@@ -35,35 +34,14 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
   onClose,
   onShowImport,
   onShowSupport,
+  onShowHotspot,
+  onShowRepair,
+  onShowCommunity,
 }: ExtrasBottomSheetProps) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
-  const { showToast } = useToastContext();
-  const [hotspotStatus, setHotspotStatus] = useState<HotspotState>('UNKNOWN');
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [showCleanConfirm, setShowCleanConfirm] = useState(false);
-
-  const refreshHotspotStatus = useCallback(() => {
-    setHotspotStatus(getHotspotStatus());
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      refreshHotspotStatus();
-    }
-  }, [isOpen, refreshHotspotStatus]);
-
-  const handleToggleHotspot = useCallback(() => {
-    const next = toggleHotspotAction(hotspotStatus, showToast, {
-      started: t('menu.hotspotStarted'),
-      stopped: t('menu.hotspotStopped'),
-      unavailable: t('common.notAvailableDevice'),
-    });
-    setHotspotStatus(next);
-    if (next !== 'UNKNOWN') {
-      setTimeout(refreshHotspotStatus, 400);
-    }
-  }, [hotspotStatus, showToast, refreshHotspotStatus, t]);
 
   const handlePressStart = useCallback((id: string) => {
     setPressedItem(id);
@@ -86,29 +64,23 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       title: t('menu.itemsApnTitle'),
       subtitle: t('menu.itemsApnSubtitle'),
       icon: 'fa-signal',
-      action: () => openApnSettings(showToast, t('common.notAvailableDevice')),
+      action: () => openApnSettings(t('common.notAvailableDevice')),
     },
     {
       id: 'battery',
       title: t('menu.itemsBatteryTitle'),
       subtitle: t('menu.itemsBatterySubtitle'),
       icon: 'fa-bolt',
-      action: () => ignoreBatteryOptimizations(showToast, t('common.notAvailableDevice')),
+      action: () => ignoreBatteryOptimizations(t('common.notAvailableDevice')),
     },
     {
       id: 'hotspot',
-      title:
-        hotspotStatus === 'RUNNING'
-          ? t('menu.itemsHotspotTitleOn')
-          : t('menu.itemsHotspotTitleOff'),
-      subtitle:
-        hotspotStatus === 'RUNNING'
-          ? t('menu.itemsHotspotSubtitleOn')
-          : hotspotStatus === 'STOPPED'
-            ? t('menu.itemsHotspotSubtitleOff')
-            : t('menu.itemsHotspotSubtitleUnknown'),
+      title: 'Proxy Hotspot',
+      subtitle: 'compartir internet',
       icon: 'fa-wifi',
-      action: hotspotStatus === 'UNKNOWN' ? undefined : handleToggleHotspot,
+      action: () => {
+        onShowHotspot?.();
+      },
     },
     {
       id: 'support',
@@ -117,6 +89,15 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       icon: 'fa-headset',
       action: () => {
         onShowSupport?.();
+      },
+    },
+    {
+      id: 'repair',
+      title: t('menu.repairTitle'),
+      subtitle: t('menu.repairSubtitle'),
+      icon: 'fa-wrench',
+      action: () => {
+        onShowRepair?.();
       },
     },
     {
@@ -143,6 +124,15 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       icon: 'fa-file-import',
       action: () => {
         onShowImport?.();
+      },
+    },
+    {
+      id: 'community',
+      title: t('menu.communityTitle'),
+      subtitle: t('menu.communitySubtitle'),
+      icon: 'fa-users',
+      action: () => {
+        onShowCommunity?.();
       },
     },
   ];
@@ -181,7 +171,7 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
               className="btn btn--danger"
               onClick={() => {
                 setShowCleanConfirm(false);
-                cleanApp(showToast, t('menu.cleanupDone'), t('common.notAvailableDevice'));
+                cleanApp(t('menu.cleanupDone'), t('common.notAvailableDevice'));
               }}
               type="button"
             >

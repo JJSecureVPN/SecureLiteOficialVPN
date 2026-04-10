@@ -11,6 +11,7 @@ import { resolveSubcategory } from '../../utils/categoryParsing';
 import { ServerStats, type ServerLiveStats } from '../ServerStats';
 import type { Category } from '@/core/types';
 import { ServerListItem } from '../ServerListItem';
+import { useCategorySaturation } from '@/features/vpn/domain/hooks/useCategorySaturation';
 
 interface ServerCategoryProps {
   category: Category;
@@ -39,10 +40,13 @@ export const ServerCategory = memo(
     onToggleStats,
   }: ServerCategoryProps) {
     const { t } = useTranslation();
+    const { getCategoryStatus } = useCategorySaturation([category]);
+    const satStatus = getCategoryStatus(category);
 
     const handleMainClick = useCallback(() => {
+      if (satStatus.isSaturated) return;
       onCategoryClick(category);
-    }, [category, onCategoryClick]);
+    }, [category, onCategoryClick, satStatus.isSaturated]);
 
     const handleStatsClick = useCallback(
       (e: React.MouseEvent) => {
@@ -61,11 +65,12 @@ export const ServerCategory = memo(
     }, [category.items]);
 
     const serverCount = category.items?.length ?? 0;
-    const connectedUsers = liveStats?.connectedUsers ?? 0;
+    const connectedUsers = satStatus.connectedUsers;
+    const isFull = satStatus.isSaturated;
 
     return (
       <Card
-        className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
+        className={`category-card ${hasSelectedServer ? 'selected' : ''} ${isFull ? 'category-card--full' : ''}`}
         role="button"
         tabIndex={0}
         data-nav
@@ -90,11 +95,15 @@ export const ServerCategory = memo(
 
             {/* Online users pill */}
             <div
-              className="category-card__badge"
-              aria-label={`${connectedUsers} usuarios conectados`}
+              className={`category-card__badge ${isFull ? 'category-card__badge--full' : ''}`}
+              aria-label={isFull ? t('servers.saturated') : `${connectedUsers} usuarios conectados`}
             >
               <span className="category-card__badge-dot" aria-hidden />
-              <span className="category-card__badge-num">{connectedUsers.toLocaleString()}</span>
+              <span className="category-card__badge-num">
+                {isFull
+                  ? `${satStatus.maxUsers.toLocaleString()} / ${satStatus.maxUsers.toLocaleString()}`
+                  : `${connectedUsers.toLocaleString()} / ${satStatus.maxUsers.toLocaleString()}`}
+              </span>
             </div>
           </div>
 

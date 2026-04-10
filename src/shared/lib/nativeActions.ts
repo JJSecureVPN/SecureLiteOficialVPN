@@ -17,38 +17,31 @@ export function openNetworkSettings(): void {
   console.debug('openNetworkSettings: native API no disponible');
 }
 
-export function openApnSettings(showToast: (msg: string) => void, msgUnavailable: string): void {
+export function openApnSettings(msgUnavailable: string): void {
   const sdk = ensureSdk();
   if (sdk) {
     sdk.app.startApnActivity();
   } else {
-    showToast(msgUnavailable);
+    console.debug(msgUnavailable);
   }
 }
 
-export function ignoreBatteryOptimizations(
-  showToast: (msg: string) => void,
-  msgUnavailable: string,
-): void {
+export function ignoreBatteryOptimizations(msgUnavailable: string): void {
   const sdk = ensureSdk();
   if (sdk) {
     sdk.app.ignoreBatteryOptimizations();
   } else {
-    showToast(msgUnavailable);
+    console.debug(msgUnavailable);
   }
 }
 
-export function cleanApp(
-  showToast: (msg: string) => void,
-  msgDone: string,
-  msgUnavailable: string,
-): void {
+export function cleanApp(msgDone: string, msgUnavailable: string): void {
   const sdk = ensureSdk();
   if (sdk) {
     sdk.app.cleanApp();
-    showToast(msgDone);
+    console.debug(msgDone);
   } else {
-    showToast(msgUnavailable);
+    console.debug(msgUnavailable);
   }
 }
 
@@ -60,7 +53,6 @@ export function getHotspotStatus(): HotspotState {
 
 export function toggleHotspot(
   current: HotspotState,
-  showToast: (msg: string) => void,
   msgs: { started: string; stopped: string; unavailable: string },
   onAfterToggle?: () => void,
 ): HotspotState {
@@ -72,10 +64,10 @@ export function toggleHotspot(
     } else {
       sdk.android.stopHotSpotService();
     }
-    showToast(starting ? msgs.started : msgs.stopped);
+    console.debug(starting ? msgs.started : msgs.stopped);
     if (onAfterToggle) onAfterToggle();
     return starting ? 'RUNNING' : 'STOPPED';
   }
-  showToast(msgs.unavailable);
+  console.debug(msgs.unavailable);
   return 'UNKNOWN';
 }

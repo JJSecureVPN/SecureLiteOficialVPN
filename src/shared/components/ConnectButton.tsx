@@ -6,11 +6,11 @@ export interface ConnectButtonProps {
    * Determina el texto y estilo del botón
    * - 'connected': Mostrar "Desconectar" y estilo danger
    * - 'connecting': Mostrar "Detener"
-   * - 'connecting-auto': Mostrar "Detener" (auto mode)
    * - 'error': Mostrar "Reintentar"
+   * - 'full': Mostrar "Lleno" (para saturación)
    * - 'disconnected': Mostrar "Conectar"
    */
-  state: 'connected' | 'connecting' | 'connecting-auto' | 'error' | 'disconnected';
+  state: 'connected' | 'connecting' | 'connecting-auto' | 'error' | 'full' | 'disconnected';
 
   /** Callback cuando se presiona el botón */
   onClick: () => void;
@@ -20,9 +20,18 @@ export interface ConnectButtonProps {
 
   /** Callback para cambiar Auto Mode */
   onAutoModeChange: (value: boolean) => void;
+
+  /** True si el botón debe estar deshabilitado */
+  disabled?: boolean;
 }
 
-export function ConnectButton({ state, onClick, autoMode, onAutoModeChange }: ConnectButtonProps) {
+export function ConnectButton({
+  state,
+  onClick,
+  autoMode,
+  onAutoModeChange,
+  disabled,
+}: ConnectButtonProps) {
   const { t } = useTranslation();
 
   const buttonText = {
@@ -30,14 +39,21 @@ export function ConnectButton({ state, onClick, autoMode, onAutoModeChange }: Co
     connecting: t('buttons.stop'),
     'connecting-auto': t('buttons.stop'),
     error: t('buttons.retry'),
+    full: t('buttons.saturated'),
     disconnected: t('buttons.connect'),
   }[state];
 
-  const isDanger = state === 'connected' || state === 'error';
+  const isDanger = state === 'connected' || state === 'error' || state === 'full';
 
   return (
     <div className="connect-button">
-      <Button variant="primary" onClick={onClick} className={isDanger ? 'danger' : ''} data-nav>
+      <Button
+        variant="primary"
+        onClick={onClick}
+        className={isDanger ? 'danger' : ''}
+        disabled={disabled}
+        data-nav
+      >
         {buttonText}
       </Button>
       <Toggle checked={autoMode} onChange={onAutoModeChange} label={t('home.auto')} />

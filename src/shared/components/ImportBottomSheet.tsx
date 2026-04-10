@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
-import { useToastContext } from '@/shared/context/ToastContext';
 import { useImportConfig } from '@/features/vpn/ui/hooks';
 import {
   ImportInputStep,
@@ -30,7 +29,6 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
   onClose,
 }: ImportBottomSheetProps) {
   const { categorias, loadCategorias, setConfig, setCreds } = useVpn();
-  const { showToast } = useToastContext();
   const { t } = useTranslation();
 
   // Import configuration state management
@@ -72,7 +70,6 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
     try {
       const sel = matches.find((m) => String(m.id) === String(selectedId)) || matches[0];
       if (!sel) {
-        showToast(t('import.noServerFound'));
         return;
       }
 
@@ -83,12 +80,11 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
       });
 
       setConfig(sel);
-      showToast(t('import.applied') || t('import.appliedFallback'));
       onClose(); // Cerrar el sheet tras aplicar
     } catch {
-      showToast(t('error.configApplyFailed'), null, 'error');
+      // ignore
     }
-  }, [matches, selectedId, parsed, setCreds, setConfig, showToast, onClose, t]);
+  }, [matches, selectedId, parsed, setCreds, setConfig, onClose, t]);
 
   const handleExport = useCallback(async () => {
     try {
@@ -109,11 +105,10 @@ export const ImportBottomSheet = memo(function ImportBottomSheet({
       };
 
       await navigator.clipboard.writeText(JSON.stringify(exportJson, null, 2));
-      showToast(t('import.copiedJson'));
     } catch {
-      showToast(t('error.copyFailed'), null, 'error');
+      // ignore
     }
-  }, [matches, selectedId, parsed, categorias, showToast, t]);
+  }, [matches, selectedId, parsed, categorias, t]);
 
   const handleOpenDesigner = useCallback(() => {
     setStep('designer');
