@@ -21,6 +21,9 @@ export interface ConnectButtonProps {
   /** Callback para cambiar Auto Mode */
   onAutoModeChange: (value: boolean) => void;
 
+  /** Callback para abrir detalles de cuenta */
+  onAccountClick?: () => void;
+
   /** True si el botón debe estar deshabilitado */
   disabled?: boolean;
 }
@@ -30,6 +33,7 @@ export function ConnectButton({
   onClick,
   autoMode,
   onAutoModeChange,
+  onAccountClick,
   disabled,
 }: ConnectButtonProps) {
   const { t } = useTranslation();
@@ -44,9 +48,15 @@ export function ConnectButton({
   }[state];
 
   const isDanger = state === 'connected' || state === 'error' || state === 'full';
+  const showAccount = state === 'connected' && onAccountClick;
 
   return (
     <div className="connect-button">
+      {showAccount && (
+        <Button variant="default" onClick={onAccountClick} className="btn-account" data-nav>
+          <i className="fa fa-user" />
+        </Button>
+      )}
       <Button
         variant="primary"
         onClick={onClick}

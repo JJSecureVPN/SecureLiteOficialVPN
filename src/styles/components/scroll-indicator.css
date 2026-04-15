@@ -1,7 +1,7 @@
 .scroll-indicator {
   position: absolute;
   /* Posición fija por defecto sobre las pestañas flotantes */
-  bottom: calc(var(--tabs-space) + 12px);
+  bottom: calc(var(--tabs-space) + 40px);
   left: 50%;
   transform: translateX(-50%);
   width: 38px;
@@ -14,7 +14,7 @@
   color: #fff;
   font-size: 14px;
   cursor: pointer;
-  z-index: 100;
+  z-index: 1100;
   box-shadow: 0 4px 12px rgba(109, 74, 255, 0.4);
   animation: pulse-down 2s infinite ease-in-out;
   transition:

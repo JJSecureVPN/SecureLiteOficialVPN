@@ -3,7 +3,7 @@ import { BottomSheet } from './BottomSheet';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTranslation } from '@/i18n';
-import { getDisplayName, formatBytes, pingClass } from '@/core/utils';
+import { getDisplayName, formatBytes } from '@/core/utils';
 import '../../styles/components/account-bottom-sheet.css';
 
 interface AccountBottomSheetProps {
@@ -67,7 +67,12 @@ export const AccountBottomSheet = memo(function AccountBottomSheet({
   };
 
   const pNum = typeof pingMs === 'number' ? Math.round(pingMs) : NaN;
-  const pCls = pingClass(pNum);
+  const pCls = useMemo(() => {
+    if (!Number.isFinite(pNum) || pNum <= 0) return 'ping-bad';
+    if (pNum <= 150) return 'ping-excellent';
+    if (pNum <= 300) return 'ping-good';
+    return 'ping-bad';
+  }, [pNum]);
   const pShow = Number.isFinite(pNum) ? `${pNum} ms` : '—';
 
   const isConnected = status === 'CONNECTED';
@@ -100,11 +105,11 @@ export const AccountBottomSheet = memo(function AccountBottomSheet({
         <div className="account-metrics-grid">
           <div className="mt-card">
             <span className="mt-val">{formatBytes(used)}</span>
-            <span className="mt-lbl">{t('account.labels.totalUsage')}</span>
+            <span className="mt-lbl">{t('traffic.total') || 'total'}</span>
           </div>
           <div className="mt-card">
             <span className={`mt-val ${pCls}`}>{pShow}</span>
-            <span className="mt-lbl">{t('account.labels.latency')}</span>
+            <span className="mt-lbl">{t('traffic.ping') || 'latency'}</span>
           </div>
           <div className="mt-card">
             <span className="mt-val">{conexiones}</span>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
@@ -8,10 +8,10 @@ import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 import { ServerCarousel } from '../components/ServerCarousel';
 import { AutoConnectStatus } from '../components/AutoConnectStatus';
-import { useCategorySaturation } from '@/features/vpn/domain/hooks/useCategorySaturation';
 import type { ServerConfig, Category } from '@/core/types';
 
-export function HomeScreen() {
+export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
+  const isExecutingRef = useRef(false);
   const { t } = useTranslation();
   const {
     config,
@@ -31,10 +31,6 @@ export function HomeScreen() {
   const sectionStyle = useSectionStyle();
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
-
-  const { isSaturated } = useCategorySaturation(categorias);
-  const currentCategory = categorias.find((c) => c.items?.some((s) => s.id === config?.id));
-  const isFull = !!currentCategory && isSaturated(currentCategory.name);
 
   // Determinar qué campos mostrar
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
@@ -66,9 +62,12 @@ export function HomeScreen() {
           return;
         }
       }
-      if (isFull && !autoMode) {
-        return;
-      }
+
+      if (isExecutingRef.current) return;
+      isExecutingRef.current = true;
+      setTimeout(() => {
+        isExecutingRef.current = false;
+      }, 800);
 
       if (autoMode) {
         try {
@@ -94,7 +93,6 @@ export function HomeScreen() {
     isV2Ray,
     creds,
     autoMode,
-    isFull,
     disconnect,
     cancelConnecting,
     startAutoConnect,
@@ -180,11 +178,12 @@ export function HomeScreen() {
             <TrafficDetails />
 
             <ConnectButton
-              state={isFull && isDisconnected ? 'full' : connectButtonState}
+              state={connectButtonState}
               onClick={handleConnect}
+              onAccountClick={onShowAccount}
               autoMode={autoMode}
               onAutoModeChange={setAutoMode}
-              disabled={isFull && isDisconnected && !autoMode}
+              disabled={false}
             />
           </div>
         </div>

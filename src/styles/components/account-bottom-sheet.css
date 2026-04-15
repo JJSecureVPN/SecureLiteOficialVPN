@@ -1,98 +1,116 @@
-/* ===========================================
-   AccountBottomSheet - Estilos premium
-   =========================================== */
-
-.account-bottom-sheet .bottom-sheet-content {
-  padding: 0;
-}
+/* AccountBottomSheet - Minimal System */
 
 .account-sheet-content {
   display: flex;
   flex-direction: column;
-  padding: 8px 16px 16px;
-  gap: 20px;
+  padding: 8px 16px 20px;
+  gap: 12px;
 }
 
-/* Metrics Grid (Usage, Latency, Sessions) */
+/* Status icon */
+.account-status-dot-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0.5px solid var(--border);
+  background: var(--surface-1);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
+}
+.account-status-dot-box.connected {
+  border-color: #1d9e75;
+}
+.account-status-dot-box.connecting {
+  border-color: #ef9f27;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: background 0.2s ease;
+}
+.connected .status-dot {
+  background: #1d9e75;
+}
+.connecting .status-dot {
+  background: #ef9f27;
+}
+
+/* Metrics grid */
 .account-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 4px 4px 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .mt-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 14px 10px;
+  background: var(--surface-1);
+  padding: 10px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-.mt-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-2px);
+  gap: 2px;
 }
 
 .mt-val {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-strong, #ffffff);
-  letter-spacing: -0.01em;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  font-family: var(--font-mono, monospace);
 }
 
 .mt-lbl {
-  font-size: 10px;
-  color: var(--muted, #8e8e93);
+  font-size: 9px;
+  color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
-/* Specific Ping Coloring */
-.mt-val.ping-excellent {
-  color: #10b981;
+/* Ping colors */
+.ping-excellent {
+  color: #1d9e75;
 }
-.mt-val.ping-good {
-  color: #f59e0b;
+.ping-good {
+  color: #ef9f27;
 }
-.mt-val.ping-bad {
-  color: #ef4444;
+.ping-bad {
+  color: #e24b4a;
 }
 
-/* Info Sections */
+/* Info sections */
 .account-info-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.ac-section-box {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+.ac-section-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .ac-section-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--accent, #007aff);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0;
-  padding-left: 4px;
+  letter-spacing: 0.1em;
+  margin: 0 0 0 2px;
 }
 
 .ac-details-card {
-  background: var(--surface-2, #1a1c29);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 18px;
+  background: var(--surface-1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -100,120 +118,105 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 9px 12px;
+  border-bottom: 0.5px solid var(--border);
 }
-
 .ac-row-item.is-last {
   border-bottom: none;
 }
 
 .ac-label {
-  font-size: 13px;
-  color: var(--muted, #a1a1aa);
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .ac-value {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-  color: #fff;
+  color: var(--text);
 }
 
 .ac-value.is-mono {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--muted);
 }
 
-/* Expiry Colors */
+/* Chip */
+.ac-chip {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* Expiry */
 .expiry-green {
-  color: #10b981;
+  color: #1d9e75;
 }
 .expiry-yellow {
-  color: #f59e0b;
+  color: #ef9f27;
 }
 .expiry-orange {
-  color: #f97316;
+  color: #d85a30;
 }
 .expiry-red {
-  color: #ef4444;
+  color: #e24b4a;
 }
 
 .blinking {
-  animation: bg-blink 1.5s ease-in-out infinite;
+  animation: blink 1.5s ease-in-out infinite;
 }
-
-@keyframes bg-blink {
+@keyframes blink {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.5;
   }
 }
 
-/* Chips */
-.ac-chip {
-  padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-/* Status Pill in Footer */
+/* Footer pill */
 .account-sheet-footer {
   display: flex;
   justify-content: center;
-  padding-top: 8px;
+  padding-top: 4px;
 }
 
 .status-pill {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 0.5px solid var(--border);
+  background: var(--surface-1);
+  color: var(--muted);
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #8e8e93;
+  gap: 6px;
 }
-
+.status-pill::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+}
 .status-pill.connected {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: #1d9e75;
+  border-color: #1d9e75;
 }
-
+.status-pill.connected::before {
+  background: #1d9e75;
+}
 .status-pill.connecting {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
+  color: #ef9f27;
+  border-color: #ef9f27;
 }
-
-/* Icon Box Status */
-.account-status-dot-box {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid currentColor;
-  display: grid;
-  place-items: center;
-  color: #52525b;
-}
-
-.account-status-dot-box.connected {
-  color: #10b981;
-}
-.account-status-dot-box.connecting {
-  color: #f59e0b;
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
+.status-pill.connecting::before {
+  background: #ef9f27;
 }

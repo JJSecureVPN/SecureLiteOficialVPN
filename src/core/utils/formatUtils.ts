@@ -63,7 +63,7 @@ export function formatProtocol(rawMode?: string | null): string {
 export function extractDomain(description?: string | null): string | null {
   if (!description) return null;
 
-  const domains = ['Front A', 'Front B', 'Cloudflare', 'G-Cloud'];
+  const domains = ['Front A', 'Front B', 'Front C', 'Cloudflare', 'G-Cloud'];
   const upper = description.toUpperCase();
 
   for (const domain of domains) {
@@ -91,7 +91,7 @@ export function extractDomain(description?: string | null): string | null {
 export function removeDomainFromDescription(description?: string | null): string {
   if (!description) return '';
 
-  const domains = ['Front A', 'Front B', 'Cloudflare', 'G-Cloud'];
+  const domains = ['Front A', 'Front B', 'Front C', 'Cloudflare', 'G-Cloud'];
   let result = description.trim();
 
   for (const domain of domains) {

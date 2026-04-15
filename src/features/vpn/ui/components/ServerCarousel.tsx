@@ -75,16 +75,17 @@ export const ServerCarousel = memo(
       }
     }, [currentConfig, allServers]);
 
-    // SELECCIÓN AUTOMÁTICA AL ROTAR (EJE FIJO = SELECCIÓN)
     useEffect(() => {
-      if (allServers.length > 0 && !isDragging) {
+      // Si estamos en autoMode o conectando, el carrusel no debe forzar la selección al centrarse,
+      // solo debe mostrar el estado actual. Esto evita el "rebote" 1-2-1-2.
+      if (allServers.length > 0 && !isDragging && !autoMode) {
         const srv = allServers[activeIndex];
         if (srv && srv.id !== currentConfig?.id) {
           lastSyncedIdRef.current = srv.id; // Evitar rebote
           onSelectServer(srv, (srv as any)._parentCategory);
         }
       }
-    }, [activeIndex, allServers, onSelectServer, isDragging, currentConfig?.id]);
+    }, [activeIndex, allServers, onSelectServer, isDragging, currentConfig?.id, autoMode]);
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {

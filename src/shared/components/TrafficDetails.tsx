@@ -4,73 +4,65 @@ import { useTrafficStats } from '@/features/vpn/domain/hooks/useTrafficStats';
 import { useTranslation } from '@/i18n';
 import '../../styles/components/traffic-details.css';
 
-/**
- * TrafficDetails Component
- * Displays real-time VPN traffic statistics (speeds, ping, total).
- * Replacing the obsolete session card details.
- */
 export const TrafficDetails = memo(function TrafficDetails() {
   const { status, pingMs } = useVpn();
   const { t } = useTranslation();
   const { downSpeed, upSpeed, totalUsed } = useTrafficStats();
 
-  // Ping class logic (simplified variant for the traffic card)
-  const pingClass = useMemo(() => {
-    if (typeof pingMs !== 'number') return '';
-    if (pingMs < 150) return 'txt-green';
-    if (pingMs < 350) return 'txt-amber';
-    return 'txt-red';
+  const pingColor = useMemo(() => {
+    if (typeof pingMs !== 'number') return undefined;
+    if (pingMs < 150) return 'var(--td-teal)';
+    if (pingMs < 350) return 'var(--td-amber)';
+    return 'var(--td-red)';
   }, [pingMs]);
 
-  const isConnected = status === 'CONNECTED';
-  if (!isConnected) return null;
+  if (status !== 'CONNECTED') return null;
 
-  const pingDisplay = typeof pingMs === 'number' ? `${Math.round(pingMs)} ms` : '—';
+  const pingDisplay = typeof pingMs === 'number' ? Math.round(pingMs) : '—';
 
   return (
-    <div className="traffic-details-card">
-      <div className="traffic-grid">
-        {/* Download Speed */}
-        <div className="traffic-item">
-          <div className="traffic-icon icon-down">
-            <i className="fa fa-arrow-down" />
+    <div className="td-card">
+      <div className="td-row">
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-teal" />
+            {t('traffic.download') || 'down'}
           </div>
-          <div className="traffic-meta">
-            <span className="traffic-label">{t('traffic.download') || 'Descarga'}</span>
-            <span className="traffic-value txt-green">{downSpeed}</span>
-          </div>
-        </div>
-
-        {/* Upload Speed */}
-        <div className="traffic-item">
-          <div className="traffic-icon icon-up">
-            <i className="fa fa-arrow-up" />
-          </div>
-          <div className="traffic-meta">
-            <span className="traffic-label">{t('traffic.upload') || 'Subida'}</span>
-            <span className="traffic-value txt-accent">{upSpeed}</span>
+          <div className="td-value-wrap">
+            <span className="td-val td-teal">{downSpeed}</span>
           </div>
         </div>
 
-        {/* Ping / Latency */}
-        <div className="traffic-item">
-          <div className="traffic-icon icon-ping">
-            <i className="fa fa-bolt" />
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-purple" />
+            {t('traffic.upload') || 'up'}
           </div>
-          <div className="traffic-meta">
-            <span className="traffic-label">{t('traffic.ping') || 'Ping'}</span>
-            <span className={`traffic-value ${pingClass}`}>{pingDisplay}</span>
+          <div className="td-value-wrap">
+            <span className="td-val td-purple">{upSpeed}</span>
           </div>
         </div>
 
-        {/* Total Usage */}
-        <div className="traffic-item">
-          <div className="traffic-icon icon-total">
-            <i className="fa fa-chart-simple" />
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-amber" />
+            {t('traffic.ping') || 'ping'}
           </div>
-          <div className="traffic-meta">
-            <span className="traffic-label">{t('traffic.total') || 'Total'}</span>
-            <span className="traffic-value">{totalUsed}</span>
+          <div className="td-value-wrap">
+            <span className="td-val" style={{ color: pingColor }}>
+              {pingDisplay}
+            </span>
+            {typeof pingMs === 'number' && <span className="td-unit">ms</span>}
+          </div>
+        </div>
+
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-gray" />
+            {t('traffic.total') || 'total'}
+          </div>
+          <div className="td-value-wrap">
+            <span className="td-val">{totalUsed}</span>
           </div>
         </div>
       </div>

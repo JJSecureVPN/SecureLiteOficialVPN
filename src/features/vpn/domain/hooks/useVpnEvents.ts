@@ -16,12 +16,18 @@ interface UseVpnEventsArgs {
   setStatus: (status: VpnStatus) => void;
   setConfigState: (config: ServerConfig) => void;
   loadCategorias: () => void;
+  isMock: boolean;
 }
 
 /**
  * Hook para suscribirse a eventos nativos de VPN (usa `DTunnelSDK` directamente)
  */
-export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseVpnEventsArgs) {
+export function useVpnEvents({
+  setStatus,
+  setConfigState,
+  loadCategorias,
+  isMock,
+}: UseVpnEventsArgs) {
   const sdk = useDTunnelSDK();
   useBridgeErrorLogger();
 
@@ -49,7 +55,7 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
 
   // Sincronizar estado real al volver a primer plano o al montar
   useEffect(() => {
-    if (!sdk) return;
+    if (!sdk || isMock) return;
 
     const syncState = () => {
       try {
@@ -89,6 +95,7 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
   }, [sdk, setStatus]);
 
   useDTunnelEvent('vpnState', (e) => {
+    if (isMock) return;
     const st = (
       typeof e.payload === 'string' ? e.payload : String(e.payload || 'DISCONNECTED')
     ) as VpnStatus;
@@ -106,6 +113,7 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
   });
 
   useDTunnelEvent('vpnStartedSuccess', () => {
+    if (isMock) return;
     // Confirmación definitiva de conexión: cancela cualquier estado pendiente
     cancelPending();
     appLogger.add('info', `Estado VPN: CONNECTED`);
@@ -118,6 +126,7 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
   });
 
   useDTunnelEvent('vpnStoppedSuccess', () => {
+    if (isMock) return;
     // Si CONNECTING llega justo después (cambio de servidor), se cancela sin flash
     scheduleStatus('DISCONNECTED', 500);
   });

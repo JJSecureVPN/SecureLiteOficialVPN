@@ -3,7 +3,6 @@ import type { AutoState, Category, ScreenType, ServerConfig, VpnStatus } from '@
 import { AUTO_CONNECT_TIMEOUT_MS } from '@/core/constants';
 import { getSdk } from '../../api/dtunnelSdk';
 import { appLogger } from '@/features/logs';
-import { useCategorySaturation } from './useCategorySaturation';
 
 interface UseAutoConnectArgs {
   status: VpnStatus;
@@ -27,8 +26,9 @@ export function useAutoConnect({
   persistCreds,
   pushCreds,
 }: UseAutoConnectArgs) {
-  const { isSaturated } = useCategorySaturation(categorias);
   const autoRef = useRef<AutoState>({ on: false, tmo: null, ver: null, list: [], i: 0 });
+  const nextAutoLock = useRef(false);
+  const isStartingRef = useRef(false);
   const [progress, setProgress] = useState({
     i: 0,
     total: 0,
@@ -44,13 +44,16 @@ export function useAutoConnect({
 
   const nextAuto = useCallback(() => {
     const auto = autoRef.current;
-    if (!auto.on) return;
+    if (!auto.on || nextAutoLock.current) return;
+
+    nextAutoLock.current = true;
 
     if (auto.i >= auto.list.length) {
       appLogger.add('info', 'Auto-conexión: Se han probado todos los servidores sin éxito.');
       auto.on = false;
       setStatus('DISCONNECTED');
       setProgress({ i: 0, total: 0, current: null });
+      nextAutoLock.current = false;
       return;
     }
 
@@ -73,6 +76,7 @@ export function useAutoConnect({
     }, 120);
 
     clearAutoTimers();
+    nextAutoLock.current = false;
 
     // Timeout para probar siguiente servidor
     auto.tmo = setTimeout(() => {
@@ -97,10 +101,10 @@ export function useAutoConnect({
         setStatus('CONNECTED');
         auto.on = false;
         // Mantenemos el progreso actual para que el UI pueda mostrar el éxito antes de desaparecer (si se desea)
-      } else if (['AUTH_FAILED', 'NO_NETWORK', 'STOPPING'].includes(st)) {
+      } else if (['AUTH_FAILED', 'NO_NETWORK'].includes(st)) {
         appLogger.add(
           'warn',
-          `Auto-conexión: Fallo en ${srv.name} (Estado: ${st}). Reintentando con otro...`,
+          `Auto-conexión: Fallo definitivo en ${srv.name} (Estado: ${st}). Probando siguiente...`,
         );
         clearAutoTimers();
         getSdk()?.main.stopVpn();
@@ -111,24 +115,24 @@ export function useAutoConnect({
 
   const startAutoConnect = useCallback(
     (cat?: Category) => {
-      if (status === 'CONNECTED' || status === 'CONNECTING') return;
+      if (status === 'CONNECTED' || status === 'CONNECTING' || isStartingRef.current) return;
 
+      isStartingRef.current = true;
       pushCreds();
       persistCreds();
       clearAutoTimers();
 
+      // Permitir que el estado de 'isStarting' se limpie después de un margen de seguridad
+      setTimeout(() => {
+        isStartingRef.current = false;
+      }, 1000);
+
       let list: ServerConfig[] = [];
       if (cat) {
-        // Si se especificó una categoría y está saturada, no iniciar
-        if (isSaturated(cat.name)) {
-          appLogger.add('warn', `Auto-conexión abortada: La categoría ${cat.name} está saturada.`);
-          return;
-        }
         list = (cat.items || []).slice();
       } else {
-        // Filtrar categorías saturadas de la rotación global
         categorias.forEach((c) => {
-          if (!isSaturated(c.name) && c.items) {
+          if (c.items) {
             list.push(...c.items);
           }
         });
@@ -152,17 +156,7 @@ export function useAutoConnect({
       setScreen('home');
       nextAuto();
     },
-    [
-      categorias,
-      clearAutoTimers,
-      isSaturated,
-      nextAuto,
-      persistCreds,
-      pushCreds,
-      setScreen,
-      setStatus,
-      status,
-    ],
+    [categorias, clearAutoTimers, nextAuto, persistCreds, pushCreds, setScreen, setStatus, status],
   );
 
   const cancelAuto = useCallback(() => {

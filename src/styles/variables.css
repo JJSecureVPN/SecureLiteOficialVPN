@@ -71,8 +71,8 @@
     --toggle-height: calc(32px * var(--scale-factor));
     --thumb-size: calc(24px * var(--scale-factor));
 
-    /* Límite dinámico — Aumentado a 140px para asegurar separación clara */
-    --tabs-space: calc((135px + var(--safe-area-bottom, 0px)) * var(--scale-factor));
+    /* Límite dinámico — Aumentado para asegurar que nada quede solapado con los BottomTabs */
+    --tabs-space: calc((140px + var(--safe-area-bottom, 0px)) * var(--scale-factor));
   }
 
   body.keyboard-open {

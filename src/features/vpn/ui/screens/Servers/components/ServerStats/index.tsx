@@ -1,9 +1,3 @@
-/**
- * ServerStats Component
- * Displays real-time statistics for a server
- */
-
-import { useTranslation } from '@/i18n';
 import './ServerStats.css';
 
 export interface ServerLiveStats {
@@ -20,86 +14,83 @@ interface ServerStatsProps {
   stats: ServerLiveStats | null;
 }
 
+function levelColor(v: number) {
+  if (v > 80) return '#E24B4A';
+  if (v > 50) return '#EF9F27';
+  return '#1D9E75';
+}
+
+function arcPath(pct: number, r: number, cx = 36, cy = 46) {
+  const angle = (Math.PI * Math.min(pct, 99.9)) / 100;
+  const ex = cx + r * Math.cos(Math.PI - angle);
+  const ey = cy - r * Math.sin(Math.PI - angle);
+  return `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${ex} ${ey}`;
+}
+
+function Gauge({ label, value }: { label: string; value: number }) {
+  const r = 30;
+  const color = levelColor(value);
+  return (
+    <div className="ss-gauge">
+      <div className="ss-arc-wrap">
+        <svg width="72" height="46" viewBox="0 0 72 46" overflow="visible">
+          <path
+            d={arcPath(100, r)}
+            fill="none"
+            stroke="var(--ss-track)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d={arcPath(value, r)}
+            fill="none"
+            stroke={color}
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="ss-val">{value.toFixed(1)}%</div>
+      </div>
+      <div className="ss-lbl">{label}</div>
+    </div>
+  );
+}
+
+function Chip({ dot, text }: { dot: string; text: string }) {
+  return (
+    <div className="ss-chip">
+      <span className="ss-chip-dot" style={{ background: dot }} />
+      {text}
+    </div>
+  );
+}
+
 export function ServerStats({ stats }: ServerStatsProps) {
-  const { t } = useTranslation();
+  if (!stats) return null;
 
-  if (!stats) {
-    return null;
-  }
-
-  const cpuUsage = stats.cpuUsage ?? 0;
-  const memoryUsage = stats.memoryUsage ?? 0;
+  const cpu = stats.cpuUsage ?? 0;
+  const mem = stats.memoryUsage ?? 0;
 
   return (
-    <div className="stats-container">
-      {/* Métricas principales con barras de progreso */}
-      <div className="stats-primary">
-        <div className="stat-metric">
-          <div className="stat-metric__header">
-            <div className="stat-metric__label">
-              <i className="fas fa-microchip" aria-hidden="true" />
-              <span>CPU</span>
-            </div>
-            <span className="stat-metric__value">{cpuUsage.toFixed(1)}%</span>
-          </div>
-          <div className="stat-progress">
-            <div
-              className="stat-progress__bar"
-              style={{ width: `${Math.min(cpuUsage, 100)}%` }}
-              data-level={cpuUsage > 80 ? 'high' : cpuUsage > 50 ? 'medium' : 'low'}
-            />
-          </div>
-        </div>
-
-        <div className="stat-metric">
-          <div className="stat-metric__header">
-            <div className="stat-metric__label">
-              <i className="fas fa-memory" aria-hidden="true" />
-              <span>RAM</span>
-            </div>
-            <span className="stat-metric__value">{memoryUsage.toFixed(1)}%</span>
-          </div>
-          <div className="stat-progress">
-            <div
-              className="stat-progress__bar"
-              style={{ width: `${Math.min(memoryUsage, 100)}%` }}
-              data-level={memoryUsage > 80 ? 'high' : memoryUsage > 50 ? 'medium' : 'low'}
-            />
-          </div>
-        </div>
+    <div className="ss-root">
+      <div className="ss-gauges">
+        <Gauge label="CPU" value={cpu} />
+        <div className="ss-divider" />
+        <Gauge label="RAM" value={mem} />
       </div>
 
-      {/* Información adicional en grid compacto */}
       {(stats.cpuCores ||
         stats.totalMemoryGb ||
-        stats.netRecvMbps !== undefined ||
-        stats.netSentMbps !== undefined) && (
-        <div className="stats-secondary">
-          {stats.cpuCores && (
-            <div className="stat-info">
-              <i className="fas fa-server" aria-hidden="true" />
-              <span>
-                {stats.cpuCores} {t('servers.stats.cores')}
-              </span>
-            </div>
+        stats.netRecvMbps != null ||
+        stats.netSentMbps != null) && (
+        <div className="ss-chips">
+          {stats.cpuCores && <Chip dot="#888780" text={`${stats.cpuCores} cores`} />}
+          {stats.totalMemoryGb && <Chip dot="#888780" text={`${stats.totalMemoryGb} GB`} />}
+          {stats.netRecvMbps != null && (
+            <Chip dot="#378ADD" text={`↓ ${stats.netRecvMbps.toFixed(1)} Mbps`} />
           )}
-          {stats.totalMemoryGb && (
-            <div className="stat-info">
-              <i className="fas fa-database" aria-hidden="true" />
-              <span>{stats.totalMemoryGb} GB</span>
-            </div>
-          )}
-          {stats.netRecvMbps !== undefined && (
-            <div className="stat-info">
-              <i className="fas fa-download" aria-hidden="true" />
-              <span>{stats.netRecvMbps.toFixed(1)} Mbps</span>
-            </div>
-          )}
-          {stats.netSentMbps !== undefined && (
-            <div className="stat-info">
-              <i className="fas fa-upload" aria-hidden="true" />
-              <span>{stats.netSentMbps.toFixed(1)} Mbps</span>
-            </div>
+          {stats.netSentMbps != null && (
+            <Chip dot="#1D9E75" text={`↑ ${stats.netSentMbps.toFixed(1)} Mbps`} />
           )}
         </div>
       )}

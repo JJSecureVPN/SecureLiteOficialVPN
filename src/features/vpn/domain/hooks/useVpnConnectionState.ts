@@ -13,7 +13,6 @@ import { useVpnEvents } from './useVpnEvents';
 import { useAutoConnect } from './useAutoConnect';
 import { useRetryLoads } from './useRetryLoads';
 import { appLogger } from '@/features/logs';
-import { useCategorySaturation } from './useCategorySaturation';
 
 interface UseVpnConnectionArgs {
   creds: Credentials;
@@ -41,6 +40,10 @@ export function useVpnConnectionState({
   setScreen,
 }: UseVpnConnectionArgs): UseVpnConnectionState {
   const [status, setStatus] = useState<VpnStatus>('DISCONNECTED');
+  const [mockTimer, setMockTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [wasMocked, setWasMocked] = useState(false);
+
+  const isMockCandidate = import.meta.env.DEV && creds.user === 'test';
 
   // Hook para manejo de servidores
   const { categorias, config, setConfig, setConfigState, loadCategorias, loadInitialConfig } =
@@ -79,22 +82,8 @@ export function useVpnConnectionState({
     setStatus,
     setConfigState,
     loadCategorias,
+    isMock: wasMocked || (status === 'DISCONNECTED' && isMockCandidate),
   });
-
-  const { isSaturated } = useCategorySaturation(categorias);
-
-  // Watchdog: Desconexión automática si la categoría se satura estando conectado
-  useEffect(() => {
-    if (status !== 'CONNECTED' || !config) return;
-
-    const currentCat = categorias.find((c) => c.items?.some((s) => s.id === config.id));
-    if (currentCat && isSaturated(currentCat.name)) {
-      appLogger.add('warn', `Watchdog: Desconectando por saturación en ${currentCat.name}`);
-      getSdk()?.main.stopVpn();
-      setStatus('DISCONNECTED');
-      // Podríamos disparar un evento global o notificación aquí
-    }
-  }, [status, config, categorias, isSaturated]);
 
   // Conexión manual
   const connect = useCallback(() => {
@@ -103,30 +92,59 @@ export function useVpnConnectionState({
       return;
     }
 
-    const currentCat = categorias.find((c) => c.items?.some((s) => s.id === config.id));
-    if (currentCat && isSaturated(currentCat.name)) {
-      appLogger.add('warn', `connect: La categoría ${currentCat.name} está llena.`);
+    pushCreds();
+    persistCreds();
+
+    if (isMockCandidate) {
+      appLogger.add('info', 'MOCK: Iniciando secuencia de conexión mock');
+      setStatus('CONNECTING');
+      setWasMocked(true);
+
+      const timer = setTimeout(() => {
+        if (creds.pass === '1234') {
+          appLogger.add('info', 'MOCK: Conectado (mock)');
+          setStatus('CONNECTED');
+        } else {
+          appLogger.add('warn', 'MOCK: Error de autenticación (mock)');
+          setStatus('AUTH_FAILED');
+          setWasMocked(false);
+        }
+        setMockTimer(null);
+      }, 1500);
+      setMockTimer(timer);
       return;
     }
 
-    pushCreds();
-    persistCreds();
+    setWasMocked(false);
     const sdk = getSdk();
     if (sdk) {
       sdk.config.setConfig(Number(config.id));
       sdk.main.startVpn();
     }
     setStatus('CONNECTING');
-  }, [config, categorias, isSaturated, persistCreds, pushCreds]);
+  }, [config, categorias, persistCreds, pushCreds, isMockCandidate, creds.pass]);
 
   const stopVpn = useCallback(() => {
     cancelAuto();
+
+    if (mockTimer) {
+      clearTimeout(mockTimer);
+      setMockTimer(null);
+    }
+
+    if (wasMocked) {
+      appLogger.add('info', 'MOCK: Desconectando (mock)');
+      setStatus('DISCONNECTED');
+      setWasMocked(false);
+      return;
+    }
+
     getSdk()?.main.stopVpn();
     // Fallback: si el SDK no emite eventos, forzar DISCONNECTED.
     // PERO si ya recibimos CONNECTING (reconexión a otro servidor activa), NO interrumpir.
-    // 650ms da margen suficiente para que startVpn (a 150ms) establezca CONNECTING antes que este timer.
-    setTimeout(() => setStatus((prev) => (prev === 'CONNECTING' ? prev : 'DISCONNECTED')), 650);
-  }, [cancelAuto]);
+    // 800ms da margen suficiente para que startVpn (a 150ms) establezca CONNECTING antes que este timer.
+    setTimeout(() => setStatus((prev) => (prev === 'CONNECTING' ? prev : 'DISCONNECTED')), 800);
+  }, [cancelAuto, mockTimer, wasMocked]);
 
   // Desconexión
   const disconnect = stopVpn;

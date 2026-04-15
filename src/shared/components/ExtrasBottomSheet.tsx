@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
 import {
@@ -51,91 +51,103 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
     setPressedItem(null);
   }, []);
 
-  const menuItems: MenuItem[] = [
-    {
-      id: 'network',
-      title: t('menu.itemsNetworkTitle'),
-      subtitle: t('menu.itemsNetworkSubtitle'),
-      icon: 'fa-network-wired',
-      action: openNetworkSettings,
-    },
-    {
-      id: 'apn',
-      title: t('menu.itemsApnTitle'),
-      subtitle: t('menu.itemsApnSubtitle'),
-      icon: 'fa-signal',
-      action: () => openApnSettings(t('common.notAvailableDevice')),
-    },
-    {
-      id: 'battery',
-      title: t('menu.itemsBatteryTitle'),
-      subtitle: t('menu.itemsBatterySubtitle'),
-      icon: 'fa-bolt',
-      action: () => ignoreBatteryOptimizations(t('common.notAvailableDevice')),
-    },
-    {
-      id: 'hotspot',
-      title: 'Proxy Hotspot',
-      subtitle: 'compartir internet',
-      icon: 'fa-wifi',
-      action: () => {
-        onShowHotspot?.();
+  const menuItems: MenuItem[] = useMemo(
+    () => [
+      {
+        id: 'network',
+        title: t('menu.itemsNetworkTitle'),
+        subtitle: t('menu.itemsNetworkSubtitle'),
+        icon: 'fa-network-wired',
+        action: openNetworkSettings,
       },
-    },
-    {
-      id: 'support',
-      title: t('menu.itemsSupportTitle'),
-      subtitle: t('menu.itemsSupportSubtitle'),
-      icon: 'fa-headset',
-      action: () => {
-        onShowSupport?.();
+      {
+        id: 'apn',
+        title: t('menu.itemsApnTitle'),
+        subtitle: t('menu.itemsApnSubtitle'),
+        icon: 'fa-signal',
+        action: () => openApnSettings(t('common.notAvailableDevice')),
       },
-    },
-    {
-      id: 'repair',
-      title: t('menu.repairTitle'),
-      subtitle: t('menu.repairSubtitle'),
-      icon: 'fa-wrench',
-      action: () => {
-        onShowRepair?.();
+      {
+        id: 'battery',
+        title: t('menu.itemsBatteryTitle'),
+        subtitle: t('menu.itemsBatterySubtitle'),
+        icon: 'fa-bolt',
+        action: () => ignoreBatteryOptimizations(t('common.notAvailableDevice')),
       },
-    },
-    {
-      id: 'terms',
-      title: t('menu.itemsTermsTitle'),
-      subtitle: t('menu.itemsTermsSubtitle'),
-      icon: 'fa-file-lines',
-      action: () => {
-        setScreen('terms');
-        onClose();
+      {
+        id: 'hotspot',
+        title: 'Proxy Hotspot',
+        subtitle: 'compartir internet',
+        icon: 'fa-wifi',
+        action: () => {
+          onShowHotspot?.();
+        },
       },
-    },
-    {
-      id: 'clean',
-      title: t('menu.itemsCleanTitle'),
-      subtitle: t('menu.itemsCleanSubtitle'),
-      icon: 'fa-broom',
-      action: () => setShowCleanConfirm(true),
-    },
-    {
-      id: 'import',
-      title: t('menu.itemsImportTitle'),
-      subtitle: t('menu.itemsImportSubtitle'),
-      icon: 'fa-file-import',
-      action: () => {
-        onShowImport?.();
+      {
+        id: 'support',
+        title: t('menu.itemsSupportTitle'),
+        subtitle: t('menu.itemsSupportSubtitle'),
+        icon: 'fa-headset',
+        action: () => {
+          onShowSupport?.();
+        },
       },
-    },
-    {
-      id: 'community',
-      title: t('menu.communityTitle'),
-      subtitle: t('menu.communitySubtitle'),
-      icon: 'fa-users',
-      action: () => {
-        onShowCommunity?.();
+      {
+        id: 'repair',
+        title: t('menu.repairTitle'),
+        subtitle: t('menu.repairSubtitle'),
+        icon: 'fa-wrench',
+        action: () => {
+          onShowRepair?.();
+        },
       },
-    },
-  ];
+      {
+        id: 'terms',
+        title: t('menu.itemsTermsTitle'),
+        subtitle: t('menu.itemsTermsSubtitle'),
+        icon: 'fa-file-lines',
+        action: () => {
+          setScreen('terms');
+          onClose();
+        },
+      },
+      {
+        id: 'clean',
+        title: t('menu.itemsCleanTitle'),
+        subtitle: t('menu.itemsCleanSubtitle'),
+        icon: 'fa-broom',
+        action: () => setShowCleanConfirm(true),
+      },
+      {
+        id: 'import',
+        title: t('menu.itemsImportTitle'),
+        subtitle: t('menu.itemsImportSubtitle'),
+        icon: 'fa-file-import',
+        action: () => {
+          onShowImport?.();
+        },
+      },
+      {
+        id: 'community',
+        title: t('menu.communityTitle'),
+        subtitle: t('menu.communitySubtitle'),
+        icon: 'fa-users',
+        action: () => {
+          onShowCommunity?.();
+        },
+      },
+    ],
+    [
+      t,
+      onShowHotspot,
+      onShowSupport,
+      onShowRepair,
+      setScreen,
+      onClose,
+      onShowImport,
+      onShowCommunity,
+    ],
+  );
 
   return (
     <BottomSheet

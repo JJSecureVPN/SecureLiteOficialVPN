@@ -42,14 +42,6 @@
   filter: brightness(0.88);
 }
 
-.btn.primary:focus-visible,
-.btn.primary.danger:focus-visible {
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.95),
-    0 0 0 6px rgba(0, 0, 0, 0.12);
-  border-color: var(--on-accent);
-}
-
 .btn.primary.danger {
   background: linear-gradient(180deg, #ff5f5f, var(--status-bad));
   border-color: #ff3b3b;
@@ -57,9 +49,7 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
 }
 
-.btn.primary:focus,
 .btn.primary:focus-visible,
-.btn.primary.danger:focus,
 .btn.primary.danger:focus-visible {
   outline: none !important;
   box-shadow:
@@ -222,4 +212,17 @@
   color: var(--muted);
   align-self: center;
   margin-right: 4px;
+}
+
+/* User Account Button in Connection Row */
+.btn-account {
+  flex: none !important;
+  width: 44px;
+  min-width: 44px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px !important;
+  border-radius: var(--radius-md) !important;
 }
