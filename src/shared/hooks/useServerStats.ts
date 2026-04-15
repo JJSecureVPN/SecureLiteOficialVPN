@@ -104,7 +104,11 @@ export function useServerStats(options: UseServerStatsOptions = {}) {
       const isFree = n.includes('GRATUITO') || n.includes('FREE');
       const wantsBrasil = n.includes('BRASIL') || n.includes('BRAZIL') || /\bBR\b/.test(n);
       const wantsArgentina = n.includes('ARGENTINA') || /\bAR\b/.test(n);
-      const wantsUsa = n.includes('USA') || n.includes('UNITED STATES') || /\bUS\b/.test(n);
+      const wantsUsa =
+        n.includes('USA') ||
+        n.includes('UNITED STATES') ||
+        n.includes('ESTADOS UNIDOS') ||
+        /\bUS\b/.test(n);
 
       const wantsTwo = /\b2\b/.test(n) || n.endsWith(' 2') || n.endsWith('2') || n.includes(' II');
       const wantsOne = /\b1\b/.test(n) || n.endsWith(' 1') || n.endsWith('1') || n.includes(' I');
@@ -155,7 +159,7 @@ export function useServerStats(options: UseServerStatsOptions = {}) {
 
             const hasBrasil = serverName.includes(' BR') || /\bBR\b/.test(serverName);
             const hasArgentina = serverName.includes(' AR') || /\bAR\b/.test(serverName);
-            const hasUsa = serverName.includes('USA');
+            const hasUsa = serverName.includes('USA') || serverName.includes('ESTADOS UNIDOS');
 
             const has1 = /\b1\b/.test(serverName);
             const has2 = /\b2\b/.test(serverName);
@@ -222,8 +226,8 @@ export function useServerStats(options: UseServerStatsOptions = {}) {
       }
 
       // USA -> PREMIUM USA / GRATUITO USA
-      if (n.includes('USA') || n.includes('UNITED STATES')) {
-        return findByIncludes(['USA']);
+      if (n.includes('USA') || n.includes('UNITED STATES') || n.includes('ESTADOS UNIDOS')) {
+        return findByIncludes(['USA']) || findByIncludes(['ESTADOS UNIDOS']);
       }
 
       // Fallback: match parcial por tokens

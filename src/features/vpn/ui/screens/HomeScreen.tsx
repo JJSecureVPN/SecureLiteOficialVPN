@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { useVpn, useConnectionStatus, ServerCard } from '@/features/vpn';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
@@ -8,6 +8,8 @@ import { useTranslation } from '@/i18n';
 import { keyboardNavigationManager } from '@/core/utils';
 import { ServerCarousel } from '../components/ServerCarousel';
 import { AutoConnectStatus } from '../components/AutoConnectStatus';
+import { useIsMobilePortrait } from '@/shared/hooks/useIsMobilePortrait';
+import { useServerStats } from '@/shared/hooks/useServerStats'; // Added
 import type { ServerConfig, Category } from '@/core/types';
 
 export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
@@ -28,9 +30,13 @@ export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
     categorias,
     setConfig,
   } = useVpn();
+  const isPortrait = useIsMobilePortrait();
   const sectionStyle = useSectionStyle();
   const connectionState = useConnectionStatus();
   const { isDisconnected, isConnecting, isConnected, isError } = connectionState;
+
+  // Real-time server stats
+  const { serversByName } = useServerStats({ pollMs: 15_000, enabled: !isPortrait }); // Solo en landscape para el carrusel
 
   // Determinar qué campos mostrar
   const isV2Ray = (config?.mode || '').toLowerCase().includes('v2ray');
@@ -134,6 +140,17 @@ export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
     return () => window.removeEventListener('keydown', onFirstKey);
   }, []);
 
+  // Buscar la categoría actual para la bandera en el home
+  const currentCategoryName = useMemo(() => {
+    if (!config || !categorias) return undefined;
+    for (const cat of categorias) {
+      if (cat.items?.some((srv) => srv.id === config.id)) {
+        return cat.name;
+      }
+    }
+    return undefined;
+  }, [config, categorias]);
+
   // Autofocus en el botón de conectar al entrar
   useAutoFocus(
     () => document.querySelector<HTMLElement>('.home-main .connect-button'),
@@ -154,10 +171,17 @@ export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
 
         <div className="server-card-wrapper">
           <div className="server-card">
-            {/* ServerCard solo visible para navegación en móvil (ocultado vía CSS en landscape) */}
-            <div className="server-selector-card-container">
-              <ServerCard config={config} onClick={handleServerCardClick} disabled={false} />
-            </div>
+            {/* ServerCard solo visible para navegación en móvil (Portrait) */}
+            {isPortrait && (
+              <div className="server-selector-card-container">
+                <ServerCard
+                  config={config}
+                  categoryName={currentCategoryName}
+                  onClick={handleServerCardClick}
+                  disabled={false}
+                />
+              </div>
+            )}
 
             {canEditCredentials && (
               <CredentialFields
@@ -188,15 +212,18 @@ export function HomeScreen({ onShowAccount }: { onShowAccount?: () => void }) {
           </div>
         </div>
 
-        {/* Carrusel de Servidores integrado directamente en el Home */}
-        <div className="home-carousel-container">
-          <ServerCarousel
-            categorias={categorias}
-            currentConfig={config}
-            onSelectServer={handleSelectServer}
-            autoMode={autoMode}
-          />
-        </div>
+        {/* Carrusel de Servidores integrado directamente en el Home (Solo Landscape) */}
+        {!isPortrait && (
+          <div className="home-carousel-container">
+            <ServerCarousel
+              categorias={categorias}
+              currentConfig={config}
+              onSelectServer={handleSelectServer}
+              autoMode={autoMode}
+              serversByName={serversByName}
+            />
+          </div>
+        )}
 
         <div className="home-spacer-bottom" />
       </div>

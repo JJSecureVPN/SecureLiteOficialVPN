@@ -1,12 +1,18 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
-import { extractDomain, removeDomainFromDescription, formatProtocol } from '@/core/utils';
+import {
+  extractDomain,
+  removeDomainFromDescription,
+  formatProtocol,
+  getServerFlag,
+} from '@/core/utils';
 import { Card, Badge } from '@/shared/ui';
 import './ServerCard.css';
 
 interface ServerCardProps {
   config: ServerConfig | null;
+  categoryName?: string; // Added
   onClick: () => void;
   disabled?: boolean;
 }
@@ -15,7 +21,12 @@ interface ServerCardProps {
  * Tarjeta que muestra el servidor seleccionado en el Home
  * Ahora alineada visualmente con ServerListItem
  */
-export const ServerCard = memo(function ServerCard({ config, onClick, disabled }: ServerCardProps) {
+export const ServerCard = memo(function ServerCard({
+  config,
+  categoryName,
+  onClick,
+  disabled,
+}: ServerCardProps) {
   const icon = config?.icon?.trim();
   const isImg = useMemo(() => {
     if (!icon) return false;
@@ -47,6 +58,11 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
   const protocolLabel = useMemo(
     () => formatProtocol(config?.mode || '') || config?.mode,
     [config?.mode],
+  );
+
+  const flag = useMemo(
+    () => getServerFlag(categoryName || config?.name),
+    [categoryName, config?.name],
   );
 
   return (
@@ -85,7 +101,7 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       {cleanDescription && <p className="server-item__description">{cleanDescription}</p>}
 
       {/* Footer: Protocolo y Dominio */}
-      {(protocolLabel || domain) && (
+      {(protocolLabel || domain || flag) && (
         <div className="server-item__footer">
           <div className="server-item__badges">
             {protocolLabel && (
@@ -99,6 +115,7 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
               </Badge>
             )}
           </div>
+          {flag && <span className="server-card__footer-flag">{flag}</span>}
         </div>
       )}
     </Card>

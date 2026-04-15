@@ -86,13 +86,97 @@
   letter-spacing: 0.02em;
 }
 
-/* Status Icon */
+/* Status Icon & Online Badge */
 .server-item__status {
   color: var(--accent);
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.server-item__stats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--border);
+  border-radius: 100px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+}
+
+.server-item__stats-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7c4dff;
+  box-shadow: 0 0 6px rgba(124, 77, 255, 0.4);
+}
+
+.server-item__stats-num {
+  font-size: 10px;
+  font-weight: 400;
+  color: #a0a0a0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Occupancy States (Scare factor) ── */
+
+/* Relaxed (Green) */
+.server-item--relaxed .server-item__stats-dot {
+  background: #1d9e75;
+  box-shadow: 0 0 4px rgba(29, 158, 117, 0.4);
+}
+.server-item--relaxed .server-item__stats-num {
+  color: #1d9e75;
+  opacity: 0.9;
+}
+
+/* Medium (Yellow/Orange) */
+.server-item--medium .server-item__stats-badge {
+  border-color: rgba(239, 159, 39, 0.3);
+  background: rgba(239, 159, 39, 0.05);
+}
+.server-item--medium .server-item__stats-dot {
+  background: #ef9f27;
+  box-shadow: 0 0 6px rgba(239, 159, 39, 0.5);
+}
+.server-item--medium .server-item__stats-num {
+  color: #ef9f27;
+}
+
+/* Saturated (Red + Pulse) */
+.server-item--saturated {
+  border-color: rgba(226, 75, 74, 0.15);
+}
+.server-item--saturated .server-item__stats-badge {
+  border-color: rgba(226, 75, 74, 0.3);
+  background: rgba(226, 75, 74, 0.05);
+}
+.server-item--saturated .server-item__stats-dot {
+  background: #e24b4a;
+  box-shadow: 0 0 8px #e24b4a;
+  animation: sc-pulse-dot-small 1.5s infinite;
+}
+.server-item--saturated .server-item__stats-num {
+  color: #e24b4a;
+  font-weight: 500;
+}
+
+@keyframes sc-pulse-dot-small {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ===========================================

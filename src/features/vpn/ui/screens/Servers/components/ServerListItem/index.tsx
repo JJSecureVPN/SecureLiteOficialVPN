@@ -3,10 +3,15 @@
  * Individual server button in grid
  */
 
-import { useCallback, memo } from 'react';
+import { useCallback, memo, useMemo } from 'react';
 import './ServerListItem.css';
 import { Card, Badge } from '@/shared/ui';
-import { formatProtocol, extractDomain, removeDomainFromDescription } from '@/core/utils';
+import {
+  formatProtocol,
+  extractDomain,
+  removeDomainFromDescription,
+  getServerCapacityStatus,
+} from '@/core/utils';
 import type { ServerConfig, Category } from '@/core/types';
 
 interface ServerListItemProps {
@@ -15,6 +20,10 @@ interface ServerListItemProps {
   category: Category;
   autoMode: boolean;
   onSelectServer: (server: ServerConfig, category: Category) => void;
+  stats?: {
+    connectedUsers?: number;
+    totalUsuarios?: number;
+  } | null;
 }
 
 export const ServerListItem = memo(
@@ -24,6 +33,7 @@ export const ServerListItem = memo(
     category,
     autoMode: _autoMode,
     onSelectServer,
+    stats,
   }: ServerListItemProps) {
     const handleClick = useCallback(() => {
       onSelectServer(server, category);
@@ -33,11 +43,16 @@ export const ServerListItem = memo(
     const domain = extractDomain(server.description);
     const cleanDescription = removeDomainFromDescription(server.description);
 
+    // Cálculo de ocupación y estado para el "scare factor"
+    const { limit, level } = useMemo(() => {
+      return getServerCapacityStatus(server.name, stats?.connectedUsers || 0);
+    }, [server.name, stats?.connectedUsers]);
+
     return (
       <Card
         as="button"
         type="button"
-        className={`server-item ${isActive ? 'selected' : ''}`}
+        className={`server-item ${isActive ? 'selected' : ''} server-item--${level}`}
         onClick={handleClick}
         data-nav
         aria-label={`${server.name} - ${protocolLabel}`}
@@ -52,8 +67,21 @@ export const ServerListItem = memo(
             {server.ip && <span className="server-item__ip">{server.ip}</span>}
           </div>
 
+          {/* Contador de usuarios online (Arriba a la derecha) */}
+          {stats && stats.connectedUsers !== undefined && (
+            <div
+              className={`server-item__stats-badge server-item__stats-badge--${level}`}
+              aria-label={`${stats.connectedUsers} usuarios online`}
+            >
+              <span className="server-item__stats-dot" />
+              <span className="server-item__stats-num">
+                {stats.connectedUsers} / {limit}
+              </span>
+            </div>
+          )}
+
           {/* Badge de estado activo */}
-          {isActive && (
+          {isActive && !stats && (
             <span className="server-item__status">
               <i className="fas fa-check-circle" aria-hidden="true" />
             </span>
@@ -87,7 +115,9 @@ export const ServerListItem = memo(
       prevProps.server.id === nextProps.server.id &&
       prevProps.isActive === nextProps.isActive &&
       prevProps.category.name === nextProps.category.name &&
-      prevProps.onSelectServer === nextProps.onSelectServer
+      prevProps.onSelectServer === nextProps.onSelectServer &&
+      prevProps.stats?.connectedUsers === nextProps.stats?.connectedUsers &&
+      prevProps.stats?.totalUsuarios === nextProps.stats?.totalUsuarios
     );
   },
 );

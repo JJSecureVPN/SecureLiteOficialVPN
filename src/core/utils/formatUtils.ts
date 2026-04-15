@@ -116,3 +116,48 @@ export function removeDomainFromDescription(description?: string | null): string
 
   return result;
 }
+
+/**
+ * Calcula el estado de saturación de un servidor basado en su nombre y ocupación.
+ * @param name Nombre o descripción del servidor/categoría
+ * @param connectedUsuarios Usuarios conectados actualmente
+ * @returns Objeto con el límite, el porcentaje y el nivel de estado (relaxed, medium, saturated)
+ */
+export function getServerCapacityStatus(name: string, connectedUsuarios: number = 0) {
+  const n = name.toUpperCase();
+
+  // Límites definidos por el usuario
+  let limit = 1000;
+  if (n.includes('ARGENTINA') || /\bAR\b/.test(n)) {
+    limit = 500;
+  } else if (n.includes('BRASIL') || n.includes('BRAZIL') || /\bBR\b/.test(n)) {
+    limit = 1000;
+  } else if (n.includes('USA') || n.includes('ESTADOS UNIDOS') || /\bUS\b/.test(n)) {
+    limit = 1000;
+  }
+
+  const percentage = (connectedUsuarios / limit) * 100;
+
+  let level: 'relaxed' | 'medium' | 'saturated' = 'relaxed';
+  if (percentage >= 85) {
+    level = 'saturated';
+  } else if (percentage >= 60) {
+    level = 'medium';
+  }
+
+  return { limit, percentage, level };
+}
+
+/**
+ * Detecta el país del servidor y retorna su bandera.
+ * @param name Nombre o descripción del servidor
+ * @returns Emoji de la bandera o globo como fallback
+ */
+export function getServerFlag(name?: string | null): string {
+  if (!name) return '🌐';
+  const n = name.toUpperCase();
+  if (n.includes('ARGENTINA') || /\bAR\b/.test(n)) return '🇦🇷';
+  if (n.includes('BRASIL') || n.includes('BRAZIL') || /\bBR\b/.test(n)) return '🇧🇷';
+  if (n.includes('USA') || n.includes('ESTADOS UNIDOS') || /\bUS\b/.test(n)) return '🇺🇸';
+  return '🌐';
+}

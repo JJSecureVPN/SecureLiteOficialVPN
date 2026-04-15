@@ -206,6 +206,21 @@
   color: var(--accent);
 }
 
+.server-item.selected .server-item__arrow {
+  color: var(--accent);
+}
+
+.server-card__footer-flag {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  flex-shrink: 0;
+}
+
+/* ===========================================
+    Description
+    =========================================== */
+
 /* ===========================================
    Mobile Optimizations
    =========================================== */

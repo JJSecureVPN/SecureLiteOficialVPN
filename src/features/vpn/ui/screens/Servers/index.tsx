@@ -267,6 +267,7 @@ export function ServersScreen() {
             currentConfig={currentConfig}
             autoMode={autoMode}
             onServerClick={handleServerClick}
+            serversByName={serversByName}
           />
         )}
       </div>

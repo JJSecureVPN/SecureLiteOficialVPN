@@ -14,6 +14,7 @@ interface ServerCarouselProps {
   currentConfig: ServerConfig | null;
   onSelectServer: (server: ServerConfig, category: Category) => void;
   autoMode: boolean;
+  serversByName?: any;
 }
 
 export const ServerCarousel = memo(
@@ -22,6 +23,7 @@ export const ServerCarousel = memo(
     currentConfig,
     onSelectServer,
     autoMode,
+    serversByName,
   }: ServerCarouselProps) {
     const { t } = useTranslation();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -63,6 +65,7 @@ export const ServerCarousel = memo(
 
     // Ref para rastrear cambios externos en la configuración y evitar bucles de "snap back"
     const lastSyncedIdRef = useRef<string | null>(currentConfig?.id || null);
+    const isFirstRender = useRef(true);
 
     // Sincronizar focus inicial y cambios externos
     useEffect(() => {
@@ -76,11 +79,17 @@ export const ServerCarousel = memo(
     }, [currentConfig, allServers]);
 
     useEffect(() => {
+      // Evitar la ejecución en el primer render para no pisar la selección inicial del SDK
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
       // Si estamos en autoMode o conectando, el carrusel no debe forzar la selección al centrarse,
       // solo debe mostrar el estado actual. Esto evita el "rebote" 1-2-1-2.
       if (allServers.length > 0 && !isDragging && !autoMode) {
         const srv = allServers[activeIndex];
-        if (srv && srv.id !== currentConfig?.id) {
+        if (srv && srv.id !== currentConfig?.id && srv.id !== lastSyncedIdRef.current) {
           lastSyncedIdRef.current = srv.id; // Evitar rebote
           onSelectServer(srv, (srv as any)._parentCategory);
         }
@@ -237,6 +246,9 @@ export const ServerCarousel = memo(
                     category={(srv as any)._parentCategory}
                     autoMode={autoMode}
                     onSelectServer={onSelectServer}
+                    stats={serversByName?.getBestMatch(
+                      `${srv.name} ${srv.description || ''}`.trim(),
+                    )}
                   />
                 </div>
               ))}
@@ -251,7 +263,8 @@ export const ServerCarousel = memo(
     return (
       prev.categorias.length === next.categorias.length &&
       prev.currentConfig?.id === next.currentConfig?.id &&
-      prev.autoMode === next.autoMode
+      prev.autoMode === next.autoMode &&
+      prev.serversByName === next.serversByName
     );
   },
 );

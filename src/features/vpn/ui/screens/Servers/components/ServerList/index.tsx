@@ -15,6 +15,7 @@ interface ServerListProps {
   currentConfig: ServerConfig | null;
   autoMode: boolean;
   onServerClick: (srv: ServerConfig, cat: Category) => void;
+  serversByName?: any;
 }
 
 export const ServerList = memo(function ServerList({
@@ -23,6 +24,7 @@ export const ServerList = memo(function ServerList({
   currentConfig,
   autoMode,
   onServerClick,
+  serversByName,
 }: ServerListProps) {
   const { t } = useTranslation();
 
@@ -49,6 +51,7 @@ export const ServerList = memo(function ServerList({
                 category={selectedCategory}
                 autoMode={autoMode}
                 onSelectServer={onServerClick}
+                stats={serversByName?.getBestMatch(`${srv.name} ${srv.description || ''}`.trim())}
               />
             ))}
           </div>

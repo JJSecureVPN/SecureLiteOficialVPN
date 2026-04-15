@@ -8,6 +8,7 @@ import './ServerCategory.css';
 import { Card } from '@/shared/ui';
 import { useTranslation } from '@/i18n';
 import { resolveSubcategory } from '../../utils/categoryParsing';
+import { getServerCapacityStatus } from '@/core/utils'; // Added
 import { ServerStats, type ServerLiveStats } from '../ServerStats';
 import type { Category } from '@/core/types';
 import { ServerListItem } from '../ServerListItem';
@@ -62,9 +63,14 @@ export const ServerCategory = memo(
 
     const serverCount = category.items?.length ?? 0;
 
+    // Cálculo de ocupación y estado para el "scare factor"
+    const { limit, level } = useMemo(() => {
+      return getServerCapacityStatus(category.name, liveStats?.connectedUsers || 0);
+    }, [category.name, liveStats?.connectedUsers]);
+
     return (
       <Card
-        className={`category-card ${hasSelectedServer ? 'selected' : ''}`}
+        className={`category-card ${hasSelectedServer ? 'selected' : ''} category-card--${level}`}
         role="button"
         tabIndex={0}
         data-nav
@@ -86,6 +92,16 @@ export const ServerCategory = memo(
                 {serverCount} {t('servers.serversUnit', 'servidores')}
               </span>
             </div>
+
+            {/* Contador de usuarios online (Arriba a la derecha) */}
+            {liveStats && liveStats.connectedUsers !== undefined && (
+              <div className={`category-card__badge category-card__badge--${level}`}>
+                <span className="category-card__badge-dot" />
+                <span className="category-card__badge-num">
+                  {liveStats.connectedUsers} / {limit}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Subcategory pills */}
@@ -152,6 +168,7 @@ export const ServerCategory = memo(
     prev.hasSelectedServer === next.hasSelectedServer &&
     prev.isExpanded === next.isExpanded &&
     prev.liveStats?.connectedUsers === next.liveStats?.connectedUsers &&
+    prev.liveStats?.totalUsuarios === next.liveStats?.totalUsuarios &&
     prev.onCategoryClick === next.onCategoryClick &&
     prev.onToggleStats === next.onToggleStats,
 );

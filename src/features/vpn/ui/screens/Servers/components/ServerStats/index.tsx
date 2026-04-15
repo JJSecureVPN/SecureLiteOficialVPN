@@ -2,6 +2,7 @@ import './ServerStats.css';
 
 export interface ServerLiveStats {
   connectedUsers?: number;
+  totalUsuarios?: number;
   cpuUsage?: number;
   memoryUsage?: number;
   cpuCores?: number;
