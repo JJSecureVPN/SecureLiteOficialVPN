@@ -31,14 +31,6 @@ export function saveCredentials(user: string, pass: string, uuid: string) {
   safeSetItem(LS_KEYS.uuid, uuid);
 }
 
-export function loadAutoMode(): boolean {
-  return safeGetItem(LS_KEYS.auto) === '1';
-}
-
-export function saveAutoMode(on: boolean) {
-  safeSetItem(LS_KEYS.auto, on ? '1' : '0');
-}
-
 export function isTermsAccepted(): boolean {
   return safeGetItem(LS_KEYS.terms) === '1';
 }

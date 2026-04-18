@@ -12,10 +12,10 @@
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
   padding: calc(10px * var(--scale-factor)) 0;
-  background: rgba(13, 13, 18, 0.95); /* Menos transparente */
+  background: var(--bg-1); /* Corregido: Oscuro como el server-card */
   border-radius: calc(24px * var(--scale-factor));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: none;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
   z-index: 1000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -92,7 +92,7 @@ body.keyboard-open .bottom-tabs {
   opacity: 1;
   box-shadow: none;
   animation: pulse-alert 2s infinite ease-in-out;
-  border: 4px solid rgba(13, 13, 18, 1);
+  border: 4px solid var(--bg-1);
 }
 
 .tab-btn.center-home.deal-active .tab-label {

@@ -1,4 +1,4 @@
-# SecureLite + DTunnelSDK
+# Imperio VPN + DTunnelSDK
 
 Guia tecnica actualizada para entender:
 1. Como funciona el proyecto de extremo a extremo.
@@ -7,7 +7,7 @@ Guia tecnica actualizada para entender:
 
 ## 1) Resumen ejecutivo
 
-SecureLite es una SPA React + TypeScript que se ejecuta dentro de WebView Android.
+Imperio VPN es una SPA React + TypeScript que se ejecuta dentro de WebView Android.
 La app no implementa VPN directamente en JavaScript: orquesta acciones nativas a traves de DTunnelSDK.
 
 Puntos clave:

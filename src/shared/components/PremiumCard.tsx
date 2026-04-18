@@ -1,48 +1,39 @@
-import { memo, useCallback } from 'react';
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
+import { memo } from 'react';
 import { useTranslation } from '@/i18n';
+import { openExternalUrl } from '@/shared/lib/nativeActions';
+import '../../styles/components/premium.css';
 
-export const PremiumCard = memo(function PremiumCard() {
+interface PremiumCardProps {
+  onBuy?: () => void;
+}
+
+export const PremiumCard = memo(function PremiumCard({ onBuy }: PremiumCardProps) {
   const { t } = useTranslation();
 
-  const openPremiumUrl = useCallback((url: string) => {
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.android.openExternalUrl(url);
+  const handleBuy = () => {
+    if (onBuy) {
+      onBuy();
     } else {
-      window.open(url, '_blank');
+      openExternalUrl('https://wa.me/message/QFQYJLGJA7UYE1');
     }
-  }, []);
-
-  const handleBuy = useCallback(() => {
-    openPremiumUrl('https://shop.jhservices.com.ar/planes');
-  }, [openPremiumUrl]);
-
-  const handleResell = useCallback(() => {
-    openPremiumUrl('https://shop.jhservices.com.ar/revendedores');
-  }, [openPremiumUrl]);
+  };
 
   return (
-    <div className="pc">
-      <div className="pc__left">
-        <span className="pc__badge">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path
-              d="M5 0L6.18 3.45H9.75L6.9 5.58L7.94 9L5 7L2.06 9L3.1 5.58L.25 3.45H3.82L5 0Z"
-              fill="currentColor"
-            />
-          </svg>
-          {t('premium.title')}
-        </span>
-        <p className="pc__cta">{t('premium.cta')}</p>
+    <div className="premium-card">
+      <div className="premium-card__header">
+        <div className="premium-card__icon" aria-hidden="true">
+          <i className="fa fa-crown" />
+        </div>
+        <div className="premium-card__info">
+          <h3 className="premium-card__title">{t('premium.title')}</h3>
+          <p className="premium-card__description">{t('premium.description')}</p>
+        </div>
       </div>
 
-      <div className="pc__actions">
-        <button className="pc__btn pc__btn--primary" onClick={handleBuy} type="button">
+      <div className="premium-card__actions">
+        <button className="premium-btn premium-btn--buy" onClick={handleBuy} type="button" data-nav>
+          <i className="fa fa-shopping-cart" aria-hidden="true" />
           {t('premium.buy')}
-        </button>
-        <button className="pc__btn pc__btn--ghost" onClick={handleResell} type="button">
-          {t('premium.resell')}
         </button>
       </div>
     </div>

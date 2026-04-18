@@ -10,9 +10,11 @@ import {
   openApnSettings,
   openNetworkSettings,
   toggleHotspot as toggleHotspotAction,
+  openExternalUrl,
 } from '@/shared/lib/nativeActions';
+import '@/styles/components/premium.css';
 import type { HotspotState } from '@/shared/lib/nativeActions';
-import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
+import { MenuRow, GlobalModal } from '@/shared/components';
 
 interface MenuItem {
   id: string;
@@ -62,6 +64,16 @@ export const MenuScreen = memo(function MenuScreen({
   const handlePressEnd = useCallback(() => {
     setPressedItem(null);
   }, []);
+
+  const handleBuyPlan = useCallback(() => {
+    openExternalUrl(
+      'https://wa.me/message/QFQYJLGJA7UYE1?text=Hola,%20me%20interesa%20comprar%20un%20plan%20en%20ImperioNetOficial.',
+    );
+  }, []);
+
+  const handleResellPlan = useCallback(() => {
+    setScreen('reseller');
+  }, [setScreen]);
 
   const menuItems: MenuItem[] = [
     {
@@ -132,7 +144,34 @@ export const MenuScreen = memo(function MenuScreen({
         <div className="panel-title">{t('menu.title')}</div>
       </div>
 
-      <PremiumCard />
+      <div className="premium-card">
+        <div className="premium-card__header">
+          <div className="premium-card__icon" aria-hidden="true">
+            <i className="fa fa-crown" />
+          </div>
+          <div className="premium-card__info">
+            <h3 className="premium-card__title">Comprar o Revender</h3>
+            <p className="premium-card__description">
+              Accede a planes oficiales o solicita tu app propia para revender con un diseño limpio
+              y soporte técnico.
+            </p>
+          </div>
+        </div>
+        <div className="premium-card__actions">
+          <button className="premium-btn premium-btn--buy" type="button" onClick={handleBuyPlan}>
+            <i className="fa fa-shopping-cart" aria-hidden="true" />
+            Comprar
+          </button>
+          <button
+            className="premium-btn premium-btn--resell"
+            type="button"
+            onClick={handleResellPlan}
+          >
+            <i className="fa fa-store" aria-hidden="true" />
+            Revender
+          </button>
+        </div>
+      </div>
 
       {showCleanConfirm && (
         <GlobalModal

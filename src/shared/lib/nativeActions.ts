@@ -71,3 +71,21 @@ export function toggleHotspot(
   console.debug(msgs.unavailable);
   return 'UNKNOWN';
 }
+
+export function openExternalUrl(url: string): void {
+  const sdk = getSdk();
+  if (sdk) {
+    sdk.android.openExternalUrl(url);
+  } else {
+    window.open(url, '_blank');
+  }
+}
+
+export function startAppUpdate(): void {
+  const sdk = getSdk();
+  if (sdk) {
+    sdk.main.startAppUpdate();
+  } else {
+    console.debug('startAppUpdate: native API no disponible');
+  }
+}

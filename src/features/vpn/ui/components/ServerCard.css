@@ -258,6 +258,37 @@
    Accessibility
    =========================================== */
 
+/* ===========================================
+    Home variant (Super-Compact)
+   =========================================== */
+.server-item--home {
+  padding: 14px;
+  gap: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.server-item--home .server-item__header {
+  align-items: center;
+}
+
+.server-item--home .loc-icon-naked {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+}
+
+.server-item--home .server-item__title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.server-item--home .server-item__ip {
+  font-size: 11px;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .server-item,

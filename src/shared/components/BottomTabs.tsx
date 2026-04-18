@@ -6,33 +6,22 @@ import '../../styles/components/bottom-tabs.css';
 interface BottomTabsProps {
   onShowLogs?: () => void;
   onShowExtras?: () => void;
-  onShowPromo?: () => void;
   onShowSupport?: () => void;
   onShowAccount?: () => void;
   onUpdate?: () => void;
-  hasActiveCoupons?: boolean;
-  promoActive?: boolean;
-  is2x1Active?: boolean;
   activeSheet?: string | null;
 }
 
 export const BottomTabs = memo(function BottomTabs({
   onShowLogs,
-  onShowPromo,
   onShowSupport,
   onShowExtras,
   onShowAccount,
   onUpdate,
-  hasActiveCoupons: propHasActiveCoupons,
-  promoActive,
-  is2x1Active,
   activeSheet,
 }: BottomTabsProps) {
   const { setScreen, screen } = useVpn();
   const { t } = useTranslation();
-
-  // Determinar si hay cupones activos (desde props o interno)
-  const isDealActive = propHasActiveCoupons || promoActive || is2x1Active;
 
   const handleUpdate = () => {
     if (onUpdate) {
@@ -80,22 +69,18 @@ export const BottomTabs = memo(function BottomTabs({
 
       <div className="center-tab-wrapper">
         <button
-          className={`tab-btn center-home ${
-            activeSheet === 'promo' || (!activeSheet && screen === 'home') ? 'active' : ''
-          } ${isDealActive && activeSheet !== 'account' ? 'deal-active' : ''}`}
+          className={`tab-btn center-home ${screen === 'home' ? 'active' : ''}`}
           type="button"
           onClick={() => {
-            if (activeSheet === 'account') {
+            if (screen === 'account') {
               onShowAccount?.();
-            } else if (isDealActive) {
-              onShowPromo?.();
             } else {
               setScreen('home');
             }
           }}
-          aria-label={activeSheet === 'account' ? t('common.close') : t('home.title')}
+          aria-label={screen === 'account' ? t('common.close') : t('home.title')}
         >
-          {activeSheet === 'account' ? (
+          {screen === 'account' ? (
             <>
               <svg
                 className="icon-svg"
@@ -108,7 +93,7 @@ export const BottomTabs = memo(function BottomTabs({
               </svg>
               <span className="tab-label">{t('common.close')}</span>
             </>
-          ) : !isDealActive ? (
+          ) : (
             <>
               <svg
                 className="icon-svg"
@@ -121,21 +106,12 @@ export const BottomTabs = memo(function BottomTabs({
               </svg>
               <span className="tab-label">{t('home.title')}</span>
             </>
-          ) : (
-            <>
-              <span className="notif-bell" aria-label="Descuento activo">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10 3.17 10 4v.68C7.63 5.36 6 7.92 6 11v5l-2 2h16l-2-2z" />
-                </svg>
-              </span>
-              <span className="tab-label">{t('promo.label')}</span>
-            </>
           )}
         </button>
       </div>
 
       <button
-        className={`tab-btn ${activeSheet === 'support' || screen === 'support' ? 'active' : ''}`}
+        className={`tab-btn ${screen === 'support' ? 'active' : ''}`}
         type="button"
         onClick={onShowSupport}
         aria-label={t('support.title')}
@@ -147,7 +123,7 @@ export const BottomTabs = memo(function BottomTabs({
       </button>
 
       <button
-        className={`tab-btn ${activeSheet === 'extras' ? 'active' : ''}`}
+        className={`tab-btn ${screen === 'menu' || screen === 'reseller' ? 'active' : ''}`}
         type="button"
         onClick={onShowExtras}
         aria-label="Extras"
@@ -171,3 +147,5 @@ export const BottomTabs = memo(function BottomTabs({
     </nav>
   );
 });
+
+export default BottomTabs;

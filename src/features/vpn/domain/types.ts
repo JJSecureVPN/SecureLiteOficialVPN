@@ -1,5 +1,4 @@
 import type {
-  AutoState,
   Category,
   Credentials,
   ScreenType,
@@ -15,21 +14,16 @@ export interface VpnContextType {
   selectedCategory: Category | null;
   user: UserInfo | null;
   creds: Credentials;
-  auto: AutoState;
-  autoProgress: { i: number; total: number; current: ServerConfig | null };
   screen: ScreenType;
   termsAccepted: boolean;
-  autoMode: boolean;
 
   setScreen: (screen: ScreenType) => void;
   setConfig: (config: ServerConfig) => void;
   setCreds: (creds: Partial<Credentials>) => void;
   setSelectedCategory: (category: Category | null) => void;
-  setAutoMode: (on: boolean) => void;
   connect: () => void;
   disconnect: () => void;
   cancelConnecting: () => void;
-  startAutoConnect: (category?: Category) => void;
   loadCategorias: () => void;
   acceptTerms: () => void;
 

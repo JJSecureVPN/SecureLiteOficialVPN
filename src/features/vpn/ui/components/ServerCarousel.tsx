@@ -6,14 +6,14 @@
 import { memo, useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import '@/styles/components/server-carousel.css';
 import { ServerListItem } from '../screens/Servers/components/ServerListItem';
-import type { Category, ServerConfig } from '@/core/types';
+import type { Category, ServerConfig, VpnStatus } from '@/core/types';
 import { useTranslation } from '@/i18n';
 
 interface ServerCarouselProps {
   categorias: Category[];
   currentConfig: ServerConfig | null;
   onSelectServer: (server: ServerConfig, category: Category) => void;
-  autoMode: boolean;
+  status?: VpnStatus; // Añadido para guards
 }
 
 export const ServerCarousel = memo(
@@ -21,7 +21,7 @@ export const ServerCarousel = memo(
     categorias,
     currentConfig,
     onSelectServer,
-    autoMode,
+    status = 'DISCONNECTED',
   }: ServerCarouselProps) {
     const { t } = useTranslation();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -77,6 +77,11 @@ export const ServerCarousel = memo(
 
     // SELECCIÓN AUTOMÁTICA AL ROTAR (EJE FIJO = SELECCIÓN)
     useEffect(() => {
+      // SOLO SELECCIONAR SI ESTÁ DESCONECTADO
+      // Si estamos conectando o conectados, no permitimos que el carrusel cambie el servidor
+      // solo por re-renders o recargas de 'allServers'.
+      if (status !== 'DISCONNECTED') return;
+
       if (allServers.length > 0 && !isDragging) {
         const srv = allServers[activeIndex];
         if (srv && srv.id !== currentConfig?.id) {
@@ -84,7 +89,7 @@ export const ServerCarousel = memo(
           onSelectServer(srv, (srv as any)._parentCategory);
         }
       }
-    }, [activeIndex, allServers, onSelectServer, isDragging, currentConfig?.id]);
+    }, [activeIndex, allServers, onSelectServer, isDragging, currentConfig?.id, status]);
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
@@ -234,7 +239,6 @@ export const ServerCarousel = memo(
                     server={srv}
                     isActive={currentConfig?.id === srv.id}
                     category={(srv as any)._parentCategory}
-                    autoMode={autoMode}
                     onSelectServer={onSelectServer}
                   />
                 </div>
@@ -250,7 +254,7 @@ export const ServerCarousel = memo(
     return (
       prev.categorias.length === next.categorias.length &&
       prev.currentConfig?.id === next.currentConfig?.id &&
-      prev.autoMode === next.autoMode
+      prev.status === next.status
     );
   },
 );

@@ -6,8 +6,9 @@ import {
   ignoreBatteryOptimizations,
   openApnSettings,
   openNetworkSettings,
+  openExternalUrl,
 } from '@/shared/lib/nativeActions';
-import { PremiumCard, MenuRow, GlobalModal } from '@/shared/components';
+import { MenuRow, GlobalModal } from '@/shared/components';
 import { BottomSheet } from './BottomSheet';
 import '../../styles/components/extras-bottom-sheet.css';
 
@@ -25,8 +26,6 @@ interface ExtrasBottomSheetProps {
   onShowImport?: () => void;
   onShowSupport?: () => void;
   onShowHotspot?: () => void;
-  onShowRepair?: () => void;
-  onShowCommunity?: () => void;
 }
 
 export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
@@ -35,8 +34,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
   onShowImport,
   onShowSupport,
   onShowHotspot,
-  onShowRepair,
-  onShowCommunity,
 }: ExtrasBottomSheetProps) {
   const { t } = useTranslation();
   const { setScreen } = useVpn();
@@ -52,6 +49,13 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
   }, []);
 
   const menuItems: MenuItem[] = [
+    {
+      id: 'buy_premium',
+      title: t('premium.buy'),
+      subtitle: t('premium.description'),
+      icon: 'fa-crown',
+      action: () => openExternalUrl('https://wa.me/message/QFQYJLGJA7UYE1'),
+    },
     {
       id: 'network',
       title: t('menu.itemsNetworkTitle'),
@@ -92,15 +96,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       },
     },
     {
-      id: 'repair',
-      title: t('menu.repairTitle'),
-      subtitle: t('menu.repairSubtitle'),
-      icon: 'fa-wrench',
-      action: () => {
-        onShowRepair?.();
-      },
-    },
-    {
       id: 'terms',
       title: t('menu.itemsTermsTitle'),
       subtitle: t('menu.itemsTermsSubtitle'),
@@ -126,15 +121,6 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
         onShowImport?.();
       },
     },
-    {
-      id: 'community',
-      title: t('menu.communityTitle'),
-      subtitle: t('menu.communitySubtitle'),
-      icon: 'fa-users',
-      action: () => {
-        onShowCommunity?.();
-      },
-    },
   ];
 
   return (
@@ -144,11 +130,9 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
       title={t('menu.title')}
       subtitle="Gestión de herramientas y red"
       icon={<i className="fa fa-bars-staggered" />}
-      height="82vh"
+      height="88vh"
       className="extras-bs"
     >
-      <PremiumCard />
-
       {showCleanConfirm && (
         <GlobalModal
           onClose={() => setShowCleanConfirm(false)}
@@ -195,6 +179,7 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
               pressed={pressedItem === item.id}
               onClick={!disabled ? item.action : undefined}
               disabled={disabled}
+              className={item.id === 'buy_premium' ? 'menu-row--premium' : ''}
               onPointerDown={() => handlePressStart(item.id)}
               onPointerUp={handlePressEnd}
               onPointerLeave={handlePressEnd}
@@ -202,6 +187,8 @@ export const ExtrasBottomSheet = memo(function ExtrasBottomSheet({
             />
           );
         })}
+        {/* Espaciador final para evitar que el último item quede bajo el BottomTabs */}
+        <div style={{ height: 'calc(var(--tabs-space) + 20px)', width: '100%' }} />
       </div>
     </BottomSheet>
   );

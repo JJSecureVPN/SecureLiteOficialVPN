@@ -1,4 +1,4 @@
-// Tipos para la aplicación Secure Tunnel
+// Tipos para la aplicación Imperio VPN
 
 import { SCREENS } from '../constants';
 
@@ -37,23 +37,6 @@ export interface Credentials {
   user: string;
   pass: string;
   uuid: string;
-}
-
-/**
- * Estado del modo auto-conexión
- * Maneja la rotación automática entre servidores
- */
-export interface AutoState {
-  /** Indica si el modo auto está activo */
-  on: boolean;
-  /** Timeout para cambiar de servidor si no conecta (tmo = timeout) */
-  tmo: ReturnType<typeof setTimeout> | null;
-  /** Intervalo para verificar estado de conexión (ver = verification) */
-  ver: ReturnType<typeof setInterval> | null;
-  /** Lista de servidores a probar */
-  list: ServerConfig[];
-  /** Índice actual en la cola de servidores */
-  i: number;
 }
 
 export type VpnStatus =

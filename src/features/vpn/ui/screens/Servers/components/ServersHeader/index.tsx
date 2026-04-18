@@ -10,10 +10,6 @@ import type { Category } from '@/core/types';
 
 interface ServersHeaderProps {
   selectedCategory: Category | null;
-  groupedServers: Array<{ label: string; servers: any[] }>;
-  subcategoryFilter: string;
-  onSubcategoryFilter: (filter: string) => void;
-  totalOnline?: number | null;
   searchTerm: string;
   categorias: Category[];
   onSearchChange: (term: string) => void;
@@ -21,14 +17,8 @@ interface ServersHeaderProps {
   onOpenConfigurator: () => void;
 }
 
-const ALL_SUBCATEGORIES = 'all';
-
 export const ServersHeader = memo(function ServersHeader({
   selectedCategory,
-  groupedServers,
-  subcategoryFilter,
-  onSubcategoryFilter,
-  totalOnline,
   searchTerm,
   categorias,
   onSearchChange,
@@ -42,7 +32,6 @@ export const ServersHeader = memo(function ServersHeader({
     return (
       <div className="section-header section-header--detail">
         <div className="section-title-group">
-          <p className="section-eyebrow">{t('servers.selectedEyebrow')}</p>
           <div className="divider-title" aria-label={`Categoría ${selectedCategory.name}`}>
             <span className="divider-line" aria-hidden="true" />
             <h2 className="panel-title panel-title--divider">{selectedCategory.name}</h2>
@@ -50,30 +39,6 @@ export const ServersHeader = memo(function ServersHeader({
           </div>
           <p className="section-subtitle">{t('servers.selectedSubtitle')}</p>
         </div>
-
-        {groupedServers.length > 0 && (
-          <div className="subcategory-chips subcategory-chips--header" role="tablist">
-            {[ALL_SUBCATEGORIES, ...groupedServers.map(({ label }) => label)].map((label) => (
-              <button
-                key={label}
-                type="button"
-                className={`chip ${label === subcategoryFilter ? 'chip-active' : ''}`}
-                onClick={() => onSubcategoryFilter(label)}
-                role="tab"
-                aria-selected={label === subcategoryFilter}
-              >
-                {label === ALL_SUBCATEGORIES
-                  ? t('servers.allSubcategories')
-                  : t(`servers.subcategoriesList.${label}`)}
-                <span className="chip-count">
-                  {label === ALL_SUBCATEGORIES
-                    ? (selectedCategory.items?.length ?? 0)
-                    : (groupedServers.find((g) => g.label === label)?.servers.length ?? 0)}
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     );
   }
@@ -91,18 +56,6 @@ export const ServersHeader = memo(function ServersHeader({
 
         {/* Title */}
         <h1 className="panel-title" dangerouslySetInnerHTML={{ __html: t('servers.title') }} />
-
-        {/* Online badge */}
-        <div
-          className={`servers-total ${!totalOnline && totalOnline !== 0 ? 'is-loading' : ''}`}
-          aria-label={`${t('servers.totalOnline')} ${totalOnline?.toLocaleString() ?? ''}`}
-        >
-          <span className="servers-total__dot" aria-hidden />
-          <span className="servers-total__label">{t('servers.totalOnline')}</span>
-          <span className="servers-total__count">
-            {totalOnline != null ? totalOnline.toLocaleString() : '—'}
-          </span>
-        </div>
 
         {/* Subtitle */}
         <p className="section-subtitle" style={{ marginBottom: '20px' }}>

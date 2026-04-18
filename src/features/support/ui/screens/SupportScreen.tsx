@@ -3,7 +3,7 @@ import { useTranslation } from '@/i18n';
 import { groqSend, GroqMessage } from '../../api/groq';
 import { GROQ_API_KEY, GROQ_MODEL, SYSTEM_PROMPT } from '../../constants';
 import { useSectionStyle } from '@/shared/hooks/useSectionStyle';
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
+import { openExternalUrl } from '@/shared/lib/nativeActions';
 import '@/styles/screens/support-screen.css';
 
 type MessageRole = 'user' | 'assistant';
@@ -19,7 +19,7 @@ type Message = {
 const createId = () =>
   crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-const ALLOWED_ORIGINS = ['shop.jhservices.com.ar', 'wa.me'];
+const ALLOWED_ORIGINS = ['wa.me'];
 
 function isAllowedUrl(url: string): boolean {
   try {
@@ -246,15 +246,6 @@ export const SupportScreen = memo(function SupportScreen() {
     [hasApiKey, input, t, isSending],
   );
 
-  const handleOpenLink = useCallback((url: string) => {
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.android.openExternalUrl(url);
-      return;
-    }
-    window.open(url, '_blank');
-  }, []);
-
   const handleClearHistory = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
     setMessages([
@@ -347,7 +338,7 @@ export const SupportScreen = memo(function SupportScreen() {
                                       key={link.url}
                                       type="button"
                                       className="support-link-btn"
-                                      onClick={() => handleOpenLink(link.url)}
+                                      onClick={() => openExternalUrl(link.url)}
                                     >
                                       {link.label}
                                     </button>

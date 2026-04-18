@@ -16,8 +16,8 @@
     background 0.2s ease;
   user-select: none;
   outline: none;
-  position: relative;
   overflow: hidden;
+  box-shadow: none !important; /* Eliminada por petición para evitar cortes visuales */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -191,6 +191,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: all 0.2s ease;
+  box-shadow: none !important;
   -webkit-tap-highlight-color: transparent;
   outline: none;
   opacity: 0.8;

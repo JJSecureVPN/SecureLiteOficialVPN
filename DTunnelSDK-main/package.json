@@ -1,0 +1,82 @@
+{
+  "name": "dtunnel-sdk",
+  "version": "1.2.1",
+  "description": "JavaScript/TypeScript SDK for the DTunnel Android WebView bridge.",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "./sdk/dtunnel-sdk.js",
+  "module": "./sdk/dtunnel-sdk.mjs",
+  "types": "./sdk/dtunnel-sdk.d.ts",
+  "bin": {
+    "dtunnel-sdk": "bin/dtunnel-sdk.mjs"
+  },
+  "scripts": {
+    "test": "node --import tsx --test ./tests/*.test.mts",
+    "test:typecheck": "tsc -p ./tests/tsconfig.json --noEmit",
+    "release:npm": "node ./scripts/release-npm.mjs",
+    "release:sdk": "node ./scripts/release-sdk.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./sdk/dtunnel-sdk.d.ts",
+      "import": "./sdk/dtunnel-sdk.mjs",
+      "require": "./sdk/dtunnel-sdk.js",
+      "default": "./sdk/dtunnel-sdk.js"
+    },
+    "./simulator": {
+      "types": "./sdk/dtunnel-sdk.simulator.d.ts",
+      "import": "./sdk/dtunnel-sdk.simulator.mjs",
+      "require": "./sdk/dtunnel-sdk.simulator.js",
+      "default": "./sdk/dtunnel-sdk.simulator.js"
+    },
+    "./react": {
+      "types": "./react/index.d.ts",
+      "import": "./react/index.mjs",
+      "require": "./react/index.js",
+      "default": "./react/index.js"
+    },
+    "./sdk/dtunnel-sdk.js": "./sdk/dtunnel-sdk.js",
+    "./sdk/dtunnel-sdk.d.ts": "./sdk/dtunnel-sdk.d.ts",
+    "./sdk/dtunnel-sdk.simulator.js": "./sdk/dtunnel-sdk.simulator.js",
+    "./sdk/dtunnel-sdk.simulator.mjs": "./sdk/dtunnel-sdk.simulator.mjs",
+    "./sdk/dtunnel-sdk.simulator.d.ts": "./sdk/dtunnel-sdk.simulator.d.ts"
+  },
+  "files": [
+    "bin",
+    "sdk",
+    "react",
+    "templates",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dtunnel",
+    "sdk",
+    "webview",
+    "android",
+    "vpn",
+    "typescript",
+    "react"
+  ],
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DTunnel0/DTunnelSDK.git"
+  }
+}

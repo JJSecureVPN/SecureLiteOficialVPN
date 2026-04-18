@@ -1,7 +1,7 @@
 import { memo, useState, useCallback, useEffect, useMemo } from 'react';
 import type { ServerConfig } from '@/features/vpn';
 import { useTranslation } from '@/i18n';
-import { extractDomain, removeDomainFromDescription, formatProtocol } from '@/core/utils';
+import { extractDomain, removeDomainFromDescription } from '@/core/utils';
 import { Card, Badge } from '@/shared/ui';
 import './ServerCard.css';
 
@@ -9,13 +9,19 @@ interface ServerCardProps {
   config: ServerConfig | null;
   onClick: () => void;
   disabled?: boolean;
+  variant?: 'default' | 'home';
 }
 
 /**
  * Tarjeta que muestra el servidor seleccionado en el Home
  * Ahora alineada visualmente con ServerListItem
  */
-export const ServerCard = memo(function ServerCard({ config, onClick, disabled }: ServerCardProps) {
+export const ServerCard = memo(function ServerCard({
+  config,
+  onClick,
+  disabled,
+  variant = 'default',
+}: ServerCardProps) {
   const icon = config?.icon?.trim();
   const isImg = useMemo(() => {
     if (!icon) return false;
@@ -44,16 +50,12 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
     () => removeDomainFromDescription(config?.description || ''),
     [config?.description],
   );
-  const protocolLabel = useMemo(
-    () => formatProtocol(config?.mode || '') || config?.mode,
-    [config?.mode],
-  );
 
   return (
     <Card
       as="button"
       type="button"
-      className="server-item location-card-home"
+      className={`server-item location-card-home ${variant === 'home' ? 'server-item--home' : ''}`}
       onClick={disabled ? undefined : onClick}
       style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1 }}
       data-nav
@@ -84,20 +86,13 @@ export const ServerCard = memo(function ServerCard({ config, onClick, disabled }
       {/* Descripción (si existe) */}
       {cleanDescription && <p className="server-item__description">{cleanDescription}</p>}
 
-      {/* Footer: Protocolo y Dominio */}
-      {(protocolLabel || domain) && (
+      {/* Footer: Dominio */}
+      {domain && (
         <div className="server-item__footer">
           <div className="server-item__badges">
-            {protocolLabel && (
-              <Badge variant="protocol" iconClass="fas fa-shield-alt">
-                {protocolLabel}
-              </Badge>
-            )}
-            {domain && (
-              <Badge variant="domain" iconClass="fas fa-globe">
-                {domain}
-              </Badge>
-            )}
+            <Badge variant="domain" iconClass="fas fa-globe">
+              {domain}
+            </Badge>
           </div>
         </div>
       )}

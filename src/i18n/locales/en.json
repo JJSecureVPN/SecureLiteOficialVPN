@@ -44,33 +44,7 @@
     "cleanConfirmTitle": "Clear Application?",
     "cleanConfirmBody": "Cache, stored settings, and temporary data will be deleted.",
     "itemsImportTitle": "Import",
-    "itemsImportSubtitle": "Import configuration JSON",
-    "repairTitle": "Repair Account",
-    "repairSubtitle": "Forced sync with Servex",
-    "repairEyebrow": "account",
-    "repairPillSuccess": "repaired",
-    "repairPillError": "error",
-    "repairPillLoading": "repairing",
-    "repairPillConnected": "connected",
-    "repairPillDisconnected": "disconnected",
-    "repairUserInputLabel": "Account to repair",
-    "repairNoUserError": "Please enter a username.",
-    "repairSuccess": "Account synced correctly. Try connecting now.",
-    "repairError": "Error syncing the account.",
-    "repairWarnDisconnect": "Will disconnect when repairing",
-    "repairInfo": "Forced sync with Servex",
-    "repairAgain": "Try again",
-    "repairButton": "Repair account",
-    "repairUnexpectedError": "An unexpected error occurred while connecting to the server.",
-    "communityTitle": "Our Community",
-    "communitySubtitle": "Join our official channels and groups",
-    "communityWhatsappTitle": "Whatsapp Community",
-    "communityWhatsappSubtitle": "Help group and announcements",
-    "communityWhatsappChannelTitle": "Whatsapp Channel",
-    "communityWhatsappChannelSubtitle": "Quick notifications",
-    "communityTelegramTitle": "Telegram Channel",
-    "communityTelegramSubtitle": "Announcements and updates",
-    "communityOpened": "Opening link..."
+    "itemsImportSubtitle": "Import configuration JSON"
   },
   "errorBoundary": {
     "title": "Something went wrong",
@@ -99,8 +73,6 @@
     "update": "Update",
     "logs": "Logs",
     "viewDetails": "View details",
-    "renew": "Renew",
-    "becomePremium": "Become Premium",
     "back": "Back"
   },
   "status": {
@@ -109,10 +81,6 @@
     "connecting": "Establishing connection…",
     "autoConnecting": "Finding best connection…",
     "connectingTo": "Connecting to"
-  },
-  "auto": {
-    "categoryFallback": "category",
-    "testing": "Testing"
   },
   "error": {
     "autoConnectFailed": "Failed to start auto-connect",
@@ -125,8 +93,6 @@
     "title": "Our Servers",
     "subtitle": "Explore and choose the best location for your connection.",
     "serverCount": "Servers",
-    "totalOnline": "USERS ONLINE:",
-    "selectedEyebrow": "Selected category",
     "selectedSubtitle": "Choose the server that best suits your connection.",
     "searchPlaceholder": "Search country or category",
     "noServers": "No servers available.",
@@ -148,23 +114,14 @@
     "allSubcategories": "All",
     "autoTest": "Automatic test",
     "manualSelect": "Manual selection",
+    "noServersInCategory": "No servers available in this category.",
     "noServersInSubcategory": "No servers in this subcategory.",
     "noSearchResults": "No results for",
     "noSearchHint": "Try another term or clear the search",
     "autoModeActive": "Automatic mode active",
     "tapToConnect": "Tap to connect",
     "inUse": "In use",
-    "stats": {
-      "cores": "Cores",
-      "totalRam": "Total RAM",
-      "download": "↓ {value} Mbps",
-      "upload": "↑ {value} Mbps"
-    },
-    "usersConnected": "Users connected",
-    "online": "ONLINE",
-    "showStats": "Show stats",
-    "hideStats": "Hide stats",
-    "statsShort": "LIVE STATS"
+    "usersConnected": "Users connected"
   },
   "import": {
     "title": "Import configuration",
@@ -221,15 +178,11 @@
     "title": "Terms of Use and Policy",
     "accept": "I ACCEPT THE TERMS OF USE",
     "back": "BACK",
-    "viewFull": "VIEW FULL TERMS",
-    "cardsLegalTitle": "Legal Terms",
-    "cardsLegalText": "By using our service, you agree to comply with all applicable laws and regulations. You are responsible for your use of the service and warrant that you will not violate any law, contract, or third-party rights.",
-    "cardsPrivacyTitle": "Privacy",
-    "cardsPrivacyText": "We respect your privacy. We do not sell, share, or disclose your personal data to third parties without your explicit consent. All data is processed according to our privacy policies.",
+    "cardsPrivacyText": "We respect your privacy. All data is processed according to our privacy policies.",
     "cardsForbiddenTitle": "Prohibited Activities",
-    "cardsForbiddenText": "Not allowed: using the service for illegal activities, harassment, fraud, malware, spam, or any content that violates third-party rights. Violations may result in permanent ban.",
+    "cardsForbiddenText": "Not allowed: illegal activities, harassment, fraud, malware, or any content that violates third‑party rights.",
     "cardsChangesTitle": "Changes to Terms",
-    "cardsChangesText": "We reserve the right to modify these terms at any time. Changes take effect immediately. Your continued use of the service constitutes acceptance of the modified terms."
+    "cardsChangesText": "We reserve the right to modify these terms at any time. Changes take effect immediately."
   },
   "theme": {
     "darkMode": "Switch to light mode",
@@ -243,18 +196,18 @@
   },
   "home": {
     "title": "Home",
-    "auto": "Auto",
+    "hotspot": "Hotspot",
     "connect": "Connect",
     "disconnect": "Disconnect",
     "connecting": "Connecting...",
     "disconnecting": "Disconnecting...",
-    "logoAlt": "Secure VPN logo",
-    "logoFallback": "Secure VPN"
+    "logoAlt": "Imperio VPN logo",
+    "logoFallback": "Imperio VPN"
   },
   "support": {
     "title": "Support",
     "subtitle": "Chat with our assistant",
-    "welcome": "Hi! I'm your Secure Lite assistant. How can I help you today?",
+    "welcome": "Hi! I'm your Imperio VPN assistant. How can I help you today?",
     "placeholder": "Type your question...",
     "send": "Send",
     "sending": "Thinking...",
@@ -266,36 +219,6 @@
   "app": {
     "loadErrorTitle": "Failed to load",
     "restartPrompt": "Please restart the application"
-  },
-  "premium": {
-    "title": "Premium",
-    "cta": "Buy or resell",
-    "description": "Access official plans or request a white-label app to resell with a clean design.",
-    "buy": "Buy",
-    "resell": "Resell"
-  },
-  "promo": {
-    "label": "OFFER",
-    "ariaLabel": "View offer",
-    "title": "Limited time offer",
-    "timerAria": "Remaining time",
-    "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "GET",
-    "promo2x1Title": "2X1 OFFER",
-    "promo2x1Subtitle": "Double devices in your plan"
-  },
-  "coupon": {
-    "title": "Available coupons",
-    "subtitle": "Take advantage of exclusive discounts",
-    "empty": "No active coupons at the moment",
-    "codeLabel": "Code",
-    "badgeLabel": "discount",
-    "oneUse": "use remaining",
-    "manyUses": "uses remaining",
-    "description": "Applicable on the purchase of any plan",
-    "copied": "Copied",
-    "copy": "Copy",
-    "openPlans": "View plans"
   },
   "logs": {
     "title": "Logs",
@@ -319,6 +242,7 @@
     "statusConnected": "Connected",
     "statusConnecting": "Connecting",
     "statusDisconnected": "Disconnected",
+    "detailsButton": "View details",
     "labels": {
       "status": "Status",
       "latency": "Latency",
@@ -343,13 +267,17 @@
       "uuid": "UUID"
     }
   },
+  "premium": {
+    "title": "Upgrade to Premium",
+    "description": "Access exclusive servers, higher speed and unlimited connection with our premium plans.",
+    "buy": "BUY"
+  },
   "session": {
     "active": "Session active",
     "greeting": "Hello, {name}",
     "promoTitle": "Upgrade to Premium",
     "promoMessage": "Upgrade to unlock more servers, higher speed and no limits.",
-    "protected": "Your connection is protected. Check your account information when needed.",
-    "renewSoon": "Your plan expires in {days}. Renew now."
+    "protected": "Your connection is protected. Check your account information when needed."
   },
   "serverCard": {
     "ariaChooseServer": "Choose server",

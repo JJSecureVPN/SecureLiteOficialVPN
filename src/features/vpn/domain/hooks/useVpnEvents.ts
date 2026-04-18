@@ -13,6 +13,7 @@ function useBridgeErrorLogger() {
 }
 
 interface UseVpnEventsArgs {
+  status: VpnStatus;
   setStatus: (status: VpnStatus) => void;
   setConfigState: (config: ServerConfig) => void;
   loadCategorias: () => void;
@@ -21,7 +22,12 @@ interface UseVpnEventsArgs {
 /**
  * Hook para suscribirse a eventos nativos de VPN (usa `DTunnelSDK` directamente)
  */
-export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseVpnEventsArgs) {
+export function useVpnEvents({
+  status,
+  setStatus,
+  setConfigState,
+  loadCategorias,
+}: UseVpnEventsArgs) {
   const sdk = useDTunnelSDK();
   useBridgeErrorLogger();
 
@@ -124,6 +130,13 @@ export function useVpnEvents({ setStatus, setConfigState, loadCategorias }: UseV
 
   // newDefaultConfig (antes: configClick) — config seleccionada desde la app nativa
   useDTunnelEvent('newDefaultConfig', () => {
+    // Si estamos conectando o conectados, ignoramos cambios de config desde el bridge
+    // para evitar "saltos" o snap-backs si el bridge reporta un estado anterior.
+    if (status !== 'DISCONNECTED') {
+      appLogger.add('info', `newDefaultConfig ignorado (Status: ${status})`);
+      return;
+    }
+
     try {
       const nativeConfig = sdk?.config.getDefaultConfig() as ServerConfig | null;
       if (!nativeConfig) {

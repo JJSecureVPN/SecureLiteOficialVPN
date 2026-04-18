@@ -10,7 +10,6 @@ export type { ServerConfig } from '@/core/types';
 // Domain hooks
 export { useVpnController } from './domain/hooks/useVpnController';
 export { useVpnConnectionState } from './domain/hooks/useVpnConnectionState';
-export { useAutoConnect } from './domain/hooks/useAutoConnect';
 export { useServers } from './domain/hooks/useServers';
 export { useCredentialsState } from './domain/hooks/useCredentialsState';
 export { useNavigationState } from './domain/hooks/useNavigationState';
@@ -29,3 +28,4 @@ export { ServerCard } from './ui/components/ServerCard';
 // UI Screens
 export { HomeScreen } from './ui/screens/HomeScreen';
 export { ServersScreen } from './ui/screens/Servers';
+export { AccountScreen } from './ui/screens/AccountScreen';

@@ -44,33 +44,7 @@
     "cleanConfirmTitle": "¿Limpiar la aplicación?",
     "cleanConfirmBody": "Se borrarán la caché, los ajustes almacenados y los datos temporales.",
     "itemsImportTitle": "Importar",
-    "itemsImportSubtitle": "Importar JSON de configuración",
-    "repairTitle": "Reparar Cuenta",
-    "repairSubtitle": "Sincronización forzada con Servex",
-    "repairEyebrow": "cuenta",
-    "repairPillSuccess": "reparado",
-    "repairPillError": "error",
-    "repairPillLoading": "reparando",
-    "repairPillConnected": "conectado",
-    "repairPillDisconnected": "desconectado",
-    "repairUserInputLabel": "Usuario a reparar",
-    "repairNoUserError": "Por favor, ingresá un usuario.",
-    "repairSuccess": "Cuenta sincronizada correctamente. Intenta conectar ahora.",
-    "repairError": "Error al sincronizar la cuenta.",
-    "repairWarnDisconnect": "Se desconectará al reparar",
-    "repairInfo": "Sincronización forzada con Servex",
-    "repairAgain": "Intentar de nuevo",
-    "repairButton": "Reparar cuenta",
-    "repairUnexpectedError": "Ocurrió un error inesperado al conectar con el servidor.",
-    "communityTitle": "Nuestra Comunidad",
-    "communitySubtitle": "Únete a nuestros canales y grupos oficiales",
-    "communityWhatsappTitle": "Comunidad Whatsapp",
-    "communityWhatsappSubtitle": "Grupo de ayuda y anuncios",
-    "communityWhatsappChannelTitle": "Canal Whatsapp",
-    "communityWhatsappChannelSubtitle": "Notificaciones rápidas",
-    "communityTelegramTitle": "Canal Telegram",
-    "communityTelegramSubtitle": "Anuncios y actualizaciones",
-    "communityOpened": "Abriendo enlace..."
+    "itemsImportSubtitle": "Importar JSON de configuración"
   },
   "errorBoundary": {
     "title": "Algo salió mal",
@@ -98,25 +72,17 @@
     "retry": "REINTENTAR",
     "saturated": "LLENO",
     "update": "Actualizar",
-    "logs": "Registros",
     "viewDetails": "Ver detalles",
-    "renew": "Renovar",
-    "becomePremium": "Convertirse Premium",
+    "logs": "Registros",
     "back": "Volver"
   },
   "status": {
     "disconnected": "Estás desconectado",
     "connected": "CONECTADO",
     "connecting": "Estableciendo conexión…",
-    "autoConnecting": "Buscando la mejor conexión…",
     "connectingTo": "Conectando a"
   },
-  "auto": {
-    "categoryFallback": "categoría",
-    "testing": "Probando"
-  },
   "error": {
-    "autoConnectFailed": "Error al iniciar auto-conexión",
     "connectionFailed": "Error al conectar",
     "updateCheckFailed": "Error al buscar actualización",
     "configApplyFailed": "Error al aplicar configuración",
@@ -127,8 +93,6 @@
     "title": "NUESTROS SERVIDORES",
     "subtitle": "Explora y elige la mejor ubicación para tu conexión.",
     "serverCount": "Servidores",
-    "totalOnline": "USUARIOS ONLINE:",
-    "selectedEyebrow": "Categoría seleccionada",
     "selectedSubtitle": "Elige el servidor que mejor se adapte a tu conexión.",
     "searchPlaceholder": "Buscar país o categoría",
     "noServers": "Ningún servidor disponible.",
@@ -140,35 +104,27 @@
     "clearSearch": "Limpiar búsqueda",
     "configurator": "Configurador",
     "subcategories": "Subcategorías",
-    "subcategoriesList": {
-      "principal": "Principal",
-      "juegos": "Juegos",
-      "stream": "Streaming",
-      "social": "Social",
-      "others": "Otros"
-    },
     "allSubcategories": "Todos",
     "autoTest": "Prueba automática",
     "manualSelect": "Seleccionar manual",
+    "noServersInCategory": "No hay servidores disponibles en esta categoría.",
     "noServersInSubcategory": "No hay servidores en esta subcategoría.",
     "noSearchResults": "Sin resultados para",
     "noSearchHint": "Intenta otro término o borra la búsqueda",
     "autoModeActive": "Modo automático activo",
     "tapToConnect": "Toca para conectar",
     "inUse": "En uso",
-    "stats": {
-      "cores": "Cores",
-      "totalRam": "RAM Total",
-      "download": "↓ {value} Mbps",
-      "upload": "↑ {value} Mbps"
-    },
     "usersConnected": "Usuarios conectados",
-    "online": "EN LÍNEA",
-    "showStats": "Mostrar estadísticas",
-    "hideStats": "Ocultar estadísticas",
-    "statsShort": "ESTADÍSTICAS EN VIVO",
     "full": "LLENO",
-    "saturated": "Categoría saturada"
+    "saturated": "Categoría saturada",
+    "online": "ONLINE",
+    "subcategoriesList": {
+      "principal": "Principal",
+      "juegos": "Gaming",
+      "stream": "Streaming",
+      "social": "Social",
+      "others": "Otros"
+    }
   },
   "import": {
     "title": "Importar configuración",
@@ -247,18 +203,18 @@
   },
   "home": {
     "title": "Inicio",
-    "auto": "Auto",
+    "hotspot": "Hotspot",
     "connect": "Conectar",
     "disconnect": "Desconectar",
     "connecting": "Conectando...",
     "disconnecting": "Desconectando...",
-    "logoAlt": "Logo Secure VPN",
-    "logoFallback": "Secure VPN"
+    "logoAlt": "Logo Imperio VPN",
+    "logoFallback": "Imperio VPN"
   },
   "support": {
     "title": "Soporte",
     "subtitle": "Chat con nuestro asistente",
-    "welcome": "¡Hola! Soy el soporte de Secure Lite. ¿En qué puedo ayudarte?",
+    "welcome": "¡Hola! Soy el soporte de Imperio VPN. ¿En qué puedo ayudarte?",
     "placeholder": "Escribe tu pregunta...",
     "send": "Enviar",
     "sending": "Pensando...",
@@ -270,59 +226,6 @@
   "app": {
     "loadErrorTitle": "Error al cargar",
     "restartPrompt": "Por favor, reinicia la aplicación"
-  },
-  "premium": {
-    "title": "Premium",
-    "cta": "Comprar o revender",
-    "description": "Accede a planes oficiales o solicita tu app propia para revender con un diseño limpio, sin contacto ni spam.",
-    "buy": "Comprar",
-    "resell": "Revender"
-  },
-  "promo": {
-    "label": "OFERTA",
-    "ariaLabel": "Ver oferta",
-    "title": "Oferta por tiempo limitado",
-    "timerAria": "Tiempo restante",
-    "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "OBTENER",
-    "modal": {
-      "title": "Abrir en navegador",
-      "subtitle": "No se pudo abrir automáticamente en tu navegador predeterminado",
-      "manualHint": "Si prefieres, puedes abrir la oferta manualmente en tu navegador predeterminado.",
-      "openButton": "Abrir en navegador",
-      "copyButton": "Copiar enlace"
-    },
-    "activeBadge": "Oferta activa",
-    "headTitle": "Aprovechá el descuento antes de que termine",
-    "tabLabel": "Oferta",
-    "specialOffer": "Oferta especial",
-    "endsIn": "Finaliza en",
-    "viewPlans": "Ver planes",
-    "emptyNovedades": "No hay novedades disponibles en este momento.",
-    "limitedTimeNote": "Oferta por tiempo limitado.",
-    "promo2x1Title": "OFERTA 2X1",
-    "promo2x1Subtitle": "Doble dispositivos en tu plan"
-  },
-  "coupon": {
-    "title": "Cupones disponibles",
-    "subtitle": "Aprovecha descuentos exclusivos",
-    "empty": "No hay cupones activos en este momento",
-    "codeLabel": "Código",
-    "badgeLabel": "descuento",
-    "oneUse": "uso restante",
-    "manyUses": "usos restantes",
-    "description": "Aplicable en la compra de cualquier plan",
-    "copied": "Copiado",
-    "copy": "Copiar",
-    "openPlans": "Ver planes",
-    "activeBadge": "Cupones activos",
-    "headTitle": "Tocá un cupón para copiar el código",
-    "tabLabel": "Cupones",
-    "availableList": "Cupones disponibles",
-    "tag": "CUPÓN",
-    "applyNote": "Los cupones se aplican al finalizar la compra.",
-    "discount": "Descuento",
-    "remaining": "Usos restantes"
   },
   "logs": {
     "title": "Registros",
@@ -346,6 +249,7 @@
     "statusConnected": "Conectado",
     "statusConnecting": "Conectando",
     "statusDisconnected": "Desconectado",
+    "detailsButton": "Ver detalles",
     "labels": {
       "status": "Estado",
       "latency": "Latencia",
@@ -369,6 +273,11 @@
       "username": "Usuario",
       "uuid": "UUID"
     }
+  },
+  "premium": {
+    "title": "Hazte Premium",
+    "description": "Accede a servidores exclusivos, mayor velocidad y conexión sin límites con nuestros planes premium.",
+    "buy": "COMPRAR"
   },
   "session": {
     "active": "Sesión activa",

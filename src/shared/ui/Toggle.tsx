@@ -10,7 +10,7 @@ interface ToggleProps {
 export const Toggle = memo(function Toggle({ checked, onChange, label }: ToggleProps) {
   const { t } = useTranslation();
   return (
-    <>
+    <div className="toggle-with-label">
       {label && <span className="auto-switch-label">{label}</span>}
       <label className="toggle" aria-label={label || t('common.toggleAriaFallback')}>
         <input
@@ -21,6 +21,6 @@ export const Toggle = memo(function Toggle({ checked, onChange, label }: ToggleP
         />
         <span className="thumb" />
       </label>
-    </>
+    </div>
   );
 });

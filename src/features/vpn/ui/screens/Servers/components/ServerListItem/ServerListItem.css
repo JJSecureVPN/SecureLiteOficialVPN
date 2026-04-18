@@ -23,6 +23,7 @@
   -webkit-tap-highlight-color: transparent;
   transition: all 0.2s ease;
   overflow: hidden;
+  box-shadow: none !important; /* Eliminada por petición para evitar cortes */
 }
 
 /* Hover & Focus */

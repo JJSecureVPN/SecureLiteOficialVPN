@@ -1,18 +1,8 @@
-/**
- * Servers - Main VPN servers selection screen
- * Refactored for better organization:
- * - Components split into Header, CategoryGrid, and ServerList
- * - Styles colocated with components
- * - Logic extracted to local hooks
- */
-
 import { useCallback, useRef, useEffect } from 'react';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { useServerStats } from '@/shared/hooks/useServerStats';
 import { useSafeArea } from '@/shared/hooks/useSafeArea';
 import { useAutoFocus } from '@/shared/hooks/useAutoFocus';
-import { useTranslation } from '@/i18n';
 import { appLogger } from '@/features/logs';
 import { useAsyncError } from '@/core/hooks';
 import { ErrorCategory } from '@/core/utils/ErrorHandler';
@@ -26,9 +16,9 @@ import { CategoryGrid } from './components/CategoryGrid';
 import { ServerList } from './components/ServerList';
 
 // Hooks locales
-import { useServersFilter, useServersExpand, useServersKeyboard, useGroupedServers } from './hooks';
+import { useServersFilter, useServersKeyboard } from './hooks';
 
-import type { Category, ServerConfig } from '@/core/types';
+import type { ServerConfig } from '@/core/types';
 import './Servers.css';
 
 export function ServersScreen() {
@@ -39,17 +29,14 @@ export function ServersScreen() {
     config: currentConfig,
     setConfig,
     setScreen,
-    startAutoConnect,
     disconnect,
     cancelConnecting,
     creds,
-    autoMode,
     selectedCategory,
     setSelectedCategory,
   } = useVpn();
 
   // UI State
-  const { t } = useTranslation();
   const { statusBarHeight } = useSafeArea();
   const sectionStyle = { paddingTop: `calc(${statusBarHeight}px + 8px)`, paddingBottom: 0 };
   const contentRef = useRef<HTMLDivElement>(null);
@@ -58,18 +45,10 @@ export function ServersScreen() {
   const error = useAsyncError();
 
   // Custom Hooks
-  const { serversByName, data: serverStats } = useServerStats({ pollMs: 3_000, enabled: true });
-  const totalOnline = serverStats?.totalUsers ?? null;
-  const { expandedCategories, toggleExpand } = useServersExpand();
-
-  const {
-    searchTerm,
-    setSearchTerm,
-    subcategoryFilter,
-    setSubcategoryFilter,
-    filteredCategories,
-    visibleGroups,
-  } = useServersFilter(categorias, selectedCategory);
+  const { searchTerm, setSearchTerm, filteredCategories } = useServersFilter(
+    categorias,
+    selectedCategory,
+  );
 
   // Keyboard navigation + focus management (consolidated)
   useServersKeyboard(contentRef, selectedCategory);
@@ -120,17 +99,8 @@ export function ServersScreen() {
 
   // Callbacks
   const handleServerClick = useCallback(
-    (srv: ServerConfig, cat: Category) => {
+    (srv: ServerConfig) => {
       error.clearError();
-
-      if (autoMode) {
-        try {
-          startAutoConnect(cat);
-        } catch (err) {
-          error.setError(err, ErrorCategory.Internal);
-        }
-        return;
-      }
 
       const performStart = () => {
         setConfig(srv);
@@ -180,8 +150,6 @@ export function ServersScreen() {
       }
     },
     [
-      autoMode,
-      startAutoConnect,
       status,
       creds.user,
       creds.pass,
@@ -190,7 +158,6 @@ export function ServersScreen() {
       disconnect,
       setConfig,
       setScreen,
-      t,
       error,
     ],
   );
@@ -218,9 +185,6 @@ export function ServersScreen() {
     }
   });
 
-  // Compute grouped servers when category is selected
-  const groupedServers = useGroupedServers(selectedCategory);
-
   return (
     <section className="screen servers-screen" style={sectionStyle}>
       <ErrorDisplay
@@ -233,10 +197,6 @@ export function ServersScreen() {
       />
       <ServersHeader
         selectedCategory={selectedCategory}
-        groupedServers={groupedServers}
-        subcategoryFilter={subcategoryFilter}
-        onSubcategoryFilter={setSubcategoryFilter}
-        totalOnline={totalOnline}
         searchTerm={searchTerm}
         categorias={categorias}
         onSearchChange={setSearchTerm}
@@ -251,21 +211,16 @@ export function ServersScreen() {
             filteredCategories={filteredCategories}
             searchTerm={searchTerm}
             currentConfig={currentConfig}
-            autoMode={autoMode}
-            expandedCategories={expandedCategories}
-            serversByName={serversByName}
             onCategoryClick={setSelectedCategory}
             onServerClick={handleServerClick}
-            onToggleExpand={toggleExpand}
             onClearSearch={() => setSearchTerm('')}
             onOpenConfigurator={handleOpenConfigurator}
           />
         ) : (
           <ServerList
             selectedCategory={selectedCategory}
-            visibleGroups={visibleGroups}
+            servers={selectedCategory.items ?? []}
             currentConfig={currentConfig}
-            autoMode={autoMode}
             onServerClick={handleServerClick}
           />
         )}
@@ -273,13 +228,7 @@ export function ServersScreen() {
 
       <ScrollIndicator
         targetRef={contentRef}
-        dependencies={[
-          selectedCategory,
-          filteredCategories,
-          visibleGroups,
-          expandedCategories,
-          searchTerm,
-        ]}
+        dependencies={[selectedCategory, filteredCategories, searchTerm]}
       />
     </section>
   );

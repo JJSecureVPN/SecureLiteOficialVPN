@@ -3,15 +3,6 @@ import es from './locales/es.json';
 import en from './locales/en.json';
 import pt from './locales/pt.json';
 import type { Language, LanguageContextType, Translations } from './types';
-import { loadLanguagePreference, saveLanguagePreference } from '../core/utils';
-
-function getSystemLanguage(): Language {
-  if (typeof window === 'undefined') return 'es';
-  const lang = navigator.language?.split('-')[0].toLowerCase();
-  if (lang === 'en') return 'en';
-  if (lang === 'pt') return 'pt';
-  return 'es';
-}
 
 const translations: Record<Language, Translations> = {
   es,
@@ -37,18 +28,15 @@ function getNestedValue(obj: Translations, path: string): string {
 export const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const stored = loadLanguagePreference();
-  const [language, setLanguageState] = useState<Language>(() => stored ?? getSystemLanguage());
+  const [language] = useState<Language>('es');
 
   // Apply language setting (for document lang attribute)
   useEffect(() => {
     document.documentElement.lang = language;
-    document.dir = language === 'pt' ? 'ltr' : language === 'en' ? 'ltr' : 'ltr';
   }, [language]);
 
-  const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    saveLanguagePreference(lang);
+  const setLanguage = useCallback((_lang: Language) => {
+    // Logic removed as per user request to stay in Spanish
   }, []);
 
   const t = useCallback(

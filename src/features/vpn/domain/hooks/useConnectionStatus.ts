@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import type { VpnStatus } from '@/core/types';
 import { useVpn } from '../../context/VpnContext';
 
 /** Estados que se consideran "desconectados" para propósitos de UI */
@@ -17,7 +18,7 @@ export interface ConnectionStatus {
   /** Hubo un error de conexión (AUTH_FAILED, NO_NETWORK, etc.) */
   isError: boolean;
   /** Estado raw del VPN */
-  status: string;
+  status: VpnStatus;
 }
 
 /**
@@ -25,18 +26,18 @@ export interface ConnectionStatus {
  * Evita duplicar la lógica en múltiples componentes
  */
 export function useConnectionStatus(): ConnectionStatus {
-  const { status, auto } = useVpn();
+  const { status } = useVpn();
 
   return useMemo(() => {
     const isError = (ERROR_STATES as readonly string[]).includes(status);
     const isDisconnectedState = (DISCONNECTED_STATES as readonly string[]).includes(status);
 
     return {
-      isDisconnected: isDisconnectedState && !auto.on,
-      isConnecting: status === 'CONNECTING' || auto.on,
+      isDisconnected: isDisconnectedState,
+      isConnecting: status === 'CONNECTING',
       isConnected: status === 'CONNECTED',
       isError,
       status,
     };
-  }, [status, auto.on]);
+  }, [status]);
 }

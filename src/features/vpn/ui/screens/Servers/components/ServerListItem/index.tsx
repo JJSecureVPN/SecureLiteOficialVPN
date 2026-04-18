@@ -13,18 +13,11 @@ interface ServerListItemProps {
   server: ServerConfig;
   isActive: boolean;
   category: Category;
-  autoMode: boolean;
   onSelectServer: (server: ServerConfig, category: Category) => void;
 }
 
 export const ServerListItem = memo(
-  function ServerListItem({
-    server,
-    isActive,
-    category,
-    autoMode: _autoMode,
-    onSelectServer,
-  }: ServerListItemProps) {
+  function ServerListItem({ server, isActive, category, onSelectServer }: ServerListItemProps) {
     const handleClick = useCallback(() => {
       onSelectServer(server, category);
     }, [server, category, onSelectServer]);

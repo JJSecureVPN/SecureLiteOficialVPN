@@ -100,4 +100,4 @@ URLSession.shared.dataTask(with: request) { data, response, error in
 
 ---
 
-*Documentación generada para SecureShop VPN - 2026*
+*Documentación generada para ImperioShop VPN - 2026*

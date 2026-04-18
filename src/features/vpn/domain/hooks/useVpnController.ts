@@ -6,19 +6,17 @@ import { useTermsState } from './useTermsState';
 import { useNavigationState } from './useNavigationState';
 import { useVpnConnectionState } from './useVpnConnectionState';
 import { useVpnUserState } from './useVpnUserState';
-import { loadAutoMode, saveAutoMode } from '@/core/utils';
 
 export function useVpnController(): VpnContextType {
   const { creds, setCreds, persistCreds } = useCredentialsState();
   const { termsAccepted, acceptTerms } = useTermsState();
   const { screen, setScreen } = useNavigationState(termsAccepted);
-  const connection = useVpnConnectionState({ creds, persistCreds, setScreen });
+  const connection = useVpnConnectionState({ creds, persistCreds });
   const userState = useVpnUserState({
     status: connection.status,
     config: connection.config,
     creds,
   });
-  const [autoMode, setAutoModeState] = useState(loadAutoMode());
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   useEffect(() => {
@@ -27,11 +25,6 @@ export function useVpnController(): VpnContextType {
     }
   }, [screen, selectedCategory]);
 
-  const setAutoMode = (on: boolean) => {
-    setAutoModeState(on);
-    saveAutoMode(on);
-  };
-
   return {
     status: connection.status,
     config: connection.config,
@@ -39,20 +32,15 @@ export function useVpnController(): VpnContextType {
     selectedCategory,
     user: userState.user,
     creds,
-    auto: connection.auto,
-    autoProgress: connection.autoProgress,
     screen,
     termsAccepted,
-    autoMode,
     setScreen,
     setConfig: connection.setConfig,
     setCreds,
     setSelectedCategory,
-    setAutoMode,
     connect: connection.connect,
     disconnect: connection.disconnect,
     cancelConnecting: connection.cancelConnecting,
-    startAutoConnect: connection.startAutoConnect,
     loadCategorias: connection.loadCategorias,
     acceptTerms,
     topInfo: userState.topInfo,

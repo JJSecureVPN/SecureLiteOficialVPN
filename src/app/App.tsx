@@ -7,6 +7,7 @@ import {
   useVpn,
   HomeScreen, // VPN Feature: Screen principal
   ServersScreen, // VPN Feature: Selección de servidores
+  AccountScreen, // VPN Feature: Account details screen
   useConnectionStatus, // VPN Feature: Hook de estado
 } from '../features/vpn';
 
@@ -20,10 +21,7 @@ import { TermsScreen } from '../features/terms';
 // import { AccountScreen } from '../features/account';
 
 // Menu Feature Screens (features/menu/ui/screens/)
-import { MenuScreen } from '../features/menu';
-
-// Referrals Feature
-import { ReferralsScreen } from '../features/referrals/ui/screens/ReferralsScreen';
+import { MenuScreen, ResellerScreen } from '../features/menu';
 
 // Support Feature
 import { SupportScreen } from '../features/support';
@@ -33,18 +31,11 @@ import { ErrorBoundary } from '../shared/components/ErrorBoundary';
 import {
   AppHeader,
   BottomTabs,
-  ExtrasBottomSheet,
-  PromoBottomSheet,
   LogsBottomSheet,
-  AccountBottomSheet,
   ImportBottomSheet,
   HotspotBottomSheet,
-  RepairAccountBottomSheet,
-  CommunityBottomSheet,
 } from '../shared/components';
 import { useSafeArea } from '../shared/hooks/useSafeArea';
-import { useCoupons } from '../shared/hooks/useCoupons';
-import { usePromo } from '../shared/hooks/usePromo';
 import { useResponsiveScale } from '../shared/hooks/useResponsiveScale';
 import { LanguageProvider } from '../i18n/context';
 
@@ -80,17 +71,17 @@ const SCREEN_COMPONENTS: Record<
   terms: TermsScreen,
   // Menu Feature (features/menu/ui/screens/)
   menu: MenuScreen,
-  // Referrals Feature
-  referrals: ReferralsScreen,
+  reseller: ResellerScreen,
   // Support Feature (features/support/ui/screens/)
   support: SupportScreen,
+  // Account Feature
+  account: AccountScreen,
 };
 
 function AppContent() {
   const { screen, setScreen } = useVpn();
   const { navigationBarHeight, statusBarHeight } = useSafeArea();
   const { isConnected, isConnecting, isError } = useConnectionStatus();
-  const { user } = useVpn();
 
   // Activa el escalado responsivo dinámico
   useResponsiveScale();
@@ -99,25 +90,8 @@ function AppContent() {
   useEffect(() => () => destroySdk(), []);
 
   const [activeSheet, setActiveSheet] = useState<ActiveSheet>(null);
-  const [hasAutoOpenedAccount, setHasAutoOpenedAccount] = useState(false);
 
-  // Auto-abrir AccountBottomSheet cuando conecta y hay datos
-  useEffect(() => {
-    if (!isConnected) {
-      setHasAutoOpenedAccount(false);
-      return;
-    }
-
-    if (
-      isConnected &&
-      user?.expiration_date &&
-      user.expiration_date !== '-' &&
-      !hasAutoOpenedAccount
-    ) {
-      setActiveSheet('account');
-      setHasAutoOpenedAccount(true);
-    }
-  }, [isConnected, user, hasAutoOpenedAccount, setActiveSheet]);
+  // Auto-abrir AccountBottomSheet cuando conecta - REMOVED (now shows greeting in Home)
 
   const handleUpdate = useCallback(() => {
     try {
@@ -133,6 +107,16 @@ function AppContent() {
   const toggleSheet = useCallback((sheet: ActiveSheet) => {
     setActiveSheet((prev) => (prev === sheet ? null : sheet));
   }, []);
+
+  const toggleMenu = useCallback(() => {
+    setActiveSheet(null);
+    setScreen(screen === 'menu' || screen === 'reseller' ? 'home' : 'menu');
+  }, [screen, setScreen]);
+
+  const handleShowAccount = useCallback(() => {
+    setScreen('account');
+    setActiveSheet(null);
+  }, [setScreen]);
 
   // Keyboard detection to hide BottomTabs and adjust layout
   useEffect(() => {
@@ -171,9 +155,6 @@ function AppContent() {
     [navigationBarHeight, statusBarHeight],
   );
 
-  const { hasActiveCoupon } = useCoupons();
-  const { isPromoActive, is2x1Active } = usePromo();
-
   return (
     <div
       className={`phone ${stateClass} ${screenClass} ${activeSheet ? 'has-open-sheet' : ''}`}
@@ -182,59 +163,34 @@ function AppContent() {
     >
       <div className="top-strip" />
 
-      {screen !== 'terms' && <AppHeader onMenuClick={() => toggleSheet('extras')} />}
+      {screen !== 'terms' && <AppHeader onMenuClick={toggleMenu} />}
 
       <ScreenComponent
-        onShowAccount={() => toggleSheet('account')}
+        onShowAccount={handleShowAccount}
         onShowSupport={() => setScreen('support')}
       />
 
-      {screen !== 'terms' && screen !== 'support' && (
-        <BottomTabs
-          onShowLogs={() => toggleSheet('logs')}
-          onShowPromo={() => toggleSheet('promo')}
-          onShowSupport={() =>
-            (screen as any) === 'support' ? setScreen('home') : setScreen('support')
-          }
-          onShowExtras={() => toggleSheet('extras')}
-          onShowAccount={() => toggleSheet('account')}
-          onUpdate={handleUpdate}
-          hasActiveCoupons={hasActiveCoupon}
-          promoActive={isPromoActive}
-          is2x1Active={is2x1Active}
-          activeSheet={activeSheet}
-        />
-      )}
-
-      <PromoBottomSheet isOpen={activeSheet === 'promo'} onClose={() => setActiveSheet(null)} />
+      {screen !== 'terms' &&
+        screen !== 'support' &&
+        screen !== 'menu' &&
+        screen !== 'reseller' &&
+        screen !== 'account' && (
+          <BottomTabs
+            onShowLogs={() => toggleSheet('logs')}
+            onShowSupport={() =>
+              (screen as any) === 'support' ? setScreen('home') : setScreen('support')
+            }
+            onShowExtras={toggleMenu}
+            onShowAccount={handleShowAccount}
+            onUpdate={handleUpdate}
+            activeSheet={activeSheet}
+          />
+        )}
 
       <LogsBottomSheet isOpen={activeSheet === 'logs'} onClose={() => setActiveSheet(null)} />
 
-      <AccountBottomSheet isOpen={activeSheet === 'account'} onClose={() => setActiveSheet(null)} />
-
       <ImportBottomSheet isOpen={activeSheet === 'import'} onClose={() => setActiveSheet(null)} />
       <HotspotBottomSheet isOpen={activeSheet === 'hotspot'} onClose={() => setActiveSheet(null)} />
-      <RepairAccountBottomSheet
-        isOpen={activeSheet === 'repair'}
-        onClose={() => setActiveSheet(null)}
-      />
-      <CommunityBottomSheet
-        isOpen={activeSheet === 'community'}
-        onClose={() => setActiveSheet(null)}
-      />
-
-      <ExtrasBottomSheet
-        isOpen={activeSheet === 'extras'}
-        onClose={() => setActiveSheet(null)}
-        onShowImport={() => setActiveSheet('import')}
-        onShowHotspot={() => setActiveSheet('hotspot')}
-        onShowRepair={() => setActiveSheet('repair')}
-        onShowCommunity={() => setActiveSheet('community')}
-        onShowSupport={() => {
-          setActiveSheet(null);
-          setScreen('support');
-        }}
-      />
     </div>
   );
 }

@@ -1,10 +1,7 @@
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { useVpn } from '@/features/vpn';
-import { getSdk } from '@/features/vpn/api/dtunnelSdk';
-import { SubscribeButton } from './AppHeader/SubscribeButton';
-import { ReferralsButton } from './AppHeader/ReferralsButton';
-import { LanguageButton } from './AppHeader/LanguageButton';
 import { BackButton } from './AppHeader/BackButton';
+import { openExternalUrl } from '@/shared/lib/nativeActions';
 
 interface AppHeaderProps {
   onMenuClick: () => void;
@@ -29,16 +26,6 @@ export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps
     }
   };
 
-  const handleSubscribe = useCallback(() => {
-    const url = 'https://shop.jhservices.com.ar/planes';
-    const sdk = getSdk();
-    if (sdk) {
-      sdk.android.openExternalUrl(url);
-      return;
-    }
-    window.open(url, '_blank');
-  }, []);
-
   return (
     <header className="topbar">
       <div className="row">
@@ -48,11 +35,21 @@ export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps
           onClick={handleClick}
         />
 
-        <ReferralsButton onClick={() => setScreen('referrals')} />
+        <div className="spacer" style={{ flex: 1 }} />
 
-        <SubscribeButton onClick={handleSubscribe} />
+        <button
+          className="icon-btn cart-btn theme-btn" /* theme-btn ensures white color */
+          onClick={() => {
+            const url =
+              'https://wa.me/message/QFQYJLGJA7UYE1?text=Hola,%20me%20interesa%20comprar%20un%20plan%20en%20ImperioNetOficial.';
+            openExternalUrl(url);
+          }}
+          aria-label="Comprar"
+        >
+          <i className="fa fa-shopping-cart" />
+        </button>
 
-        <LanguageButton />
+        <div className="language-spacer-placeholder" style={{ width: 0 }} />
       </div>
     </header>
   );

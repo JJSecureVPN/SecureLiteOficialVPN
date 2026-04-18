@@ -10,16 +10,16 @@ export interface ConnectButtonProps {
    * - 'full': Mostrar "Lleno" (para saturación)
    * - 'disconnected': Mostrar "Conectar"
    */
-  state: 'connected' | 'connecting' | 'connecting-auto' | 'error' | 'full' | 'disconnected';
+  state: 'connected' | 'connecting' | 'error' | 'full' | 'disconnected';
 
   /** Callback cuando se presiona el botón */
   onClick: () => void;
 
-  /** True si Auto Mode está activo */
-  autoMode: boolean;
+  /** True si el toggle está activo */
+  toggleChecked: boolean;
 
-  /** Callback para cambiar Auto Mode */
-  onAutoModeChange: (value: boolean) => void;
+  /** Callback para cambiar el estado del toggle */
+  onToggleChange: (value: boolean) => void;
 
   /** True si el botón debe estar deshabilitado */
   disabled?: boolean;
@@ -28,8 +28,8 @@ export interface ConnectButtonProps {
 export function ConnectButton({
   state,
   onClick,
-  autoMode,
-  onAutoModeChange,
+  toggleChecked,
+  onToggleChange,
   disabled,
 }: ConnectButtonProps) {
   const { t } = useTranslation();
@@ -37,7 +37,6 @@ export function ConnectButton({
   const buttonText = {
     connected: t('buttons.disconnect'),
     connecting: t('buttons.stop'),
-    'connecting-auto': t('buttons.stop'),
     error: t('buttons.retry'),
     full: t('buttons.saturated'),
     disconnected: t('buttons.connect'),
@@ -56,7 +55,7 @@ export function ConnectButton({
       >
         {buttonText}
       </Button>
-      <Toggle checked={autoMode} onChange={onAutoModeChange} label={t('home.auto')} />
+      <Toggle checked={toggleChecked} onChange={onToggleChange} label={t('home.hotspot')} />
     </div>
   );
 }

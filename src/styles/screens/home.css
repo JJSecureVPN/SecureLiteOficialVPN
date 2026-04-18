@@ -17,3 +17,89 @@
   font-weight: 500;
   font-size: var(--font-base);
 }
+
+/* User Greeting & Active Session Card */
+.active-session-card {
+  background: rgba(10, 15, 25, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.session-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+}
+
+.greeting-text {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.user-name {
+  color: #fff;
+}
+
+.session-status-text {
+  font-size: 12px;
+  color: rgba(59, 130, 246, 0.85);
+  line-height: 1.2;
+  margin: 1px 0 0;
+  font-weight: 500;
+}
+
+.view-details-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.view-details-btn i {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.view-details-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.view-details-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

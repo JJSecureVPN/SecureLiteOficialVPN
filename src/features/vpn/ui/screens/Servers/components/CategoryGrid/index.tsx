@@ -15,12 +15,8 @@ interface CategoryGridProps {
   filteredCategories: Category[];
   searchTerm: string;
   currentConfig: ServerConfig | null;
-  autoMode: boolean;
-  expandedCategories: Set<string>;
-  serversByName: any;
   onCategoryClick: (cat: Category) => void;
   onServerClick: (srv: ServerConfig, cat: Category) => void;
-  onToggleExpand: (catName: string) => void;
   onClearSearch: () => void;
   onOpenConfigurator: () => void;
 }
@@ -30,12 +26,8 @@ export const CategoryGrid = memo(function CategoryGrid({
   filteredCategories,
   searchTerm,
   currentConfig,
-  autoMode,
-  expandedCategories,
-  serversByName,
   onCategoryClick,
   onServerClick,
-  onToggleExpand,
   onClearSearch,
   onOpenConfigurator,
 }: CategoryGridProps) {
@@ -82,24 +74,17 @@ export const CategoryGrid = memo(function CategoryGrid({
       {filteredCategories.map((cat) => {
         const hasSelectedServer =
           currentConfig && cat.items?.some((srv) => srv.id === currentConfig.id);
-        const first = cat.items?.[0];
-        const live = serversByName.getBestMatch(
-          `${cat.name || ''} ${first?.name || ''} ${first?.description || ''}`.trim(),
-        );
 
         return (
           <ServerCategory
             key={cat.name}
             category={cat}
             hasSelectedServer={!!hasSelectedServer}
-            autoMode={autoMode}
-            liveStats={live}
-            isExpanded={!!searchTerm || expandedCategories.has(cat.name)}
+            isExpanded={!!searchTerm}
             searchTerm={searchTerm}
             currentConfig={currentConfig}
             onServerClick={onServerClick}
             onCategoryClick={onCategoryClick}
-            onToggleStats={onToggleExpand}
           />
         );
       })}

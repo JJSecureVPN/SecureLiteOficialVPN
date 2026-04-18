@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
 import { BottomSheet } from './BottomSheet';
+import { PremiumCard } from './PremiumCard';
 import { useVpn } from '@/features/vpn';
 import { getSdk } from '@/features/vpn/api/dtunnelSdk';
 import { useTranslation } from '@/i18n';
@@ -138,6 +139,11 @@ export const AccountBottomSheet = memo(function AccountBottomSheet({
               <AcRow label={t('account.fields.publicIp')} value={topInfo.ip} mono last />
             </div>
           </div>
+        </div>
+
+        {/* Premium Upgrade Banner */}
+        <div style={{ padding: '4px 0 16px' }}>
+          <PremiumCard />
         </div>
 
         <div className="account-sheet-footer">

@@ -1,4 +1,4 @@
-# 🔒 SecureLite VPN - Refactored Architecture
+# 🔒 Imperio VPN - Refactored Architecture
 
 Una aplicación VPN moderna construida con **React 19**, **TypeScript**, y **Vite**, diseñada para integrarse con aplicaciones Android nativas a través de WebView.
 
@@ -62,8 +62,8 @@ Una aplicación VPN moderna construida con **React 19**, **TypeScript**, y **Vit
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/jjsecurevpn-vpn/SecureLiteOficial.git
-cd SecureLiteOficial
+git clone https://github.com/imperionet-vpn/ImperioLiteOficial.git
+cd ImperioLiteOficial
 
 # Instalar dependencias
 npm install
@@ -792,7 +792,7 @@ npm test -- --inspect-brk
 
 ## 📜 Licencia
 
-Proyecto privado - Uso exclusivo de JJSecure VPN
+Proyecto privado - Uso exclusivo de Imperio VPN
 
 ---
 

@@ -11,7 +11,15 @@ export const LS_KEYS = {
   language: 'vpn_language',
 } as const;
 
-export const SCREENS = ['home', 'servers', 'menu', 'terms', 'support', 'referrals'] as const;
+export const SCREENS = [
+  'home',
+  'servers',
+  'menu',
+  'reseller',
+  'terms',
+  'support',
+  'account',
+] as const;
 
 /** Timeout para auto-conexión por servidor en milisegundos */
 export const AUTO_CONNECT_TIMEOUT_MS = 10000;

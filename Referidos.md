@@ -30,7 +30,7 @@ El endpoint devolverá un Array (`[]`) con los usuarios del sistema que tienen l
     "nombre": "Nombre de Usuario",
     "saldo": 1500,
     "total_earned": 5000,
-    "referral_code": "SECURE-XYZ123",
+    "referral_code": "IMPERIO-XYZ123",
     "created_at": "2024-03-20T10:00:00Z"
   },
   ...

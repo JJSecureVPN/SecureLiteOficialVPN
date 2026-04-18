@@ -9,6 +9,7 @@ type GlobalModalProps = {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   hideClose?: boolean;
+  overlayClassName?: string;
 };
 
 export const GlobalModal = memo(function GlobalModal({
@@ -20,6 +21,7 @@ export const GlobalModal = memo(function GlobalModal({
   className = '',
   size = 'md',
   hideClose = false,
+  overlayClassName = '',
 }: GlobalModalProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -59,7 +61,10 @@ export const GlobalModal = memo(function GlobalModal({
   }, [handleClose]);
 
   return (
-    <div className={`modal-overlay ${isAnimating ? 'open' : ''}`} onClick={handleClose}>
+    <div
+      className={`modal-overlay ${isAnimating ? 'open' : ''} ${overlayClassName}`}
+      onClick={handleClose}
+    >
       <div
         className={`modal-content modal-content--${size} ${isAnimating ? 'open' : ''} ${className}`}
         onClick={(e) => e.stopPropagation()}
@@ -100,7 +105,7 @@ export const GlobalModal = memo(function GlobalModal({
           </div>
         )}
 
-        {!title && !subtitle && !icon && (
+        {!title && !subtitle && !icon && !hideClose && (
           <button
             className="modal-close modal-close--standalone"
             onClick={handleClose}

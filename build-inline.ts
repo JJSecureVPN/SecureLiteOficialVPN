@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 
 /*
-  build-inline.ts para Secure
+  build-inline.ts para Imperio
   Genera un HTML inline con todo el CSS y JS embebido
 */
 
@@ -167,7 +167,7 @@ function main() {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#f8f7ff" />
-  <title>Secure Tunnel</title>
+  <title>Imperio VPN</title>
   <script>
     (function(){
       try{
@@ -209,7 +209,7 @@ ${jsContent}
 </body>
 </html>`;
   
-  const outPath = join(distDir, "Secure.html");
+  const outPath = join(distDir, "Imperio.html");
   writeFileSync(outPath, html, "utf8");
   
   const sizeKB = (Buffer.byteLength(html, "utf8") / 1024).toFixed(1);
@@ -218,4 +218,4 @@ ${jsContent}
 
 main();
 
-// cd "C:/Users/JHServices/Documents/SecureSRC/Secure" && npx tsx build-inline.ts
+// cd "C:/Users/JHServices/Documents/ImperioSRC/Imperio" && npx tsx build-inline.ts

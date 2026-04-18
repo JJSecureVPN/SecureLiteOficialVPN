@@ -44,33 +44,7 @@
     "cleanConfirmTitle": "Limpar o aplicativo?",
     "cleanConfirmBody": "Cache, ajustes armazenados e dados temporarios serão apagados.",
     "itemsImportTitle": "Importar",
-    "itemsImportSubtitle": "Importar JSON de configuração",
-    "repairTitle": "Reparar Conta",
-    "repairSubtitle": "Sincronização forzada com Servex",
-    "repairEyebrow": "conta",
-    "repairPillSuccess": "reparado",
-    "repairPillError": "erro",
-    "repairPillLoading": "reparando",
-    "repairPillConnected": "conectado",
-    "repairPillDisconnected": "desconectado",
-    "repairUserInputLabel": "Usuário a reparar",
-    "repairNoUserError": "Por favor, insira um usuário.",
-    "repairSuccess": "Conta sincronizada corretamente. Tente conectar agora.",
-    "repairError": "Erro ao sincronizar a conta.",
-    "repairWarnDisconnect": "Desconectará ao reparar",
-    "repairInfo": "Sincronização forçada com Servex",
-    "repairAgain": "Tentar novamente",
-    "repairButton": "Reparar conta",
-    "repairUnexpectedError": "Ocorreu um erro inesperado ao conectar com o servidor.",
-    "communityTitle": "Nossa Comunidade",
-    "communitySubtitle": "Junte-se aos nossos canais e grupos oficiais",
-    "communityWhatsappTitle": "Comunidade Whatsapp",
-    "communityWhatsappSubtitle": "Grupo de ajuda e anúncios",
-    "communityWhatsappChannelTitle": "Canal Whatsapp",
-    "communityWhatsappChannelSubtitle": "Notificações rápidas",
-    "communityTelegramTitle": "Canal Telegram",
-    "communityTelegramSubtitle": "Anúncios e atualizações",
-    "communityOpened": "Abrindo link..."
+    "itemsImportSubtitle": "Importar JSON de configuração"
   },
   "errorBoundary": {
     "title": "Algo deu errado",
@@ -96,12 +70,9 @@
     "disconnect": "DESCONECTAR",
     "stop": "PARAR",
     "retry": "TENTAR NOVAMENTE",
-    "saturated": "LOTADO",
     "update": "Atualizar",
     "logs": "Registros",
     "viewDetails": "Ver detalhes",
-    "renew": "Renovar",
-    "becomePremium": "Tornar-se Premium",
     "back": "Voltar"
   },
   "status": {
@@ -111,24 +82,17 @@
     "autoConnecting": "Procurando a melhor conexão…",
     "connectingTo": "Conectando a"
   },
-  "auto": {
-    "categoryFallback": "categoria",
-    "testing": "Testando"
-  },
   "error": {
     "autoConnectFailed": "Erro ao iniciar auto-conexão",
     "connectionFailed": "Erro ao conectar",
     "updateCheckFailed": "Erro ao verificar atualização",
     "configApplyFailed": "Erro ao aplicar configuração",
-    "copyFailed": "Não foi possível copiar",
-    "categoryFull": "Esta categoria atingiu o limite de usuários"
+    "copyFailed": "Não foi possível copiar"
   },
   "servers": {
     "title": "Nossos Servidores",
     "subtitle": "Explore e escolha a melhor localização para sua conexão.",
     "serverCount": "Servidores",
-    "totalOnline": "USUÁRIOS ONLINE:",
-    "selectedEyebrow": "Categoria selecionada",
     "selectedSubtitle": "Escolha o servidor que melhor se adequa à sua conexão.",
     "searchPlaceholder": "Procurar país ou categoria",
     "noServers": "Nenhum servidor disponível.",
@@ -150,25 +114,14 @@
     "allSubcategories": "Todos",
     "autoTest": "Teste automático",
     "manualSelect": "Seleção manual",
+    "noServersInCategory": "Nenhum servidor disponível nesta categoria.",
     "noServersInSubcategory": "Nenhum servidor nesta subcategoria.",
     "noSearchResults": "Sem resultados para",
     "noSearchHint": "Tente outro termo ou limpe a pesquisa",
     "autoModeActive": "Modo automático ativo",
     "tapToConnect": "Toque para conectar",
     "inUse": "Em uso",
-    "stats": {
-      "cores": "Cores",
-      "totalRam": "RAM Total",
-      "download": "↓ {value} Mbps",
-      "upload": "↑ {value} Mbps"
-    },
-    "usersConnected": "Usuários conectados",
-    "online": "ONLINE",
-    "showStats": "Mostrar estatísticas",
-    "hideStats": "Ocultar estatísticas",
-    "statsShort": "ESTATÍSTICAS AO VIVO",
-    "full": "LOTADO",
-    "saturated": "Categoria lotada"
+    "usersConnected": "Usuários conectados"
   },
   "import": {
     "title": "Importar configuração",
@@ -225,15 +178,11 @@
     "title": "Termos de Uso e Política",
     "accept": "ACEITO OS TERMOS DE USO",
     "back": "VOLTAR",
-    "viewFull": "VER TERMOS COMPLETOS",
-    "cardsLegalTitle": "Termos Legais",
-    "cardsLegalText": "Ao usar nosso serviço, você concorda em cumprir com todas as leis e regulamentações aplicáveis. Você é responsável pelo seu uso do serviço e garante que não violará nenhuma lei, contrato ou direitos de terceiros.",
-    "cardsPrivacyTitle": "Privacidade",
-    "cardsPrivacyText": "Respeitamos sua privacidade. Não vendemos, compartilhamos nem divulgamos seus dados pessoais a terceiros sem seu consentimento explícito. Todos os dados são processados de acordo com nossas políticas de privacidade.",
+    "cardsPrivacyText": "Respeitamos sua privacidade. Todos os dados são processados de acordo com nossas políticas de privacidade.",
     "cardsForbiddenTitle": "Atividades Proibidas",
-    "cardsForbiddenText": "Não permitido: usar o serviço para atividades ilegais, assédio, fraude, malware, spam ou qualquer conteúdo que viole direitos de terceiros. Violações podem resultar em banimento permanente.",
+    "cardsForbiddenText": "Não permitido: atividades ilegais, assédio, fraude, malware ou qualquer conteúdo que viole direitos de terceiros.",
     "cardsChangesTitle": "Alterações nos Termos",
-    "cardsChangesText": "Nos reservamos o direito de modificar estes termos a qualquer momento. As alterações entram em vigor imediatamente. Seu uso contínuo do serviço constitui aceitação dos termos modificados."
+    "cardsChangesText": "Nos reservamos o direito de modificar estes termos a qualquer momento. As alterações entram em vigor imediatamente."
   },
   "theme": {
     "darkMode": "Mudar para modo claro",
@@ -247,18 +196,18 @@
   },
   "home": {
     "title": "Início",
-    "auto": "Auto",
+    "hotspot": "Hotspot",
     "connect": "Conectar",
     "disconnect": "Desconectar",
     "connecting": "Conectando...",
     "disconnecting": "Desconectando...",
-    "logoAlt": "Logo Secure VPN",
-    "logoFallback": "Secure VPN"
+    "logoAlt": "Logo Imperio VPN",
+    "logoFallback": "Imperio VPN"
   },
   "support": {
     "title": "Suporte",
     "subtitle": "Chat com nosso assistente",
-    "welcome": "Olá! Sou o suporte da Secure Lite. Em que posso ajudar?",
+    "welcome": "Olá! Sou o suporte da Imperio VPN. Em que posso ajudar?",
     "placeholder": "Escreva sua pergunta...",
     "send": "Enviar",
     "sending": "Pensando...",
@@ -270,36 +219,6 @@
   "app": {
     "loadErrorTitle": "Erro ao carregar",
     "restartPrompt": "Por favor, reinicie o aplicativo"
-  },
-  "premium": {
-    "title": "Premium",
-    "cta": "Comprar o revender",
-    "description": "Acesse planos oficiais ou solicite seu app white-label para revender com um design limpo.",
-    "buy": "Comprar",
-    "resell": "Revender"
-  },
-  "promo": {
-    "label": "OFERTA",
-    "ariaLabel": "Ver oferta",
-    "title": "Oferta por tempo limitado",
-    "timerAria": "Tempo restante",
-    "unit": { "hours": "HRS", "minutes": "MIN" },
-    "cta": "OBTER",
-    "promo2x1Title": "OFERTA 2X1",
-    "promo2x1Subtitle": "Dobro de dispositivos no plano"
-  },
-  "coupon": {
-    "title": "Cupons disponíveis",
-    "subtitle": "Aproveite descontos exclusivos",
-    "empty": "Nenhum cupom ativo no momento",
-    "codeLabel": "Código",
-    "badgeLabel": "desconto",
-    "oneUse": "uso restante",
-    "manyUses": "usos restantes",
-    "description": "Aplicável na compra de qualquer plano",
-    "copied": "Copiado",
-    "copy": "Copiar",
-    "openPlans": "Ver planos"
   },
   "logs": {
     "title": "Registros",
@@ -323,6 +242,7 @@
     "statusConnected": "Conectado",
     "statusConnecting": "Conectando",
     "statusDisconnected": "Desconectado",
+    "detailsButton": "Ver detalhes",
     "labels": {
       "status": "Status",
       "latency": "Latência",
@@ -340,20 +260,24 @@
       "devices": "Dispositivos",
       "remainingDays": "Dias restantes",
       "server": "Servidor",
-      "mode": "Modo",
+      "mode": "Mode",
       "operator": "Operadora",
       "publicIp": "IP público",
       "username": "Usuário",
       "uuid": "UUID"
     }
   },
+  "premium": {
+    "title": "Torne-se Premium",
+    "description": "Acesse servidores exclusivos, mayor velocidade e conexão sem limites com nossos planos premium.",
+    "buy": "COMPRAR"
+  },
   "session": {
     "active": "Sessão ativa",
     "greeting": "Olá, {name}",
     "promoTitle": "Faça upgrade para Premium",
     "promoMessage": "Atualize para desbloquear mais servidores, maior velocidade e sem limites.",
-    "protected": "Sua conexão está protegida. Verifique os dados da sua conta quando necessário.",
-    "renewSoon": "Seu plano expira em {days}. Renove agora."
+    "protected": "Sua conexão está protegida. Verifique os dados da sua conta quando necessário."
   },
   "serverCard": {
     "ariaChooseServer": "Escolher servidor",

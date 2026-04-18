@@ -1,0 +1,251 @@
+/* ===========================================
+   AccountScreen - Estilos premium
+   =========================================== */
+
+.account-screen {
+  overflow-y: auto;
+  padding-bottom: calc(var(--safe-area-bottom) + 80px); /* Espacio para tabs */
+}
+
+.account-screen-content {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 4px;
+}
+
+.account-header-text h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.account-header-text p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted, #8e8e93);
+}
+
+/* Metrics Grid (Usage, Latency, Sessions) */
+.account-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mt-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.mt-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.mt-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-strong, #ffffff);
+  letter-spacing: -0.01em;
+}
+
+.mt-lbl {
+  font-size: 10px;
+  color: var(--muted, #8e8e93);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+/* Specific Ping Coloring */
+.mt-val.ping-excellent {
+  color: #10b981;
+}
+.mt-val.ping-good {
+  color: #f59e0b;
+}
+.mt-val.ping-bad {
+  color: #ef4444;
+}
+
+/* Info Sections */
+.account-info-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ac-section-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ac-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent, #007aff);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding-left: 4px;
+}
+
+.ac-details-card {
+  background: var(--surface-2, #1a1c29);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.ac-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.ac-row-item.is-last {
+  border-bottom: none;
+}
+
+.ac-label {
+  font-size: 14px;
+  color: var(--muted, #a1a1aa);
+}
+
+.ac-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ac-value.is-mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+
+/* Expiry Colors */
+.expiry-green {
+  color: #10b981;
+}
+.expiry-yellow {
+  color: #f59e0b;
+}
+.expiry-orange {
+  color: #f97316;
+}
+.expiry-red {
+  color: #ef4444;
+}
+
+.blinking {
+  animation: bg-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes bg-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Chips */
+.ac-chip {
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Status Pill in Footer */
+.account-screen-footer {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.status-pill {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #8e8e93;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-pill.connected {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.status-pill.connecting {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+/* Icon Box Status */
+.account-status-dot-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  place-items: center;
+  color: #52525b;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.account-status-dot-box.connected {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.1);
+}
+
+.account-status-dot-box.connecting {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.1);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}

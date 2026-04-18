@@ -1,7 +1,7 @@
 /**
  * DTunnel SDK – React bindings
  *
- * Adaptación de DTunnelSDK-main/react/index.mjs para el proyecto Secure.
+ * Adaptación de DTunnelSDK-main/react/index.mjs para el proyecto Imperio.
  * El SDK se carga como IIFE global (window.DTunnelSDK) y se expone al árbol
  * React vía contexto.
  *
