@@ -35,4 +35,5 @@ export interface VpnContextType {
 
   topInfo: { op: string; ip: string; ver: string };
   pingMs: number | null;
+  connectionStartTime: number | null;
 }

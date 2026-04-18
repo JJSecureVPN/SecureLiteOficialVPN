@@ -57,5 +57,6 @@ export function useVpnController(): VpnContextType {
     acceptTerms,
     topInfo: userState.topInfo,
     pingMs: userState.pingMs,
+    connectionStartTime: connection.connectionStartTime,
   };
 }

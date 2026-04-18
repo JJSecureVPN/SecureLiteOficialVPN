@@ -38,12 +38,6 @@
     --screen-top: 75px;
     --top-strip-height: 75px;
   }
-  .fields {
-    grid-template-columns: 1fr;
-  }
-  .field.full {
-    grid-column: auto;
-  }
   .stat-grid {
     grid-template-columns: 1fr;
   }

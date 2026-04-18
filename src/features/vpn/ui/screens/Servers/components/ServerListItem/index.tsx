@@ -44,7 +44,7 @@ export const ServerListItem = memo(
     const cleanDescription = removeDomainFromDescription(server.description);
 
     // Cálculo de ocupación y estado para el "scare factor"
-    const { limit, level } = useMemo(() => {
+    const { level } = useMemo(() => {
       return getServerCapacityStatus(server.name, stats?.connectedUsers || 0);
     }, [server.name, stats?.connectedUsers]);
 
@@ -66,19 +66,6 @@ export const ServerListItem = memo(
             <h4 className="server-item__title">{server.name}</h4>
             {server.ip && <span className="server-item__ip">{server.ip}</span>}
           </div>
-
-          {/* Contador de usuarios online (Arriba a la derecha) */}
-          {stats && stats.connectedUsers !== undefined && (
-            <div
-              className={`server-item__stats-badge server-item__stats-badge--${level}`}
-              aria-label={`${stats.connectedUsers} usuarios online`}
-            >
-              <span className="server-item__stats-dot" />
-              <span className="server-item__stats-num">
-                {stats.connectedUsers} / {limit}
-              </span>
-            </div>
-          )}
 
           {/* Badge de estado activo */}
           {isActive && !stats && (

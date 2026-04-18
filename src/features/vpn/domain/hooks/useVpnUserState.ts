@@ -78,7 +78,7 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
   );
 
   const requestUserInfo = useCallback(
-    (force = false) => {
+    (force = false, silent = false) => {
       const now = Date.now();
       const { pending, lastAt } = userFetchRef.current;
       const recentlyFetched = now - lastAt < 5000;
@@ -92,9 +92,12 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
 
       const sdk = getSdk();
       if (sdk) {
-        sdk.main.startCheckUser();
+        // Solo abrir el diálogo nativo si NO es una petición silenciosa (fondo/sync)
+        if (!silent) {
+          sdk.main.startCheckUser();
+        }
 
-        // Fallback único si no llega evento en 1.2s
+        // Obtener datos (ya sea por evento tras startCheckUser o por lectura directa)
         const fallback = setTimeout(() => {
           const raw = getUserInfoRaw();
           if (raw) {
@@ -104,13 +107,11 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
           }
         }, 1200);
 
-        // Limpia el timeout si llega el evento primero
         sdk.once('checkUserResult', () => clearTimeout(fallback));
         sdk.once('checkUserError', () => clearTimeout(fallback));
         return;
       }
 
-      // Sin SDK: leer directo
       const raw = getUserInfoRaw();
       if (raw) {
         handleUserData(raw);
@@ -126,13 +127,14 @@ export function useVpnUserState({ status, config, creds }: UseVpnUserStateArgs):
   });
 
   useDTunnelEvent('checkUserError', (e) => {
-    // El error llega como string; desbloquear pending sin sobreescribir datos existentes
     if (e.payload) userFetchRef.current.pending = false;
   });
 
   useEffect(() => {
     if (status === 'CONNECTED') {
-      requestUserInfo(true);
+      // Recuperar si ya tenía tiempo guardado (fue reconexión/reinicio con VPN activa)
+      const isSyncing = !!localStorage.getItem('vpn_connection_start_time');
+      requestUserInfo(true, isSyncing);
     } else {
       setUser(null);
     }

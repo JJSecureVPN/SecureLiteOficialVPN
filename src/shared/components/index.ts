@@ -1,15 +1,12 @@
 export { AppHeader } from './AppHeader';
 export { BottomTabs } from './BottomTabs';
 export { ConnectButton } from './ConnectButton';
-export { ErrorBoundary } from './ErrorBoundary';
+// ErrorBoundary, StatCard, KeyValueList, BottomSheet are either unused or imported directly.
 export { GlobalModal } from './GlobalModal';
 export { PremiumCard } from './PremiumCard';
 export { TrafficDetails } from './TrafficDetails';
-export { StatCard } from './StatCard';
-export { KeyValueList } from './KeyValueList';
 export { MenuRow } from './MenuRow';
 export { StatusLogo } from './StatusLogo';
-export { BottomSheet } from './BottomSheet';
 export { ExtrasBottomSheet } from './ExtrasBottomSheet';
 export { LogsBottomSheet } from './LogsBottomSheet';
 export { AccountBottomSheet } from './AccountBottomSheet';

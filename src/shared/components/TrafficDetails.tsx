@@ -1,13 +1,15 @@
 import { memo, useMemo } from 'react';
 import { useVpn } from '@/features/vpn';
 import { useTrafficStats } from '@/features/vpn/domain/hooks/useTrafficStats';
+import { useConnectionTimer } from '@/features/vpn/domain/hooks/useConnectionTimer';
 import { useTranslation } from '@/i18n';
 import '../../styles/components/traffic-details.css';
 
 export const TrafficDetails = memo(function TrafficDetails() {
-  const { status, pingMs } = useVpn();
+  const { status, pingMs, topInfo, connectionStartTime } = useVpn();
   const { t } = useTranslation();
   const { downSpeed, upSpeed, totalUsed } = useTrafficStats();
+  const time = useConnectionTimer(status === 'CONNECTED', connectionStartTime);
 
   const pingColor = useMemo(() => {
     if (typeof pingMs !== 'number') return undefined;
@@ -19,6 +21,7 @@ export const TrafficDetails = memo(function TrafficDetails() {
   if (status !== 'CONNECTED') return null;
 
   const pingDisplay = typeof pingMs === 'number' ? Math.round(pingMs) : '—';
+  const ipDisplay = topInfo?.ip || '—';
 
   return (
     <div className="td-card">
@@ -53,6 +56,26 @@ export const TrafficDetails = memo(function TrafficDetails() {
               {pingDisplay}
             </span>
             {typeof pingMs === 'number' && <span className="td-unit">ms</span>}
+          </div>
+        </div>
+
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-blue" />
+            IP
+          </div>
+          <div className="td-value-wrap">
+            <span className="td-val">{ipDisplay}</span>
+          </div>
+        </div>
+
+        <div className="td-item">
+          <div className="td-lbl">
+            <span className="td-dot dot-green" />
+            {t('traffic.time') || 'tiempo'}
+          </div>
+          <div className="td-value-wrap">
+            <span className="td-val">{time}</span>
           </div>
         </div>
 

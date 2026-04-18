@@ -53,10 +53,11 @@
     --font-xl: calc(20px * var(--scale-factor));
     --font-2xl: calc(24px * var(--scale-factor));
 
-    --radius-sm: calc(10px * var(--scale-factor));
-    --radius-md: calc(12px * var(--scale-factor));
-    --radius-lg: calc(16px * var(--scale-factor));
-    --radius-xl: calc(20px * var(--scale-factor));
+    --radius-main: calc(16px * var(--scale-factor));
+    --radius-sm: var(--radius-main);
+    --radius-md: var(--radius-main);
+    --radius-lg: var(--radius-main);
+    --radius-xl: var(--radius-main);
 
     --btn-height: calc(42px * var(--scale-factor));
     --input-height: calc(42px * var(--scale-factor));

@@ -4,20 +4,12 @@
 export { VpnProvider, useVpn } from './context/VpnContext';
 
 // Domain types
-export type { VpnContextType } from './domain/types';
 export type { ServerConfig } from '@/core/types';
 
 // Domain hooks
-export { useVpnController } from './domain/hooks/useVpnController';
-export { useVpnConnectionState } from './domain/hooks/useVpnConnectionState';
-export { useAutoConnect } from './domain/hooks/useAutoConnect';
-export { useServers } from './domain/hooks/useServers';
-export { useCredentialsState } from './domain/hooks/useCredentialsState';
-export { useNavigationState } from './domain/hooks/useNavigationState';
-export { useTermsState } from './domain/hooks/useTermsState';
-export { useVpnEvents } from './domain/hooks/useVpnEvents';
-export { useRetryLoads } from './domain/hooks/useRetryLoads';
-export { useVpnUserState } from './domain/hooks/useVpnUserState';
+// useVpnController, useVpnConnectionState, useAutoConnect, useServers,
+// useCredentialsState, useNavigationState, useTermsState, useVpnEvents,
+// useRetryLoads, useVpnUserState are used within the feature but not exported.
 export { useConnectionStatus } from './domain/hooks/useConnectionStatus';
 
 // API

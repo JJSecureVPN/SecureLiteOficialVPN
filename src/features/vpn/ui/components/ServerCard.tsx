@@ -115,7 +115,7 @@ export const ServerCard = memo(function ServerCard({
               </Badge>
             )}
           </div>
-          {flag && <span className="server-card__footer-flag">{flag}</span>}
+          {flag && flag !== '🌐' && <span className="server-card__footer-flag">{flag}</span>}
         </div>
       )}
     </Card>

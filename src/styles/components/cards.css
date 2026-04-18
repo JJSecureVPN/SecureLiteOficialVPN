@@ -47,7 +47,7 @@
   justify-content: space-between;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-main);
   background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
@@ -78,7 +78,7 @@
 
 .server-item.location-card-home {
   margin: 0;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-main);
   background: var(--surface-1);
 }
 
@@ -163,7 +163,7 @@
 .info-card {
   background: linear-gradient(180deg, var(--cardBg1), var(--cardBg2));
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-main);
   box-shadow: var(--shadow-sm);
   padding: var(--space-md) var(--space-lg);
   margin: var(--space-md) 0;
@@ -172,161 +172,9 @@
 
 /* session-card styles moved to src/styles/components/session-card.css */
 
-/* ===========================================
-   Stat Card
-   =========================================== */
+/* session-card styles moved to src/styles/components/session-card.css */
 
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(clamp(120px, calc(150px * var(--scale-factor)), 180px), 1fr)
-  );
-  gap: var(--space-md);
-}
-
-.stat-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md);
-  /* Alineado visual con las demás tarjetas */
-  background: var(--surface-1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.12s ease,
-    box-shadow 0.2s ease;
-}
-
-.stat-card:focus-visible {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow:
-    0 0 0 3px var(--focus-accent-15),
-    var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.stat-card small {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--font-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-}
-
-.stat-card strong {
-  display: block;
-  margin-top: var(--space-xs);
-  font-size: var(--font-xl);
-}
-
-/* ===========================================
-   Account Card
-   =========================================== */
-
-.account-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.account-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  /* Unificar con apariencia de tarjetas Home/Category/ListItem */
-  background: var(--surface-1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.12s ease,
-    box-shadow 0.2s ease;
-}
-
-.account-card:focus-visible {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow:
-    0 0 0 3px var(--focus-accent-15),
-    var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.account-card.compact {
-  padding: var(--space-lg);
-  border-radius: var(--radius-lg);
-  background: var(--surface-1);
-  border-color: var(--border);
-}
-
-.account-card .card-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-weight: 700;
-  font-size: var(--font-base);
-  margin-bottom: var(--space-md);
-}
-
-.account-card.compact .card-head span {
-  font-size: var(--font-xs);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.account-card ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.account-card li {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.account-card.compact li {
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-  padding: var(--space-xs) 0;
-  border-bottom: 1px dashed var(--border);
-}
-
-.account-card.compact li:last-child {
-  border-bottom: none;
-}
-
-.account-card li span {
-  font-size: var(--font-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-
-.account-card.compact li span {
-  font-size: var(--font-xs);
-}
-
-.account-card li strong {
-  font-size: var(--font-md);
-  font-weight: 700;
-  word-break: break-word;
-}
-
-.account-card.compact li strong {
-  font-size: var(--font-base);
-}
+/* account-card styles migrated to src/styles/components/account-bottom-sheet.css */
 
 /* ===========================================
    Term Card

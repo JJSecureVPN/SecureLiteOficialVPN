@@ -360,6 +360,7 @@
     "download": "Download",
     "upload": "Upload",
     "ping": "Ping",
+    "time": "Time",
     "total": "Total Usage"
   }
 }

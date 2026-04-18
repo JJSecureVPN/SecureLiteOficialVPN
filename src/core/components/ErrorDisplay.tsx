@@ -63,17 +63,3 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
     </div>
   );
 };
-
-/**
- * Inline error message component
- * Displays error as inline text with optional icon
- */
-export const ErrorMessage: React.FC<{ message: string; icon?: string }> = ({
-  message,
-  icon = '⚠️',
-}) => (
-  <div className="flex items-center gap-2 text-red-600 text-sm">
-    {icon && <span>{icon}</span>}
-    <span>{message}</span>
-  </div>
-);

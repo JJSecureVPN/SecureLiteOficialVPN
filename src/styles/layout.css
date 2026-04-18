@@ -69,11 +69,6 @@ header.topbar .row {
   gap: var(--space-md);
 }
 
-/* Ensure header has just one row container, with controls aligned right */
-header.topbar {
-  justify-content: flex-end;
-}
-
 .hotzone {
   display: inline-flex;
   align-items: center;
@@ -86,21 +81,6 @@ header.topbar {
 
 .hotzone:active {
   transform: scale(0.95);
-}
-
-.dots {
-  display: grid;
-  grid-template-columns: repeat(2, clamp(6px, calc(8px * var(--scale-factor)), 10px));
-  grid-auto-rows: clamp(5px, calc(7px * var(--scale-factor)), 9px);
-  gap: clamp(3px, calc(4px * var(--scale-factor)), 6px);
-  cursor: pointer;
-}
-
-.dots span {
-  width: clamp(6px, calc(8px * var(--scale-factor)), 10px);
-  height: clamp(6px, calc(8px * var(--scale-factor)), 10px);
-  border-radius: 2px;
-  background: var(--text-strong-35);
 }
 
 .icon-btn {
@@ -126,34 +106,8 @@ header.topbar {
   transform: scale(0.96);
 }
 
-.coupon-btn {
-  color: var(--text-strong-35);
-  position: relative;
-}
-
-.coupon-btn i {
-  color: var(--text-strong-35);
-}
-
-.coupon-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 10px;
-  font-weight: 700;
-  min-width: 16px;
-  height: 16px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--bg-1);
-}
-
-/* Small attention marker for single-coupon highlight */
-.coupon-attention {
+/* Subscription button attention markers */
+.subscription-attention {
   position: absolute;
   top: -6px;
   right: -6px;

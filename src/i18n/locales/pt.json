@@ -364,6 +364,7 @@
     "download": "Download",
     "upload": "Upload",
     "ping": "Ping",
+    "time": "Tempo",
     "total": "Uso Total"
   }
 }

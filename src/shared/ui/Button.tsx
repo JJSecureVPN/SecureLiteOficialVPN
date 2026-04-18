@@ -2,7 +2,7 @@ import { memo, type ReactNode, type ButtonHTMLAttributes } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'default' | 'primary' | 'soft' | 'quick';
+  variant?: 'default' | 'primary' | 'soft';
   className?: string;
 }
 
@@ -17,7 +17,6 @@ export const Button = memo(function Button({
     default: 'btn',
     primary: 'btn primary',
     soft: 'btn soft',
-    quick: 'ql-qbtn',
   }[variant];
 
   return (

@@ -32,6 +32,7 @@ interface UseVpnConnectionState {
   cancelConnecting: () => void;
   startAutoConnect: (cat?: Category) => void;
   loadCategorias: () => void;
+  connectionStartTime: number | null;
 }
 
 export function useVpnConnectionState({
@@ -40,8 +41,34 @@ export function useVpnConnectionState({
   setScreen,
 }: UseVpnConnectionArgs): UseVpnConnectionState {
   const [status, setStatus] = useState<VpnStatus>('DISCONNECTED');
+  const [connectionStartTime, setConnectionStartTime] = useState<number | null>(() => {
+    const saved = localStorage.getItem('vpn_connection_start_time');
+    return saved ? Number(saved) : null;
+  });
   const [mockTimer, setMockTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [wasMocked, setWasMocked] = useState(false);
+
+  // Sincronizar el tiempo de inicio con el estado de la conexión
+  useEffect(() => {
+    if (status === 'CONNECTED') {
+      // Si ya tenemos un tiempo (recuperado o iniciado), no hacemos nada
+      if (connectionStartTime) return;
+
+      // Por si acaso, chequear localStorage una vez más (si el estado cambió rápido)
+      const saved = localStorage.getItem('vpn_connection_start_time');
+      if (saved) {
+        setConnectionStartTime(Number(saved));
+      } else {
+        const now = Date.now();
+        setConnectionStartTime(now);
+        localStorage.setItem('vpn_connection_start_time', String(now));
+      }
+    } else if (status !== 'CONNECTING' && status !== 'STOPPING') {
+      // Si estamos desconectados o en error, limpiamos el tiempo
+      setConnectionStartTime(null);
+      localStorage.removeItem('vpn_connection_start_time');
+    }
+  }, [status, connectionStartTime]);
 
   const isMockCandidate = import.meta.env.DEV && creds.user === 'test';
 
@@ -171,5 +198,6 @@ export function useVpnConnectionState({
     cancelConnecting,
     startAutoConnect,
     loadCategorias,
+    connectionStartTime,
   };
 }

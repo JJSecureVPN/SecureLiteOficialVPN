@@ -1,3 +1,3 @@
 // Core components barrel export
-export { ErrorDisplay, ErrorMessage } from './ErrorDisplay';
+export { ErrorDisplay } from './ErrorDisplay';
 export type { ErrorDisplayProps } from './ErrorDisplay';

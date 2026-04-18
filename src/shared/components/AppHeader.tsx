@@ -41,13 +41,13 @@ export const AppHeader = memo(function AppHeader({ onMenuClick }: AppHeaderProps
 
   return (
     <header className="topbar">
-      <div className="row">
-        <BackButton
-          isSubScreen={isSubScreen}
-          isCategoryDetail={isCategoryDetail}
-          onClick={handleClick}
-        />
+      <BackButton
+        isSubScreen={isSubScreen}
+        isCategoryDetail={isCategoryDetail}
+        onClick={handleClick}
+      />
 
+      <div className="row">
         <ReferralsButton onClick={() => setScreen('referrals')} />
 
         <SubscribeButton onClick={handleSubscribe} />

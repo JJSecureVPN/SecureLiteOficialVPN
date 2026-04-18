@@ -2,7 +2,7 @@
   background: var(--surface-1);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 10px 14px;
+  padding: 8px 12px;
   font-family: var(--font-mono, monospace);
   margin-top: 10px;
 
@@ -10,38 +10,41 @@
   --td-purple: #7f77dd;
   --td-amber: #ba7517;
   --td-red: #e24b4a;
+  --td-blue: #3b82f6;
+  --td-green: #22c55e;
   --td-gray: #888780;
 }
 
 .td-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5px; /* Estas son las "líneas" de división */
+  background: var(--border); /* El color de las líneas */
 }
 
 .td-item {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 6px 10px;
-  border-right: 0.5px solid var(--border);
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 4px;
+  background: var(--surface-1); /* El fondo de cada celda */
+  text-align: center;
 }
 
-.td-item:first-child {
-  padding-left: 0;
-}
-.td-item:last-child {
-  border-right: none;
-  padding-right: 0;
-}
+/* Manejo de bordes: ahora son automáticos por el gap */
 
 .td-lbl {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 8px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .td-dot {
@@ -60,6 +63,12 @@
 .dot-amber {
   background: var(--td-amber);
 }
+.dot-blue {
+  background: var(--td-blue);
+}
+.dot-green {
+  background: var(--td-green);
+}
 .dot-gray {
   background: var(--td-gray);
 }
@@ -67,38 +76,43 @@
 .td-value-wrap {
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: 2px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .td-val {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--text);
-  letter-spacing: -0.02em;
-  line-height: 1;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .td-unit {
-  font-size: 9px;
+  font-size: 8px;
   color: var(--muted);
 }
 
 .td-teal {
   color: var(--td-teal);
 }
+.dot-teal {
+  box-shadow: 0 0 4px var(--td-teal);
+}
 .td-purple {
   color: var(--td-purple);
 }
+.dot-purple {
+  box-shadow: 0 0 4px var(--td-purple);
+}
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
   .td-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .td-item:nth-child(2) {
-    border-right: none;
-  }
-  .td-item:nth-child(3) {
-    border-right: 0.5px solid var(--border);
-    padding-left: 0;
   }
 }
